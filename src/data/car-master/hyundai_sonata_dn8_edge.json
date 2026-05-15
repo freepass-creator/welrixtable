@@ -1,0 +1,182 @@
+{
+  "catalog_id": "hyundai_sonata_dn8_edge",
+  "title": "쏘나타 디 엣지 (DN8 페이스리프트)",
+  "model_name_kr": "쏘나타 디 엣지 DN8",
+  "maker": "현대",
+  "year_start": "2023-11",
+  "year_end": "현재",
+  "status": "current",
+  "source": "hyundai_official",
+  "source_urls": [
+    "https://www.hyundai.com/kr/ko/e/vehicles/sonata-the-edge/price",
+    "https://www.hyundai.com/contents/repn-car/html/homepage/price/sonata26-J-G2.0_price.content",
+    "https://www.hyundai.com/contents/repn-car/html/homepage/price/sonata26-J-L2.0_price.content",
+    "https://www.hyundai.com/contents/repn-car/html/homepage/price/sonata-nline-26_price.content",
+    "https://www.hyundai.com/contents/repn-car/html/homepage/price/sonata26-H_price.content",
+    "https://www.hyundai.com/contents/repn-car/html/homepage/price/sonata26-R_price.content",
+    "https://www.hyundai.com/contents/repn-car/html/homepage/price/sonata26-J-G1.6_price.content"
+  ],
+  "fetched_at": "2026-05-14",
+  "fetched_hash": "a84edf40e35b",
+  "trims": {
+    "프리미엄 가솔린 2.0": {
+      "slug": "premium",
+      "price": {
+        "base": 28700000
+      },
+      "select_groups": [
+        {
+          "name": "인포테인먼트 내비 Ⅰ",
+          "price": 1400000,
+          "code": "DN07P01"
+        }
+      ],
+      "h_genuine": [],
+      "source_fragment": "sonata26-J-G2.0_price.content"
+    },
+    "에스 가솔린 2.0": {
+      "slug": "s",
+      "price": {
+        "base": 30020000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "sonata26-J-G2.0_price.content"
+    },
+    "익스클루시브 가솔린 2.0": {
+      "slug": "exclusive",
+      "price": {
+        "base": 33100000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "sonata26-J-G2.0_price.content"
+    },
+    "인스퍼레이션 가솔린 2.0": {
+      "slug": "inspiration",
+      "price": {
+        "base": 36040000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "sonata26-J-G2.0_price.content"
+    },
+    "프리미엄 LPG 2.0": {
+      "slug": "premium",
+      "price": {
+        "base": 29550000
+      },
+      "select_groups": [
+        {
+          "name": "인포테인먼트 내비 Ⅰ",
+          "price": 1400000,
+          "code": "DN07P01"
+        }
+      ],
+      "h_genuine": [],
+      "source_fragment": "sonata26-J-L2.0_price.content"
+    },
+    "익스클루시브 LPG 2.0": {
+      "slug": "exclusive",
+      "price": {
+        "base": 33600000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "sonata26-J-L2.0_price.content"
+    },
+    "인스퍼레이션 LPG 2.0": {
+      "slug": "inspiration",
+      "price": {
+        "base": 36290000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "sonata26-J-L2.0_price.content"
+    },
+    "개별소비세 5% 적용 시 N라인": {
+      "slug": "premium",
+      "price": {
+        "base": 37310000
+      },
+      "select_groups": [
+        {
+          "name": "컴포트 Ⅳ(2열 편의)",
+          "price": 640000,
+          "code": "DN07P12"
+        }
+      ],
+      "h_genuine": [],
+      "source_fragment": "sonata-nline-26_price.content"
+    },
+    "익스클루시브 장애인용": {
+      "slug": "exclusive-right-hand",
+      "price": {
+        "base": 33270000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "sonata26-H_price.content"
+    },
+    "Business 1 영업용": {
+      "slug": "smart",
+      "price": {
+        "base": 25600000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "sonata26-R_price.content"
+    },
+    "Business 2 영업용": {
+      "slug": "modern",
+      "price": {
+        "base": 29840000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "sonata26-R_price.content"
+    },
+    "프리미엄 가솔린 1.6": {
+      "slug": "premium",
+      "price": {
+        "base": 29370000
+      },
+      "select_groups": [
+        {
+          "name": "인포테인먼트 내비 Ⅰ",
+          "price": 1400000,
+          "code": "DN07P01"
+        }
+      ],
+      "h_genuine": [],
+      "source_fragment": "sonata26-J-G1.6_price.content"
+    },
+    "에스 가솔린 1.6": {
+      "slug": "s",
+      "price": {
+        "base": 30690000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "sonata26-J-G1.6_price.content"
+    },
+    "익스클루시브 가솔린 1.6": {
+      "slug": "exclusive",
+      "price": {
+        "base": 33770000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "sonata26-J-G1.6_price.content"
+    },
+    "인스퍼레이션 가솔린 1.6": {
+      "slug": "inspiration",
+      "price": {
+        "base": 36710000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "sonata26-J-G1.6_price.content"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+# 원본 엑셀 (배포용)
+웰릭스모빌리티 신차 견적(*)_*.xlsx
+
+# 분석 산출물
+_dump/
+_tools/__pycache__/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Node / Vite
+node_modules/
+dist/
+.vite/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Firebase
+.firebase/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# 크롤러 캐시 (다운로드 원본 — 매번 fetch)
+_cache/
+
+# 백업
+*.bak
+*.bak.*

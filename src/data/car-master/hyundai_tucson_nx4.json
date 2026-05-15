@@ -1,0 +1,72 @@
+{
+  "catalog_id": "hyundai_tucson_nx4",
+  "title": "투싼 (NX4)",
+  "model_name_kr": "투싼 NX4",
+  "maker": "현대",
+  "year_start": "2020-09",
+  "year_end": "현재",
+  "status": "current",
+  "source": "hyundai_official",
+  "source_urls": [
+    "https://www.hyundai.com/kr/ko/e/vehicles/tucson/price",
+    "https://www.hyundai.com/contents/repn-car/html/homepage/price/nx4-2026_price.content"
+  ],
+  "fetched_at": "2026-05-14",
+  "fetched_hash": "54eee81c8875",
+  "trims": {
+    "모던 가솔린 1.6T": {
+      "slug": "modern",
+      "price": {
+        "base": 28480000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "nx4-2026_price.content"
+    },
+    "프리미엄 가솔린 1.6T": {
+      "slug": "premium",
+      "price": {
+        "base": 31160000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "nx4-2026_price.content"
+    },
+    "에이치-픽 가솔린 1.6T": {
+      "slug": "h-pick",
+      "price": {
+        "base": 32050000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "nx4-2026_price.content"
+    },
+    "인스퍼레이션 가솔린 1.6T": {
+      "slug": "inspiration",
+      "price": {
+        "base": 34600000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "nx4-2026_price.content"
+    },
+    "블랙 익스테리어 가솔린 1.6T": {
+      "slug": "black-exterior",
+      "price": {
+        "base": 35050000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "nx4-2026_price.content"
+    },
+    "N Line 가솔린 1.6T": {
+      "slug": "n-inspiration",
+      "price": {
+        "base": 35450000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "nx4-2026_price.content"
+    }
+  }
+}

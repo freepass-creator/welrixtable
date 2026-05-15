@@ -1,0 +1,337 @@
+{
+  "catalog_id": "kia_sorento_mq4_facelift",
+  "title": "더 뉴 쏘렌토 (MQ4 페이스리프트)",
+  "model_name_kr": "더 뉴 쏘렌토 MQ4",
+  "maker": "기아",
+  "year_start": "2023-08",
+  "year_end": "현재",
+  "status": "current",
+  "source": "kia_official_pdf",
+  "source_urls": [
+    "https://www.kia.com/content/dam/kwp/kr/ko/vehicles/pdf/price/price_sorento.pdf"
+  ],
+  "fetched_at": "2026-05-14",
+  "fetched_hash": "fd56c4721bef",
+  "trims": {
+    "프레스티지 가솔린 2.5T": {
+      "price": {
+        "base": 36350000
+      },
+      "select_groups": [
+        {
+          "name": "전자식 4WD",
+          "price": 2320000
+        },
+        {
+          "name": "6인승",
+          "price": 840000
+        },
+        {
+          "name": "7인승",
+          "price": 690000
+        },
+        {
+          "name": "스타일",
+          "price": 1240000
+        },
+        {
+          "name": "12.3인치 클러스터",
+          "price": 590000
+        },
+        {
+          "name": "드라이브 와이즈",
+          "price": 1290000
+        },
+        {
+          "name": "HUD + 빌트인 캠 2",
+          "price": 1190000
+        }
+      ],
+      "source_page": 1,
+      "raw_price": "3,635만"
+    },
+    "노블레스 가솔린 2.5T": {
+      "price": {
+        "base": 39510000
+      },
+      "select_groups": [
+        {
+          "name": "전자식 4WD",
+          "price": 2320000
+        },
+        {
+          "name": "6인승",
+          "price": 840000
+        },
+        {
+          "name": "7인승",
+          "price": 690000
+        },
+        {
+          "name": "스타일",
+          "price": 1140000
+        },
+        {
+          "name": "드라이브 와이즈",
+          "price": 1290000
+        },
+        {
+          "name": "HUD + 빌트인 캠 2",
+          "price": 1190000
+        },
+        {
+          "name": "스마트 커넥트",
+          "price": 800000
+        },
+        {
+          "name": "KRELL 프리미엄 사운드",
+          "price": 640000
+        }
+      ],
+      "source_page": 1,
+      "raw_price": "3,951만"
+    },
+    "시그니처 가솔린 2.5T": {
+      "price": {
+        "base": 42320000
+      },
+      "select_groups": [
+        {
+          "name": "전자식 4WD",
+          "price": 2320000
+        },
+        {
+          "name": "6인승",
+          "price": 840000
+        },
+        {
+          "name": "7인승",
+          "price": 690000
+        },
+        {
+          "name": "컴포트",
+          "price": 1090000
+        },
+        {
+          "name": "드라이브 와이즈",
+          "price": 1290000
+        },
+        {
+          "name": "HUD + 빌트인 캠 2",
+          "price": 1190000
+        },
+        {
+          "name": "스마트 커넥트",
+          "price": 700000
+        },
+        {
+          "name": "KRELL 프리미엄 사운드",
+          "price": 640000
+        }
+      ],
+      "source_page": 1,
+      "raw_price": "4,232만"
+    },
+    "X-Line 가솔린 2.5T": {
+      "price": {
+        "base": 43260000
+      },
+      "select_groups": [
+        {
+          "name": "전자식 4WD",
+          "price": 2320000
+        },
+        {
+          "name": "6인승",
+          "price": 840000
+        },
+        {
+          "name": "7인승",
+          "price": 690000
+        },
+        {
+          "name": "컴포트",
+          "price": 600000
+        },
+        {
+          "name": "드라이브 와이즈",
+          "price": 1290000
+        },
+        {
+          "name": "HUD + 빌트인 캠 2",
+          "price": 1190000
+        },
+        {
+          "name": "스마트 커넥트",
+          "price": 700000
+        },
+        {
+          "name": "KRELL 프리미엄 사운드",
+          "price": 640000
+        }
+      ],
+      "source_page": 1,
+      "raw_price": "4,326만"
+    },
+    "프레스티지 하이브리드": {
+      "price": {
+        "base": 40580000
+      },
+      "select_groups": [
+        {
+          "name": "전자식 4WD",
+          "price": 2320000
+        },
+        {
+          "name": "6인승",
+          "price": 840000
+        },
+        {
+          "name": "7인승",
+          "price": 690000
+        },
+        {
+          "name": "스타일",
+          "price": 1240000
+        },
+        {
+          "name": "12.3인치 클러스터",
+          "price": 590000
+        },
+        {
+          "name": "드라이브 와이즈",
+          "price": 1290000
+        },
+        {
+          "name": "HUD + 빌트인 캠 2",
+          "price": 1190000
+        }
+      ],
+      "source_page": 2,
+      "raw_price": "4,058만 친환경차 세제혜택 후 3,958만"
+    },
+    "노블레스 하이브리드": {
+      "price": {
+        "base": 43840000
+      },
+      "select_groups": [
+        {
+          "name": "전자식 4WD",
+          "price": 2320000
+        },
+        {
+          "name": "6인승",
+          "price": 840000
+        },
+        {
+          "name": "7인승",
+          "price": 690000
+        },
+        {
+          "name": "스타일",
+          "price": 1140000
+        },
+        {
+          "name": "드라이브 와이즈",
+          "price": 1290000
+        },
+        {
+          "name": "HUD + 빌트인 캠 2",
+          "price": 1190000
+        },
+        {
+          "name": "스마트 커넥트",
+          "price": 800000
+        },
+        {
+          "name": "KRELL 프리미엄 사운드",
+          "price": 640000
+        }
+      ],
+      "source_page": 2,
+      "raw_price": "4,384만 친환경차 세제혜택 후 4,284만"
+    },
+    "시그니처 하이브리드": {
+      "price": {
+        "base": 46370000
+      },
+      "select_groups": [
+        {
+          "name": "전자식 4WD",
+          "price": 2320000
+        },
+        {
+          "name": "6인승",
+          "price": 840000
+        },
+        {
+          "name": "7인승",
+          "price": 690000
+        },
+        {
+          "name": "컴포트",
+          "price": 1090000
+        },
+        {
+          "name": "드라이브 와이즈",
+          "price": 1290000
+        },
+        {
+          "name": "HUD + 빌트인 캠 2",
+          "price": 1190000
+        },
+        {
+          "name": "스마트 커넥트",
+          "price": 700000
+        },
+        {
+          "name": "KRELL 프리미엄 사운드",
+          "price": 640000
+        }
+      ],
+      "source_page": 2,
+      "raw_price": "4,637만 친환경차 세제혜택 후 4,537만"
+    },
+    "X-Line 하이브리드": {
+      "price": {
+        "base": 47310000
+      },
+      "select_groups": [
+        {
+          "name": "전자식 4WD",
+          "price": 2320000
+        },
+        {
+          "name": "6인승",
+          "price": 840000
+        },
+        {
+          "name": "7인승",
+          "price": 690000
+        },
+        {
+          "name": "컴포트",
+          "price": 600000
+        },
+        {
+          "name": "드라이브 와이즈",
+          "price": 1290000
+        },
+        {
+          "name": "HUD + 빌트인 캠 2",
+          "price": 1190000
+        },
+        {
+          "name": "스마트 커넥트",
+          "price": 700000
+        },
+        {
+          "name": "KRELL 프리미엄 사운드",
+          "price": 640000
+        }
+      ],
+      "source_page": 2,
+      "raw_price": "4,731만 친환경차 세제혜택 후 4,631만"
+    }
+  }
+}

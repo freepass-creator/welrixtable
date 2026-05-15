@@ -1,0 +1,111 @@
+{
+  "catalog_id": "hyundai_avante_cn7",
+  "title": "더 뉴 아반떼 (CN7 페이스리프트)",
+  "model_name_kr": "더 뉴 아반떼 CN7",
+  "maker": "현대",
+  "year_start": "2023-04",
+  "year_end": "현재",
+  "status": "current",
+  "source": "hyundai_official",
+  "source_urls": [
+    "https://www.hyundai.com/kr/ko/e/vehicles/avante/price",
+    "https://www.hyundai.com/contents/repn-car/html/homepage/price/cn7-26-J-L1.6_price.content",
+    "https://www.hyundai.com/contents/repn-car/html/homepage/price/cn7-26-H-L1.6_price.content",
+    "https://www.hyundai.com/contents/repn-car/html/homepage/price/cn7-26-R-L1.6_price.content",
+    "https://www.hyundai.com/contents/repn-car/html/homepage/price/cn7-26-J-G1.6_price.content"
+  ],
+  "fetched_at": "2026-05-14",
+  "fetched_hash": "5863e74a0d72",
+  "trims": {
+    "스마트 LPG 1.6": {
+      "slug": "smart",
+      "price": {
+        "base": 22050000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "cn7-26-J-L1.6_price.content"
+    },
+    "모던 LPG 1.6": {
+      "slug": "modern",
+      "price": {
+        "base": 25300000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "cn7-26-J-L1.6_price.content"
+    },
+    "인스퍼레이션 LPG 1.6": {
+      "slug": "inspiration",
+      "price": {
+        "base": 28860000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "cn7-26-J-L1.6_price.content"
+    },
+    "모던 장애인용 LPG 1.6": {
+      "slug": "modern-right-hand",
+      "price": {
+        "base": 23950000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "cn7-26-H-L1.6_price.content"
+    },
+    "스마트 영업용 LPG 1.6": {
+      "slug": "smart",
+      "price": {
+        "base": 20930000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "cn7-26-R-L1.6_price.content"
+    },
+    "모던 영업용 LPG 1.6": {
+      "slug": "modern",
+      "price": {
+        "base": 24020000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "cn7-26-R-L1.6_price.content"
+    },
+    "스마트 가솔린 1.6": {
+      "slug": "smart",
+      "price": {
+        "base": 20650000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "cn7-26-J-G1.6_price.content"
+    },
+    "모던 가솔린 1.6": {
+      "slug": "modern",
+      "price": {
+        "base": 23910000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "cn7-26-J-G1.6_price.content"
+    },
+    "인스퍼레이션 가솔린 1.6": {
+      "slug": "inspiration",
+      "price": {
+        "base": 27590000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "cn7-26-J-G1.6_price.content"
+    },
+    "N 라인 가솔린 1.6": {
+      "slug": "n-line",
+      "price": {
+        "base": 28490000
+      },
+      "select_groups": [],
+      "h_genuine": [],
+      "source_fragment": "cn7-26-J-G1.6_price.content"
+    }
+  }
+}

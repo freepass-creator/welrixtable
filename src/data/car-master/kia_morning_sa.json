@@ -1,0 +1,107 @@
+{
+  "catalog_id": "kia_morning_sa",
+  "model_root": "모닝",
+  "title": "기아 모닝 SA",
+  "maker": "기아",
+  "source": "stub",
+  "source_urls": [],
+  "fetched_at": "2026-05-04",
+  "note": "모닝 1세대 SA (2004~2011). 트림명만 stub.",
+  "options": {},
+  "categories": {},
+  "trims": {
+    "Standard 가솔린 1.0": {
+      "slug": "standard",
+      "price": {
+        "base": 6600000
+      },
+      "basic": [],
+      "select": [],
+      "select_groups": []
+    },
+    "Standard LPi 1.0": {
+      "slug": "standard",
+      "price": {
+        "base": 7200000
+      },
+      "basic": [],
+      "select": [],
+      "select_groups": []
+    },
+    "Deluxe 가솔린 1.0": {
+      "slug": "deluxe",
+      "price": {
+        "base": 7600000
+      },
+      "basic": [],
+      "select": [],
+      "select_groups": []
+    },
+    "Deluxe LPi 1.0": {
+      "slug": "deluxe",
+      "price": {
+        "base": 8200000
+      },
+      "basic": [],
+      "select": [],
+      "select_groups": []
+    },
+    "럭셔리 가솔린 1.0": {
+      "slug": "luxury",
+      "price": {
+        "base": 8500000
+      },
+      "basic": [],
+      "select": [],
+      "select_groups": []
+    },
+    "럭셔리 LPi 1.0": {
+      "slug": "luxury",
+      "price": {
+        "base": 9100000
+      },
+      "basic": [],
+      "select": [],
+      "select_groups": []
+    },
+    "SLX 가솔린 1.0": {
+      "slug": "slx",
+      "price": {
+        "base": 9200000
+      },
+      "basic": [],
+      "select": [],
+      "select_groups": []
+    },
+    "SLX LPi 1.0": {
+      "slug": "slx",
+      "price": {
+        "base": 9800000
+      },
+      "basic": [],
+      "select": [],
+      "select_groups": []
+    },
+    "Picanto 가솔린 1.0": {
+      "slug": "picanto",
+      "price": {
+        "base": 9900000
+      },
+      "basic": [],
+      "select": [],
+      "select_groups": []
+    },
+    "Picanto LPi 1.0": {
+      "slug": "picanto",
+      "price": {
+        "base": 10500000
+      },
+      "basic": [],
+      "select": [],
+      "select_groups": []
+    }
+  },
+  "aliases": [],
+  "year_start": "2005-01",
+  "year_end": "2007-12"
+}

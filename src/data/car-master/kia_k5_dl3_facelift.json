@@ -1,0 +1,469 @@
+{
+  "catalog_id": "kia_k5_dl3_facelift",
+  "title": "더 뉴 K5 (DL3 페이스리프트)",
+  "model_name_kr": "더 뉴 K5 DL3",
+  "maker": "기아",
+  "year_start": "2023-11",
+  "year_end": "현재",
+  "status": "current",
+  "source": "kia_official_pdf",
+  "source_urls": [
+    "https://www.kia.com/content/dam/kwp/kr/ko/vehicles/pdf/price/price_k5.pdf"
+  ],
+  "fetched_at": "2026-05-14",
+  "fetched_hash": "a5cca4645ad8",
+  "trims": {
+    "프레스티지 하이브리드": {
+      "price": {
+        "base": 33930000
+      },
+      "select_groups": [
+        {
+          "name": "스타일",
+          "price": 1090000
+        },
+        {
+          "name": "컴포트",
+          "price": 990000
+        },
+        {
+          "name": "드라이브 와이즈",
+          "price": 740000
+        },
+        {
+          "name": "12.3인치 클러스터 팩",
+          "price": 690000
+        },
+        {
+          "name": "HUD+ 빌트인 캠 2",
+          "price": 1090000
+        },
+        {
+          "name": "KRELL프리미엄 사운드",
+          "price": 590000
+        },
+        {
+          "name": "스마트커넥트",
+          "price": 890000
+        },
+        {
+          "name": "파노라마 선루프",
+          "price": 1090000
+        }
+      ],
+      "source_page": 1,
+      "raw_price": "3,393만 친환경차 세제혜택 후 3,293만"
+    },
+    "베스트 셀렉션 하이브리드": {
+      "price": {
+        "base": 35020000
+      },
+      "select_groups": [
+        {
+          "name": "스타일",
+          "price": 700000
+        },
+        {
+          "name": "빌트인 캠 2",
+          "price": 450000
+        },
+        {
+          "name": "파노라마 선루프",
+          "price": 1090000
+        }
+      ],
+      "source_page": 1,
+      "raw_price": "3,502만 친환경차 세제혜택 후 3,402만"
+    },
+    "노블레스 하이브리드": {
+      "price": {
+        "base": 37300000
+      },
+      "select_groups": [
+        {
+          "name": "스타일",
+          "price": 890000
+        },
+        {
+          "name": "컴포트",
+          "price": 890000
+        },
+        {
+          "name": "드라이브 와이즈",
+          "price": 450000
+        },
+        {
+          "name": "HUD+ 빌트인 캠 2",
+          "price": 1090000
+        },
+        {
+          "name": "KRELL프리미엄 사운드",
+          "price": 590000
+        },
+        {
+          "name": "스마트커넥트",
+          "price": 300000
+        },
+        {
+          "name": "파노라마 선루프",
+          "price": 1090000
+        }
+      ],
+      "source_page": 1,
+      "raw_price": "3,730만 친환경차 세제혜택 후 3,630만"
+    },
+    "시그니처 하이브리드": {
+      "price": {
+        "base": 40290000
+      },
+      "select_groups": [
+        {
+          "name": "스타일",
+          "price": 200000
+        },
+        {
+          "name": "컴포트",
+          "price": 590000
+        },
+        {
+          "name": "HUD+ 빌트인 캠 2",
+          "price": 1090000
+        },
+        {
+          "name": "KRELL프리미엄 사운드",
+          "price": 590000
+        },
+        {
+          "name": "블랙 핏",
+          "price": 690000
+        },
+        {
+          "name": "파노라마 선루프",
+          "price": 1090000
+        }
+      ],
+      "source_page": 1,
+      "raw_price": "4,029만 친환경차 세제혜택 후 3,929만"
+    },
+    "스마트 셀렉션 가솔린 2.0": {
+      "price": {
+        "base": 27660000
+      },
+      "select_groups": [],
+      "source_page": 3,
+      "raw_price": "2,766만"
+    },
+    "프레스티지 가솔린 2.0": {
+      "price": {
+        "base": 28510000
+      },
+      "select_groups": [
+        {
+          "name": "스타일",
+          "price": 1090000
+        },
+        {
+          "name": "컴포트",
+          "price": 990000
+        },
+        {
+          "name": "드라이브 와이즈",
+          "price": 740000
+        },
+        {
+          "name": "12.3인치 클러스터 팩",
+          "price": 690000
+        },
+        {
+          "name": "HUD+ 빌트인 캠 2",
+          "price": 1090000
+        },
+        {
+          "name": "KRELL프리미엄 사운드",
+          "price": 590000
+        },
+        {
+          "name": "스마트커넥트",
+          "price": 890000
+        },
+        {
+          "name": "파노라마 선루프",
+          "price": 1090000
+        }
+      ],
+      "source_page": 4,
+      "raw_price": "2,851만"
+    },
+    "베스트 셀렉션 가솔린 2.0": {
+      "price": {
+        "base": 29730000
+      },
+      "select_groups": [
+        {
+          "name": "스타일",
+          "price": 700000
+        },
+        {
+          "name": "빌트인 캠 2",
+          "price": 450000
+        },
+        {
+          "name": "파노라마 선루프",
+          "price": 1090000
+        }
+      ],
+      "source_page": 4,
+      "raw_price": "2,973만"
+    },
+    "노블레스 가솔린 2.0": {
+      "price": {
+        "base": 32030000
+      },
+      "select_groups": [
+        {
+          "name": "스타일",
+          "price": 890000
+        },
+        {
+          "name": "컴포트",
+          "price": 890000
+        },
+        {
+          "name": "드라이브 와이즈",
+          "price": 450000
+        },
+        {
+          "name": "HUD+ 빌트인 캠 2",
+          "price": 1090000
+        },
+        {
+          "name": "KRELL프리미엄 사운드",
+          "price": 590000
+        },
+        {
+          "name": "스마트커넥트",
+          "price": 300000
+        },
+        {
+          "name": "파노라마 선루프",
+          "price": 1090000
+        }
+      ],
+      "source_page": 4,
+      "raw_price": "3,203만"
+    },
+    "시그니처 가솔린 2.0": {
+      "price": {
+        "base": 35220000
+      },
+      "select_groups": [
+        {
+          "name": "스타일",
+          "price": 200000
+        },
+        {
+          "name": "컴포트",
+          "price": 590000
+        },
+        {
+          "name": "HUD+ 빌트인 캠 2",
+          "price": 1090000
+        },
+        {
+          "name": "KRELL프리미엄 사운드",
+          "price": 590000
+        },
+        {
+          "name": "블랙 핏",
+          "price": 690000
+        },
+        {
+          "name": "파노라마 선루프",
+          "price": 1090000
+        }
+      ],
+      "source_page": 4,
+      "raw_price": "3,522만"
+    },
+    "프레스티지 가솔린 1.6T": {
+      "price": {
+        "base": 29320000
+      },
+      "select_groups": [
+        {
+          "name": "스타일",
+          "price": 1090000
+        },
+        {
+          "name": "컴포트",
+          "price": 990000
+        },
+        {
+          "name": "드라이브 와이즈",
+          "price": 740000
+        },
+        {
+          "name": "12.3인치 클러스터 팩",
+          "price": 690000
+        },
+        {
+          "name": "HUD+ 빌트인 캠 2",
+          "price": 1090000
+        },
+        {
+          "name": "KRELL프리미엄 사운드",
+          "price": 590000
+        },
+        {
+          "name": "스마트커넥트",
+          "price": 890000
+        },
+        {
+          "name": "파노라마 선루프",
+          "price": 1090000
+        }
+      ],
+      "source_page": 6,
+      "raw_price": "2,932만"
+    },
+    "베스트 셀렉션 가솔린 1.6T": {
+      "price": {
+        "base": 30540000
+      },
+      "select_groups": [
+        {
+          "name": "스타일",
+          "price": 700000
+        },
+        {
+          "name": "빌트인 캠 2",
+          "price": 450000
+        },
+        {
+          "name": "파노라마 선루프",
+          "price": 1090000
+        }
+      ],
+      "source_page": 6,
+      "raw_price": "3,054만"
+    },
+    "노블레스 가솔린 1.6T": {
+      "price": {
+        "base": 33270000
+      },
+      "select_groups": [
+        {
+          "name": "스타일",
+          "price": 890000
+        },
+        {
+          "name": "컴포트",
+          "price": 890000
+        },
+        {
+          "name": "드라이브 와이즈",
+          "price": 450000
+        },
+        {
+          "name": "HUD+ 빌트인 캠 2",
+          "price": 1090000
+        },
+        {
+          "name": "KRELL프리미엄 사운드",
+          "price": 590000
+        },
+        {
+          "name": "스마트커넥트",
+          "price": 300000
+        },
+        {
+          "name": "파노라마 선루프",
+          "price": 1090000
+        }
+      ],
+      "source_page": 6,
+      "raw_price": "3,327만"
+    },
+    "시그니처 가솔린 1.6T": {
+      "price": {
+        "base": 36010000
+      },
+      "select_groups": [
+        {
+          "name": "스타일",
+          "price": 200000
+        },
+        {
+          "name": "컴포트",
+          "price": 590000
+        },
+        {
+          "name": "HUD+ 빌트인 캠 2",
+          "price": 1090000
+        },
+        {
+          "name": "KRELL프리미엄 사운드",
+          "price": 590000
+        },
+        {
+          "name": "블랙 핏",
+          "price": 690000
+        },
+        {
+          "name": "파노라마 선루프",
+          "price": 1090000
+        }
+      ],
+      "source_page": 6,
+      "raw_price": "3,601만"
+    },
+    "트렌디 가솔린 2.0": {
+      "price": {
+        "base": 25070000
+      },
+      "select_groups": [],
+      "source_page": 9,
+      "raw_price": "2,507만"
+    },
+    "왼손 오른발 장애 가솔린 2.0": {
+      "price": {
+        "base": 27510000
+      },
+      "select_groups": [],
+      "source_page": 10,
+      "raw_price": "2,751만"
+    },
+    "오른손 오른발 장애 가솔린 2.0": {
+      "price": {
+        "base": 27510000
+      },
+      "select_groups": [],
+      "source_page": 10,
+      "raw_price": "2,751만"
+    },
+    "오른발 장애 가솔린 2.0": {
+      "price": {
+        "base": 27670000
+      },
+      "select_groups": [],
+      "source_page": 10,
+      "raw_price": "2,767만"
+    },
+    "양발 장애 가솔린 2.0": {
+      "price": {
+        "base": 27820000
+      },
+      "select_groups": [],
+      "source_page": 10,
+      "raw_price": "2,782만"
+    },
+    "오른손 장애 가솔린 2.0": {
+      "price": {
+        "base": 27560000
+      },
+      "select_groups": [],
+      "source_page": 10,
+      "raw_price": "2,756만"
+    }
+  }
+}

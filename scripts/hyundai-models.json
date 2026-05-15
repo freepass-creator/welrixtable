@@ -1,0 +1,100 @@
+{
+  "_doc": "현대 모델 메타 — chassis_id → slug + 모델명(+코드) + 생산기간",
+  "_format": {
+    "slug": "현대닷컴 URL slug",
+    "title": "catalog 내부 풀 타이틀",
+    "model_name_kr": "UI 표시명 (모델명 + 코드명, 예: '더 뉴 그랜저 GN7')",
+    "year_start": "YYYY-MM",
+    "year_end": "YYYY-MM | '현재'",
+    "status": "current | discontinued"
+  },
+
+  "hyundai_grandeur_gn7_fl": {
+    "slug": "the-new-grandeur",
+    "title": "더 뉴 그랜저 (GN7 페이스리프트)",
+    "model_name_kr": "더 뉴 그랜저 GN7",
+    "year_start": "2026-05",
+    "year_end": "현재",
+    "status": "current"
+  },
+  "hyundai_grandeur_gn7_fl_hybrid": {
+    "slug": "the-new-grandeur-hybrid",
+    "title": "더 뉴 그랜저 하이브리드 (GN7 페이스리프트)",
+    "model_name_kr": "더 뉴 그랜저 GN7",
+    "year_start": "2026-05",
+    "year_end": "현재",
+    "status": "current"
+  },
+  "hyundai_palisade_lx3": {
+    "slug": "the-all-new-palisade",
+    "title": "디 올 뉴 팰리세이드 (LX3)",
+    "model_name_kr": "디 올 뉴 팰리세이드 LX3",
+    "year_start": "2025-01",
+    "year_end": "현재",
+    "status": "current"
+  },
+  "hyundai_sonata_dn8_edge": {
+    "slug": "sonata-the-edge",
+    "title": "쏘나타 디 엣지 (DN8 페이스리프트)",
+    "model_name_kr": "쏘나타 디 엣지 DN8",
+    "year_start": "2023-11",
+    "year_end": "현재",
+    "status": "current"
+  },
+  "hyundai_avante_cn7": {
+    "slug": "avante",
+    "title": "더 뉴 아반떼 (CN7 페이스리프트)",
+    "model_name_kr": "더 뉴 아반떼 CN7",
+    "year_start": "2023-04",
+    "year_end": "현재",
+    "status": "current"
+  },
+  "hyundai_kona_sx2": {
+    "slug": "kona",
+    "title": "디 올 뉴 코나 (SX2)",
+    "model_name_kr": "디 올 뉴 코나 SX2",
+    "year_start": "2023-04",
+    "year_end": "현재",
+    "status": "current"
+  },
+  "hyundai_tucson_nx4": {
+    "slug": "tucson",
+    "title": "투싼 (NX4)",
+    "model_name_kr": "투싼 NX4",
+    "year_start": "2020-09",
+    "year_end": "현재",
+    "status": "current"
+  },
+  "hyundai_santafe_mx5": {
+    "slug": "santafe",
+    "title": "디 올 뉴 싼타페 (MX5)",
+    "model_name_kr": "디 올 뉴 싼타페 MX5",
+    "year_start": "2023-08",
+    "year_end": "현재",
+    "status": "current"
+  },
+  "hyundai_casper": {
+    "slug": "casper",
+    "title": "캐스퍼 (페이스리프트)",
+    "model_name_kr": "캐스퍼",
+    "year_start": "2024-04",
+    "year_end": "현재",
+    "status": "current"
+  },
+  "hyundai_venue": {
+    "slug": "venue",
+    "title": "베뉴 (QX1)",
+    "model_name_kr": "베뉴 QX1",
+    "year_start": "2019-07",
+    "year_end": "현재",
+    "status": "current"
+  },
+  "hyundai_porter": {
+    "slug": "porter-2-electric",
+    "title": "포터 II (일렉트릭)",
+    "model_name_kr": "포터 II",
+    "year_start": "2023-11",
+    "year_end": "현재",
+    "status": "current"
+  }
+}

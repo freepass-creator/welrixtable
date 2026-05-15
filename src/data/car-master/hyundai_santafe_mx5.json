@@ -1,0 +1,585 @@
+{
+  "catalog_id": "hyundai_santafe_mx5",
+  "title": "디 올 뉴 싼타페 (MX5)",
+  "model_name_kr": "디 올 뉴 싼타페 MX5",
+  "maker": "현대",
+  "year_start": "2023-08",
+  "year_end": "현재",
+  "status": "current",
+  "source": "hyundai_official",
+  "source_urls": [
+    "https://www.hyundai.com/kr/ko/e/vehicles/santafe/price",
+    "https://www.hyundai.com/contents/repn-car/html/homepage/price/mx5_2026_price.content"
+  ],
+  "fetched_at": "2026-05-14",
+  "fetched_hash": "6d77742ed5f7",
+  "trims": {
+    "익스클루시브": {
+      "slug": "exclusive",
+      "price": {
+        "base": 36620000
+      },
+      "select_groups": [
+        {
+          "name": "빌트인 캠 2, 증강현실 내비게이션",
+          "price": 450000,
+          "code": "MX03P11"
+        },
+        {
+          "name": "HTRAC",
+          "price": 2230000,
+          "code": "MX03008"
+        },
+        {
+          "name": "6인승",
+          "price": 1040000,
+          "code": "MX03P22"
+        },
+        {
+          "name": "7인승",
+          "price": 690000,
+          "code": "MX03P23"
+        },
+        {
+          "name": "듀얼와이드선루프 + 루프랙",
+          "price": 990000,
+          "code": "MX03P01"
+        },
+        {
+          "name": "동승석 8way 전동시트",
+          "price": 200000,
+          "code": "MX03081"
+        },
+        {
+          "name": "헤드업 디스플레이",
+          "price": 590000,
+          "code": "MX03113"
+        },
+        {
+          "name": "파킹 어시스트 플러스Ⅰ",
+          "price": 1190000,
+          "code": "MX03P06"
+        },
+        {
+          "name": "플래티넘Ⅰ",
+          "price": 450000,
+          "code": "MX03P04"
+        },
+        {
+          "name": "베스트 셀렉션Ⅰ",
+          "price": 1500000,
+          "code": "MX03P12",
+          "note": "베스트 셀렉션Ⅰ 선택 시,"
+        }
+      ],
+      "h_genuine": [
+        {
+          "name": "빌트인 공기청정기 2.0",
+          "price": 530000,
+          "code": "MX03127"
+        },
+        {
+          "name": "라이프 스타일",
+          "price": 490000,
+          "code": "MX03P16"
+        },
+        {
+          "name": "사이드스텝",
+          "price": 400000,
+          "code": "MX03128"
+        },
+        {
+          "name": "블랙 사이드스텝",
+          "price": 450000,
+          "code": "MX03143"
+        },
+        {
+          "name": "프로텍션 매트 패키지 Ⅰ",
+          "price": 230000,
+          "code": "MX03P13"
+        },
+        {
+          "name": "프로텍션 매트 패키지 Ⅱ",
+          "price": 150000,
+          "code": "MX03P14"
+        },
+        {
+          "name": "러기지 패키지",
+          "price": 120000,
+          "code": "MX03P15"
+        }
+      ],
+      "source_fragment": "mx5_2026_price.content"
+    },
+    "프레스티지": {
+      "slug": "prestige",
+      "price": {
+        "base": 39490000
+      },
+      "select_groups": [
+        {
+          "name": "빌트인 캠 2, 증강현실 내비게이션",
+          "price": 450000,
+          "code": "MX03P11"
+        },
+        {
+          "name": "HTRAC",
+          "price": 2230000,
+          "code": "MX03008"
+        },
+        {
+          "name": "6인승",
+          "price": 1040000,
+          "code": "MX03P22"
+        },
+        {
+          "name": "7인승",
+          "price": 690000,
+          "code": "MX03P23"
+        },
+        {
+          "name": "듀얼와이드선루프",
+          "price": 890000,
+          "code": "MX03057"
+        },
+        {
+          "name": "헤드업 디스플레이",
+          "price": 590000,
+          "code": "MX03113"
+        },
+        {
+          "name": "시트플러스",
+          "price": 740000,
+          "code": "MX03P03"
+        },
+        {
+          "name": "파킹 어시스트 플러스Ⅰ",
+          "price": 1190000,
+          "code": "MX03P06"
+        },
+        {
+          "name": "디자인 플러스 Ⅰ",
+          "price": 1350000,
+          "code": "MX03P08"
+        }
+      ],
+      "h_genuine": [
+        {
+          "name": "빌트인 공기청정기 2.0",
+          "price": 530000,
+          "code": "MX03127"
+        },
+        {
+          "name": "라이프 스타일",
+          "price": 490000,
+          "code": "MX03P16"
+        },
+        {
+          "name": "사이드스텝",
+          "price": 400000,
+          "code": "MX03128"
+        },
+        {
+          "name": "블랙 사이드스텝",
+          "price": 450000,
+          "code": "MX03143"
+        },
+        {
+          "name": "프로텍션 매트 패키지 Ⅰ",
+          "price": 230000,
+          "code": "MX03P13"
+        },
+        {
+          "name": "프로텍션 매트 패키지 Ⅱ",
+          "price": 150000,
+          "code": "MX03P14"
+        },
+        {
+          "name": "러기지 패키지",
+          "price": 120000,
+          "code": "MX03P15"
+        }
+      ],
+      "source_fragment": "mx5_2026_price.content"
+    },
+    "에이치-픽": {
+      "slug": "h-pick",
+      "price": {
+        "base": 42140000
+      },
+      "select_groups": [
+        {
+          "name": "빌트인 캠 2, 증강현실 내비게이션",
+          "price": 450000,
+          "code": "MX03P11"
+        },
+        {
+          "name": "HTRAC",
+          "price": 2230000,
+          "code": "MX03008"
+        },
+        {
+          "name": "6인승",
+          "price": 1040000,
+          "code": "MX03P22"
+        },
+        {
+          "name": "7인승",
+          "price": 690000,
+          "code": "MX03P23"
+        },
+        {
+          "name": "듀얼와이드선루프",
+          "price": 890000,
+          "code": "MX03057"
+        },
+        {
+          "name": "BOSE 프리미엄 사운드(12스피커, 외장 앰프)",
+          "price": 640000,
+          "code": "MX03125"
+        },
+        {
+          "name": "20인치 휠 & 타이어",
+          "price": 490000,
+          "code": "MX03058"
+        },
+        {
+          "name": "[N 퍼포먼스 파츠]알콘(alcon) 모노블록 브레이크 & 20인치 휠 패키지",
+          "price": 2700000,
+          "code": "MX03P19"
+        },
+        {
+          "name": "[N 퍼포먼스 파츠]20인치 블랙 휠",
+          "price": 800000,
+          "code": "MX03P20"
+        }
+      ],
+      "h_genuine": [
+        {
+          "name": "빌트인 공기청정기 2.0",
+          "price": 530000,
+          "code": "MX03127"
+        },
+        {
+          "name": "라이프 스타일",
+          "price": 490000,
+          "code": "MX03P16"
+        },
+        {
+          "name": "사이드스텝",
+          "price": 400000,
+          "code": "MX03128"
+        },
+        {
+          "name": "블랙 사이드스텝",
+          "price": 450000,
+          "code": "MX03143"
+        },
+        {
+          "name": "프로텍션 매트 패키지 Ⅰ",
+          "price": 230000,
+          "code": "MX03P13"
+        },
+        {
+          "name": "프로텍션 매트 패키지 Ⅱ",
+          "price": 150000,
+          "code": "MX03P14"
+        },
+        {
+          "name": "러기지 패키지",
+          "price": 120000,
+          "code": "MX03P15"
+        }
+      ],
+      "source_fragment": "mx5_2026_price.content"
+    },
+    "블랙 익스테리어": {
+      "slug": "black-exterior",
+      "price": {
+        "base": 42490000
+      },
+      "select_groups": [
+        {
+          "name": "빌트인 캠 2, 증강현실 내비게이션",
+          "price": 450000,
+          "code": "MX03P11"
+        },
+        {
+          "name": "HTRAC",
+          "price": 2230000,
+          "code": "MX03008"
+        },
+        {
+          "name": "6인승",
+          "price": 1040000,
+          "code": "MX03P22"
+        },
+        {
+          "name": "7인승",
+          "price": 690000,
+          "code": "MX03P23"
+        },
+        {
+          "name": "듀얼와이드선루프",
+          "price": 890000,
+          "code": "MX03057"
+        },
+        {
+          "name": "BOSE 프리미엄 사운드(12스피커, 외장 앰프)",
+          "price": 640000,
+          "code": "MX03125"
+        },
+        {
+          "name": "20인치 휠 & 타이어",
+          "price": 490000,
+          "code": "MX03058"
+        },
+        {
+          "name": "[N 퍼포먼스 파츠]알콘(alcon) 모노블록 브레이크 & 20인치 휠 패키지",
+          "price": 2700000,
+          "code": "MX03P19"
+        },
+        {
+          "name": "[N 퍼포먼스 파츠]20인치 블랙 휠",
+          "price": 800000,
+          "code": "MX03P20"
+        }
+      ],
+      "h_genuine": [
+        {
+          "name": "빌트인 공기청정기 2.0",
+          "price": 530000,
+          "code": "MX03127"
+        },
+        {
+          "name": "라이프 스타일",
+          "price": 490000,
+          "code": "MX03P16"
+        },
+        {
+          "name": "사이드스텝",
+          "price": 400000,
+          "code": "MX03128"
+        },
+        {
+          "name": "블랙 사이드스텝",
+          "price": 450000,
+          "code": "MX03143"
+        },
+        {
+          "name": "프로텍션 매트 패키지 Ⅰ",
+          "price": 230000,
+          "code": "MX03P13"
+        },
+        {
+          "name": "프로텍션 매트 패키지 Ⅱ",
+          "price": 150000,
+          "code": "MX03P14"
+        },
+        {
+          "name": "러기지 패키지",
+          "price": 120000,
+          "code": "MX03P15"
+        }
+      ],
+      "source_fragment": "mx5_2026_price.content"
+    },
+    "캘리그래피": {
+      "slug": "calligraphy",
+      "price": {
+        "base": 45530000
+      },
+      "select_groups": [
+        {
+          "name": "빌트인 캠 2, 증강현실 내비게이션",
+          "price": 450000,
+          "code": "MX03P11"
+        },
+        {
+          "name": "HTRAC",
+          "price": 2230000,
+          "code": "MX03008"
+        },
+        {
+          "name": "6인승",
+          "price": 1040000,
+          "code": "MX03P22"
+        },
+        {
+          "name": "7인승",
+          "price": 690000,
+          "code": "MX03P23"
+        },
+        {
+          "name": "듀얼와이드선루프",
+          "price": 890000,
+          "code": "MX03057"
+        },
+        {
+          "name": "BOSE 프리미엄 사운드(12스피커, 외장 앰프)",
+          "price": 640000,
+          "code": "MX03125"
+        },
+        {
+          "name": "[N 퍼포먼스 파츠]알콘(alcon) 모노블록 브레이크 & 21인치 휠 패키지",
+          "price": 2750000,
+          "code": "MX03P17"
+        },
+        {
+          "name": "[N 퍼포먼스 파츠]21인치 블랙 휠",
+          "price": 850000,
+          "code": "MX03P18"
+        }
+      ],
+      "h_genuine": [
+        {
+          "name": "빌트인 공기청정기 2.0",
+          "price": 530000,
+          "code": "MX03127"
+        },
+        {
+          "name": "라이프 스타일",
+          "price": 490000,
+          "code": "MX03P16"
+        },
+        {
+          "name": "사이드스텝",
+          "price": 400000,
+          "code": "MX03128"
+        },
+        {
+          "name": "블랙 사이드스텝",
+          "price": 450000,
+          "code": "MX03143"
+        },
+        {
+          "name": "차량 보호 필름Ⅰ(프론트 범퍼 사이드 외)",
+          "price": 410000,
+          "code": "MX03130"
+        },
+        {
+          "name": "차량 보호 필름Ⅱ(도어 중앙부, 도어 엣지 외)",
+          "price": 400000,
+          "code": "MX03131"
+        },
+        {
+          "name": "프로텍션 매트 패키지 Ⅰ",
+          "price": 230000,
+          "code": "MX03P13"
+        },
+        {
+          "name": "프로텍션 매트 패키지 Ⅱ",
+          "price": 150000,
+          "code": "MX03P14"
+        },
+        {
+          "name": "러기지 패키지",
+          "price": 120000,
+          "code": "MX03P15"
+        }
+      ],
+      "source_fragment": "mx5_2026_price.content"
+    },
+    "블랙 잉크": {
+      "slug": "black-ink",
+      "price": {
+        "base": 45530000
+      },
+      "select_groups": [
+        {
+          "name": "빌트인 캠 2, 증강현실 내비게이션",
+          "price": 450000,
+          "code": "MX03P11"
+        },
+        {
+          "name": "HTRAC",
+          "price": 2230000,
+          "code": "MX03008"
+        },
+        {
+          "name": "6인승",
+          "price": 1040000,
+          "code": "MX03P22"
+        },
+        {
+          "name": "7인승",
+          "price": 690000,
+          "code": "MX03P23"
+        },
+        {
+          "name": "듀얼와이드선루프",
+          "price": 890000,
+          "code": "MX03057"
+        },
+        {
+          "name": "BOSE 프리미엄 사운드(12스피커, 외장 앰프)",
+          "price": 640000,
+          "code": "MX03125"
+        },
+        {
+          "name": "블랙잉크 플러스",
+          "price": 940000,
+          "code": "MX03P21"
+        },
+        {
+          "name": "[N 퍼포먼스 파츠]알콘(alcon) 모노블록 브레이크 & 21인치 휠 패키지",
+          "price": 2750000,
+          "code": "MX03P17"
+        },
+        {
+          "name": "[N 퍼포먼스 파츠]21인치 블랙 휠",
+          "price": 850000,
+          "code": "MX03P18"
+        }
+      ],
+      "h_genuine": [
+        {
+          "name": "빌트인 공기청정기 2.0",
+          "price": 530000,
+          "code": "MX03127"
+        },
+        {
+          "name": "라이프 스타일",
+          "price": 490000,
+          "code": "MX03P16"
+        },
+        {
+          "name": "사이드스텝",
+          "price": 400000,
+          "code": "MX03128"
+        },
+        {
+          "name": "블랙 사이드스텝",
+          "price": 450000,
+          "code": "MX03143"
+        },
+        {
+          "name": "차량 보호 필름Ⅰ(프론트 범퍼 사이드 외)",
+          "price": 410000,
+          "code": "MX03130"
+        },
+        {
+          "name": "차량 보호 필름Ⅱ(도어 중앙부, 도어 엣지 외)",
+          "price": 400000,
+          "code": "MX03131"
+        },
+        {
+          "name": "프로텍션 매트 패키지 Ⅰ",
+          "price": 230000,
+          "code": "MX03P13"
+        },
+        {
+          "name": "프로텍션 매트 패키지 Ⅱ",
+          "price": 150000,
+          "code": "MX03P14"
+        },
+        {
+          "name": "러기지 패키지",
+          "price": 120000,
+          "code": "MX03P15"
+        }
+      ],
+      "source_fragment": "mx5_2026_price.content"
+    }
+  }
+}

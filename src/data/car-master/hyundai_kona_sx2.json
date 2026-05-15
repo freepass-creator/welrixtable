@@ -1,0 +1,387 @@
+{
+  "catalog_id": "hyundai_kona_sx2",
+  "title": "디 올 뉴 코나 (SX2)",
+  "model_name_kr": "디 올 뉴 코나 SX2",
+  "maker": "현대",
+  "year_start": "2023-04",
+  "year_end": "현재",
+  "status": "current",
+  "source": "hyundai_official",
+  "source_urls": [
+    "https://www.hyundai.com/kr/ko/e/vehicles/kona/price",
+    "https://www.hyundai.com/contents/repn-car/html/homepage/price/kona-27-J-G2.0_price.content",
+    "https://www.hyundai.com/contents/repn-car/html/homepage/price/kona-27-J-G1.6T_price.content"
+  ],
+  "fetched_at": "2026-05-14",
+  "fetched_hash": "2fc3a078c065",
+  "trims": {
+    "모던 가솔린 2.0": {
+      "slug": "modern",
+      "price": {
+        "base": 23960000
+      },
+      "select_groups": [
+        {
+          "name": "하이패스",
+          "price": 200000,
+          "code": "SX04112"
+        },
+        {
+          "name": "내비게이션 패키지Ⅰ",
+          "price": 550000,
+          "code": "SX04P06"
+        },
+        {
+          "name": "현대 스마트센스Ⅰ",
+          "price": 1100000,
+          "code": "SX04P02"
+        },
+        {
+          "name": "컴포트 초이스",
+          "price": 400000,
+          "code": "SX04P05"
+        }
+      ],
+      "h_genuine": [],
+      "source_fragment": "kona-27-J-G2.0_price.content"
+    },
+    "H-Pick 가솔린 2.0": {
+      "slug": "H-Pick",
+      "price": {
+        "base": 26280000
+      },
+      "select_groups": [
+        {
+          "name": "하이패스",
+          "price": 200000,
+          "code": "SX04112"
+        },
+        {
+          "name": "베스트 셀렉션",
+          "price": 790000,
+          "code": "SX04P04"
+        },
+        {
+          "name": "스타일 Lite",
+          "price": 490000,
+          "code": "SX04P07"
+        },
+        {
+          "name": "현대 스마트센스Ⅲ",
+          "price": 550000,
+          "code": "SX04P03"
+        },
+        {
+          "name": "클러스터(12.3인치 컬러 LCD)",
+          "price": 400000,
+          "code": "SX04071"
+        },
+        {
+          "name": "파킹어시스트",
+          "price": 990000,
+          "code": "SX04P09",
+          "note": "클러스터 선택 시"
+        },
+        {
+          "name": "컨비니언스",
+          "price": 400000,
+          "code": "SX04P10"
+        },
+        {
+          "name": "빌트인 캠 2, 증강현실 내비게이션",
+          "price": 450000,
+          "code": "SX04P01"
+        }
+      ],
+      "h_genuine": [],
+      "source_fragment": "kona-27-J-G2.0_price.content"
+    },
+    "모던 가솔린 1.6T": {
+      "slug": "modern",
+      "price": {
+        "base": 24660000
+      },
+      "select_groups": [
+        {
+          "name": "하이패스",
+          "price": 200000,
+          "code": "SX04112"
+        },
+        {
+          "name": "내비게이션 패키지Ⅰ",
+          "price": 550000,
+          "code": "SX04P06"
+        },
+        {
+          "name": "현대 스마트센스Ⅰ",
+          "price": 1100000,
+          "code": "SX04P02"
+        },
+        {
+          "name": "컴포트 초이스",
+          "price": 400000,
+          "code": "SX04P05"
+        }
+      ],
+      "h_genuine": [],
+      "source_fragment": "kona-27-J-G1.6T_price.content"
+    },
+    "H-Pick 가솔린 1.6T": {
+      "slug": "H-Pick",
+      "price": {
+        "base": 26880000
+      },
+      "select_groups": [
+        {
+          "name": "하이패스",
+          "price": 200000,
+          "code": "SX04112"
+        },
+        {
+          "name": "베스트 셀렉션",
+          "price": 790000,
+          "code": "SX04P04"
+        },
+        {
+          "name": "스타일 Lite",
+          "price": 490000,
+          "code": "SX04P07"
+        },
+        {
+          "name": "현대 스마트센스Ⅲ",
+          "price": 550000,
+          "code": "SX04P03"
+        },
+        {
+          "name": "클러스터(12.3인치 컬러 LCD)",
+          "price": 400000,
+          "code": "SX04071"
+        },
+        {
+          "name": "파킹어시스트",
+          "price": 990000,
+          "code": "SX04P09",
+          "note": "클러스터 선택 시"
+        },
+        {
+          "name": "컨비니언스",
+          "price": 400000,
+          "code": "SX04P10"
+        },
+        {
+          "name": "빌트인 캠 2, 증강현실 내비게이션",
+          "price": 450000,
+          "code": "SX04P01"
+        }
+      ],
+      "h_genuine": [],
+      "source_fragment": "kona-27-J-G1.6T_price.content"
+    },
+    "프리미엄 가솔린 1.6T": {
+      "slug": "premium",
+      "price": {
+        "base": 29190000
+      },
+      "select_groups": [
+        {
+          "name": "HTRAC(험로주행모드)",
+          "price": 2030000,
+          "code": "SX04001"
+        },
+        {
+          "name": "와이드 선루프",
+          "price": 590000,
+          "code": "SX04056"
+        },
+        {
+          "name": "빌트인 캠 2, 증강현실 내비게이션",
+          "price": 450000,
+          "code": "SX04P01"
+        },
+        {
+          "name": "베스트 셀렉션",
+          "price": 790000,
+          "code": "SX04P04"
+        },
+        {
+          "name": "현대 스마트센스Ⅲ",
+          "price": 550000,
+          "code": "SX04P03"
+        },
+        {
+          "name": "클러스터(12.3인치 컬러 LCD)",
+          "price": 400000,
+          "code": "SX04071"
+        },
+        {
+          "name": "파킹어시스트",
+          "price": 990000,
+          "code": "SX04P09",
+          "note": "클러스터 선택 시"
+        },
+        {
+          "name": "시트플러스",
+          "price": 490000,
+          "code": "SX04P08"
+        },
+        {
+          "name": "19인치 알로이 휠 & 타이어",
+          "price": 250000,
+          "code": "SX04037"
+        },
+        {
+          "name": "실내 컬러 패키지",
+          "price": 200000,
+          "code": "SX04P11"
+        }
+      ],
+      "h_genuine": [],
+      "source_fragment": "kona-27-J-G1.6T_price.content"
+    },
+    "인스퍼레이션 가솔린 1.6T": {
+      "slug": "inspiration",
+      "price": {
+        "base": 31500000
+      },
+      "select_groups": [
+        {
+          "name": "HTRAC(험로주행모드)",
+          "price": 2030000,
+          "code": "SX04001"
+        },
+        {
+          "name": "와이드 선루프",
+          "price": 590000,
+          "code": "SX04056"
+        },
+        {
+          "name": "빌트인 캠 2, 증강현실 내비게이션",
+          "price": 450000,
+          "code": "SX04P01"
+        },
+        {
+          "name": "파킹어시스트",
+          "price": 990000,
+          "code": "SX04P09"
+        },
+        {
+          "name": "BOSE 프리미엄 사운드",
+          "price": 590000,
+          "code": "SX04117"
+        },
+        {
+          "name": "투톤 컬러 루프",
+          "price": 300000,
+          "code": "SX04058"
+        },
+        {
+          "name": "실내 컬러 패키지",
+          "price": 200000,
+          "code": "SX04P11"
+        },
+        {
+          "name": "에코패키지",
+          "price": 200000,
+          "code": "SX04P12"
+        }
+      ],
+      "h_genuine": [],
+      "source_fragment": "kona-27-J-G1.6T_price.content"
+    },
+    "블랙 익스테리어 가솔린 1.6T": {
+      "slug": "black-exterior",
+      "price": {
+        "base": 31850000
+      },
+      "select_groups": [
+        {
+          "name": "HTRAC(험로주행모드)",
+          "price": 2030000,
+          "code": "SX04001"
+        },
+        {
+          "name": "와이드 선루프",
+          "price": 590000,
+          "code": "SX04056"
+        },
+        {
+          "name": "빌트인 캠 2, 증강현실 내비게이션",
+          "price": 450000,
+          "code": "SX04P01"
+        },
+        {
+          "name": "파킹어시스트",
+          "price": 990000,
+          "code": "SX04P09"
+        },
+        {
+          "name": "BOSE 프리미엄 사운드",
+          "price": 590000,
+          "code": "SX04117"
+        },
+        {
+          "name": "투톤 컬러 루프",
+          "price": 300000,
+          "code": "SX04058"
+        },
+        {
+          "name": "실내 컬러 패키지",
+          "price": 200000,
+          "code": "SX04P11"
+        },
+        {
+          "name": "에코패키지",
+          "price": 200000,
+          "code": "SX04P12"
+        }
+      ],
+      "h_genuine": [],
+      "source_fragment": "kona-27-J-G1.6T_price.content"
+    },
+    "N Line 가솔린 1.6T": {
+      "slug": "n-line",
+      "price": {
+        "base": 32490000
+      },
+      "select_groups": [
+        {
+          "name": "HTRAC(험로주행모드)",
+          "price": 2030000,
+          "code": "SX04001"
+        },
+        {
+          "name": "와이드 선루프",
+          "price": 590000,
+          "code": "SX04056"
+        },
+        {
+          "name": "빌트인 캠 2, 증강현실 내비게이션",
+          "price": 450000,
+          "code": "SX04P01"
+        },
+        {
+          "name": "파킹어시스트",
+          "price": 990000,
+          "code": "SX04P09"
+        },
+        {
+          "name": "BOSE 프리미엄 사운드",
+          "price": 590000,
+          "code": "SX04117"
+        },
+        {
+          "name": "투톤 컬러 루프",
+          "price": 300000,
+          "code": "SX04058"
+        },
+        {
+          "name": "알칸타라 인테리어 패키지",
+          "price": 370000,
+          "code": "SX04P13"
+        }
+      ],
+      "h_genuine": [],
+      "source_fragment": "kona-27-J-G1.6T_price.content"
+    }
+  }
+}
