@@ -210,7 +210,54 @@ window.__welrix_onPriceChange = (data) => {
 };
 
 // ============ 견적 계산 ============
+function renderSummary() {
+  const mini = $('qp-summary-mini');
+  if (!mini) return;
+  const v = state.vehicle;
+  const vEl = $('qp-vehicle');
+  // 차량 정보가 부분이라도 있으면 표시
+  const titleParts = v ? [v.brand, v.model, v.variant, v.trim_name].filter(Boolean) : [];
+  if (titleParts.length) {
+    vEl.textContent = titleParts.join(' · ');
+    vEl.classList.remove('empty');
+  } else {
+    vEl.textContent = '차량 미선택';
+    vEl.classList.add('empty');
+  }
+  // 가격 (총계는 차량가 + 내장색)
+  const totalKrw = v && v.total_manwon ? v.total_manwon * 10000 + (state.cond.colorIntPrice || 0) : 0;
+  $('qp-price-num').textContent = totalKrw ? krw(totalKrw) : '';
+  // breakdown: 트림 / 옵션 (총계는 상단 가격으로 통합 — 중복 표시 X)
+  const trimManwon = v?.trim_price_manwon || 0;
+  const optsManwon = v?.options_price_manwon || 0;
+  $('qp-bd-trim').textContent = trimManwon ? `${fmt(trimManwon)}만` : '—';
+  $('qp-bd-opts').textContent = optsManwon ? `${fmt(optsManwon)}만` : '—';
+  // 개소세 라벨
+  const taxLabel = $('qp-tax-label');
+  if (taxLabel && v && v.tax_rate) {
+    taxLabel.textContent = v.tax_rate === '3_5' ? '3.5%' : '5%';
+  }
+  // 옵션 — 뱃지로 노출 (라벨 분리 → wrap 시 chips는 같은 col에서 시작)
+  const opts = (v && v.options) || [];
+  $('qp-summary-opts').innerHTML = opts.length
+    ? `<span class="qp-opt-label">옵션</span><div class="qp-opt-chips">${opts.map((n) => `<span class="badge badge--brand">${n}</span>`).join('')}</div>`
+    : '';
+  // 색상
+  const colorBits = [];
+  if (v && v.colorExt) {
+    const hex = guessColor(v.colorExt);
+    colorBits.push(`<span class="color-item"><span class="swatch" style="background:${hex}"></span>외장 ${v.colorExt}</span>`);
+  }
+  if (state.cond.colorInt) {
+    const hex = guessColor(state.cond.colorInt);
+    colorBits.push(`<span class="color-item"><span class="swatch" style="background:${hex}"></span>내장 ${state.cond.colorInt}</span>`);
+  }
+  $('qp-summary-colors').innerHTML = colorBits.join('');
+}
+
 function recompute() {
+  // 부분 선택이어도 요약은 즉시 반영
+  renderSummary();
   if (!state.vehicle || !state.vehicle.total_manwon) {
     renderEmpty();
     return;
@@ -261,11 +308,33 @@ function recompute() {
 }
 
 function renderEmpty() {
-  $('terms-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:32px; color:#bbb; font-size:13px;">차량 선택 후 산출</div>';
-  const mini = $('qp-summary-mini');
-  if (mini) mini.hidden = true;
+  // 4기간 카드 골격은 항상 노출 (값만 빈 placeholder)
+  const grid = $('terms-grid');
+  if (grid) {
+    grid.innerHTML = state.scenarios.map((sc, idx) => `
+      <div class="term-card term-card--empty" data-idx="${idx}">
+        <div class="term-card__head">
+          <select class="term-card__term-dd" disabled><option>${sc.term}개월</option></select>
+          <label class="term-card__check"><input type="checkbox" checked disabled/></label>
+        </div>
+        <div class="term-card__monthly">—<em>원</em></div>
+        <div class="term-card__cond">
+          <label><span>보증금</span><span class="pct-cell pct-cell--static">${sc.dep}%</span></label>
+          <label><span>선납금</span><span class="pct-cell pct-cell--static">${sc.pre}%</span></label>
+        </div>
+        <div class="term-card__row"><span>만기인수</span><b>—</b></div>
+        <div class="term-card__row"><span>보증금</span><b>—</b></div>
+        <div class="term-card__row"><span>선납금</span><b>—</b></div>
+      </div>
+    `).join('');
+  }
+  // 요약은 renderSummary가 별도로 처리 (recompute에서 호출됨, 또는 직접 호출)
   $('quote-doc').innerHTML = '<div class="quote-doc__empty">차량과 트림을 선택하면 견적서가 생성됩니다.</div>';
 }
+// 페이지 로드 시 즉시 빈 상태 그리기
+renderEmpty();
+// renderSummary는 renderEmpty와 별도로 항상 노출 (초기 차량 미선택 텍스트 표시)
+if (typeof renderSummary === 'function') renderSummary();
 
 const TERM_OPTIONS = [12, 24, 36, 48, 60];
 function renderTerms(monthly) {
@@ -404,13 +473,8 @@ function renderQuoteDoc(monthly, totalKrw, tintFee, deliveryFee, accessoryFee = 
     </div>
   `;
   $('quote-doc').innerHTML = html;
-  // 작은 정보 줄 갱신
-  const mini = $('qp-summary-mini');
-  if (mini) {
-    mini.hidden = false;
-    $('qp-vehicle').textContent = `${v.brand} ${v.model} ${v.trim_name}`;
-    $('qp-price-num').textContent = krw(totalKrw);
-  }
+  // 작은 정보 줄 갱신 (renderSummary와 동일 로직 — 가격 포함)
+  renderSummary();
 }
 
 // 텍스트 형식 (카톡 전송용)
@@ -446,6 +510,23 @@ function attach() {
     const handler = () => { state.cond[map[key]] = el.value; recompute(); };
     el.addEventListener('change', handler);
     el.addEventListener('input', handler);
+  });
+  // 전체 보증금/선납금 — 입력시 4기간 시나리오 일괄 적용
+  $('q-dep')?.addEventListener('change', (e) => {
+    const v = Math.max(0, Math.min(100, +e.target.value || 0));
+    e.target.value = v;
+    state.cond.dep = v;
+    state.scenarios.forEach((sc) => { sc.dep = v; });
+    if (state.vehicle && state.vehicle.total_manwon) recompute();
+    else renderEmpty();
+  });
+  $('q-pre')?.addEventListener('change', (e) => {
+    const v = Math.max(0, Math.min(100, +e.target.value || 0));
+    e.target.value = v;
+    state.cond.pre = v;
+    state.scenarios.forEach((sc) => { sc.pre = v; });
+    if (state.vehicle && state.vehicle.total_manwon) recompute();
+    else renderEmpty();
   });
   // 탁송 cascade
   $('q-delivery-region')?.addEventListener('change', () => {
@@ -531,12 +612,12 @@ function attach() {
     try {
       await navigator.clipboard.writeText(url);
       const btn = $('btn-copy-sign-link');
-      const orig = btn.textContent;
-      btn.textContent = '✓ 복사됨!';
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<i class="ph ph-check"></i>복사됨';
       btn.style.background = '#10b981';
       btn.style.borderColor = '#10b981';
       btn.style.color = '#fff';
-      setTimeout(() => { btn.textContent = orig; btn.style.cssText = ''; }, 1500);
+      setTimeout(() => { btn.innerHTML = orig; btn.style.cssText = ''; }, 1500);
     } catch (err) {
       prompt('아래 링크를 복사해 손님께 전달하세요:', url);
     }

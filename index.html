@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>웰릭스 모빌리티 — 신차 장기렌터카 견적</title>
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/[email protected]/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
 <style>
   :root {
     --ink-1: #0a0a0a;
@@ -18,6 +19,10 @@
     --bg-soft: #fafafa;
     --accent: #0a0a0a;
     --accent-soft: #f5f5f5;
+    --brand: var(--brand);
+    --brand-700: var(--brand-700);
+    --brand-100: var(--brand-100);
+    --brand-50: var(--brand-50);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -28,17 +33,17 @@
     -webkit-text-size-adjust: 100%;
     margin: 0;
     display: grid;
-    grid-template-columns: 460px minmax(0, 1fr) 320px;
+    grid-template-columns: 520px minmax(0, 1fr) 320px;
     grid-template-rows: 44px 1fr;
     gap: 0;
     height: 100vh;
     overflow: hidden;
   }
   @media (max-width: 1500px) {
-    body { grid-template-columns: 430px minmax(0, 1fr) 300px; }
+    body { grid-template-columns: 480px minmax(0, 1fr) 300px; }
   }
   @media (max-width: 1300px) {
-    body { grid-template-columns: 400px minmax(0, 1fr) 280px; }
+    body { grid-template-columns: 450px minmax(0, 1fr) 280px; }
   }
   /* 톱바 — 화이트 + 헤어라인만 */
   .global-topbar {
@@ -49,9 +54,10 @@
     background: var(--bg);
     border-bottom: 1px solid var(--line);
   }
+  .ph { font-size: 14px; line-height: 1; }
   .global-topbar__brand {
     display: inline-flex; align-items: center; gap: 8px;
-    font-size: 13.5px; font-weight: 600; letter-spacing: -0.2px; color: var(--ink-1);
+    font-size: 13.5px; font-weight: 500; letter-spacing: -0.2px; color: var(--ink-1);
   }
   .global-topbar__brand .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-1); }
   .global-topbar__hint { font-size: 12px; color: var(--ink-4); padding-left: 12px; }
@@ -59,18 +65,19 @@
   .global-topbar__actions { display: flex; gap: 2px; }
   .gt-btn {
     height: 28px; padding: 0 10px;
-    border-radius: 4px; font-size: 12px; font-weight: 500;
+    border: 1px solid transparent; border-radius: 6px;
+    font-size: 12px; font-weight: 500;
     cursor: pointer; font-family: inherit;
     display: inline-flex; align-items: center; gap: 4px;
-    background: transparent; color: var(--ink-2); border: none;
-    transition: background .12s, color .12s;
+    background: transparent; color: var(--ink-2);
+    transition: background .12s, color .12s, border-color .12s;
   }
   .gt-btn:hover { background: var(--accent-soft); color: var(--ink-1); }
-  .gt-btn.outline { background: transparent; color: var(--ink-2); border: none; }
-  .gt-btn.outline:hover { background: var(--accent-soft); color: var(--ink-1); }
-  .gt-btn.primary { background: var(--ink-1); color: #fff; border: none; font-weight: 600; }
-  .gt-btn.primary:hover { background: #262626; }
-  .gt-btn.ghost { background: transparent; color: var(--ink-3); border: none; }
+  .gt-btn.outline { border-color: var(--line-2); color: var(--ink-1); }
+  .gt-btn.outline:hover { background: var(--accent-soft); border-color: var(--ink-4); color: var(--ink-1); }
+  .gt-btn.primary { background: var(--brand); color: #fff; border-color: var(--brand); font-weight: 500; }
+  .gt-btn.primary:hover { background: var(--brand-700); border-color: var(--brand-700); color: #fff; }
+  .gt-btn.ghost { color: var(--ink-3); }
   .gt-btn.ghost:hover { background: var(--accent-soft); color: var(--ink-1); }
   @media (max-width: 1024px) {
     body { grid-template-columns: 1fr; }
@@ -174,23 +181,13 @@
     .step-dd { display: block; height: 32px; font-size: 12.5px; padding: 0 10px; padding-right: 28px; }
 
     /* 섹션별 padding 통일 (위 .section 규칙으로 일괄 적용됨) */
-    #sec-options, #sec-color, #sec-delivery, #sec-tint, #sec-extras, #sec-insurance { padding: 10px 14px !important; }
+    #sec-options, #sec-extras { padding: 8px 0 !important; }
     .colors { gap: 5px !important; }
     .color { padding: 4px 8px !important; font-size: 11px !important; }
     /* 색상 카드 swatch 그리드 숨김 (dropdown 만 사용) */
     #sec-color #colors { display: none !important; }
-    /* dropdown 옆 색깔 뱃지 */
-    .color-wrap { position: relative; }
     .color-wrap .step-dd { padding-left: 30px !important; }
-    .color-swatch-mini {
-      position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
-      width: 14px; height: 14px; border-radius: 50%;
-      border: 1px solid rgba(0,0,0,0.18);
-      background: #e5e5e5;
-      pointer-events: none; z-index: 1;
-    }
-    .color-wrap select:disabled + ,
-    .color-wrap .step-dd:disabled ~ .color-swatch-mini { opacity: 0.3; }
+    .color-wrap:has(.step-dd:disabled) .color-swatch-mini { opacity: 0.3; }
     /* accordion summary (좌측 STEP 9 용품) */
     .step-title-summary {
       list-style: none; cursor: pointer; user-select: none;
@@ -199,8 +196,8 @@
     .step-title-summary::-webkit-details-marker { display: none; }
     .step-title-summary .caret { margin-left: auto; font-size: 10px; color: #888; transition: transform .15s; }
     details[open] > .step-title-summary .caret { transform: rotate(180deg); }
-    .step-title-text { font-size: 10px; letter-spacing: 0.6px; color: #999; font-weight: 600; }
-    .step-title-text b { color: #0D4E8B; }
+    .step-title-text { font-size: 10px; letter-spacing: 0.6px; color: var(--ink-4); font-weight: 500; }
+    .step-title-text b { color: var(--brand); font-weight: 500; }
 
     /* 하단바 숨김 */
     .total-bar { display: none !important; }
@@ -222,9 +219,52 @@
 
     /* 견적 조건 4 column → 가로 폭 좁으므로 4 → 동일 유지 */
     .qp-cond__grid { grid-template-columns: repeat(4, 1fr) !important; }
+
+    /* ===== 필드 row — 라벨 좌측 / 인풋 우측 가로 레이아웃 ===== */
+    #sec-manufacturer, #sec-model, #sec-variant, #sec-trim,
+    #sec-color, #sec-delivery, #sec-tint, #sec-insurance {
+      display: grid !important;
+      grid-template-columns: 110px 1fr;
+      align-items: center;
+      column-gap: 12px;
+      row-gap: 4px;
+      padding: 8px 0 !important;
+    }
+    #sec-manufacturer > .step-title, #sec-model > .step-title,
+    #sec-variant > .step-title, #sec-trim > .step-title,
+    #sec-color > .step-title, #sec-delivery > .step-title,
+    #sec-tint > .step-title, #sec-insurance > .step-title {
+      grid-column: 1;
+      margin-bottom: 0 !important;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #sec-manufacturer > *:not(.step-title),
+    #sec-model > *:not(.step-title),
+    #sec-variant > *:not(.step-title),
+    #sec-trim > *:not(.step-title),
+    #sec-color > *:not(.step-title),
+    #sec-delivery > *:not(.step-title),
+    #sec-tint > *:not(.step-title),
+    #sec-insurance > *:not(.step-title) {
+      grid-column: 2;
+      min-width: 0;
+    }
   }
   /* dropdown 은 모든 화면에서 항상 보임 (모바일/웹 동일) */
   .step-dd { display: block; }
+
+  /* 색상 swatch — 모든 화면에서 동작 */
+  .color-wrap { position: relative; display: block; }
+  .color-swatch-mini {
+    position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.2);
+    background: var(--ink-5);
+    pointer-events: none; z-index: 2;
+    display: block;
+  }
   /* STEP 1~4 카드 그리드 항상 숨김 (dropdown 만 사용) */
   #sec-manufacturer .grid-2,
   #sec-model .grid-2,
@@ -236,23 +276,23 @@
     border-bottom: 1px solid #eee;
     background: #fff; position: relative;
   }
-  .title { font-size: 18px; font-weight: 800; }
-  .title .accent { color: #0D4E8B; }
-  .reset-btn {
-    background: none; border: 1px solid #ddd; border-radius: 6px;
-    padding: 6px 10px; font-size: 11px; cursor: pointer;
-    color: #666; font-family: inherit;
-  }
+  .title { font-size: 18px; font-weight: 600; }
+  .title .accent { color: var(--brand); }
   .topbar-actions { position: absolute; top: 14px; right: 20px; display: flex; gap: 6px; }
   .topbar-btn {
     height: 28px; padding: 0 12px;
-    border-radius: 6px; font-size: 12px; font-weight: 600;
+    border: 1px solid transparent; border-radius: 6px;
+    font-size: 12px; font-weight: 500;
     cursor: pointer; font-family: inherit;
+    display: inline-flex; align-items: center; gap: 4px;
+    background: transparent; color: var(--ink-2);
+    transition: background .12s, color .12s, border-color .12s;
   }
-  .topbar-btn.outline { background: #fff; color: #0D4E8B; border: 1.5px solid #0D4E8B; }
-  .topbar-btn.outline:hover { background: #f0f7ff; }
-  .topbar-btn.primary { background: #0D4E8B; color: #fff; border: 1.5px solid #0D4E8B; }
-  .topbar-btn.primary:hover { background: #0a3d6e; }
+  .topbar-btn:hover { background: var(--accent-soft); color: var(--ink-1); }
+  .topbar-btn.outline { border-color: var(--line-2); color: var(--ink-1); }
+  .topbar-btn.outline:hover { background: var(--accent-soft); border-color: var(--ink-4); color: var(--ink-1); }
+  .topbar-btn.primary { background: var(--brand); color: #fff; border-color: var(--brand); font-weight: 500; }
+  .topbar-btn.primary:hover { background: var(--brand-700); border-color: var(--brand-700); color: #fff; }
 
   /* 손님 / 담당자 — 분리된 카드 두 개 좌우 배치 */
   .qp-people-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -274,17 +314,25 @@
   .quote-modal__head {
     display: flex; align-items: center; gap: 8px;
     padding: 14px 18px; background: #fafafa; border-bottom: 1px solid #eee;
-    font-size: 13px; font-weight: 700; color: #0D4E8B;
+    font-size: 12.5px; font-weight: 500; color: var(--brand);
   }
   .quote-modal__head .actions { margin-left: auto; display: flex; gap: 6px; }
   .quote-modal__head button {
     height: 28px; padding: 0 12px;
-    border-radius: 6px; font-size: 11.5px; font-weight: 600;
+    border: 1px solid transparent; border-radius: 6px;
+    font-size: 12px; font-weight: 500;
     cursor: pointer; font-family: inherit;
+    display: inline-flex; align-items: center; gap: 4px;
+    background: transparent; color: var(--ink-2);
+    transition: background .12s, color .12s, border-color .12s;
   }
-  .quote-modal__head button.outline { background: #fff; color: #0D4E8B; border: 1.5px solid #0D4E8B; }
-  .quote-modal__head button.primary { background: #0D4E8B; color: #fff; border: 1.5px solid #0D4E8B; }
-  .quote-modal__head button.close { background: transparent; border: none; color: #666; font-size: 18px; }
+  .quote-modal__head button:hover { background: var(--accent-soft); color: var(--ink-1); }
+  .quote-modal__head button.outline { border-color: var(--line-2); color: var(--ink-1); }
+  .quote-modal__head button.outline:hover { background: var(--accent-soft); border-color: var(--ink-4); color: var(--ink-1); }
+  .quote-modal__head button.primary { background: var(--brand); color: #fff; border-color: var(--brand); font-weight: 500; }
+  .quote-modal__head button.primary:hover { background: var(--brand-700); border-color: var(--brand-700); color: #fff; }
+  .quote-modal__head button.close { color: var(--ink-3); font-size: 16px; padding: 0 8px; }
+  .quote-modal__head button.close:hover { background: var(--accent-soft); color: var(--ink-1); }
   .quote-modal__body { flex: 1; overflow-y: auto; padding: 0; }
   .breadcrumb {
     display: flex; gap: 6px; flex-wrap: wrap;
@@ -296,12 +344,12 @@
     background: #fff; border: 1px solid #e0e0e0;
     padding: 4px 10px; border-radius: 12px;
   }
-  .crumb.filled { color: #0D4E8B; border-color: #0D4E8B; font-weight: 600; }
+  .crumb.filled { color: var(--brand); border-color: var(--brand); font-weight: 400; }
   .crumb .label { color: #aaa; margin-right: 4px; font-weight: 400; }
-  .crumb.filled .label { color: #0D4E8B; }
+  .crumb.filled .label { color: var(--brand); }
   section { padding: 20px; border-bottom: 8px solid #f5f5f5; }
   .step-title { font-size: 11px; color: #999; font-weight: 600; letter-spacing: 1px; margin-bottom: 12px; }
-  .step-title b { color: #0D4E8B; }
+  .step-title b { color: var(--brand); }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .grid-1 { display: flex; flex-direction: column; gap: 6px; }
   .card {
@@ -310,47 +358,51 @@
     transition: all 0.15s; text-align: left;
     font-family: inherit; width: 100%;
   }
-  .card.active { border-color: #0D4E8B; background: #f5f9ff; }
+  .card.active { border-color: var(--brand); background: var(--brand-50); }
   .card.disabled { opacity: 0.4; cursor: not-allowed; background: #fafafa; }
-  .card .name { font-weight: 600; font-size: 14px; }
+  .card .name { font-weight: 400; font-size: 13px; }
   .card .sub { font-size: 11px; color: #777; margin-top: 3px; line-height: 1.5; }
-  .card .price { font-size: 13px; color: #0D4E8B; font-weight: 700; margin-top: 6px; }
+  .card .price { font-size: 12.5px; color: var(--brand); font-weight: 600; margin-top: 6px; }
   .trim-row {
     display: flex; justify-content: space-between; align-items: center;
     border: 1.5px solid #e5e5e5; border-radius: 8px;
     padding: 14px; cursor: pointer; background: #fff;
     transition: all 0.15s;
   }
-  .trim-row.active { border-color: #0D4E8B; background: #f5f9ff; }
+  .trim-row.active { border-color: var(--brand); background: var(--brand-50); }
   .trim-row .info { flex: 1; }
-  .trim-row .info .name { font-weight: 600; font-size: 15px; }
+  .trim-row .info .name { font-weight: 400; font-size: 14px; }
   .trim-row .info .meta { font-size: 11px; color: #888; margin-top: 3px; }
-  .trim-row .price { font-weight: 700; font-size: 15px; white-space: nowrap; }
+  .trim-row .price { font-weight: 600; font-size: 13px; white-space: nowrap; }
   .specs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
   .spec-item { background: #f9f9f9; padding: 10px; border-radius: 6px; text-align: center; }
   .spec-item .k { font-size: 10px; color: #999; }
-  .spec-item .v { font-size: 12.5px; font-weight: 600; margin-top: 2px; }
+  .spec-item .v { font-size: 12px; font-weight: 400; margin-top: 2px; }
   .features {
     background: #fafafa; padding: 12px; border-radius: 6px;
     margin-top: 12px; font-size: 11.5px; color: #555; line-height: 1.7;
   }
-  .features .label { font-weight: 600; color: #333; margin-bottom: 4px; display: block; }
+  .features .label { font-weight: 400; color: var(--ink-2); margin-bottom: 4px; display: block; }
   .option-row {
     display: flex; align-items: flex-start; gap: 10px;
-    border: 1.5px solid #e5e5e5; border-radius: 8px;
-    padding: 12px; cursor: pointer; background: #fff;
-    transition: all 0.15s;
+    border: 0; border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    padding: 9px 2px; cursor: pointer; background: transparent;
+    transition: background .12s;
   }
-  .option-row.active { border-color: #0D4E8B; background: #f5f9ff; }
+  .option-row:last-child { border-bottom: 0; }
+  .option-row:hover { background: var(--accent-soft); }
+  .option-row.active { background: var(--brand-50); }
+  .option-row.active .o-name { color: var(--brand); }
   .option-row.disabled { opacity: 0.4; cursor: not-allowed; }
   .option-row input[type="checkbox"] {
-    margin-top: 2px; width: 18px; height: 18px;
-    accent-color: #0D4E8B; cursor: pointer; flex-shrink: 0;
+    margin-top: 2px; width: 14px; height: 14px;
+    accent-color: var(--brand); cursor: pointer; flex-shrink: 0;
   }
   .option-row .o-info { flex: 1; min-width: 0; }
-  .option-row .o-name { font-weight: 500; font-size: 13.5px; line-height: 1.4; }
-  .option-row .o-sub { font-size: 11px; color: #888; margin-top: 3px; line-height: 1.4; }
-  .option-row .o-price { font-weight: 600; font-size: 13px; color: #0D4E8B; white-space: nowrap; }
+  .option-row .o-name { font-weight: 400; font-size: 13px; line-height: 1.4; color: var(--ink-1); }
+  .option-row .o-sub { font-size: 11px; color: var(--ink-4); margin-top: 2px; line-height: 1.4; }
+  .option-row .o-price { font-weight: 500; font-size: 12.5px; color: var(--brand); white-space: nowrap; font-variant-numeric: tabular-nums; }
   .colors { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .color-card {
     display: flex; align-items: center; gap: 10px;
@@ -358,10 +410,10 @@
     padding: 10px 12px; cursor: pointer; background: #fff;
     transition: all 0.15s;
   }
-  .color-card.active { border-color: #0D4E8B; background: #f5f9ff; }
+  .color-card.active { border-color: var(--brand); background: var(--brand-50); }
   .color-swatch { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #ddd; flex-shrink: 0; }
   .color-card .c-name { font-size: 12.5px; font-weight: 500; flex: 1; }
-  .color-card .c-price { font-size: 11px; color: #0D4E8B; font-weight: 600; }
+  .color-card .c-price { font-size: 11px; color: var(--brand); font-weight: 600; }
   .total-bar {
     position: fixed; bottom: 0; left: 0; right: 0;
     background: #fff; border-top: 1px solid #ddd;
@@ -373,7 +425,7 @@
   .total-row { display: flex; justify-content: space-between; align-items: center; }
   .total-row.sub { font-size: 12px; color: #888; margin-bottom: 4px; }
   .total-row.main .label { color: #555; font-size: 13px; }
-  .total-row.main .v { font-size: 22px; font-weight: 800; color: #0D4E8B; }
+  .total-row.main .v { font-size: 22px; font-weight: 700; color: var(--brand); }
   .empty-state { padding: 30px 20px; text-align: center; color: #aaa; font-size: 13px; }
   .footnote { font-size: 10.5px; color: #999; padding: 14px 20px; line-height: 1.6; }
   section.hidden { display: none; }
@@ -386,9 +438,9 @@
   <span class="global-topbar__hint">신차 장기렌터카 견적기</span>
   <span class="spacer"></span>
   <div class="global-topbar__actions">
-    <button class="gt-btn outline" id="btn-preview-quote">📄 견적서 미리보기</button>
-    <button class="gt-btn outline" id="btn-copy-sign-link" title="모듀사인 서명 페이지 링크를 복사합니다">📝 서명 링크 복사</button>
-    <button class="gt-btn primary" id="btn-save-link">🔗 링크 저장</button>
+    <button class="gt-btn outline" id="btn-preview-quote"><i class="ph ph-file-text"></i>견적서 미리보기</button>
+    <button class="gt-btn outline" id="btn-copy-sign-link" title="모듀사인 서명 페이지 링크를 복사합니다"><i class="ph ph-signature"></i>서명 링크 복사</button>
+    <button class="gt-btn primary" id="btn-save-link"><i class="ph ph-link"></i>링크 저장</button>
     <button class="gt-btn ghost" id="reset-btn">초기화</button>
   </div>
 </div>
@@ -4859,9 +4911,12 @@ function getMinPrice(model) {
 // EVENT DELEGATION
 // ============================================================
 document.addEventListener('click', (e) => {
-  if (e.target.closest('#tax-toggle')) {
+  if (e.target.closest('#tax-toggle') || e.target.closest('#qp-tax-toggle')) {
     state.tax_rate = state.tax_rate === '3_5' ? '5' : '3_5';
-    document.getElementById('tax-label').textContent = state.tax_rate === '3_5' ? '3.5%' : '5%';
+    const label = state.tax_rate === '3_5' ? '3.5%' : '5%';
+    document.getElementById('tax-label').textContent = label;
+    const qpLabel = document.getElementById('qp-tax-label');
+    if (qpLabel) qpLabel.textContent = label;
     render();
     return;
   }
@@ -5060,13 +5115,13 @@ function renderOptions() {
     const checked = state.options.has(id);
     const enabled = isOptionEnabled(id);
     let hint = '';
-    if (opt.requires) hint = `<div class="o-sub" style="color:#c00;">⚠ 선행 필수: ${opt.requires.map(r => om[r].name).join(', ')}</div>`;
-    else if (opt.requires_in_trim?.[state.trim]) hint = `<div class="o-sub" style="color:#c00;">⚠ 선행 필수: ${opt.requires_in_trim[state.trim].map(r => om[r].name).join(', ')}</div>`;
+    if (opt.requires) hint = `<div class="o-sub" style="color:#c00;"><i class="ph ph-warning"></i> 선행 필수: ${opt.requires.map(r => om[r].name).join(', ')}</div>`;
+    else if (opt.requires_in_trim?.[state.trim]) hint = `<div class="o-sub" style="color:#c00;"><i class="ph ph-warning"></i> 선행 필수: ${opt.requires_in_trim[state.trim].map(r => om[r].name).join(', ')}</div>`;
     
     // 같은 그룹에서 하나만 고를 수 있다는 안내
     const group = getExclusiveGroup(id);
     if (group) {
-      hint += `<div class="o-sub" style="color:#888;font-size:11px;">💡 ${group.label} 중 하나만 선택 가능</div>`;
+      hint += `<div class="o-sub" style="color:var(--ink-4);font-size:11px;"><i class="ph ph-info"></i> ${group.label} 중 하나만 선택 가능</div>`;
     }
     
     // 비활성화 사유 (포함 관계로 막힌 경우만 표시)
@@ -5108,19 +5163,21 @@ function renderColors() {
 }
 
 function renderTotal() {
-  let total = 0; let summary = '차량 미선택';
+  let total = 0; let trimPrice = 0; let optionsPrice = 0; let colorPrice = 0;
+  let summary = '차량 미선택';
   if (state.trim) {
     const m = getManufacturer();
     const model = getModel();
     const trim = getTrim();
     const om = getOptionsMaster();
-    total += getTrimPrice(trim, state.tax_rate);
+    trimPrice = getTrimPrice(trim, state.tax_rate);
     summary = `${m.manufacturer_name} ${model.model_name} ${trim.name}`;
     state.options.forEach(id => {
-      if (om[id]) total += getOptionPrice(om[id], state.trim);
+      if (om[id]) optionsPrice += getOptionPrice(om[id], state.trim);
     });
     if (state.options.size > 0) summary += ` + 옵션${state.options.size}`;
-    if (state.color !== null) total += model.exterior_colors[state.color].price;
+    if (state.color !== null) colorPrice = model.exterior_colors[state.color].price;
+    total = trimPrice + optionsPrice + colorPrice;
   }
   $('selected-summary').textContent = summary;
   $('total').textContent = state.trim ? `${total.toLocaleString()} 만원` : '— 만원';
@@ -5130,13 +5187,22 @@ function renderTotal() {
     const model = getModel();
     const variant = getVariant();
     const trim = getTrim();
+    const om = getOptionsMaster();
     window.__welrix_onPriceChange({
       brand: m?.manufacturer_name,
       model: model?.model_name,
       variant: variant?.variant_name,
       trim_name: trim?.name,
+      fuel: variant?.fuel,
+      displacement_cc: variant?.displacement_cc,
+      engine: trim?.engine,
       total_manwon: total,
+      trim_price_manwon: trimPrice,
+      options_price_manwon: optionsPrice,
+      color_price_manwon: colorPrice,
       tax_rate: state.tax_rate,
+      options: Array.from(state.options).map(id => om?.[id]?.name).filter(Boolean),
+      colorExt: (state.color !== null && model?.exterior_colors) ? model.exterior_colors[state.color]?.name : null,
     });
   }
 }
@@ -5255,6 +5321,7 @@ function attachDropdownHandlers() {
     state.options.clear();
     if (state.manufacturer) $('sec-model').classList.remove('hidden');
     render();
+    if (state.manufacturer) requestAnimationFrame(() => $('dd-model')?.focus());
   });
   $('dd-model')?.addEventListener('change', (e) => {
     state.model = e.target.value || null;
@@ -5262,6 +5329,7 @@ function attachDropdownHandlers() {
     state.options.clear();
     if (state.model) $('sec-variant').classList.remove('hidden');
     render();
+    if (state.model) requestAnimationFrame(() => $('dd-variant')?.focus());
   });
   $('dd-variant')?.addEventListener('change', (e) => {
     state.variant = e.target.value || null;
@@ -5269,6 +5337,7 @@ function attachDropdownHandlers() {
     state.options.clear();
     if (state.variant) $('sec-trim').classList.remove('hidden');
     render();
+    if (state.variant) requestAnimationFrame(() => $('dd-trim')?.focus());
   });
   $('dd-trim')?.addEventListener('change', (e) => {
     state.trim = e.target.value || null;
@@ -5279,10 +5348,21 @@ function attachDropdownHandlers() {
       $('sec-color').classList.remove('hidden');
     }
     render();
+    // 트림까지 선택되면 옵션 섹션으로 부드럽게 스크롤
+    if (state.trim) {
+      requestAnimationFrame(() => {
+        $('sec-options')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
   });
   $('dd-color-ext')?.addEventListener('change', (e) => {
     state.color = e.target.value !== '' ? +e.target.value : null;
     render();
+    // swatch 직접 갱신 (quote.js hook이 못 잡는 케이스 대비)
+    const sel = e.target;
+    const text = sel.options[sel.selectedIndex]?.text || '';
+    const name = text.split('·')[0].trim();
+    window.__welrix_updateExtSwatch?.(name);
   });
 }
 attachDropdownHandlers();
@@ -5291,16 +5371,16 @@ attachDropdownHandlers();
 (function runValidation() {
   const errors = validateVehicleDB(VEHICLE_DB);
   if (errors.length === 0) {
-    console.log('%c✅ VEHICLE_DB 스키마 검증 통과', 'color: green; font-weight: bold');
+    console.log('%c[OK] VEHICLE_DB 스키마 검증 통과', 'color: green; font-weight: bold');
     const stats = {
       manufacturers: VEHICLE_DB.manufacturers.length,
       models: VEHICLE_DB.manufacturers.reduce((a, m) => a + m.models.length, 0),
       variants: VEHICLE_DB.manufacturers.reduce((a, m) => a + m.models.reduce((b, mo) => b + mo.variants.length, 0), 0),
       trims: VEHICLE_DB.manufacturers.reduce((a, m) => a + m.models.reduce((b, mo) => b + mo.variants.reduce((c, v) => c + v.trims.length, 0), 0), 0)
     };
-    console.log('%c📊 통계:', 'color: blue', stats);
+    console.log('%c[stats]', 'color: blue', stats);
   } else {
-    console.error('%c❌ VEHICLE_DB 스키마 검증 실패: ' + errors.length + '건', 'color: red; font-weight: bold');
+    console.error('%c[FAIL] VEHICLE_DB 스키마 검증 실패: ' + errors.length + '건', 'color: red; font-weight: bold');
     errors.forEach(e => console.error('  • ' + e));
   }
 })();
@@ -5323,21 +5403,99 @@ render();
   .quote-panel .qp-header { display: none; }
   .qp-summary-mini[hidden] { display: none !important; }
   .qp-summary-mini {
-    display: flex; align-items: baseline; gap: 10px;
+    display: flex; flex-direction: column; gap: 4px;
     padding: 10px 0; margin: 0 0 8px;
     background: transparent; border: none; border-bottom: 1px solid var(--line);
     border-radius: 0;
     font-size: 12.5px;
   }
-  .qp-summary-mini .qp-vehicle { font-weight: 500; color: var(--ink-1); }
-  .qp-summary-mini .qp-price { margin-left: auto; font-weight: 600; color: var(--ink-1); font-variant-numeric: tabular-nums; }
+  .qp-summary-mini__row {
+    display: flex; align-items: baseline; gap: 10px; width: 100%;
+  }
+  .qp-summary-mini .qp-vehicle { font-weight: 400; color: var(--ink-1); }
+  .qp-summary-mini .qp-vehicle.empty { color: var(--ink-4); }
+  .qp-summary-mini .qp-price { margin-left: auto; font-weight: 500; color: var(--ink-1); font-variant-numeric: tabular-nums; }
+  .qp-summary-mini .qp-price:empty { display: none; }
+  /* 트림 · 옵션 · 총계 breakdown + 개소세 토글 */
+  .qp-summary-breakdown {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 11px;
+    flex-wrap: wrap;
+  }
+  .qp-bd { display: inline-flex; align-items: baseline; gap: 4px; color: var(--ink-3); }
+  .qp-bd em { font-style: normal; color: var(--ink-4); font-size: 10px; }
+  .qp-bd b { font-weight: 500; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .qp-bd--total b { color: var(--ink-1); font-weight: 600; }
+  .qp-tax-toggle {
+    margin-left: auto;
+    display: inline-flex; align-items: center; gap: 4px;
+    height: 22px; padding: 0 8px;
+    border: 1px solid var(--line-2); border-radius: 4px;
+    background: transparent; color: var(--ink-3);
+    font-size: 10.5px; font-weight: 400; font-family: inherit;
+    cursor: pointer;
+    transition: background .12s, border-color .12s, color .12s;
+  }
+  .qp-tax-toggle:hover { background: var(--accent-soft); border-color: var(--ink-4); color: var(--ink-1); }
+  .qp-tax-toggle b { font-weight: 500; color: var(--ink-1); font-variant-numeric: tabular-nums; }
+  /* ===== 뱃지(badge) 규격 — 옵션/속성 표시용 ===== */
+  .badge {
+    display: inline-flex; align-items: center;
+    height: 22px; padding: 0 8px;
+    border: 1px solid var(--line-2);
+    background: #fff;
+    border-radius: 4px;
+    font-size: 11px; line-height: 1;
+    color: var(--ink-2); font-weight: 400;
+    white-space: nowrap;
+  }
+  .badge--brand {
+    border-color: var(--brand-100);
+    background: var(--brand-50);
+    color: var(--brand);
+    font-weight: 500;
+  }
+  .badge--soft {
+    border-color: transparent;
+    background: var(--accent-soft);
+    color: var(--ink-2);
+  }
+  /* 옵션 뱃지 묶음 — 라벨 col + 칩 col (wrap 시에도 라벨 우측 시작점 유지) */
+  .qp-summary-opts {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    column-gap: 8px; row-gap: 4px;
+    align-items: start;
+  }
+  .qp-summary-opts:empty { display: none; }
+  .qp-opt-label {
+    font-size: 10px; color: var(--ink-4);
+    letter-spacing: 0.4px; text-transform: uppercase;
+    align-self: center;
+    line-height: 22px;
+  }
+  .qp-opt-chips {
+    display: flex; flex-wrap: wrap; gap: 4px;
+    min-width: 0;
+  }
+  .qp-summary-colors {
+    font-size: 10.5px; color: var(--ink-3); line-height: 1.5;
+    display: flex; flex-wrap: wrap; gap: 10px;
+  }
+  .qp-summary-colors:empty { display: none; }
+  .qp-summary-colors .color-item { display: inline-flex; align-items: center; gap: 5px; }
+  .qp-summary-colors .swatch {
+    width: 9px; height: 9px; border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.2);
+    flex-shrink: 0;
+  }
   .quote-panel .qp-title {
     font-size: 10px; color: var(--ink-4); font-weight: 500; letter-spacing: 0.6px; margin-bottom: 6px;
     text-transform: uppercase;
   }
   .quote-panel .qp-title b { color: var(--ink-1); }
   .quote-panel .qp-vehicle {
-    font-size: 16px; font-weight: 600; color: var(--ink-1);
+    font-size: 16px; font-weight: 500; color: var(--ink-1);
     word-break: keep-all;
   }
   .quote-panel .qp-vehicle .empty { color: var(--ink-4); font-weight: 400; font-size: 14px; }
@@ -5345,7 +5503,7 @@ render();
     margin-top: 6px;
     font-size: 13px; color: var(--ink-3);
   }
-  .quote-panel .qp-total-price b { color: var(--ink-1); font-size: 15px; font-weight: 600; }
+  .quote-panel .qp-total-price b { color: var(--ink-1); font-size: 15px; font-weight: 500; }
 
   /* 조건 영역 — 카드 chrome 제거, hairline 디바이더 */
   .qp-cond {
@@ -5360,16 +5518,61 @@ render();
     letter-spacing: 0.6px; margin-bottom: 6px;
     text-transform: uppercase;
   }
-  .qp-cond__title b { color: #0D4E8B; }
+  .qp-cond__title b { color: var(--brand); }
   .qp-cond__grid {
     display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px 10px;
   }
   @media (max-width: 600px) {
     .qp-cond__grid { grid-template-columns: repeat(2, 1fr); }
   }
-  .qc-field { display: flex; flex-direction: column; gap: 4px; }
+  /* 우측 패널 form — 좌측 field-row와 톤 통일, 2 column */
+  .qp-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 16px;
+    margin: 0 0 4px;
+    border-top: 1px solid var(--line);
+  }
+  .qp-form--conds {
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 12px;
+  }
+  .qp-form + .qp-form {
+    margin-top: 16px;
+  }
+  .qc-field {
+    display: grid; grid-template-columns: 64px 1fr;
+    align-items: center; column-gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .qp-form--conds .qc-field {
+    grid-template-columns: 48px 1fr;
+    border-bottom: 0;
+  }
+  .qp-form > .qc-field:nth-last-child(-n+2) { border-bottom: 0; }
   .qc-field label {
-    font-size: 10.5px; color: var(--ink-4); font-weight: 500; letter-spacing: 0;
+    font-size: 11px; color: var(--ink-4); font-weight: 400; letter-spacing: 0;
+  }
+  /* % 입력 — input + % 라벨 wrap */
+  .qc-pct {
+    display: inline-flex; align-items: center; gap: 2px;
+    border-bottom: 1px solid var(--line-2);
+  }
+  .qc-pct:focus-within { border-bottom-color: var(--ink-1); }
+  .qc-pct input {
+    flex: 1; min-width: 0;
+    height: 28px; padding: 0 0 0 2px;
+    border: none; background: transparent;
+    font-size: 13px; color: var(--ink-1); font-family: inherit;
+    font-variant-numeric: tabular-nums; text-align: right;
+    outline: none;
+    -moz-appearance: textfield;
+  }
+  .qc-pct input::-webkit-outer-spin-button,
+  .qc-pct input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .qc-pct em {
+    font-style: normal; color: var(--ink-4); font-size: 11px; padding-right: 2px;
   }
   .qc-field select, .qc-field input {
     height: 28px; padding: 0 0 0 2px;
@@ -5430,7 +5633,7 @@ render();
   .term-card__term-dd {
     appearance: none; -webkit-appearance: none;
     background: transparent; border: none;
-    font-size: 11px; font-weight: 600; color: var(--ink-1);
+    font-size: 11px; font-weight: 500; color: var(--ink-1);
     letter-spacing: 0.4px; cursor: pointer;
     padding: 2px 14px 2px 0;
     font-family: inherit;
@@ -5469,7 +5672,7 @@ render();
   .term-card__check { display: inline-flex; align-items: center; }
   .term-card__check input { margin: 0; cursor: pointer; accent-color: var(--ink-1); }
   .term-card__monthly {
-    font-size: 22px; font-weight: 600; color: var(--ink-1);
+    font-size: 22px; font-weight: 500; color: var(--ink-1);
     letter-spacing: -0.03em; font-variant-numeric: tabular-nums;
     margin-bottom: 6px;
   }
@@ -5482,30 +5685,50 @@ render();
   }
   .term-card__row span { color: var(--ink-4); }
   .term-card__row b { color: var(--ink-2); font-weight: 500; font-variant-numeric: tabular-nums; }
+  /* 빈 상태 — 차량 미선택 시 4기간 카드 골격만 노출 */
+  .term-card--empty { opacity: 0.5; }
+  .term-card--empty .term-card__monthly { color: var(--ink-4); font-weight: 400; }
+  .term-card__cond .pct-cell--static {
+    display: inline-block; border-bottom: none; padding: 0;
+    font-size: 11px; color: var(--ink-4); height: auto;
+  }
+  /* 차량 선택되면 4기간 카드 페이드인 (empty→filled 전환 신호) */
+  .term-card:not(.term-card--empty) {
+    animation: termCardIn 0.28s ease-out both;
+  }
+  @keyframes termCardIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .term-card:not(.term-card--empty) { animation: none; }
+  }
 
   /* 손님 견적서 (진짜 견적서 디자인) */
   .customer-output {
-    border: 1.5px solid #e5e5e5; border-radius: 8px; overflow: hidden; background: #fff;
+    border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff;
   }
   .customer-output__head {
     display: flex; align-items: center; gap: 8px;
     padding: 10px 14px; background: #fafafa; border-bottom: 1px solid #eee;
     font-size: 11px; color: #999; font-weight: 600; letter-spacing: 1px;
   }
-  .customer-output__head b { color: #0D4E8B; }
+  .customer-output__head b { color: var(--brand); }
   .customer-output__head .actions { margin-left: auto; display: flex; gap: 6px; }
   .customer-output__head button {
     height: 28px; padding: 0 12px;
-    background: #0D4E8B; color: #fff;
-    border: none; border-radius: 6px;
-    font-size: 12px; font-weight: 600; cursor: pointer;
+    background: var(--brand); color: #fff;
+    border: 1px solid var(--brand); border-radius: 6px;
+    font-size: 12px; font-weight: 500; cursor: pointer;
     font-family: inherit;
+    display: inline-flex; align-items: center; gap: 4px;
+    transition: background .12s, border-color .12s, color .12s;
   }
-  .customer-output__head button:hover { background: #0a3d6e; }
+  .customer-output__head button:hover { background: var(--brand-700); border-color: var(--brand-700); }
   .customer-output__head button.outline {
-    background: #fff; color: #0D4E8B; border: 1.5px solid #0D4E8B;
+    background: transparent; color: var(--ink-1); border-color: var(--line-2); font-weight: 500;
   }
-  .customer-output__head button.outline:hover { background: #f0f7ff; }
+  .customer-output__head button.outline:hover { background: var(--accent-soft); border-color: var(--ink-4); color: var(--ink-1); }
 
   /* 실제 견적서 영역 */
   .quote-doc {
@@ -5518,13 +5741,13 @@ render();
   .quote-doc__brand {
     display: flex; justify-content: space-between; align-items: flex-end;
     padding-bottom: 14px; margin-bottom: 18px;
-    border-bottom: 2px solid #0D4E8B;
+    border-bottom: 2px solid var(--brand);
   }
   .quote-doc__brand-name {
-    font-size: 20px; font-weight: 800; color: #0D4E8B; letter-spacing: -0.5px;
+    font-size: 20px; font-weight: 700; color: var(--brand); letter-spacing: -0.5px;
   }
   .quote-doc__doc-title {
-    font-size: 22px; font-weight: 800; letter-spacing: 2px; color: #222;
+    font-size: 22px; font-weight: 700; letter-spacing: 2px; color: #222;
   }
   .quote-doc__meta {
     font-size: 11px; color: #888; margin-top: 4px; text-align: right;
@@ -5533,7 +5756,7 @@ render();
     margin-bottom: 18px;
   }
   .quote-doc__section-title {
-    font-size: 11px; font-weight: 700; color: #0D4E8B;
+    font-size: 11px; font-weight: 700; color: var(--brand);
     letter-spacing: 1.5px; margin-bottom: 8px;
     padding-bottom: 4px; border-bottom: 1px solid #eee;
   }
@@ -5555,14 +5778,14 @@ render();
     font-variant-numeric: tabular-nums;
   }
   .quote-doc__table td.price {
-    color: #0D4E8B; font-weight: 700;
+    color: var(--brand); font-weight: 700;
   }
   .quote-doc__terms-table {
     width: 100%; border-collapse: separate; border-spacing: 0;
     border: 1px solid #e5e5e5; border-radius: 6px; overflow: hidden;
   }
   .quote-doc__terms-table th {
-    background: #f7faff; color: #0D4E8B; font-weight: 700;
+    background: #f7faff; color: var(--brand); font-weight: 700;
     padding: 10px 8px; font-size: 12px; text-align: center;
     border-bottom: 1px solid #e5e5e5;
   }
@@ -5575,11 +5798,11 @@ render();
   .quote-doc__terms-table td:last-child { border-right: none; }
   .quote-doc__terms-table tr:last-child td { border-bottom: none; }
   .quote-doc__terms-table tr.monthly td {
-    background: #f7faff; font-weight: 800; color: #0D4E8B;
+    background: #f7faff; font-weight: 700; color: var(--brand);
     font-size: 14.5px; padding: 12px 8px;
   }
   .quote-doc__terms-table tr.monthly th {
-    background: #0D4E8B; color: #fff;
+    background: var(--brand); color: #fff;
   }
   .quote-doc__terms-table th.row-label, .quote-doc__terms-table td.row-label {
     background: #fafafa; text-align: left; color: #555; font-weight: 500;
@@ -5598,7 +5821,7 @@ render();
     border-top: 1px dashed #ddd;
     color: #555; font-size: 11.5px;
   }
-  .quote-doc__footer .staff b { color: #0D4E8B; }
+  .quote-doc__footer .staff b { color: var(--brand); }
   .quote-doc__empty {
     text-align: center; padding: 60px 20px;
     color: #bbb; font-size: 14px;
@@ -5607,50 +5830,51 @@ render();
 
 <section class="quote-panel" id="quote-section">
   <!-- 차량 선택 시만 노출되는 작은 정보 줄 -->
-  <div class="qp-summary-mini" id="qp-summary-mini" hidden>
-    <span class="qp-vehicle" id="qp-vehicle"></span>
-    <span class="qp-price" id="qp-price-num"></span>
+  <div class="qp-summary-mini" id="qp-summary-mini">
+    <div class="qp-summary-mini__row">
+      <span class="qp-vehicle empty" id="qp-vehicle">차량 미선택</span>
+      <span class="qp-price" id="qp-price-num"></span>
+    </div>
+    <div class="qp-summary-breakdown" id="qp-summary-breakdown">
+      <span class="qp-bd"><em>트림</em><b id="qp-bd-trim">—</b></span>
+      <span class="qp-bd"><em>옵션</em><b id="qp-bd-opts">—</b></span>
+      <button type="button" class="qp-tax-toggle" id="qp-tax-toggle" title="개소세 5% ↔ 3.5% 전환">개소세 <b id="qp-tax-label">5%</b></button>
+    </div>
+    <div class="qp-summary-opts" id="qp-summary-opts"></div>
+    <div class="qp-summary-colors" id="qp-summary-colors"></div>
   </div>
 
-  <!-- 손님 / 담당자 — 분리된 두 카드 (좌우 배치) -->
-  <div class="qp-people-row">
-    <div class="qp-cond">
-      <div class="qp-cond__title">손님</div>
-      <div class="qp-cond__grid" style="grid-template-columns: 1fr 1fr;">
-        <div class="qc-field"><label>이름</label><input id="q-cust-name" placeholder="VIP 고객님" /></div>
-        <div class="qc-field"><label>연락처</label><input id="q-cust-tel" placeholder="010-0000-0000" /></div>
-      </div>
+  <!-- 그룹 1: 연락처 -->
+  <div class="qp-form">
+    <div class="qc-field"><label>손님이름</label><input id="q-cust-name" placeholder="VIP 고객님" /></div>
+    <div class="qc-field"><label>손님연락처</label><input id="q-cust-tel" placeholder="010-0000-0000" /></div>
+    <div class="qc-field"><label>담당자이름</label><input id="q-staff-name" placeholder="홍길동 과장" /></div>
+    <div class="qc-field"><label>담당자연락처</label><input id="q-staff-tel" placeholder="010-0000-0000" /></div>
+  </div>
+
+  <!-- 그룹 2: 견적 조건 (4개 한 줄) -->
+  <div class="qp-form qp-form--conds">
+    <div class="qc-field"><label>신용</label>
+      <select id="q-credit">
+        <option>신용</option><option selected>중신용</option><option>저신용</option><option>무신용</option>
+      </select>
     </div>
-    <div class="qp-cond">
-      <div class="qp-cond__title">담당자</div>
-      <div class="qp-cond__grid" style="grid-template-columns: 1fr 1fr;">
-        <div class="qc-field"><label>이름</label><input id="q-staff-name" placeholder="홍길동 과장" /></div>
-        <div class="qc-field"><label>연락처</label><input id="q-staff-tel" placeholder="010-0000-0000" /></div>
-      </div>
+    <div class="qc-field"><label>약정주행</label>
+      <select id="q-km">
+        <option value="2">2만km/년</option>
+        <option value="3">3만km/년</option>
+      </select>
+    </div>
+    <div class="qc-field"><label>보증금</label>
+      <span class="qc-pct"><input id="q-dep" type="number" value="10" min="0" max="100" /><em>%</em></span>
+    </div>
+    <div class="qc-field"><label>선납금</label>
+      <span class="qc-pct"><input id="q-pre" type="number" value="0" min="0" max="100" /><em>%</em></span>
     </div>
   </div>
 
-  <!-- 견적 조건 (공통) -->
-  <div class="qp-cond">
-    <div class="qp-cond__title">공통 조건</div>
-    <div class="qp-cond__grid" style="grid-template-columns: 1fr 1fr;">
-      <div class="qc-field"><label>신용</label>
-        <select id="q-credit">
-          <option>신용</option><option selected>중신용</option><option>저신용</option><option>무신용</option>
-        </select>
-      </div>
-      <div class="qc-field"><label>약정주행</label>
-        <select id="q-km">
-          <option value="2">2만km/년</option>
-          <option value="3">3만km/년</option>
-        </select>
-      </div>
-    </div>
-  </div>
-  <div class="qp-terms__title">시나리오 비교 (기간/보증금/선납금 변경 가능)</div>
-  <div class="terms-grid" id="terms-grid">
-    <div style="grid-column:1/-1; text-align:center; padding:32px; color:#bbb; font-size:13px;">차량 선택 후 산출</div>
-  </div>
+  <div class="qp-terms__title">기간별 대여료</div>
+  <div class="terms-grid" id="terms-grid"></div>
 
   <!-- 견적서는 모달에서만 (ERP 화면엔 노출 X) -->
   <div id="quote-doc" style="display:none;"></div>
@@ -5722,7 +5946,7 @@ render();
       <div class="doc-file-list" id="doc-file-list"></div>
 
       <textarea class="contract-memo" id="contract-memo" rows="2" placeholder="추가 요청사항이나 메모" style="margin-top:10px;"></textarea>
-      <button class="contract-submit" id="btn-contract-submit">계약 접수 요청 →</button>
+      <button class="contract-submit" id="btn-contract-submit">계약 접수 요청 <i class="ph ph-arrow-right"></i></button>
     </div>
   </details>
 
@@ -5805,7 +6029,7 @@ render();
 
   .contract-section { margin-bottom: 10px; }
   .contract-section__title {
-    font-size: 10.5px; font-weight: 700; color: #0D4E8B;
+    font-size: 10.5px; font-weight: 700; color: var(--brand);
     letter-spacing: 0.5px; margin-bottom: 6px;
   }
   .doc-dropzone {
@@ -5943,7 +6167,7 @@ render();
     const renderList = (listEl, files, onRemove) => {
       listEl.innerHTML = files.map((f, i) => `
         <div class="doc-file-item">
-          <span>📄</span>
+          <i class="ph ph-file-text"></i>
           <span class="name">${f.name}</span>
           <span class="size">${fmtSize(f.size)}</span>
           <span class="remove" data-i="${i}">✕</span>
@@ -6020,9 +6244,9 @@ render();
 <div class="quote-modal-backdrop" id="quote-modal-bd">
   <div class="quote-modal">
     <div class="quote-modal__head">
-      <span>📄 손님 견적서 미리보기</span>
+      <span><i class="ph ph-file-text"></i> 손님 견적서 미리보기</span>
       <div class="actions">
-        <button class="outline" id="btn-modal-copy-text">📋 텍스트 복사</button>
+        <button class="outline" id="btn-modal-copy-text"><i class="ph ph-copy"></i>텍스트 복사</button>
         <button class="primary" id="btn-modal-save-image">🖼 이미지 저장</button>
         <button class="close" id="btn-modal-close">✕</button>
       </div>
