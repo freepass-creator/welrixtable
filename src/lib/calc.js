@@ -68,6 +68,7 @@ const DEFAULT_CFG = {
     wells_basic_monthly: 12900,
     wells_self_yearly: 96000,
     gps_monthly: 11000,
+    inspection_fee_yearly: 76000,  // 정기검사비 (1~2년차 면제, 3년차 이후 적용)
   },
   residuals: {
     km_adjustment: { '1만km': 0.02, '2만km': 0, '3만km': -0.04, '4만km': -0.10 },
@@ -121,17 +122,13 @@ export function setCompanyConfig(cfg) {
 // 후방 호환용 별칭 (기존 코드 참조)
 const CREDIT_LOOKUP = new Proxy({}, { get: (_, k) => CFG.credit_lookup[k] });
 
-// 정기검사 (등급/년차별)
-// 3~8년차 동일 / 1~2년차 면제 (신차 2년까지 유예)
-// 소형 76,000원/년 기준
+// 정기검사 (3~8년차 동일 / 1~2년차 면제, 신차 2년까지 유예)
+// 엑셀 F11(termCode): 2=24M=0회, 3=36M=1회, 4=48M=2회, 5=60M=3회
 function inspectionFee(termCode) {
-  // F11=2 (24M): 0
-  // F11=3 (36M): G37 = 76000 (1번)
-  // F11=4 (48M): G38*2 = 152000 (2번)
-  // F11=5 (60M): G39*3 = 228000 (3번)
-  if (termCode === 5) return 228000;
-  if (termCode === 4) return 152000;
-  if (termCode === 3) return 76000;
+  const fee = CFG.services.inspection_fee_yearly ?? 76000;
+  if (termCode === 5) return fee * 3;
+  if (termCode === 4) return fee * 2;
+  if (termCode === 3) return fee;
   return 0;
 }
 

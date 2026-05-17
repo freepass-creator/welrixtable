@@ -1,9 +1,11 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import vue from '@vitejs/plugin-vue';
 
 export default defineConfig({
   root: '.',
   publicDir: 'public',
+  plugins: [vue()],
   server: {
     port: 5173,
     open: '/index.html',

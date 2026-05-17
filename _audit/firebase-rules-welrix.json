@@ -1,0 +1,41 @@
+{
+  "_doc": "freepasserp3 database.rules.json 에 추가할 welrix 전용 경로. 기존 $other 위에 삽입 후 Firebase Console → Realtime Database → 규칙 → 게시.",
+
+  "welrix_quotes": {
+    ".indexOn": ["staff_uid", "created_at", "company"],
+    ".read": true,
+    "$id": {
+      ".write": "auth != null && (!data.exists() || data.child('staff_uid').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'agent_admin' || root.child('users').child(auth.uid).child('role').val() === 'agent_manager')",
+      ".validate": "newData.hasChildren(['quote_id', 'created_at', 'company', 'staff_uid'])",
+      "access_log": {
+        "$auto": {
+          ".write": true,
+          ".validate": "newData.hasChildren(['at']) && newData.child('at').isNumber()"
+        }
+      }
+    }
+  },
+
+  "welrix_chats": {
+    "$staff_uid": {
+      ".read": "auth != null && (auth.uid === $staff_uid || root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'agent_admin' || root.child('users').child(auth.uid).child('role').val() === 'agent_manager')",
+      ".write": "auth != null && (auth.uid === $staff_uid || root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'agent_admin' || root.child('users').child(auth.uid).child('role').val() === 'agent_manager')",
+      "messages": {
+        ".indexOn": ["at"],
+        "$msg_id": {
+          ".validate": "newData.hasChildren(['text', 'sender', 'at', 'uid', 'name']) && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 1000 && newData.child('uid').val() === auth.uid"
+        }
+      }
+    }
+  },
+
+  "welrix_quote_files": {
+    "$id": {
+      ".read": "auth != null && (root.child('welrix_quotes').child($id).child('staff_uid').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin' || root.child('users').child(auth.uid).child('role').val() === 'agent_admin' || root.child('users').child(auth.uid).child('role').val() === 'agent_manager')",
+      "$file_id": {
+        ".write": "auth != null && (root.child('welrix_quotes').child($id).child('staff_uid').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin')",
+        ".validate": "newData.hasChildren(['name', 'size', 'type', 'storage_path', 'uploaded_at', 'uploaded_by'])"
+      }
+    }
+  }
+}

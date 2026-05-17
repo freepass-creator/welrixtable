@@ -5,6 +5,14 @@
 _dump/
 _tools/__pycache__/
 
+# _audit 작업물 — 큰 데이터/백업 제외, 스크립트와 룰만 커밋
+_audit/excel_db.json
+_audit/inline_db.json
+_audit/diff_report*.json
+_audit/unmatched_classification.json
+_audit/vehicles.json.bak*
+_audit/index.html.bak*
+
 # OS
 .DS_Store
 Thumbs.db
