@@ -1013,11 +1013,11 @@ const VEHICLE_DB = {
               displacement_cc: 998,
               transmission: "자동 4단",
               trims: [
-                { trim_id: "van_smart", operating: false, name: "밴 스마트", seats: 2, base_price_5: 1460, base_price_3_5: 1460, engine: "스마트스트림 가솔린 1.0",
+                { trim_id: "van_smart", name: "밴 스마트", seats: 2, base_price_5: 1460, base_price_3_5: 1460, engine: "스마트스트림 가솔린 1.0",
                   fuel_economy: { combined: 14.3, urban: 13.4, highway: 15.5, co2: 115 },
                   standard_features: ["스마트스트림 1.0 + 자동 4단", "풋파킹 브레이크", "FCA(차량/보행자/자전거)", "LKA/LFA/HBA/DAW/ISLA", "6에어백(1열/사이드/전복커튼)", "15\" 스틸 휠", "LED DRL", "틴티드 글라스", "전동조절 미러", "직물시트", "수동 틸트 스티어링", "오토라이트", "크루즈컨트롤", "격벽 + 보호봉", "풀오토 에어컨", "마이크로 에어 필터", "후방 모니터", "8\" 디스플레이 오디오(2스피커)", "폰 프로젝션", "USB C 충전(1열)"],
                   available_options: ["active_turbo_1", "basic_plus", "comfort_2", "navi_plus_2"] },
-                { trim_id: "van_smart_choice", operating: false, name: "밴 스마트 초이스", seats: 2, base_price_5: 1560, base_price_3_5: 1560, engine: "스마트스트림 가솔린 1.0",
+                { trim_id: "van_smart_choice", name: "밴 스마트 초이스", seats: 2, base_price_5: 1560, base_price_3_5: 1560, engine: "스마트스트림 가솔린 1.0",
                   fuel_economy: { combined: 14.3, urban: 13.4, highway: 15.5, co2: 115 },
                   standard_features: ["+1열 센터사이드 에어백", "가죽 스티어링(열선)", "운전석 시트 암레스트", "실내 무드램프(퍼플)", "인조가죽 적용 내장(도어/콘솔)", "운전석 선바이저 램프", "인조가죽 시트", "1열 열선", "운전석 통풍", "버튼시동 & 스마트키", "스마트키 원격시동", "세이프티 파워 윈도우(운전석)", "리어 와이퍼&와셔", "1열 버튼 타입 도어핸들"],
                   available_options: ["active_turbo_1", "hipass", "navi_2"] }
@@ -1162,7 +1162,7 @@ const VEHICLE_DB = {
               displacement_cc: 1998,
               transmission: "8단 N DCT / 6단 수동",
               trims: [
-                { trim_id: "n", operating: false, name: "N", seats: 5, base_price_5: 3359, base_price_3_5: 3309, engine: "T-GDI 2.0 (280hp)",
+                { trim_id: "n", name: "N", seats: 5, base_price_5: 3359, base_price_3_5: 3309, engine: "T-GDI 2.0 (280hp)",
                   fuel_economy: { combined: 10.4, co2: 161 },
                   standard_features: ["N 전용 섀시/서스펜션", "전자식 LSD", "런치컨트롤", "N 그린 시프트", "19\"알로이휠", "버킷시트(옵션)", "N 전용 인테리어"],
                   available_options: ["n_fan_package", "n_brake_package", "n_wheel_package", "n_floor_mat"] }
@@ -1433,7 +1433,7 @@ const VEHICLE_DB = {
                 displacement_cc: 1598,
                 transmission: "자동 8단 / 8단 습식 DCT(2.5T 옵션)",
                 trims: [
-                  { trim_id: "n_line", operating: false, name: "N 라인", seats: 5,
+                  { trim_id: "n_line", name: "N 라인", seats: 5,
                     base_price_5: 3731, base_price_3_5: 3674,
                     engine: "G 1.6 T-GDI (기본) / G 2.5 T-GDI (옵션)",
                     fuel_economy: { combined: 12.0, urban: 10.4, highway: 14.9, co2: 138 },
@@ -1675,19 +1675,19 @@ const VEHICLE_DB = {
                 displacement_cc: 1598,
                 transmission: "스마트스트림 IVT",
                 trims: [
-                  { trim_id: "smart", operating: false, name: "스마트", seats: 5,
+                  { trim_id: "smart", name: "스마트", seats: 5,
                     base_price_5: 1956, base_price_3_5: 1926,
                     engine: "스마트스트림 G 1.6",
                     fuel_economy: { combined: 13.3, urban: 12.4, highway: 14.7, co2: 125 },
                     standard_features: VENUE_SMART_F,
                     available_options: ["wheel_15_alloy", "hipass"] },
-                  { trim_id: "premium", operating: false, name: "프리미엄", seats: 5,
+                  { trim_id: "premium", name: "프리미엄", seats: 5,
                     base_price_5: 2246, base_price_3_5: 2212,
                     engine: "스마트스트림 G 1.6",
                     fuel_economy: { combined: 13.7, urban: 12.7, highway: 15.2, co2: 121 },
                     standard_features: VENUE_PREMIUM_F,
                     available_options: ["sunroof", "two_tone_roof", "style", "tech"] },
-                  { trim_id: "flux", operating: false, name: "FLUX (플럭스)", seats: 5,
+                  { trim_id: "flux", name: "FLUX (플럭스)", seats: 5,
                     base_price_5: 2423, base_price_3_5: 2386,
                     engine: "스마트스트림 G 1.6",
                     fuel_economy: { combined: 13.3, urban: 12.4, highway: 14.7, co2: 125 },
@@ -2178,7 +2178,7 @@ const VEHICLE_DB = {
                     fuel_economy: { combined: 11.0, urban: 9.6, highway: 13.4, co2: 152 },
                     standard_features: HPICK_F,
                     available_options: ["htrac", "panoramic_sunroof", "bose", "wheel_20", "builtin_cam", "seat_6", "seat_7", "lifestyle"] },
-                  { trim_id: "black_exterior", operating: false, name: "H-Pick 블랙 익스테리어", seats: 5,
+                  { trim_id: "black_exterior", name: "H-Pick 블랙 익스테리어", seats: 5,
                     base_price_5: 4249, base_price_3_5: 4184,
                     engine: "스마트스트림 G 2.5 T-GDI",
                     fuel_economy: { combined: 11.0, urban: 9.6, highway: 13.4, co2: 152 },
@@ -2190,7 +2190,7 @@ const VEHICLE_DB = {
                     fuel_economy: { combined: 10.0, urban: 8.8, highway: 12.0, co2: 168 },
                     standard_features: CALLIGRAPHY_F,
                     available_options: ["htrac", "panoramic_sunroof", "bose", "builtin_cam", "seat_6", "seat_7"] },
-                  { trim_id: "black_ink", operating: false, name: "캘리그래피 블랙 잉크", seats: 5,
+                  { trim_id: "black_ink", name: "캘리그래피 블랙 잉크", seats: 5,
                     base_price_5: 4553, base_price_3_5: 4484,
                     engine: "스마트스트림 G 2.5 T-GDI",
                     fuel_economy: { combined: 10.0, urban: 8.8, highway: 12.0, co2: 168 },
@@ -3708,7 +3708,7 @@ const VEHICLE_DB = {
                     fuel_economy: { combined: 11.5, urban: 10.4, highway: 13.1, co2: 144 },
                     standard_features: SPORT_SIG_F,
                     available_options: ["electric_4wd", "wheel_19", "premium", "drive_wise", "builtin_cam_2", "monitoring", "krell_sound"] },
-                  { trim_id: "x_line", operating: false, name: "X-Line", seats: 5, base_price_5: 3576, base_price_3_5: 3522, engine: "G1.6 T-GDI",
+                  { trim_id: "x_line", name: "X-Line", seats: 5, base_price_5: 3576, base_price_3_5: 3522, engine: "G1.6 T-GDI",
                     fuel_economy: { combined: 11.5, urban: 10.4, highway: 13.1, co2: 144 },
                     standard_features: SPORT_XL_F,
                     available_options: ["electric_4wd", "premium", "drive_wise", "builtin_cam_2", "monitoring", "krell_sound"] }
@@ -3764,7 +3764,7 @@ const VEHICLE_DB = {
                     fuel_economy: { combined: 15.6, urban: 16.2, highway: 14.8, co2: 102 },
                     standard_features: SPORT_SIG_F,
                     available_options: ["electric_4wd", "wheel_19", "premium", "drive_wise", "builtin_cam_2", "monitoring", "krell_sound"] },
-                  { trim_id: "x_line", operating: false, name: "X-Line", seats: 5, base_price_5: 4058, base_price_3_5: 3995, engine: "1.6T HEV",
+                  { trim_id: "x_line", name: "X-Line", seats: 5, base_price_5: 4058, base_price_3_5: 3995, engine: "1.6T HEV",
                     fuel_economy: { combined: 15.6, urban: 16.2, highway: 14.8, co2: 102 },
                     standard_features: SPORT_XL_F,
                     available_options: ["electric_4wd", "premium", "drive_wise", "builtin_cam_2", "monitoring", "krell_sound"] }
@@ -4073,7 +4073,7 @@ const VEHICLE_DB = {
                     fuel_economy: { combined: 9.0, urban: 7.8, highway: 10.9, co2: 189 },
                     standard_features: CARN_7_NOB_F,
                     available_options: ["style_pkg", "comfort", "smart_connect", "drive_wise", "monitoring", "hud_builtin_cam", "sunroof_dual", "my_comfort"] },
-                  { trim_id: "outdoor", operating: false, name: "아웃도어", seats: 7, base_price_5: 4231, base_price_3_5: 4168, engine: "G3.5 GDI",
+                  { trim_id: "outdoor", name: "아웃도어", seats: 7, base_price_5: 4231, base_price_3_5: 4168, engine: "G3.5 GDI",
                     fuel_economy: { combined: 9.0, urban: 7.8, highway: 10.9, co2: 189 },
                     standard_features: CARN_7_OUTDOOR_F,
                     available_options: ["style_pkg", "smart_connect", "drive_wise", "monitoring", "hud_builtin_cam", "sunroof_dual"] },
@@ -4455,7 +4455,7 @@ const VEHICLE_DB = {
                 displacement_cc: 2497,
                 transmission: "8단 자동",
                 trims: [
-                  { trim_id: "black", operating: false, name: "Black", seats: 5,
+                  { trim_id: "black", name: "Black", seats: 5,
                     base_price_5: 8370, base_price_3_5: 8243,
                     engine: "스마트스트림 G 2.5 T-GDI (304hp) / 3.5 T-GDI (380hp) 옵션",
                     fuel_economy: { combined: 9.4, urban: 8.1, highway: 11.7, co2: 179 },
@@ -4553,7 +4553,7 @@ const VEHICLE_DB = {
                 displacement_cc: 3470,
                 transmission: "8단 자동",
                 trims: [
-                  { trim_id: "standard", operating: false, name: "스탠다드 (5인승, 2WD 기본)", seats: 5,
+                  { trim_id: "standard", name: "스탠다드 (5인승, 2WD 기본)", seats: 5,
                     base_price_5: 9760, base_price_3_5: 9617,
                     engine: "스마트스트림 G 3.5 T-GDI (380hp) / 48V e-S/C (415hp) 옵션",
                     fuel_economy: { combined: 9.3, urban: 8.0, highway: 11.5, co2: 184 },
@@ -4580,7 +4580,7 @@ const VEHICLE_DB = {
                 displacement_cc: 3470,
                 transmission: "8단 자동",
                 trims: [
-                  { trim_id: "lwb", operating: false, name: "Long Wheel Base (5인승 기본)", seats: 5,
+                  { trim_id: "lwb", name: "Long Wheel Base (5인승 기본)", seats: 5,
                     base_price_5: 16790, base_price_3_5: 16647,
                     engine: "G 3.5 T-GDI + 48V e-S/C (415hp/56kgf·m)",
                     fuel_economy: { combined: 8.2, urban: 7.1, highway: 10.1, co2: 207 },
@@ -4685,7 +4685,7 @@ const VEHICLE_DB = {
                 displacement_cc: 2497,
                 transmission: "8단 자동",
                 trims: [
-                  { trim_id: "standard", operating: false, name: "스탠다드 (2WD 기본)", seats: 5, base_price_5: 5400, base_price_3_5: 5318, engine: "스마트스트림 G 2.5 T-GDI (304hp/43kgf·m)",
+                  { trim_id: "standard", name: "스탠다드 (2WD 기본)", seats: 5, base_price_5: 5400, base_price_3_5: 5318, engine: "스마트스트림 G 2.5 T-GDI (304hp/43kgf·m)",
                     fuel_economy: { combined: 10.2, urban: 8.9, highway: 12.5, co2: 164 },
                     standard_features: GV70_STANDARD_F,
                     available_options: ["awd", "popular_1", "popular_2", "convenience", "driving_assist_1", "driving_assist_2", "rear_comfort", "bnO_18", "builtin_cam", "panoramic_sunroof", "sport_pkg", "wheel_21_silent", "e_lsd", "signature_design", "sport_design_2"] }
@@ -4702,7 +4702,7 @@ const VEHICLE_DB = {
                 displacement_cc: 3470,
                 transmission: "8단 자동",
                 trims: [
-                  { trim_id: "standard", operating: false, name: "스탠다드 (AWD 기본)", seats: 5, base_price_5: 5950, base_price_3_5: 5868, engine: "스마트스트림 G 3.5 T-GDI (380hp/53kgf·m)",
+                  { trim_id: "standard", name: "스탠다드 (AWD 기본)", seats: 5, base_price_5: 5950, base_price_3_5: 5868, engine: "스마트스트림 G 3.5 T-GDI (380hp/53kgf·m)",
                     fuel_economy: { combined: 8.9, urban: 7.8, highway: 10.9, co2: 189 },
                     standard_features: [...GV70_STANDARD_F, "AWD 기본", "프리뷰 전자제어 서스펜션", "19인치 미쉐린 타이어", "전륜 코퍼도장 모노블럭(4P) 브레이크", "후륜 스타일링 커버"],
                     available_options: ["popular_1", "popular_2", "convenience", "driving_assist_1", "driving_assist_2", "rear_comfort", "bnO_18", "builtin_cam", "panoramic_sunroof", "wheel_21_silent", "signature_design", "sport_design_2"],
@@ -4772,7 +4772,7 @@ const VEHICLE_DB = {
                 displacement_cc: 2497,
                 transmission: "8단 자동",
                 trims: [
-                  { trim_id: "standard", operating: false, name: "스탠다드 (2WD 기본)", seats: 5, base_price_5: 6895, base_price_3_5: 6790, engine: "스마트스트림 G 2.5 T-GDI (304hp/43kgf·m)",
+                  { trim_id: "standard", name: "스탠다드 (2WD 기본)", seats: 5, base_price_5: 6895, base_price_3_5: 6790, engine: "스마트스트림 G 2.5 T-GDI (304hp/43kgf·m)",
                     fuel_economy: { combined: 9.3, urban: 8.2, highway: 11.0, co2: 183 },
                     standard_features: GV80_STANDARD_F,
                     available_options: ["awd", "popular", "convenience", "driving_assist_1", "driving_assist_2", "rear_comfort", "seat_6", "seat_7", "bnO_22", "builtin_cam", "panoramic_sunroof", "wheel_21", "trailer_hitch"] }
@@ -4789,7 +4789,7 @@ const VEHICLE_DB = {
                 displacement_cc: 3470,
                 transmission: "8단 자동",
                 trims: [
-                  { trim_id: "standard", operating: false, name: "스탠다드 (2WD 기본)", seats: 5, base_price_5: 7445, base_price_3_5: 7340, engine: "스마트스트림 G 3.5 T-GDI (380hp/54kgf·m)",
+                  { trim_id: "standard", name: "스탠다드 (2WD 기본)", seats: 5, base_price_5: 7445, base_price_3_5: 7340, engine: "스마트스트림 G 3.5 T-GDI (380hp/54kgf·m)",
                     fuel_economy: { combined: 8.6, urban: 7.7, highway: 10.0, co2: 199 },
                     standard_features: [...GV80_STANDARD_F, "20인치 미쉐린 타이어 & 다이아몬드 컷팅 휠", "전륜 코퍼도장 모노블럭(4P) 브레이크", "후륜 스타일링 커버"],
                     available_options: ["awd", "popular", "convenience", "driving_assist_1", "driving_assist_2", "rear_comfort", "seat_6", "seat_7", "bnO_22", "builtin_cam", "panoramic_sunroof", "wheel_21", "trailer_hitch"] }
