@@ -28,7 +28,7 @@
 
   "company_id": "welrix",
   "name": "웰릭스 모빌리티",
-  "logo_url": null,
+  "logo_url": "/welrix-logo.png",
   "brand_color": "#e1141e",
   "accent_color": "#2d6cdf",
   "signature_link": "https://app.modusign.co.kr/magic-link/link/665f4cd0-fb5c-11f0-8c47-897ef2e93d12/authentication?shareType=URL",

@@ -498,11 +498,15 @@ function renderQuoteDoc(monthly, totalKrw, tintFee, deliveryFee, accessoryFee = 
   const extColorHex = v.colorExt ? guessColor(v.colorExt) : '#e5e5e5';
   const intColorHex = state.cond.colorInt ? guessColor(state.cond.colorInt) : '#e5e5e5';
 
+  const cfg = window.__welrix_companyConfig || {};
+  const logoUrl = cfg.logo_url;
+  const showLogo = state.send_options?.showLogo !== false; // 기본 true, 사용자가 끄면 false
   const html = `
     <div class="quote-doc" id="quote-doc-content">
       <!-- 헤더 -->
       <div class="qd-hero">
-        <div class="qd-hero__brand">WELRIX MOBILITY</div>
+        ${(showLogo && logoUrl) ? `<img class="qd-hero__logo" src="${logoUrl}" alt="${cfg.name || ''}" />` : ''}
+        ${(!showLogo || !logoUrl) ? `<div class="qd-hero__brand">${(cfg.name || 'WELRIX MOBILITY').toUpperCase()}</div>` : ''}
         <div class="qd-hero__title">신차 장기렌터카 견적서</div>
         <div class="qd-hero__meta">
           <span><b>견적번호</b> ${quoteNo}</span>
@@ -647,6 +651,8 @@ function renderQuoteDoc(monthly, totalKrw, tintFee, deliveryFee, accessoryFee = 
 // 다중 차종: 차량정보+월대여료 블록을 차종마다 반복
 // ============================================================
 function renderOfficialQuoteDoc(vehicles) {
+  // 토글로 재렌더할 때 쓰려고 마지막 source 보관
+  window.__welrix_lastQuoteSnaps = vehicles;
   const today = new Date();
   const todayStr = today.toLocaleDateString('ko-KR');
   const expire = new Date(today.getTime() + 7*86400000);
@@ -1026,10 +1032,14 @@ function renderMultiQuoteDoc(vehicles) {
     `;
   }).join('');
 
+  const cfg = window.__welrix_companyConfig || {};
+  const logoUrl = cfg.logo_url;
+  const showLogo = state.send_options?.showLogo !== false;
   const html = `
     <div class="quote-doc" id="quote-doc-content">
       <div class="qd-hero">
-        <div class="qd-hero__brand">WELRIX MOBILITY</div>
+        ${(showLogo && logoUrl) ? `<img class="qd-hero__logo" src="${logoUrl}" alt="${cfg.name || ''}" />` : ''}
+        ${(!showLogo || !logoUrl) ? `<div class="qd-hero__brand">${(cfg.name || 'WELRIX MOBILITY').toUpperCase()}</div>` : ''}
         <div class="qd-hero__title">신차 장기렌터카 견적서</div>
         <div class="qd-hero__meta">
           <span><b>견적번호</b> ${quoteNo}</span>
@@ -1324,6 +1334,22 @@ function attach() {
     }
   };
   $('btn-modal-close')?.addEventListener('click', () => $('quote-modal-bd').classList.remove('open'));
+
+  // === 모달 옵션: 로고 제외 토글 ===
+  const optExcludeLogo = $('opt-exclude-logo');
+  if (optExcludeLogo) {
+    if (!state.send_options) state.send_options = { showLogo: true };
+    optExcludeLogo.checked = state.send_options.showLogo === false;
+    optExcludeLogo.addEventListener('change', () => {
+      state.send_options.showLogo = !optExcludeLogo.checked;
+      // 현재 모달이 열려있으면 즉시 재렌더
+      if ($('quote-modal-bd').classList.contains('open')) {
+        // cart 또는 single preview 어느 쪽이든 마지막 source 로 재렌더
+        const snap = window.__welrix_lastQuoteSnaps || (state.vehicle ? [snapshotCurrentVehicle()].filter(Boolean) : []);
+        if (snap.length) renderOfficialQuoteDoc(snap);
+      }
+    });
+  }
   $('quote-modal-bd')?.addEventListener('click', (e) => {
     if (e.target === $('quote-modal-bd')) $('quote-modal-bd').classList.remove('open');
   });

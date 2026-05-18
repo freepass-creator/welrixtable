@@ -44,6 +44,9 @@ yarn-error.log*
 # 크롤러 캐시 (다운로드 원본 — 매번 fetch)
 _cache/
 
+# PDF 가격표 원본 (56MB+, 배포 불필요, 로컬 audit 전용)
+pricepdf/
+
 # 백업
 *.bak
 *.bak.*

@@ -88,17 +88,13 @@
     -webkit-text-size-adjust: 100%;
     margin: 0;
     display: grid;
-    grid-template-columns: 440px minmax(0, 1fr) 320px;
+    /* 3패널 ratio 고정 — 좌(차량):중(견적):우(채팅) = 28:52:20.
+       viewport 폭에 비례해 동시에 축소·확대. discrete breakpoint 없음. */
+    grid-template-columns: minmax(0, 28fr) minmax(0, 52fr) minmax(0, 20fr);
     grid-template-rows: 44px 1fr;
     gap: 0;
     height: 100vh;
     overflow: hidden;
-  }
-  @media (max-width: 1500px) {
-    body { grid-template-columns: 410px minmax(0, 1fr) 300px; }
-  }
-  @media (max-width: 1300px) {
-    body { grid-template-columns: 380px minmax(0, 1fr) 280px; }
   }
   /* 톱바 — 화이트 + 헤어라인만 */
   .global-topbar {
@@ -386,6 +382,15 @@
     font-size: 12.5px; font-weight: 500; color: var(--brand);
   }
   .quote-modal__head .actions { margin-left: auto; display: flex; gap: 6px; }
+  .quote-modal__opt {
+    display: inline-flex; align-items: center; gap: 4px;
+    margin-left: 12px; padding: 4px 8px;
+    font-size: 11.5px; color: var(--ink-3); font-weight: 400;
+    cursor: pointer; user-select: none;
+    border-radius: var(--radius-sm);
+  }
+  .quote-modal__opt:hover { color: var(--ink-1); background: var(--accent-soft); }
+  .quote-modal__opt input { margin: 0; accent-color: var(--ink-1); cursor: pointer; }
   /* 모달 헤더 버튼 — 박스 없이 통일 */
   .quote-modal__head button {
     height: 28px; padding: 0 8px;
@@ -6182,6 +6187,11 @@ render();
     color: var(--brand); letter-spacing: 2px;
     margin-bottom: 6px;
   }
+  .qd-hero__logo {
+    height: 28px; width: auto;
+    margin-bottom: 8px;
+    display: block;
+  }
   .qd-hero__title {
     font-size: 22px; font-weight: 700;
     color: #1a1a1a; letter-spacing: -0.5px;
@@ -7787,6 +7797,10 @@ render();
   <div class="quote-modal">
     <div class="quote-modal__head">
       <span><i class="ph ph-file-text"></i> 손님 견적서 미리보기</span>
+      <label class="quote-modal__opt" title="견적서에 회사 로고 노출 여부">
+        <input type="checkbox" id="opt-exclude-logo" />
+        <span>로고 제외</span>
+      </label>
       <div class="actions">
         <button class="outline" id="btn-modal-copy-text"><i class="ph ph-copy"></i>텍스트</button>
         <button class="outline" id="btn-modal-save-image"><i class="ph ph-download-simple"></i>이미지 저장</button>

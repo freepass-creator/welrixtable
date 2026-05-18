@@ -26,6 +26,16 @@ export const vehicleState = reactive({
 // 담당자 정보(이름·연락처·수수료율) — 영업자 본인 거라 매번 입력 번거로움 → localStorage 영속화
 const STAFF_KEY = 'welrix_staff_v1';
 const FEE_KEY = 'welrix_fee_v1';
+const SEND_OPTS_KEY = 'welrix_send_opts_v1';
+function loadSendOpts() {
+  try {
+    const raw = localStorage.getItem(SEND_OPTS_KEY);
+    return raw ? JSON.parse(raw) : { showLogo: true };
+  } catch { return { showLogo: true }; }
+}
+function persistSendOpts(o) {
+  try { localStorage.setItem(SEND_OPTS_KEY, JSON.stringify(o)); } catch {}
+}
 function loadStaff() {
   try {
     const raw = localStorage.getItem(STAFF_KEY);
@@ -59,6 +69,7 @@ export const quoteState = reactive({
   cust:  { name: '', tel: '' },
   staff: loadStaff(),  // ← 영업 본인 정보 자동 로드
   send: [true, true, true],
+  send_options: loadSendOpts(),  // { showLogo: bool }
   scenarios: [
     { term: 36, dep: 10, pre: 0 },
     { term: 48, dep: 10, pre: 0 },
@@ -68,13 +79,16 @@ export const quoteState = reactive({
   monthly: [],
 });
 
-// 담당자 정보(이름/연락처) + 수수료율 자동 저장
+// 담당자 정보(이름/연락처) + 수수료율 + 발송옵션 자동 저장
 import { watch } from 'vue';
 watch(() => ({ name: quoteState.staff.name, tel: quoteState.staff.tel }),
       (newVal) => persistStaff(newVal),
       { deep: true });
 watch(() => quoteState.cond.feeRatePct,
       (v) => { if (typeof v === 'number' && isFinite(v)) persistFeeRate(v); });
+watch(() => ({ ...quoteState.send_options }),
+      (v) => persistSendOpts(v),
+      { deep: true });
 
 // === 견적 장바구니 — 한 손님에게 N차종 보낼 때 ===
 // localStorage 영속화 (수동 삭제 전까지 유지)
