@@ -115,9 +115,34 @@ async function loadVehicles() {
     VEHICLES = await r.json();
   } catch {}
 }
-function findVehicleMeta(brand, model, trim_name, variant) {
+function findVehicleMeta(brand, model, trim_name, variant, trim_price_won) {
   if (!VEHICLES?.length) return {};
-  // 1) 정확 매칭 — brand + model + variant(연료/배기량 키워드) + trim_name 모두 trim 텍스트에 포함
+  // 0) ⭐ 가격 정확 매칭 (Excel 차량DB 가격과 1대1) — 최우선
+  // 잔가율 r24/r36/r48/r60 정확성 보장 핵심
+  if (trim_price_won) {
+    const exact = VEHICLES.filter(v =>
+      v.brand === brand && v.model === model && v.price === trim_price_won
+    );
+    if (exact.length === 1) return exact[0];
+    if (exact.length > 1) {
+      // 같은 가격 트림이 여러개면 trim_name 텍스트로 추가 좁히기
+      if (trim_name) {
+        const tn = exact.find(v => (v.trim || '').includes(trim_name));
+        if (tn) return tn;
+      }
+      // variant 토큰 (예: '하이브리드') 으로 좁히기
+      const tokens = (variant || '').split(/[\s·,()]+/).filter(t => t.length > 1);
+      if (tokens.length) {
+        const scored = exact.map(m => ({
+          m, score: tokens.reduce((s, t) => s + ((m.trim || '').includes(t) ? 1 : 0), 0)
+        }));
+        scored.sort((a, b) => b.score - a.score);
+        if (scored[0].score > 0) return scored[0].m;
+      }
+      return exact[0];
+    }
+  }
+  // 1) 텍스트 매칭 — brand + model + variant + trim_name (가격 없거나 미매치 시)
   if (trim_name) {
     const variantTokens = (variant || '').split(/[\s·,()]+/).filter(t => t.length > 1);
     const matches = VEHICLES.filter(v =>
@@ -127,7 +152,6 @@ function findVehicleMeta(brand, model, trim_name, variant) {
     );
     if (matches.length === 1) return matches[0];
     if (matches.length > 1 && variantTokens.length) {
-      // variant 토큰(예: '하이브리드', '1.6', '2WD')으로 좁히기
       const scored = matches.map(m => ({
         m, score: variantTokens.reduce((s, t) => s + ((m.trim || '').includes(t) ? 1 : 0), 0)
       }));
@@ -136,7 +160,7 @@ function findVehicleMeta(brand, model, trim_name, variant) {
     }
     if (matches.length) return matches[0];
   }
-  // 2) 폴백 — brand + model 만 (이전 동작)
+  // 2) 폴백 — brand + model 만
   return VEHICLES.find(v => v.brand === brand && v.model === model) || {};
 }
 
@@ -278,7 +302,7 @@ function recompute() {
     return;
   }
   const v = state.vehicle;
-  const meta = findVehicleMeta(v.brand, v.model, v.trim_name, v.variant);
+  const meta = findVehicleMeta(v.brand, v.model, v.trim_name, v.variant, (v.trim_price_manwon || 0) * 10000);
   // 회사 옵션가 (선팅) — wel calc.js 에 itemsFee 로 전달
   const tintPrice = TINT_PRICES[state.tint.product] || {};
   const tintFee = [...state.tint.areas].reduce((s, k) => s + (tintPrice[k] || 0), 0);
@@ -1537,7 +1561,7 @@ ${url}
     const monthly = [];  // 텍스트만 위한 재계산은 생략 (기존 결과 활용)
     // 단순화 — recompute() 결과 활용 위해 quote-doc 의 데이터 추출 또는 재호출
     // 빠른 fix — 텍스트 다시 계산
-    const meta = findVehicleMeta(v.brand, v.model, v.trim_name, v.variant);
+    const meta = findVehicleMeta(v.brand, v.model, v.trim_name, v.variant, (v.trim_price_manwon || 0) * 10000);
     const tintPrice = TINT_PRICES[state.tint.product] || {};
     const tintFee = [...state.tint.areas].reduce((s, k) => s + (tintPrice[k] || 0), 0);
     const deliveryFee = FLAT_DELIVERY[state.cond.deliveryCity] || 0;
