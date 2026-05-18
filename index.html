@@ -7825,9 +7825,9 @@ render();
 <script type="module">
   const p = new URLSearchParams(location.search);
   if (!p.get('q') && p.get('admin') !== '1') {
-    const s1 = document.createElement('script'); s1.type='module'; s1.src='./quote.js';
-    const s2 = document.createElement('script'); s2.type='module'; s2.src='./src/main.js';
-    document.body.appendChild(s1); document.body.appendChild(s2);
+    // dynamic import — Vite 가 별도 chunk 로 번들 (createElement('script') 는 prod 에서 raw 경로 404)
+    import('./quote.js');
+    import('./src/main.js');
   }
 </script>
 </body>
