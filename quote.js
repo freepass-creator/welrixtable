@@ -71,7 +71,7 @@ async function loadCompanyConfig() {
   const params = new URLSearchParams(location.search);
   const id = params.get('c') || 'welrix';
   try {
-    const r = await fetch(`./src/data/company-config/${id}.json`);
+    const r = await fetch(`./data/company-config/${id}.json`);
     if (r.ok) {
       const cfg = await r.json();
       setCompanyConfig(cfg);
@@ -111,7 +111,7 @@ function mixWithWhite(hex, white) {
 }
 async function loadVehicles() {
   try {
-    const r = await fetch(`./src/data/vehicles.json?t=${Date.now()}`);
+    const r = await fetch(`./data/vehicles.json?t=${Date.now()}`);
     VEHICLES = await r.json();
   } catch {}
 }
