@@ -22,7 +22,7 @@ function onPreChange() {
     <div class="qc-field">
       <label>신용</label>
       <select v-model="quoteState.cond.credit" @change="recompute">
-        <option>신용</option><option>중신용</option><option>저신용</option><option>무신용</option>
+        <option>신용</option><option>중신용</option><option>저신용</option>
       </select>
     </div>
     <div class="qc-field">

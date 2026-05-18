@@ -6116,8 +6116,12 @@ render();
   .term-card__row {
     display: flex; justify-content: space-between; font-size: 11px; padding: 2px 0;
   }
-  .term-card__row span { color: var(--ink-4); }
+  .term-card__row span { color: var(--ink-4); display: inline-flex; align-items: baseline; gap: 4px; }
   .term-card__row b { color: var(--ink-2); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .term-card__row .resid-pct {
+    font-style: normal; font-size: 10px; font-weight: 500;
+    color: var(--brand); font-variant-numeric: tabular-nums;
+  }
   /* 빈 상태 — 차량 미선택 시 4기간 카드 골격만 노출 */
   .term-card--empty { opacity: 0.5; }
   .term-card--empty .term-card__monthly { color: var(--ink-4); font-weight: 400; }

@@ -16,6 +16,7 @@ const cards = computed(() => {
       idx, term: sc.term, dep: sc.dep, pre: sc.pre,
       monthly: m?.monthly ?? null,
       residualAmt: m?.residualAmt ?? null,
+      residualPct: m?.residualPct ?? null,
       depAmt: m?.depAmt ?? null,
       preAmt: m?.preAmt ?? null,
       sent: state.send[idx] !== false,
@@ -105,7 +106,10 @@ function onSendToggle(idx, e) {
         </span>
       </label>
     </div>
-    <div class="term-card__row"><span>만기인수</span><b>{{ card.residualAmt != null ? fmt(card.residualAmt) : '—' }}</b></div>
+    <div class="term-card__row">
+      <span>만기인수<em v-if="card.residualPct != null" class="resid-pct">{{ (card.residualPct * 100).toFixed(0) }}%</em></span>
+      <b>{{ card.residualAmt != null ? fmt(card.residualAmt) : '—' }}</b>
+    </div>
     <div class="term-card__row"><span>보증금</span><b>{{ card.depAmt != null ? fmt(card.depAmt) : '—' }}</b></div>
     <div class="term-card__row"><span>선납금</span><b>{{ card.preAmt != null ? fmt(card.preAmt) : '—' }}</b></div>
   </div>

@@ -257,15 +257,16 @@ export function calcQuote(input) {
 
   // ====== 4. 잔가율 ======
   // I3: 차량별 잔가율 + 신용가산 + 제네시스/K9/하이리무진 가산
+  // Excel: IF(C3="신용", buyback_apply, 0) — "신용" 만 (최상위 신용등급), 고신용은 제외
   const residualBase = (v[`r${term}`] ?? 0.5) +
-    ((cu.creditGrade === '신용' || cu.creditGrade === '고신용') ? (v.buyback_apply || 0) : 0) +
+    (cu.creditGrade === '신용' ? (v.buyback_apply || 0) : 0) +
     residualBrandAdj(v.brand, v.model);
 
   // I4: 주행거리 보정
   const I4 = residualBase + kmAdj(c.km || '2만km');
 
-  // I5: 매각잔가 가산 (신용=차량별 buyback_apply, 외=4%)
-  const I5 = (cu.creditGrade === '신용' || cu.creditGrade === '고신용')
+  // I5: 매각잔가 가산 (Excel: 신용만 buyback_apply, 나머지 모두 4%)
+  const I5 = cu.creditGrade === '신용'
     ? (v.buyback_apply || 0)
     : 0.04;
 
