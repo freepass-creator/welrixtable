@@ -27,9 +27,19 @@ function onProductChange(v) {
   quoteState.tint.product = v;
   window.__welrix_recompute?.();
 }
+// 배타 그룹 — 한 그룹 내 동시 선택 불가 (다른 멤버 자동 해제)
+const EXCLUSIVE_GROUPS = [
+  ['side_rear_no_coupon', 'side_rear_with_coupon'],  // 측후면 쿠폰 X / O
+  ['sunroof_normal', 'sunroof_pano'],                 // 썬루프 일반 / 파노
+];
 function toggleArea(key, e) {
-  if (e.target.checked) quoteState.tint.areas.add(key);
-  else quoteState.tint.areas.delete(key);
+  if (e.target.checked) {
+    const group = EXCLUSIVE_GROUPS.find((g) => g.includes(key));
+    if (group) group.filter((k) => k !== key).forEach((k) => quoteState.tint.areas.delete(k));
+    quoteState.tint.areas.add(key);
+  } else {
+    quoteState.tint.areas.delete(key);
+  }
   window.__welrix_recompute?.();
 }
 </script>

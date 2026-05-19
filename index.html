@@ -6489,36 +6489,43 @@ render();
    * 영업이 모달에서 보고, 이미지로 캡쳐해 손님에게 보냄.
    * ============================================================ */
   .quote-doc.official {
-    /* A4 폭 (210mm = ~794px @96dpi). 인쇄 시 정확히 A4 한 페이지에 맞음. */
+    /* A4 (210×297mm). 1페이지에 맞도록 패딩·간격 최소화. */
     width: 210mm;
     min-height: 297mm;
     box-sizing: border-box;
     margin: 0 auto;
-    padding: 18mm 16mm 18mm;
+    padding: 12mm 12mm 10mm;
     background: #fff;
     color: #1a1a1a;
     font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif;
-    font-size: 12px;
-    line-height: 1.5;
+    font-size: 11px;
+    line-height: 1.45;
     letter-spacing: -0.2px;
   }
+  /* 출력 (print) — body 안의 다른 요소 모두 숨기고 견적서만 출력 */
   @media print {
     @page { size: A4; margin: 0; }
-    .quote-doc.official { box-shadow: none; }
+    html, body { background: #fff !important; }
+    body > *:not(.quote-modal-backdrop) { display: none !important; }
+    .quote-modal-backdrop { position: static !important; background: #fff !important; padding: 0 !important; }
+    .quote-modal-backdrop .quote-modal { box-shadow: none !important; max-width: none !important; height: auto !important; }
+    .quote-modal__head { display: none !important; }
+    .quote-modal__body { overflow: visible !important; padding: 0 !important; }
+    .quote-doc.official { box-shadow: none; padding: 10mm; }
   }
-  /* 헤더 */
+  /* 헤더 — 압축 */
   .ofq-hero {
     display: flex; align-items: flex-end; justify-content: space-between;
-    padding-bottom: 14px; margin-bottom: 18px;
-    border-bottom: 1px solid var(--line-2);  /* 굵은 라인 제거, 헤어라인만 */
+    padding-bottom: 8px; margin-bottom: 10px;
+    border-bottom: 1px solid var(--line-2);
   }
   .ofq-hero__logo {
-    height: 28px; width: auto; display: block;
-    margin-bottom: 8px;
+    height: 22px; width: auto; display: block;
+    margin-bottom: 4px;
   }
   .ofq-hero__left .title {
-    font-size: 22px; font-weight: 600; color: #1a1a1a;
-    letter-spacing: -0.5px; line-height: 1.2;
+    font-size: 18px; font-weight: 600; color: #1a1a1a;
+    letter-spacing: -0.5px; line-height: 1.15;
   }
   .ofq-hero__right {
     text-align: right; font-size: 11px; color: #666;
@@ -6526,12 +6533,12 @@ render();
   }
   .ofq-hero__right b { color: #1a1a1a; font-weight: 600; }
 
-  /* 섹션 공통 — 일체감 위해 톤 정돈 */
-  .ofq-section { margin-bottom: 18px; }
+  /* 섹션 공통 — 1페이지 압축 */
+  .ofq-section { margin-bottom: 10px; }
   .ofq-section__title {
-    font-size: 11px; font-weight: 600;
+    font-size: 10.5px; font-weight: 600;
     color: var(--ink-2); letter-spacing: 1.5px;
-    margin-bottom: 8px; padding-bottom: 4px;
+    margin-bottom: 5px; padding-bottom: 3px;
     border-bottom: 1px solid var(--line);
     text-transform: uppercase;
   }
@@ -7852,6 +7859,7 @@ render();
         <button class="outline" id="btn-modal-copy-text"><i class="ph ph-copy"></i>텍스트</button>
         <button class="outline" id="btn-modal-save-image"><i class="ph ph-download-simple"></i>이미지 저장</button>
         <button class="outline" id="btn-modal-copy-image"><i class="ph ph-clipboard"></i>이미지 복사</button>
+        <button class="outline" id="btn-modal-print"><i class="ph ph-printer"></i>출력</button>
         <button class="primary" id="btn-modal-send-link"><i class="ph ph-paper-plane-tilt"></i>링크 발송</button>
         <button class="close" id="btn-modal-close"><i class="ph ph-x"></i></button>
       </div>

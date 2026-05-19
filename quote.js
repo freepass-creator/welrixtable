@@ -12,6 +12,30 @@ import {
 const $ = (id) => document.getElementById(id);
 const fmt = (n) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
 const krw = (n) => `${fmt(n)}원`;
+// 전화번호 자동 하이픈 — 010-1234-5678, 02-1234-5678, 1544-5678 등
+function fmtTel(tel) {
+  if (!tel) return '';
+  const d = String(tel).replace(/\D/g, '');
+  if (!d) return '';
+  // 010 / 011-019 → 010-XXXX-XXXX
+  if (/^01[016789]/.test(d)) {
+    if (d.length === 11) return `${d.slice(0,3)}-${d.slice(3,7)}-${d.slice(7)}`;
+    if (d.length === 10) return `${d.slice(0,3)}-${d.slice(3,6)}-${d.slice(6)}`;
+  }
+  // 02-XXXX-XXXX
+  if (d.startsWith('02')) {
+    if (d.length === 10) return `${d.slice(0,2)}-${d.slice(2,6)}-${d.slice(6)}`;
+    if (d.length === 9)  return `${d.slice(0,2)}-${d.slice(2,5)}-${d.slice(5)}`;
+  }
+  // 031~064 (지역번호) — 0XX-XXX(X)-XXXX
+  if (/^0[3-6]/.test(d)) {
+    if (d.length === 11) return `${d.slice(0,3)}-${d.slice(3,7)}-${d.slice(7)}`;
+    if (d.length === 10) return `${d.slice(0,3)}-${d.slice(3,6)}-${d.slice(6)}`;
+  }
+  // 1544/1588 etc 전국 대표번호
+  if (d.length === 8 && /^1[5-9]/.test(d)) return `${d.slice(0,4)}-${d.slice(4)}`;
+  return tel; // 매치 안되면 원본
+}
 
 // 색상 이름 → hex 추정
 function guessColor(name) {
@@ -542,13 +566,11 @@ function renderQuoteDoc(monthly, totalKrw, tintFee, deliveryFee, accessoryFee = 
         <div class="qd-people">
           <div class="qd-people__col">
             <h4>고객</h4>
-            <div class="name">${state.cust.name || '-'} 님</div>
-            <div class="tel">${state.cust.tel || '-'}</div>
+            <div class="name">${[state.cust.name ? `${state.cust.name} 님` : '', fmtTel(state.cust.tel)].filter(Boolean).join(' · ') || '-'}</div>
           </div>
           <div class="qd-people__col">
             <h4>담당자</h4>
-            <div class="name">${state.staff.name || '웰릭스 모빌리티'}</div>
-            <div class="tel">${state.staff.tel || '010-0000-0000'}</div>
+            <div class="name">${[state.staff.name, fmtTel(state.staff.tel)].filter(Boolean).join(' · ') || '-'}</div>
           </div>
         </div>
       </div>
@@ -799,14 +821,12 @@ function renderOfficialQuoteDoc(vehicles) {
       <div class="ofq-infobar">
         <div class="ofq-infobar__item">
           <span class="ofq-infobar__label">수신</span>
-          <span class="ofq-infobar__value"><b>${state.cust.name || 'VIP 고객'}</b> 귀하</span>
+          <span class="ofq-infobar__value">${[state.cust.name ? `<b>${state.cust.name}</b> 귀하` : '', fmtTel(state.cust.tel)].filter(Boolean).join(' · ') || '-'}</span>
         </div>
         <div class="ofq-infobar__divider"></div>
         <div class="ofq-infobar__item">
           <span class="ofq-infobar__label">담당</span>
-          <span class="ofq-infobar__value">
-            ${state.staff.name || '웰릭스 모빌리티'}${state.staff.tel ? ` · ${state.staff.tel}` : ''}
-          </span>
+          <span class="ofq-infobar__value">${[state.staff.name, fmtTel(state.staff.tel)].filter(Boolean).join(' · ') || '-'}</span>
         </div>
       </div>
 
@@ -1078,13 +1098,11 @@ function renderMultiQuoteDoc(vehicles) {
         <div class="qd-people">
           <div class="qd-people__col">
             <h4>고객</h4>
-            <div class="name">${state.cust.name || '-'} 님</div>
-            <div class="tel">${state.cust.tel || '-'}</div>
+            <div class="name">${[state.cust.name ? `${state.cust.name} 님` : '', fmtTel(state.cust.tel)].filter(Boolean).join(' · ') || '-'}</div>
           </div>
           <div class="qd-people__col">
             <h4>담당자</h4>
-            <div class="name">${state.staff.name || '웰릭스 모빌리티'}</div>
-            <div class="tel">${state.staff.tel || '010-0000-0000'}</div>
+            <div class="name">${[state.staff.name, fmtTel(state.staff.tel)].filter(Boolean).join(' · ') || '-'}</div>
           </div>
         </div>
       </div>
@@ -1357,6 +1375,11 @@ function attach() {
     }
   };
   $('btn-modal-close')?.addEventListener('click', () => $('quote-modal-bd').classList.remove('open'));
+
+  // 견적서 출력 (인쇄) — 브라우저 print 다이얼로그
+  $('btn-modal-print')?.addEventListener('click', () => {
+    window.print();
+  });
 
   // === 모달 옵션: 로고 제외 토글 ===
   const optExcludeLogo = $('opt-exclude-logo');
