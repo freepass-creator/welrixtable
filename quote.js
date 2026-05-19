@@ -755,15 +755,28 @@ function renderOfficialQuoteDoc(vehicles) {
             </div>
           ` : ''}
 
-          <div class="ofq-vcard__row">
-            <span class="row-key"><i class="ph ph-palette"></i>색상·부가</span>
-            <div class="ofq-vcard__colors">
-              <span class="color-inline"><span class="swatch-dot" style="background:${guessColor(veh.colorExt)}"></span>외장 ${veh.colorExt || '-'}</span>
-              <span class="color-inline"><span class="swatch-dot" style="background:${guessColor(veh.colorInt)}"></span>내장 ${veh.colorInt || '-'}</span>
-              ${deliveryFee ? `<span class="color-inline">탁송 ${veh.snapshot?.deliveryCity || ''}</span>` : ''}
-              ${tintFee ? `<span class="color-inline">선팅 ${veh.snapshot?.tint?.product || ''}</span>` : ''}
-              ${extrasNames.length ? `<span class="color-inline">용품 ${extrasNames.join(', ')}</span>` : ''}
+          <div class="ofq-meta-grid">
+            <div class="meta-item">
+              <span class="meta-key">외장 색상</span>
+              <span class="meta-val"><span class="swatch-dot" style="background:${guessColor(veh.colorExt)}"></span>${veh.colorExt || '-'}</span>
             </div>
+            <div class="meta-item">
+              <span class="meta-key">내장 색상</span>
+              <span class="meta-val"><span class="swatch-dot" style="background:${guessColor(veh.colorInt)}"></span>${veh.colorInt || '-'}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-key">탁송</span>
+              <span class="meta-val">${deliveryFee ? (veh.snapshot?.deliveryCity || '-') : '-'}</span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-key">선팅</span>
+              <span class="meta-val">${tintFee ? (veh.snapshot?.tint?.product || '-') : '-'}</span>
+            </div>
+            ${extrasNames.length ? `
+            <div class="meta-item">
+              <span class="meta-key">용품</span>
+              <span class="meta-val">${extrasNames.join(', ')}</span>
+            </div>` : ''}
           </div>
 
         </div>
@@ -1376,58 +1389,27 @@ function attach() {
   };
   $('btn-modal-close')?.addEventListener('click', () => $('quote-modal-bd').classList.remove('open'));
 
-  // 견적서 출력 — hidden iframe 에 격리해서 print (팝업 차단 회피)
+  // 견적서 출력 — print-mode 클래스 토글로 메인 페이지에서 직접 인쇄 (가장 안정)
   $('btn-modal-print')?.addEventListener('click', () => {
     const docEl = $('quote-doc-content');
     if (!docEl) { alert('출력할 견적서가 없습니다.'); return; }
-
-    // 메인 페이지 stylesheet 모두 복사 — link 는 abs href 로
-    const styleNodes = [];
-    document.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
-      styleNodes.push(`<link rel="stylesheet" href="${link.href}">`);
-    });
-    document.querySelectorAll('style').forEach(s => {
-      styleNodes.push(`<style>${s.textContent}</style>`);
-    });
-
-    const html = `<!DOCTYPE html>
-<html lang="ko"><head>
-<meta charset="UTF-8">
-<title>견적서 출력</title>
-${styleNodes.join('\n')}
-<style>
-  @page { size: A4; margin: 0; }
-  html, body { margin: 0; padding: 0; background: #fff; }
-  body > * { display: block; }
-</style>
-</head><body>
-${docEl.outerHTML}
-</body></html>`;
-
-    // 기존 print iframe 제거
-    const old = document.getElementById('__print-iframe');
+    // 1) 현재 견적서 element 복제해서 body 끝에 'print-target' id 로 추가
+    const old = document.getElementById('print-target');
     if (old) old.remove();
-
-    const iframe = document.createElement('iframe');
-    iframe.id = '__print-iframe';
-    iframe.style.cssText = 'position:fixed; left:-9999px; top:-9999px; width:210mm; height:297mm; border:0;';
-    document.body.appendChild(iframe);
-
-    const doc = iframe.contentDocument || iframe.contentWindow.document;
-    doc.open();
-    doc.write(html);
-    doc.close();
-
-    // CSS load 기다린 후 print
-    setTimeout(() => {
-      try {
-        iframe.contentWindow.focus();
-        iframe.contentWindow.print();
-      } catch (e) {
-        alert('출력 실패: ' + e.message);
-      }
-      setTimeout(() => iframe.remove(), 2000);
-    }, 500);
+    const clone = docEl.cloneNode(true);
+    clone.id = 'print-target';
+    document.body.appendChild(clone);
+    // 2) body 에 print-mode 클래스 — @media print 외에 main page 도 영향
+    document.body.classList.add('print-mode');
+    // 3) 인쇄 후 정리
+    const cleanup = () => {
+      document.body.classList.remove('print-mode');
+      const el = document.getElementById('print-target');
+      if (el) el.remove();
+      window.removeEventListener('afterprint', cleanup);
+    };
+    window.addEventListener('afterprint', cleanup);
+    setTimeout(() => window.print(), 50);
   });
 
   // === 모달 옵션: 로고 제외 토글 ===

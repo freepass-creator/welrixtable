@@ -6502,16 +6502,18 @@ render();
     line-height: 1.4;
     letter-spacing: -0.2px;
   }
-  /* 출력 (print) — body 안의 다른 요소 모두 숨기고 견적서만 출력 */
+  /* 출력 (print) — print-mode 클래스 시 #print-target 만 표시 */
   @media print {
     @page { size: A4; margin: 0; }
-    html, body { background: #fff !important; }
-    body > *:not(.quote-modal-backdrop) { display: none !important; }
-    .quote-modal-backdrop { position: static !important; background: #fff !important; padding: 0 !important; }
-    .quote-modal-backdrop .quote-modal { box-shadow: none !important; max-width: none !important; height: auto !important; }
-    .quote-modal__head { display: none !important; }
-    .quote-modal__body { overflow: visible !important; padding: 0 !important; }
-    .quote-doc.official { box-shadow: none; padding: 10mm; }
+    html, body { background: #fff !important; margin: 0 !important; padding: 0 !important; }
+    body.print-mode > *:not(#print-target) { display: none !important; }
+    body.print-mode #print-target {
+      display: block !important;
+      position: static !important;
+      width: 210mm !important; min-height: 297mm !important;
+      margin: 0 !important; padding: 8mm 12mm !important;
+      box-shadow: none !important;
+    }
   }
   /* 헤더 — 더 짜부 */
   .ofq-hero {
@@ -6655,6 +6657,38 @@ render();
     margin-top: 2px;
     font-size: 10.5px; color: var(--ink-4);
     font-weight: 400; letter-spacing: 0;
+  }
+  /* 차량 정보 메타 grid — 외장/내장/탁송/선팅 4분할 */
+  .ofq-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid var(--line);
+  }
+  .ofq-meta-grid .meta-item {
+    display: flex; flex-direction: column;
+    padding: 6px 10px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    min-width: 0;
+  }
+  .ofq-meta-grid .meta-item:nth-child(4n) { border-right: none; }
+  .ofq-meta-grid .meta-item:nth-last-child(-n+4) { border-bottom: none; }
+  .ofq-meta-grid .meta-key {
+    font-size: 9.5px; color: var(--ink-4);
+    letter-spacing: 0.5px; text-transform: uppercase;
+    font-weight: 500; margin-bottom: 2px;
+  }
+  .ofq-meta-grid .meta-val {
+    font-size: 11.5px; color: var(--ink-1);
+    font-weight: 500;
+    display: inline-flex; align-items: center; gap: 5px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .ofq-meta-grid .swatch-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.18);
+    display: inline-block; flex-shrink: 0;
   }
   .ofq-vcard__total {
     text-align: right; white-space: nowrap;
