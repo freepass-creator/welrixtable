@@ -6718,34 +6718,34 @@ render();
 
   /* 월 대여료 산출 — 견적1/2/3 가로 비교 (엑셀 핵심) */
   .ofq-terms-table th.row-label, .ofq-terms-table td.row-label {
-    background: #fafafa; text-align: left;
-    color: #666; font-weight: 500;
+    background: var(--bg-soft); text-align: left;
+    color: var(--ink-3); font-weight: 500;
     width: 92px;
     font-size: 11.5px;
   }
   .ofq-terms-table thead th {
-    background: #fff7f7; color: var(--brand);
-    font-weight: 700; padding: 9px;
-    font-size: 12px;
+    background: var(--bg-soft); color: var(--ink-1);
+    font-weight: 600; padding: 6px 9px;
+    font-size: 11.5px;
   }
   .ofq-terms-table td { text-align: center; }
   .ofq-terms-table tr.monthly td {
-    background: #fff7f7; font-weight: 700;
-    color: var(--brand); font-size: 14px;
-    padding: 10px 6px;
+    background: var(--bg); font-weight: 700;
+    color: var(--ink-1); font-size: 14px;
+    padding: 8px 6px;
   }
   .ofq-terms-table tr.monthly th.row-label {
-    background: var(--brand); color: #fff;
+    background: var(--ink-1); color: #fff;
   }
-  .ofq-terms-table td.col-off { opacity: 0.35; background: #f8f8f8; }
+  .ofq-terms-table td.col-off { opacity: 0.35; background: var(--bg-muted); }
   .ofq-terms-table td.best {
-    background: #fff7f7;
+    background: var(--bg-soft);
     position: relative;
   }
   .ofq-terms-table td.best::after {
     content: 'BEST';
     position: absolute; top: 2px; right: 4px;
-    font-size: 8px; font-weight: 700; color: var(--brand);
+    font-size: 8px; font-weight: 700; color: var(--ink-1);
     letter-spacing: 0.5px;
   }
 
