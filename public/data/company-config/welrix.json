@@ -34,6 +34,16 @@
   "accent_color": "#2d6cdf",
   "signature_link": "https://app.modusign.co.kr/magic-link/link/665f4cd0-fb5c-11f0-8c47-897ef2e93d12/authentication?shareType=URL",
 
+  "company_info": {
+    "full_name": "주식회사 웰릭스모빌리티",
+    "biz_no": "000-00-00000",
+    "ceo": "대표이사명",
+    "address": "주소 입력",
+    "phone": "1544-0000",
+    "fax": "02-000-0000",
+    "email": "contact@welrix.co.kr"
+  },
+
   "financial": {
     "credit_lookup": {
       "신용":   { "interest": 0.064, "profit": 0.019, "deposit": 0.05 },

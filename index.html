@@ -6836,24 +6836,23 @@ render();
 
   /* 푸터 */
   .ofq-footer {
-    margin-top: 22px; padding-top: 14px;
-    border-top: 2px solid var(--brand);
+    margin-top: 12px; padding-top: 8px;
+    border-top: 1.5px solid var(--brand);
   }
   .ofq-footer__bank {
-    background: var(--bg-soft); padding: 8px 12px;
+    background: var(--bg-soft); padding: 6px 10px;
     border: 1px solid var(--line-2);
-    font-size: 11.5px; color: var(--ink-1); font-weight: 500;
-    margin-bottom: 10px; font-variant-numeric: tabular-nums;
+    font-size: 11px; color: var(--ink-1); font-weight: 500;
+    margin-bottom: 6px; font-variant-numeric: tabular-nums;
   }
   .ofq-footer__bank b { color: var(--brand); }
-  .ofq-footer__sign {
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 11.5px; color: #666;
+  .ofq-footer__company {
+    display: flex; flex-direction: column; gap: 2px;
+    font-size: 9.5px; color: var(--ink-3); line-height: 1.45;
+    padding: 0 10px;
   }
-  .ofq-footer__sign .staff b { color: #1a1a1a; font-weight: 600; }
-  .ofq-footer__sign .seal {
-    font-size: 10.5px; color: #999;
-  }
+  .ofq-footer__company b { color: var(--ink-2); font-weight: 600; }
+  .ofq-footer__company-left, .ofq-footer__company-right { letter-spacing: 0; }
 
   /* 차종 구분 헤더 (다중 차종) — 정제 톤 */
   .ofq-vehicle-head {

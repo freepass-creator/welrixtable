@@ -274,11 +274,32 @@ export function buildOfficialQuoteHtml(a) {
         </ol>
       </div>
 
+      ${showLogo ? `
       <div class="ofq-footer">
         <div class="ofq-footer__bank">
           <span>계약금 입금계좌</span> · <b>신한은행 140-013-750928 웰릭스모빌리티㈜</b>
         </div>
+        ${companyConfig.company_info ? (() => {
+          const ci = companyConfig.company_info;
+          const left = [
+            ci.full_name ? `<b>${ci.full_name}</b>` : '',
+            ci.ceo ? `대표 ${ci.ceo}` : '',
+            ci.biz_no ? `사업자 ${ci.biz_no}` : '',
+          ].filter(Boolean).join(' · ');
+          const right = [
+            ci.address || '',
+            ci.phone ? `Tel ${fmtTel(ci.phone)}` : '',
+            ci.fax ? `Fax ${fmtTel(ci.fax)}` : '',
+            ci.email || '',
+          ].filter(Boolean).join(' · ');
+          return `
+        <div class="ofq-footer__company">
+          <div class="ofq-footer__company-left">${left}</div>
+          <div class="ofq-footer__company-right">${right}</div>
+        </div>`;
+        })() : ''}
       </div>
+      ` : ''}
     </div>
   `;
 }
