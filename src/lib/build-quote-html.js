@@ -274,6 +274,13 @@ export function buildOfficialQuoteHtml(a) {
         </ol>
       </div>
 
+      ${showLogo ? `
+      <div class="ofq-footer">
+        <div class="ofq-footer__bank">
+          <span>계약금 입금계좌</span> · <b>신한은행 140-013-750928 웰릭스모빌리티㈜</b>
+        </div>
+      </div>
+      ` : ''}
     </div>
   `;
 }
