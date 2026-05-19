@@ -10,6 +10,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'change']);
 
 const open = ref(false);
+const flipUp = ref(false);  // viewport 바닥 가까우면 위로 펼침
 const rootEl = ref(null);
 
 const current = computed(() => {
@@ -17,8 +18,22 @@ const current = computed(() => {
   return props.options.find((o) => String(o.value) === String(props.modelValue));
 });
 
+const MENU_HEIGHT = 280; // .cdd__menu max-height
+const ITEM_HEIGHT = 32;
+
+function computeFlip() {
+  if (!rootEl.value) return;
+  const rect = rootEl.value.getBoundingClientRect();
+  const spaceBelow = window.innerHeight - rect.bottom;
+  const spaceAbove = rect.top;
+  const needed = Math.min(MENU_HEIGHT, props.options.length * ITEM_HEIGHT + 16);
+  // 아래 공간이 부족하고 위 공간이 더 넓으면 위로
+  flipUp.value = spaceBelow < needed && spaceAbove > spaceBelow;
+}
+
 function toggle() {
   if (props.disabled) return;
+  if (!open.value) computeFlip();
   open.value = !open.value;
 }
 function close() { open.value = false; }
@@ -63,7 +78,7 @@ function onEsc(e) {
       </span>
       <span class="cdd__chev"></span>
     </button>
-    <div v-if="open" class="cdd__menu">
+    <div v-if="open" class="cdd__menu" :class="{ 'cdd__menu--up': flipUp }">
       <button
         v-for="opt in options"
         :key="opt.value"

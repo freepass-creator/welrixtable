@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, nextTick } from 'vue';
 import { quoteState } from '../store.js';
 import { ACCESSORIES } from '../data/lookups.js';
 import CustomDropdown from './CustomDropdown.vue';
@@ -7,6 +7,12 @@ import CustomDropdown from './CustomDropdown.vue';
 const fmt = (n) => new Intl.NumberFormat('ko-KR').format(n);
 
 const open = ref(false);
+function onToggle(e) {
+  open.value = e.target.open;
+  if (open.value) {
+    nextTick(() => e.target.scrollIntoView({ block: 'end', behavior: 'smooth' }));
+  }
+}
 
 function buildOpts(map, prefix) {
   return [{ value: '', label: `${prefix} 없음`, sub: '무료' },
@@ -30,7 +36,7 @@ function onChange(key, v) {
 
 <template>
   <section id="sec-extras">
-    <details class="qp-extras-inline" :open="open" @toggle="open = $event.target.open">
+    <details class="qp-extras-inline" :open="open" @toggle="onToggle">
       <summary class="step-title-summary">
         <span class="step-title-text">용품 — 블박 · 내비 · 하이패스</span>
         <span class="caret"></span>

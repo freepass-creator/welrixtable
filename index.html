@@ -5823,6 +5823,11 @@ render();
     padding: 4px;
     max-height: 280px; overflow-y: auto;
   }
+  /* viewport 바닥 가까우면 위로 펼침 */
+  .cdd__menu--up {
+    top: auto; bottom: calc(100% + 2px);
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+  }
   .cdd__opt {
     display: flex; align-items: center; gap: 8px;
     width: 100%; padding: 6px 8px;
