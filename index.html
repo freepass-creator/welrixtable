@@ -6489,17 +6489,17 @@ render();
    * 영업이 모달에서 보고, 이미지로 캡쳐해 손님에게 보냄.
    * ============================================================ */
   .quote-doc.official {
-    /* A4 (210×297mm). 1페이지에 맞도록 패딩·간격 최소화. */
+    /* A4 (210×297mm). 1페이지에 맞도록 상하 패딩 최소화. */
     width: 210mm;
     min-height: 297mm;
     box-sizing: border-box;
     margin: 0 auto;
-    padding: 12mm 12mm 10mm;
+    padding: 8mm 12mm 8mm;
     background: #fff;
     color: #1a1a1a;
     font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif;
     font-size: 11px;
-    line-height: 1.45;
+    line-height: 1.4;
     letter-spacing: -0.2px;
   }
   /* 출력 (print) — body 안의 다른 요소 모두 숨기고 견적서만 출력 */
@@ -6513,19 +6513,19 @@ render();
     .quote-modal__body { overflow: visible !important; padding: 0 !important; }
     .quote-doc.official { box-shadow: none; padding: 10mm; }
   }
-  /* 헤더 — 압축 */
+  /* 헤더 — 더 짜부 */
   .ofq-hero {
     display: flex; align-items: flex-end; justify-content: space-between;
-    padding-bottom: 8px; margin-bottom: 10px;
+    padding-bottom: 5px; margin-bottom: 7px;
     border-bottom: 1px solid var(--line-2);
   }
   .ofq-hero__logo {
-    height: 22px; width: auto; display: block;
-    margin-bottom: 4px;
+    height: 18px; width: auto; display: block;
+    margin-bottom: 2px;
   }
   .ofq-hero__left .title {
-    font-size: 18px; font-weight: 600; color: #1a1a1a;
-    letter-spacing: -0.5px; line-height: 1.15;
+    font-size: 16px; font-weight: 600; color: #1a1a1a;
+    letter-spacing: -0.5px; line-height: 1.1;
   }
   .ofq-hero__right {
     text-align: right; font-size: 11px; color: #666;
@@ -6533,12 +6533,12 @@ render();
   }
   .ofq-hero__right b { color: #1a1a1a; font-weight: 600; }
 
-  /* 섹션 공통 — 1페이지 압축 */
-  .ofq-section { margin-bottom: 10px; }
+  /* 섹션 공통 — 1페이지 짜부 */
+  .ofq-section { margin-bottom: 6px; }
   .ofq-section__title {
-    font-size: 10.5px; font-weight: 600;
+    font-size: 10px; font-weight: 600;
     color: var(--ink-2); letter-spacing: 1.5px;
-    margin-bottom: 5px; padding-bottom: 3px;
+    margin-bottom: 3px; padding-bottom: 2px;
     border-bottom: 1px solid var(--line);
     text-transform: uppercase;
   }
@@ -6559,15 +6559,15 @@ render();
   .ofq-table {
     width: 100%;
     border-collapse: separate; border-spacing: 0;
-    font-size: 12px;
+    font-size: 11px;
     font-variant-numeric: tabular-nums;
   }
   .ofq-table th, .ofq-table td {
     border-right: 1px solid var(--line-2);
     border-bottom: 1px solid var(--line-2);
-    padding: 8px 10px;
+    padding: 4px 8px;
     vertical-align: middle;
-    line-height: 1.4;
+    line-height: 1.3;
   }
   .ofq-table th:last-child, .ofq-table td:last-child { border-right: 0; }
   .ofq-table tr:last-child th, .ofq-table tr:last-child td { border-bottom: 0; }
@@ -6576,7 +6576,7 @@ render();
     color: var(--ink-3); font-weight: 500;
     text-align: center;
     white-space: nowrap;
-    font-size: 11.5px;
+    font-size: 10.5px;
   }
   .ofq-table td {
     background: var(--bg); color: var(--ink-1);
@@ -6594,16 +6594,15 @@ render();
     display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
   }
 
-  /* 수신·담당 한 줄 정보 바 — 견적서 정제 톤, 좌측 빨간 액센트 + 직각 */
+  /* 수신·담당 한 줄 정보 바 — 짜부 */
   .ofq-infobar {
     display: flex; align-items: baseline;
-    gap: var(--space-5);
-    padding: 12px 18px;
-    margin-bottom: var(--space-4);
+    gap: var(--space-4);
+    padding: 6px 12px;
+    margin-bottom: 8px;
     background: var(--bg-soft);
     border: 1px solid var(--line-2);
     border-left: 3px solid var(--brand);
-    /* 직각 — 견적서 톤 */
   }
   .ofq-infobar__item {
     display: flex; align-items: baseline; gap: 10px;

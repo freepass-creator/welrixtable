@@ -1376,9 +1376,37 @@ function attach() {
   };
   $('btn-modal-close')?.addEventListener('click', () => $('quote-modal-bd').classList.remove('open'));
 
-  // 견적서 출력 (인쇄) — 브라우저 print 다이얼로그
+  // 견적서 출력 — 새 창에서 견적서 HTML 만 격리해서 print
   $('btn-modal-print')?.addEventListener('click', () => {
-    window.print();
+    const docEl = $('quote-doc-content');
+    if (!docEl) { alert('출력할 견적서가 없습니다.'); return; }
+    // 메인 페이지의 견적서 관련 style 만 추출 (.quote-doc / .qd- / .ofq- prefix 등)
+    const allStyles = Array.from(document.querySelectorAll('style, link[rel=stylesheet]'))
+      .map(el => el.outerHTML).join('\n');
+    const html = `<!DOCTYPE html>
+<html lang="ko"><head>
+<meta charset="UTF-8">
+<title>견적서 출력</title>
+${allStyles}
+<style>
+  @page { size: A4; margin: 0; }
+  html, body { margin: 0; padding: 0; background: #fff; }
+  body { display: block !important; }
+</style>
+</head><body>
+${docEl.outerHTML}
+<script>
+window.addEventListener('load', () => {
+  setTimeout(() => { window.print(); }, 300);
+  window.addEventListener('afterprint', () => window.close());
+});
+<\/script>
+</body></html>`;
+    const w = window.open('', '_blank', 'width=900,height=1200');
+    if (!w) { alert('팝업이 차단되었습니다. 브라우저 팝업 허용 후 다시 시도해주세요.'); return; }
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
   });
 
   // === 모달 옵션: 로고 제외 토글 ===
