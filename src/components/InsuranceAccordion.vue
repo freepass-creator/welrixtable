@@ -6,20 +6,20 @@ import CustomDropdown from './CustomDropdown.vue';
 const open = ref(false);
 
 const SVC_OPTS = [
-  { value: '웰스 Basic', label: '웰스 Basic' },
-  { value: '웰스 Self',  label: '웰스 Self' },
+  { value: '웰스 Basic', label: '웰스 Basic', sub: '월 12,900원' },
+  { value: '웰스 Self',  label: '웰스 Self',  sub: '연 96,000원' },
 ];
 const INS_OPTS = [
-  { value: '1억', label: '대물 1억' },
-  { value: '2억', label: '대물 2억' },
-  { value: '3억', label: '대물 3억' },
-  { value: '5억', label: '대물 5억' },
+  { value: '1억', label: '대물 1억', sub: '기본' },
+  { value: '2억', label: '대물 2억', sub: '+10,000원' },
+  { value: '3억', label: '대물 3억', sub: '+20,000원' },
+  { value: '5억', label: '대물 5억', sub: '+30,000원' },
 ];
 const EXTRA_OPTS = [
-  { value: '없음', label: '추가운전자 없음' },
-  { value: '1명', label: '추가운전자 1명' },
-  { value: '2명', label: '추가운전자 2명' },
-  { value: '3명', label: '추가운전자 3명' },
+  { value: '없음', label: '추가운전자 없음', sub: '무료' },
+  { value: '1명', label: '추가운전자 1명',   sub: '+50,000원' },
+  { value: '2명', label: '추가운전자 2명',   sub: '+100,000원' },
+  { value: '3명', label: '추가운전자 3명',   sub: '+150,000원' },
 ];
 
 function onSvc(v)   { quoteState.cond.svc = v;          window.__welrix_recompute?.(); }

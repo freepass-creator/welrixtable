@@ -9,8 +9,12 @@ const fmt = (n) => new Intl.NumberFormat('ko-KR').format(n);
 const open = ref(false);
 
 function buildOpts(map, prefix) {
-  return [{ value: '', label: `${prefix} 없음` },
-    ...Object.entries(map).map(([k, v]) => ({ value: k, label: `${k} (+${fmt(v)}원)` }))
+  return [{ value: '', label: `${prefix} 없음`, sub: '무료' },
+    ...Object.entries(map).map(([k, v]) => ({
+      value: k,
+      label: k,
+      sub: v > 0 ? `+${fmt(v)}원` : '무료',
+    }))
   ];
 }
 

@@ -54,7 +54,7 @@ function toggleArea(key, e) {
         >
           <input type="checkbox" :checked="c.checked" :data-tint-area="c.key" @change="toggleArea(c.key, $event)" />
           <span class="tn">{{ c.label }}</span>
-          <em class="tp">{{ c.price > 0 ? '+' + fmt(c.price) : '무료' }}</em>
+          <em class="tp">{{ c.price > 0 ? '+' + fmt(c.price) + '원' : '무료' }}</em>
         </label>
       </div>
       <span v-else style="font-size:11px; color:var(--ink-4);">제품을 선택하면 부위가 표시됩니다</span>

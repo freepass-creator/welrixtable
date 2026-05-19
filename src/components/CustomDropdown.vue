@@ -55,6 +55,7 @@ function onEsc(e) {
           <span v-if="current.iconUrl" class="cdd__icon" :style="{ backgroundImage: `url('${current.iconUrl}')` }"></span>
           <span v-else-if="current.swatch" class="cdd__icon" :style="{ background: current.swatch }"></span>
           <span class="cdd__text">{{ current.label }}</span>
+          <span v-if="current.sub" class="cdd__sub" :class="{ 'cdd__sub--accent': current.subAccent }">{{ current.sub }}</span>
         </template>
         <template v-else>
           <span class="cdd__text cdd__text--placeholder">{{ placeholder }}</span>
@@ -73,7 +74,8 @@ function onEsc(e) {
       >
         <span v-if="opt.iconUrl" class="cdd__icon" :style="{ backgroundImage: `url('${opt.iconUrl}')` }"></span>
         <span v-else-if="opt.swatch" class="cdd__icon" :style="{ background: opt.swatch }"></span>
-        <span>{{ opt.label }}</span>
+        <span class="cdd__opt-label">{{ opt.label }}</span>
+        <span v-if="opt.sub" class="cdd__opt-sub" :class="{ 'cdd__opt-sub--accent': opt.subAccent }">{{ opt.sub }}</span>
       </button>
     </div>
   </div>

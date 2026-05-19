@@ -14,7 +14,8 @@ const cityOptions = computed(() => {
   const cities = DELIVERY_REGIONS[quoteState.cond.deliveryRegion] || {};
   return Object.entries(cities).map(([c, fee]) => ({
     value: c,
-    label: `${c} (${fee > 0 ? '+' + fmt(fee) + '원' : '무료'})`,
+    label: c,
+    sub: fee > 0 ? `+${fmt(fee)}원` : '무료',
   }));
 });
 

@@ -5323,7 +5323,12 @@ function syncToVueStore() {
     );
     vs.trimOptions = sortedTrims.map((t) => {
       const price = getTrimPrice(t, state.tax_rate);
-      return { value: t.trim_id, label: `${t.name} · ${price.toLocaleString()}만` };
+      return {
+        value: t.trim_id,
+        label: t.name,
+        sub: `${price.toLocaleString()}만원`,
+        subAccent: true,
+      };
     });
   } else {
     vs.trimOptions = [];
@@ -5332,7 +5337,8 @@ function syncToVueStore() {
   if (model && state.trim) {
     vs.exteriorColorOptions = (model.exterior_colors || []).map((c, i) => ({
       value: String(i),
-      label: `${c.name}${c.price > 0 ? ' · +' + c.price + '만' : ''}`,
+      label: c.name,
+      sub: c.price > 0 ? `+${(c.price * 10000).toLocaleString()}원` : '무료',
       name: c.name,
       swatch: c.hex,
     }));
@@ -5791,6 +5797,13 @@ render();
     flex: 1; min-width: 0;
   }
   .cdd__text--placeholder { color: var(--ink-4); }
+  /* 부가 정보 (가격/추가비용) — 우측 정렬 tabular */
+  .cdd__sub {
+    margin-left: auto; padding-left: 12px; padding-right: 18px;
+    font-size: 12px; color: var(--ink-4); font-weight: 500;
+    font-variant-numeric: tabular-nums; flex-shrink: 0;
+  }
+  .cdd__sub--accent { color: var(--ink-1); font-weight: 600; }
   .cdd__chev {
     position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
     width: 11px; height: 11px;
@@ -5819,6 +5832,18 @@ render();
   .cdd__opt:hover { background: var(--accent-soft); }
   .cdd__opt--sel { background: var(--brand-50); color: var(--brand); }
   .cdd__opt .cdd__icon { width: 16px; height: 16px; }
+  .cdd__opt-label {
+    flex: 1; min-width: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .cdd__opt-sub {
+    font-size: 12px; color: var(--ink-4); font-weight: 500;
+    font-variant-numeric: tabular-nums; flex-shrink: 0;
+    padding-left: 12px;
+  }
+  .cdd__opt-sub--accent { color: var(--ink-1); font-weight: 600; }
+  .cdd__opt:hover .cdd__opt-sub { color: var(--ink-2); }
+  .cdd__opt--sel .cdd__opt-sub { color: var(--brand); }
   .qp-summary-mini .qp-price { font-weight: 500; color: var(--ink-1); font-variant-numeric: tabular-nums; }
   .qp-summary-mini .qp-price:empty { display: none; }
   /* 가격 공식 — 트림 + 옵션 = 총 X만원 */
