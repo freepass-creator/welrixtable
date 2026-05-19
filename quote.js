@@ -524,13 +524,12 @@ function renderQuoteDoc(monthly, totalKrw, tintFee, deliveryFee, accessoryFee = 
 
   const cfg = window.__welrix_companyConfig || {};
   const logoUrl = cfg.logo_url;
-  const showLogo = state.send_options?.showLogo !== false; // 기본 true, 사용자가 끄면 false
+  const showLogo = state.send_options?.showLogo !== false; // 기본 true, "CI 제외" 체크 시 false
   const html = `
     <div class="quote-doc" id="quote-doc-content">
       <!-- 헤더 -->
       <div class="qd-hero">
-        ${(showLogo && logoUrl) ? `<img class="qd-hero__logo" src="${logoUrl}" alt="${cfg.name || ''}" />` : ''}
-        ${(!showLogo || !logoUrl) ? `<div class="qd-hero__brand">${(cfg.name || 'WELRIX MOBILITY').toUpperCase()}</div>` : ''}
+        ${showLogo && logoUrl ? `<img class="qd-hero__logo" src="${logoUrl}" alt="${cfg.name || ''}" />` : ''}
         <div class="qd-hero__title">신차 장기렌터카 견적서</div>
         <div class="qd-hero__meta">
           <span><b>견적번호</b> ${quoteNo}</span>
@@ -656,10 +655,6 @@ function renderQuoteDoc(monthly, totalKrw, tintFee, deliveryFee, accessoryFee = 
       <div class="qd-footer">
         <div class="qd-footer__bank">
           <span class="label">계약금 입금</span> <b>신한은행 140-013-750928 웰릭스모빌리티㈜</b>
-        </div>
-        <div class="qd-footer__sign">
-          <div class="staff">담당 · <b>${state.staff.name || '웰릭스 모빌리티'}</b></div>
-          <div class="tel">${state.staff.tel || '010-0000-0000'}</div>
         </div>
       </div>
     </div>
@@ -897,7 +892,6 @@ function renderOfficialQuoteDoc(vehicles) {
           <span>계약금 입금계좌</span> · <b>신한은행 140-013-750928 웰릭스모빌리티㈜</b>
         </div>
         <div class="ofq-footer__sign">
-          <div class="staff">담당 · <b>${state.staff.name || '웰릭스 모빌리티'}</b> · ${state.staff.tel || '010-0000-0000'}</div>
           <div class="seal">웰릭스모빌리티㈜</div>
         </div>
       </div>
@@ -1062,8 +1056,7 @@ function renderMultiQuoteDoc(vehicles) {
   const html = `
     <div class="quote-doc" id="quote-doc-content">
       <div class="qd-hero">
-        ${(showLogo && logoUrl) ? `<img class="qd-hero__logo" src="${logoUrl}" alt="${cfg.name || ''}" />` : ''}
-        ${(!showLogo || !logoUrl) ? `<div class="qd-hero__brand">${(cfg.name || 'WELRIX MOBILITY').toUpperCase()}</div>` : ''}
+        ${showLogo && logoUrl ? `<img class="qd-hero__logo" src="${logoUrl}" alt="${cfg.name || ''}" />` : ''}
         <div class="qd-hero__title">신차 장기렌터카 견적서</div>
         <div class="qd-hero__meta">
           <span><b>견적번호</b> ${quoteNo}</span>
@@ -1134,10 +1127,6 @@ function renderMultiQuoteDoc(vehicles) {
       <div class="qd-footer">
         <div class="qd-footer__bank">
           <span class="label">계약금 입금</span> <b>신한은행 140-013-750928 웰릭스모빌리티㈜</b>
-        </div>
-        <div class="qd-footer__sign">
-          <div class="staff">담당 · <b>${state.staff.name || '웰릭스 모빌리티'}</b></div>
-          <div class="tel">${state.staff.tel || '010-0000-0000'}</div>
         </div>
       </div>
     </div>
