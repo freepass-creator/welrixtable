@@ -1376,37 +1376,58 @@ function attach() {
   };
   $('btn-modal-close')?.addEventListener('click', () => $('quote-modal-bd').classList.remove('open'));
 
-  // 견적서 출력 — 새 창에서 견적서 HTML 만 격리해서 print
+  // 견적서 출력 — hidden iframe 에 격리해서 print (팝업 차단 회피)
   $('btn-modal-print')?.addEventListener('click', () => {
     const docEl = $('quote-doc-content');
     if (!docEl) { alert('출력할 견적서가 없습니다.'); return; }
-    // 메인 페이지의 견적서 관련 style 만 추출 (.quote-doc / .qd- / .ofq- prefix 등)
-    const allStyles = Array.from(document.querySelectorAll('style, link[rel=stylesheet]'))
-      .map(el => el.outerHTML).join('\n');
+
+    // 메인 페이지 stylesheet 모두 복사 — link 는 abs href 로
+    const styleNodes = [];
+    document.querySelectorAll('link[rel="stylesheet"]').forEach(link => {
+      styleNodes.push(`<link rel="stylesheet" href="${link.href}">`);
+    });
+    document.querySelectorAll('style').forEach(s => {
+      styleNodes.push(`<style>${s.textContent}</style>`);
+    });
+
     const html = `<!DOCTYPE html>
 <html lang="ko"><head>
 <meta charset="UTF-8">
 <title>견적서 출력</title>
-${allStyles}
+${styleNodes.join('\n')}
 <style>
   @page { size: A4; margin: 0; }
   html, body { margin: 0; padding: 0; background: #fff; }
-  body { display: block !important; }
+  body > * { display: block; }
 </style>
 </head><body>
 ${docEl.outerHTML}
-<script>
-window.addEventListener('load', () => {
-  setTimeout(() => { window.print(); }, 300);
-  window.addEventListener('afterprint', () => window.close());
-});
-<\/script>
 </body></html>`;
-    const w = window.open('', '_blank', 'width=900,height=1200');
-    if (!w) { alert('팝업이 차단되었습니다. 브라우저 팝업 허용 후 다시 시도해주세요.'); return; }
-    w.document.open();
-    w.document.write(html);
-    w.document.close();
+
+    // 기존 print iframe 제거
+    const old = document.getElementById('__print-iframe');
+    if (old) old.remove();
+
+    const iframe = document.createElement('iframe');
+    iframe.id = '__print-iframe';
+    iframe.style.cssText = 'position:fixed; left:-9999px; top:-9999px; width:210mm; height:297mm; border:0;';
+    document.body.appendChild(iframe);
+
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    doc.open();
+    doc.write(html);
+    doc.close();
+
+    // CSS load 기다린 후 print
+    setTimeout(() => {
+      try {
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+      } catch (e) {
+        alert('출력 실패: ' + e.message);
+      }
+      setTimeout(() => iframe.remove(), 2000);
+    }, 500);
   });
 
   // === 모달 옵션: 로고 제외 토글 ===
