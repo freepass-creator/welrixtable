@@ -5800,13 +5800,13 @@ render();
     flex: 1; min-width: 0;
   }
   .cdd__text--placeholder { color: var(--ink-4); }
-  /* 부가 정보 (가격/추가비용) — 우측 정렬 tabular */
+  /* 부가 정보 sub — 닫힌 드롭다운 (선택된 값 표시): 진하게 강조 */
   .cdd__sub {
     margin-left: auto; padding-left: 12px; padding-right: 18px;
-    font-size: 12px; color: var(--ink-4); font-weight: 500;
+    font-size: 12px; color: var(--ink-1); font-weight: 600;
     font-variant-numeric: tabular-nums; flex-shrink: 0;
+    letter-spacing: -0.1px;
   }
-  .cdd__sub--accent { color: var(--ink-1); font-weight: 600; }
   .cdd__chev {
     position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
     width: 11px; height: 11px;
@@ -5838,20 +5838,27 @@ render();
     font-family: inherit;
   }
   .cdd__opt:hover { background: var(--accent-soft); }
-  .cdd__opt--sel { background: var(--brand-50); color: var(--brand); }
+  .cdd__opt:hover .cdd__opt-label { color: var(--ink-1); }
+  .cdd__opt--sel {
+    background: var(--brand-50);
+    color: var(--brand);
+  }
+  .cdd__opt--sel .cdd__opt-label { color: var(--brand); font-weight: 600; }
   .cdd__opt .cdd__icon { width: 16px; height: 16px; }
   .cdd__opt-label {
     flex: 1; min-width: 0;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    color: var(--ink-1); font-weight: 500;
   }
+  /* 메뉴 항목 sub — 옅게 (label 보조). 선택 시 brand 강조 */
   .cdd__opt-sub {
-    font-size: 12px; color: var(--ink-4); font-weight: 500;
+    font-size: 11.5px; color: var(--ink-3); font-weight: 500;
     font-variant-numeric: tabular-nums; flex-shrink: 0;
     padding-left: 12px;
+    letter-spacing: -0.1px;
   }
-  .cdd__opt-sub--accent { color: var(--ink-1); font-weight: 600; }
   .cdd__opt:hover .cdd__opt-sub { color: var(--ink-2); }
-  .cdd__opt--sel .cdd__opt-sub { color: var(--brand); }
+  .cdd__opt--sel .cdd__opt-sub { color: var(--brand); font-weight: 600; }
   .qp-summary-mini .qp-price { font-weight: 500; color: var(--ink-1); font-variant-numeric: tabular-nums; }
   .qp-summary-mini .qp-price:empty { display: none; }
   /* 가격 공식 — 트림 + 옵션 = 총 X만원 */
