@@ -113,19 +113,27 @@ export function buildOfficialQuoteHtml(a) {
           <div class="ofq-meta-grid">
             <div class="meta-item">
               <span class="meta-key">외장 색상</span>
-              <span class="meta-val"><span class="swatch-dot" style="background:${guessColor(veh.colorExt)}"></span>${veh.colorExt || '-'}</span>
+              <span class="meta-val">${veh.colorExt
+                ? `<span class="swatch-dot" style="background:${guessColor(veh.colorExt)}"></span>${veh.colorExt}`
+                : `<span class="meta-empty">미선택</span>`}</span>
             </div>
             <div class="meta-item">
               <span class="meta-key">내장 색상</span>
-              <span class="meta-val"><span class="swatch-dot" style="background:${guessColor(veh.colorInt)}"></span>${veh.colorInt || '-'}</span>
+              <span class="meta-val">${veh.colorInt
+                ? `<span class="swatch-dot" style="background:${guessColor(veh.colorInt)}"></span>${veh.colorInt}`
+                : `<span class="meta-empty">미선택</span>`}</span>
             </div>
             <div class="meta-item">
               <span class="meta-key">탁송</span>
-              <span class="meta-val">${deliveryFee ? (veh.snapshot?.deliveryCity || '-') : '-'}</span>
+              <span class="meta-val">${(deliveryFee && veh.snapshot?.deliveryCity)
+                ? veh.snapshot.deliveryCity
+                : `<span class="meta-empty">미선택</span>`}</span>
             </div>
             <div class="meta-item">
               <span class="meta-key">선팅</span>
-              <span class="meta-val">${tintFee ? (veh.snapshot?.tint?.product || '-') : '-'}</span>
+              <span class="meta-val">${(tintFee && veh.snapshot?.tint?.product)
+                ? veh.snapshot.tint.product
+                : `<span class="meta-empty">미선택</span>`}</span>
             </div>
             ${extrasNames.length ? `
             <div class="meta-item">
