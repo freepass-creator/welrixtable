@@ -1402,27 +1402,53 @@ function attach() {
   };
   $('btn-modal-close')?.addEventListener('click', () => $('quote-modal-bd').classList.remove('open'));
 
-  // 견적서 출력 — print-mode 클래스 토글로 메인 페이지에서 직접 인쇄 (가장 안정)
-  $('btn-modal-print')?.addEventListener('click', () => {
-    const docEl = $('quote-doc-content');
-    if (!docEl) { alert('출력할 견적서가 없습니다.'); return; }
-    // 1) 현재 견적서 element 복제해서 body 끝에 'print-target' id 로 추가
-    const old = document.getElementById('print-target');
-    if (old) old.remove();
-    const clone = docEl.cloneNode(true);
-    clone.id = 'print-target';
-    document.body.appendChild(clone);
-    // 2) body 에 print-mode 클래스 — @media print 외에 main page 도 영향
-    document.body.classList.add('print-mode');
-    // 3) 인쇄 후 정리
-    const cleanup = () => {
-      document.body.classList.remove('print-mode');
-      const el = document.getElementById('print-target');
-      if (el) el.remove();
-      window.removeEventListener('afterprint', cleanup);
-    };
-    window.addEventListener('afterprint', cleanup);
-    setTimeout(() => window.print(), 50);
+  // 견적서 출력 — html2canvas 로 캡쳐 후 이미지로 인쇄 (이미지 복사와 동일한 안정성)
+  $('btn-modal-print')?.addEventListener('click', async () => {
+    const btn = $('btn-modal-print');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="ph ph-spinner"></i> 준비 중...';
+    btn.disabled = true;
+    try {
+      const canvas = await captureQuoteImage();
+      if (!canvas) return;
+      const dataUrl = canvas.toDataURL('image/png');
+      // 기존 print iframe 정리
+      const oldIf = document.getElementById('__print-iframe');
+      if (oldIf) oldIf.remove();
+      // 숨겨진 iframe 에 이미지 1장만 넣고 print
+      const iframe = document.createElement('iframe');
+      iframe.id = '__print-iframe';
+      iframe.style.cssText = 'position:fixed; left:-9999px; top:-9999px; width:210mm; height:297mm; border:0;';
+      document.body.appendChild(iframe);
+      const doc = iframe.contentDocument;
+      doc.open();
+      doc.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>견적서 출력</title>
+<style>
+@page { size: A4; margin: 0; }
+html, body { margin: 0; padding: 0; background: #fff; }
+img { display: block; width: 210mm; height: auto; }
+</style></head><body><img src="${dataUrl}"></body></html>`);
+      doc.close();
+      // 이미지 로드 대기 후 print
+      const img = iframe.contentDocument.querySelector('img');
+      const doPrint = () => {
+        try {
+          iframe.contentWindow.focus();
+          iframe.contentWindow.print();
+        } catch (e) {
+          alert('출력 실패: ' + e.message);
+        }
+        setTimeout(() => iframe.remove(), 2000);
+      };
+      if (img.complete) doPrint();
+      else img.addEventListener('load', doPrint, { once: true });
+    } catch (e) {
+      console.error('[print]', e);
+      alert('출력 준비 실패: ' + (e.message || e));
+    } finally {
+      btn.innerHTML = orig;
+      btn.disabled = false;
+    }
   });
 
   // === 모달 옵션: 로고 제외 토글 ===

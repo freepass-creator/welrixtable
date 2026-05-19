@@ -6770,11 +6770,14 @@ render();
     font-weight: 600; padding: 6px 9px;
     font-size: 11.5px;
     border-right: 1px solid var(--line-2);
+    border-bottom: 1.5px solid var(--line-2);  /* 헤더 ↔ body 구분선 */
   }
   .ofq-terms-table td {
     text-align: center;
     border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);  /* row 구분선 */
   }
+  .ofq-terms-table tr:last-child td { border-bottom: none; }
   .ofq-terms-table tr.monthly td {
     background: var(--bg-soft); font-weight: 700;
     color: var(--ink-1); font-size: 14px;
