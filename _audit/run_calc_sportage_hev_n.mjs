@@ -10,16 +10,20 @@ const veh = JSON.parse(readFileSync(new URL('../src/data/vehicles.json', import.
 const target = veh.find(v => v.model === '스포티지' && v.price === 38280000);
 console.log('vehicle:', target);
 
-// Excel 캐시와 동일: 탁송 175k(부산), 선팅 105k, 보증 20%, 중신용
+// Excel 캐시와 동일 조건:
+//   BC13 (탁송) = 121,000 → o.deliveryFee
+//   BC15 (선팅) = 105,000 + BC17 (블박) = 175,000 → o.itemsFee = 280,000
+//   보증금 20%, 중신용, 60개월
+// Excel H34 결과 = 714,000원
 const r = calcQuote({
   vehicle: {
     brand: target.brand, model: target.model, trim: target.trim,
-    price: target.price + 175000 + 105000, disp: target.disp, fuel: target.fuel,
+    price: target.price, disp: target.disp, fuel: target.fuel,
     tax_exempt: target.tax_exempt, group: target.group, multi_seat: target.multi_seat,
     r24: target.r24, r36: target.r36, r48: target.r48, r60: target.r60,
     strategic: target.strategic, buyback_apply: target.buyback_apply,
   },
-  options:   { optPrice: 0, discount: 0, deliveryFee: 175000, itemsFee: 105000, etc: 0 },
+  options:   { optPrice: 0, discount: 0, deliveryFee: 121000, itemsFee: 280000, etc: 0 },
   contract:  { term: 60, km: '2만km', dep: 20, pre: 0 },
   customer:  { creditGrade: '중신용' },
   insurance: { property: '1억', extraDriver: '없음', exec: '미가입',
