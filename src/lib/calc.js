@@ -246,11 +246,14 @@ export function calcQuote(input) {
   const acqRate = isPorter ? CFG.costs.acquisition_tax_rate_porter : CFG.costs.acquisition_tax_rate;
   const C12 = round(C11 * acqRate);                         // 취득세 (회사 config)
   const C13 = CFG.costs.registration_fee;                   // 등록비 (회사 config)
-  // 용품 합계 (블박/썬팅/내비/하이패스 등) — C14 취득원가 (VAT 제외)
+  // C14 (취득원가의 일부) = Excel 견적1 C14 = (BC15 선팅 + BC17 사용자탁송) / 1.1
+  // ⭐ Excel: 사용자 입력 탁송도 취득원가에 포함 (부가세 빼서). PMT base 키워서 월대여료에 반영.
+  // 용품(블박/내비/하이패스) + 선팅 = itemsFee, + 사용자 탁송 (deliveryFee)
   const itemsFee = (o.itemsFee != null)
     ? o.itemsFee
     : ((o.blackboxFee || 0) + (o.tintFee || 0) + (o.naviFee || 0) + (o.hipassFee || 0));
-  const C14 = round(itemsFee / 1.1);
+  const userDelivery = o.deliveryFee || 0;
+  const C14 = round((itemsFee + userDelivery) / 1.1);
   const C15 = C11 + C12 + C13 + C14;                        // 취득원가
   const C22 = C15;
   const F22 = C22;
@@ -327,7 +330,7 @@ export function calcQuote(input) {
   const C29 = I15 * termCode;                               // 자동차세 (5년분)
   const C30 = I16;                                          // 정기검사
   const C31 = I17 / 1.1 * termCode;                         // 정비 (5년분)
-  const C32 = I18 / 1.1;                                    // 탁송
+  const C32 = I18 / 1.1;                                    // 탁송 (가산원가 부분)
   const C33 = I19 / 1.1 * termCode;                         // GPS (5년분)
   const C34 = I20;                                          // 영업수당
   const C35 = CFG.costs.delivery_first;                     // 1차탁송료 (회사 config)
