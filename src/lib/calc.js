@@ -256,18 +256,22 @@ export function calcQuote(input) {
   const F22 = C22;
 
   // ====== 4. 잔가율 ======
-  // I3: 차량별 잔가율 + 신용가산 + 제네시스/K9/하이리무진 가산
-  // Excel: IF(C3="신용", buyback_apply, 0) — "신용" 만 (최상위 신용등급), 고신용은 제외
+  // ⭐ Excel 차량DB col O = "전략차종" (가솔린/하이브리드 0.08, LPG 0). col P "인수가적용" 은 사용 안 함.
+  // vehicles.json mapping: col O → v.strategic, col P → v.buyback_apply (legacy 이름, 실제 calc 미사용)
+  const strategicBonus = v.strategic || 0;
+
+  // I3: 차량별 잔가율 + 전략차종 가산(신용만) + 제네시스/K9/하이리무진 가산
+  // Excel: VLOOKUP D:O col 12 = 전략차종 + IF("신용", strategic, 0)
   const residualBase = (v[`r${term}`] ?? 0.5) +
-    (cu.creditGrade === '신용' ? (v.buyback_apply || 0) : 0) +
+    (cu.creditGrade === '신용' ? strategicBonus : 0) +
     residualBrandAdj(v.brand, v.model);
 
   // I4: 주행거리 보정
   const I4 = residualBase + kmAdj(c.km || '2만km');
 
-  // I5: 매각잔가 가산 (Excel: 신용만 buyback_apply, 나머지 모두 4%)
+  // I5: 매각잔가 가산 (Excel: IF("신용", strategic, 4%))
   const I5 = cu.creditGrade === '신용'
-    ? (v.buyback_apply || 0)
+    ? strategicBonus
     : 0.04;
 
   // I6: 인수가율 가산
