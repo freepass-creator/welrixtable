@@ -7520,7 +7520,7 @@ render();
   @media (max-width: 600px) { .tint-chips { grid-template-columns: repeat(3, 1fr); } }
   .tint-chip {
     display: flex; flex-direction: column; gap: 4px;
-    padding: 9px 10px;
+    padding: 9px 8px;
     border: 1px solid var(--line-2); border-radius: 5px;
     background: transparent; cursor: pointer;
     transition: border-color .12s, background .12s;
@@ -7548,6 +7548,8 @@ render();
     font-variant-numeric: tabular-nums;
     line-height: 1.2;
     letter-spacing: -0.2px;
+    white-space: nowrap;  /* '+105,000원' 줄바꿈 방지 */
+    overflow: hidden; text-overflow: ellipsis;
   }
   .tint-chip.on .tp { color: var(--brand); }
 
