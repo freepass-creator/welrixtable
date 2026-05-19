@@ -15,8 +15,8 @@ function onToggle(e) {
 }
 
 const SVC_OPTS = [
-  { value: '웰스 Basic', label: '케어 Basic' },
-  { value: '웰스 Self',  label: '케어 Self' },
+  { value: '웰스 Basic', label: '웰스 Basic' },
+  { value: '웰스 Self',  label: '웰스 Self' },
 ];
 const INS_OPTS = [
   { value: '1억', label: '대물 1억' },
@@ -40,11 +40,11 @@ function onExtra(v) { quoteState.cond.extraDriver = v;  window.__welrix_recomput
   <section id="sec-insurance">
     <details class="qp-extras-inline" :open="open" @toggle="onToggle">
       <summary class="step-title-summary">
-        <span class="step-title-text">서비스 — 케어 · 대물보험 · 추가운전자</span>
+        <span class="step-title-text">서비스 — 차량케어 · 대물보험 · 추가운전자</span>
         <span class="caret"></span>
       </summary>
       <div style="margin-top:8px; display:grid; grid-template-columns:repeat(3, 1fr); gap:6px;">
-        <CustomDropdown :options="SVC_OPTS"   :model-value="quoteState.cond.svc"          placeholder="케어 Basic" @change="onSvc" />
+        <CustomDropdown :options="SVC_OPTS"   :model-value="quoteState.cond.svc"          placeholder="웰스 Basic" @change="onSvc" />
         <CustomDropdown :options="INS_OPTS"   :model-value="quoteState.cond.insProperty"  placeholder="대물 1억"   @change="onIns" />
         <CustomDropdown :options="EXTRA_OPTS" :model-value="quoteState.cond.extraDriver"  placeholder="추가운전자 없음" @change="onExtra" />
       </div>
