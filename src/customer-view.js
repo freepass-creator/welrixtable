@@ -1,5 +1,8 @@
 // 손님용 견적 뷰어 — ?q=<id> 로 접속 시 견적서 풀스크린 표시 (read-only)
+// PC viewport: 영업 미리보기와 동일한 official 견적서 (buildOfficialQuoteHtml)
+// 모바일: 기존 카드형 모바일 레이아웃
 import { loadQuote, markQuoteAccessed } from './firebase/quotes.js';
+import { buildOfficialQuoteHtml } from './lib/build-quote-html.js';
 
 const params = new URLSearchParams(location.search);
 const quoteId = params.get('q');
@@ -8,6 +11,9 @@ if (quoteId) {
   document.documentElement.classList.add('customer-mode');
   bootCustomerView(quoteId);
 }
+
+// 모바일 viewport 판정
+const isMobile = () => window.innerWidth < 768;
 
 async function bootCustomerView(id) {
   // body 안의 모든 영업용 UI 숨김
@@ -58,6 +64,27 @@ async function render(id) {
     }
     // 접근 로그 (비동기, 에러 무시)
     markQuoteAccessed(id).catch(() => {});
+
+    // PC viewport — 영업 미리보기와 동일한 official 견적서 렌더
+    if (!isMobile()) {
+      const today = new Date(quote.created_at || Date.now());
+      const expireDate = new Date(quote.expires_at || today.getTime() + 7*86400000);
+      const quoteNo = today.toISOString().slice(0,10).replace(/-/g,'') + '-' + (quote.id || '0000').slice(-4);
+      document.body.innerHTML = `<div class="cv-shell cv-shell--pc">` +
+        buildOfficialQuoteHtml({
+          vehicles:      quote.vehicles || [],
+          customer:      quote.customer || {},
+          staff:         quote.staff || {},
+          cond:          quote.cond || {},
+          send:          quote.send || [],
+          quoteMeta:     { quoteNo, todayStr: today.toLocaleDateString('ko-KR'), expireStr: expireDate.toLocaleDateString('ko-KR') },
+          companyConfig: { name: '웰릭스 모빌리티', logo_url: '/welrix-ci.png' },
+          showLogo:      true,
+        }) +
+      `</div>`;
+      return;
+    }
+    // 모바일 viewport — 기존 카드형 레이아웃 (아래 코드 그대로)
 
     const expireDate = new Date(quote.expires_at || quote.created_at + 7*86400000);
     const expireStr = expireDate.toLocaleDateString('ko-KR');

@@ -87,6 +87,7 @@ window.__welrix_data = {
 // ============ 상태 — Vue 반응형 store와 공유 (마이그레이션 1단계) ============
 import { quoteState as state, cartStore, addToCart, removeFromCart, clearCart, findCartItem } from './src/store.js';
 import { saveQuote, buildQuoteUrl } from './src/firebase/quotes.js';
+import { buildOfficialQuoteHtml } from './src/lib/build-quote-html.js';
 import { logQuoteSent } from './src/firebase/chat.js';
 let VEHICLES = [];
 
@@ -692,13 +693,25 @@ function renderQuoteDoc(monthly, totalKrw, tintFee, deliveryFee, accessoryFee = 
 // 다중 차종: 차량정보+월대여료 블록을 차종마다 반복
 // ============================================================
 function renderOfficialQuoteDoc(vehicles) {
-  // 토글로 재렌더할 때 쓰려고 마지막 source 보관
   window.__welrix_lastQuoteSnaps = vehicles;
   const today = new Date();
   const todayStr = today.toLocaleDateString('ko-KR');
   const expire = new Date(today.getTime() + 7*86400000);
   const expireStr = expire.toLocaleDateString('ko-KR');
   const quoteNo = today.toISOString().slice(0,10).replace(/-/g,'') + '-' + String(Date.now()).slice(-4);
+
+  $('quote-modal-body').innerHTML = buildOfficialQuoteHtml({
+    vehicles,
+    customer: { name: state.cust.name, tel: state.cust.tel },
+    staff:    { name: state.staff.name, tel: state.staff.tel },
+    cond:     state.cond,
+    send:     state.send,
+    quoteMeta:{ quoteNo, todayStr, expireStr },
+    companyConfig: window.__welrix_companyConfig || {},
+    showLogo: state.send_options?.showLogo !== false,
+  });
+  return;
+  /* eslint-disable */
   const sentFlags = state.send;
   const cond = state.cond;
 
