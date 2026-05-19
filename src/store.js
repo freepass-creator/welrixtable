@@ -71,9 +71,9 @@ export const quoteState = reactive({
   send: [true, true, true],
   send_options: loadSendOpts(),  // { showLogo: bool }
   scenarios: [
-    { term: 36, dep: 10, pre: 0 },
-    { term: 48, dep: 10, pre: 0 },
     { term: 60, dep: 10, pre: 0 },
+    { term: 48, dep: 10, pre: 0 },
+    { term: 36, dep: 10, pre: 0 },
   ],
   // 계산된 월대여료 결과 (recompute가 채움) — TermsGrid 컴포넌트가 reactive 읽음
   monthly: [],
