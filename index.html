@@ -6489,9 +6489,12 @@ render();
    * 영업이 모달에서 보고, 이미지로 캡쳐해 손님에게 보냄.
    * ============================================================ */
   .quote-doc.official {
-    width: 820px;
+    /* A4 폭 (210mm = ~794px @96dpi). 인쇄 시 정확히 A4 한 페이지에 맞음. */
+    width: 210mm;
+    min-height: 297mm;
+    box-sizing: border-box;
     margin: 0 auto;
-    padding: 36px 40px 30px;
+    padding: 18mm 16mm 18mm;
     background: #fff;
     color: #1a1a1a;
     font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif;
@@ -6499,19 +6502,22 @@ render();
     line-height: 1.5;
     letter-spacing: -0.2px;
   }
+  @media print {
+    @page { size: A4; margin: 0; }
+    .quote-doc.official { box-shadow: none; }
+  }
   /* 헤더 */
   .ofq-hero {
     display: flex; align-items: flex-end; justify-content: space-between;
     padding-bottom: 14px; margin-bottom: 18px;
-    border-bottom: 3px solid var(--brand);
+    border-bottom: 1px solid var(--line-2);  /* 굵은 라인 제거, 헤어라인만 */
   }
-  .ofq-hero__left .brand {
-    font-size: 11px; font-weight: 600;
-    color: var(--brand); letter-spacing: 2.5px;
-    margin-bottom: 4px;
+  .ofq-hero__logo {
+    height: 28px; width: auto; display: block;
+    margin-bottom: 8px;
   }
   .ofq-hero__left .title {
-    font-size: 24px; font-weight: 700; color: #1a1a1a;
+    font-size: 22px; font-weight: 600; color: #1a1a1a;
     letter-spacing: -0.5px; line-height: 1.2;
   }
   .ofq-hero__right {
@@ -6520,13 +6526,14 @@ render();
   }
   .ofq-hero__right b { color: #1a1a1a; font-weight: 600; }
 
-  /* 섹션 공통 */
+  /* 섹션 공통 — 일체감 위해 톤 정돈 */
   .ofq-section { margin-bottom: 18px; }
   .ofq-section__title {
-    font-size: 11px; font-weight: 700;
-    color: var(--brand); letter-spacing: 2px;
-    margin-bottom: 6px; padding-bottom: 4px;
-    border-bottom: 1px solid #e5e5e5;
+    font-size: 11px; font-weight: 600;
+    color: var(--ink-2); letter-spacing: 1.5px;
+    margin-bottom: 8px; padding-bottom: 4px;
+    border-bottom: 1px solid var(--line);
+    text-transform: uppercase;
   }
   .ofq-section__title .unit {
     font-size: 10px; color: #999; font-weight: 400;

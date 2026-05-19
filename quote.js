@@ -703,7 +703,7 @@ function renderOfficialQuoteDoc(vehicles) {
             <span>${veh.trim_name || ''}</span>
           </div>
         ` : ''}
-        <div class="ofq-section__title">차량 <span class="unit">[VAT 포함]</span></div>
+        <div class="ofq-section__title">차량 정보 <span class="unit">[VAT 포함]</span></div>
         <div class="ofq-vcard">
           <div class="ofq-vcard__head">
             <div class="ofq-vcard__title">
@@ -738,15 +738,15 @@ function renderOfficialQuoteDoc(vehicles) {
             <div class="ofq-vcard__row ofq-vcard__row--side">
               <span class="row-key"><i class="ph ph-plus-square"></i>부가</span>
               <div>${[
-                deliveryFee ? `탁송 ${veh.snapshot?.deliveryCity} <i>(${krw(deliveryFee)})</i>` : null,
-                tintFee ? `선팅 ${veh.snapshot?.tint?.product} <i>(${krw(tintFee)})</i>` : null,
+                deliveryFee ? `탁송 ${veh.snapshot?.deliveryCity}` : null,
+                tintFee ? `선팅 ${veh.snapshot?.tint?.product}` : null,
                 extrasNames.length ? `용품 ${extrasNames.join(', ')}` : null,
               ].filter(Boolean).join(' · ')}</div>
             </div>
           ` : ''}
         </div>
 
-        <div class="ofq-section__title" style="margin-top:14px;">월 대여료 산출 <span class="unit">[단위 : VAT 포함 · ${cond.km}만km/년]</span></div>
+        <div class="ofq-section__title" style="margin-top:14px;">계약 정보 (월 대여료) <span class="unit">[VAT 포함 · ${cond.km}만km/년]</span></div>
         <div class="ofq-table-wrap">
           <table class="ofq-table ofq-terms-table">
             <thead>
@@ -778,7 +778,14 @@ function renderOfficialQuoteDoc(vehicles) {
       <!-- 헤더 (회사 + 견적서 메타) -->
       <div class="ofq-hero">
         <div class="ofq-hero__left">
-          <div class="brand">WELRIX MOBILITY · 웰릭스모빌리티</div>
+          ${(() => {
+            const cfg = window.__welrix_companyConfig || {};
+            const showLogo = state.send_options?.showLogo !== false;
+            const logoUrl = cfg.logo_url;
+            return (showLogo && logoUrl)
+              ? `<img class="ofq-hero__logo" src="${logoUrl}" alt="${cfg.name || ''}" />`
+              : '';
+          })()}
           <div class="title">신차 장기렌터카 견적서</div>
         </div>
         <div class="ofq-hero__right">
@@ -808,7 +815,7 @@ function renderOfficialQuoteDoc(vehicles) {
 
       <!-- 보험가입 내역 -->
       <div class="ofq-section">
-        <div class="ofq-section__title">보험가입 내역 <span class="unit">※ 사고처리 콜센터 1544-3871</span></div>
+        <div class="ofq-section__title">보험가입 내역 <span class="unit">사고처리 1544-3871</span></div>
         <div class="ofq-table-wrap">
           <table class="ofq-table ofq-ins-table">
             <tr>
@@ -830,26 +837,29 @@ function renderOfficialQuoteDoc(vehicles) {
         </div>
       </div>
 
-      <!-- 정비상품 -->
+      <!-- 정비상품 — 선택된 상품만 표시 -->
       <div class="ofq-section">
-        <div class="ofq-section__title">정비상품 안내</div>
+        <div class="ofq-section__title">부가서비스 · 정비상품 (${cond.svc || '웰스 Basic'})</div>
         <div class="ofq-table-wrap">
           <table class="ofq-table ofq-svc-table">
             <thead>
               <tr>
-                <th>정비 상품</th><th>정비 방식</th><th>정비 주기</th><th>소모품 교환</th>
+                <th>정비 방식</th><th>정비 주기</th><th>소모품 교환</th>
                 <th>사고처리</th><th>검사대행</th><th>사고대차</th><th>고장대차</th>
               </tr>
             </thead>
             <tbody>
+              ${cond.svc === '웰스 Self' ? `
               <tr>
-                <th>웰스 Basic</th><td>방문 점검 (정비사 방문)</td><td>6개월 1회</td>
-                <td>엔진오일 등 한정</td><td>지원</td><td>O</td><td>X</td><td>X</td>
-              </tr>
-              <tr>
-                <th>웰스 Self</th><td>정비제외 (고객 자체정비)</td><td>없음</td>
+                <td>정비제외 (고객 자체정비)</td><td>없음</td>
                 <td>없음</td><td>지원</td><td>O</td><td>X</td><td>X</td>
               </tr>
+              ` : `
+              <tr>
+                <td>방문 점검 (정비사 방문)</td><td>6개월 1회</td>
+                <td>엔진오일 등 한정</td><td>지원</td><td>O</td><td>X</td><td>X</td>
+              </tr>
+              `}
             </tbody>
           </table>
         </div>
