@@ -6628,24 +6628,32 @@ render();
   /* === 차량 카드 (직각/정제 톤, 견적서 정통 양식) === */
   .ofq-vcard {
     border: 1px solid var(--line-2);
-    /* 견적서는 직각 — 정제된 양식 톤 */
-    padding: 18px 22px;
+    padding: 10px 14px;
     background: var(--bg);
   }
   .ofq-vcard__head {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    gap: 16px;
-    padding-bottom: 14px; margin-bottom: 14px;
-    border-bottom: 1px solid #f0f0f0;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 12px;
+    padding-bottom: 8px; margin-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .ofq-vcard__title {
+    display: flex; align-items: center; gap: 10px;
+    flex: 1; min-width: 0;
+  }
+  .ofq-vcard__title .vlogo {
+    height: 22px; width: auto; max-width: 56px;
+    object-fit: contain;
+    flex-shrink: 0;
   }
   .ofq-vcard__title .vname {
-    font-size: 20px; font-weight: 700;
-    color: #1a1a1a; letter-spacing: -0.5px;
-    line-height: 1.2;
+    font-size: 14px; font-weight: 600;
+    color: var(--ink-1); letter-spacing: -0.3px;
+    line-height: 1.25;
   }
   .ofq-vcard__title .vmeta {
-    margin-top: 4px;
-    font-size: 12px; color: #888;
+    margin-top: 2px;
+    font-size: 10.5px; color: var(--ink-4);
     font-weight: 400; letter-spacing: 0;
   }
   .ofq-vcard__total {
@@ -6727,25 +6735,29 @@ render();
     background: var(--bg-soft); color: var(--ink-1);
     font-weight: 600; padding: 6px 9px;
     font-size: 11.5px;
+    border-right: 1px solid var(--line-2);
   }
-  .ofq-terms-table td { text-align: center; }
+  .ofq-terms-table td {
+    text-align: center;
+    border-right: 1px solid var(--line);
+  }
   .ofq-terms-table tr.monthly td {
-    background: var(--bg); font-weight: 700;
+    background: var(--bg-soft); font-weight: 700;
     color: var(--ink-1); font-size: 14px;
     padding: 8px 6px;
   }
   .ofq-terms-table tr.monthly th.row-label {
-    background: var(--ink-1); color: #fff;
+    background: var(--bg-soft); color: var(--ink-1); font-weight: 600;
   }
   .ofq-terms-table td.col-off { opacity: 0.35; background: var(--bg-muted); }
   .ofq-terms-table td.best {
-    background: var(--bg-soft);
+    background: var(--brand-50);  /* 옅은 네이비 — 분홍 X */
     position: relative;
   }
   .ofq-terms-table td.best::after {
     content: 'BEST';
     position: absolute; top: 2px; right: 4px;
-    font-size: 8px; font-weight: 700; color: var(--ink-1);
+    font-size: 8px; font-weight: 700; color: var(--brand);
     letter-spacing: 0.5px;
   }
 

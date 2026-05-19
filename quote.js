@@ -729,8 +729,15 @@ function renderOfficialQuoteDoc(vehicles) {
         <div class="ofq-vcard">
           <div class="ofq-vcard__head">
             <div class="ofq-vcard__title">
-              <div class="vname">${[veh.brand, veh.model, veh.trim_name].filter(Boolean).join(' ')}</div>
-              <div class="vmeta">${[veh.variant, veh.fuel || cond._fuel, veh.displacement_cc ? veh.displacement_cc + 'cc' : null].filter(Boolean).join(' · ')}</div>
+              ${(() => {
+                const M_LOGO = { '현대': 'https://cdn.simpleicons.org/hyundai/002C5F', '기아': 'https://cdn.simpleicons.org/kia/05141F', '제네시스': '/genesis.png' };
+                const url = M_LOGO[veh.brand];
+                return url ? `<img class="vlogo" src="${url}" alt="${veh.brand}" />` : '';
+              })()}
+              <div>
+                <div class="vname">${[veh.brand, veh.model, veh.variant, veh.trim_name].filter(Boolean).join(' ')}</div>
+                <div class="vmeta">${[veh.fuel || cond._fuel, veh.displacement_cc ? veh.displacement_cc + 'cc' : null].filter(Boolean).join(' · ')}</div>
+              </div>
             </div>
             <div class="ofq-vcard__total">
               <div class="label">총 차량가격</div>
@@ -749,23 +756,16 @@ function renderOfficialQuoteDoc(vehicles) {
           ` : ''}
 
           <div class="ofq-vcard__row">
-            <span class="row-key"><i class="ph ph-palette"></i>색상</span>
+            <span class="row-key"><i class="ph ph-palette"></i>색상·부가</span>
             <div class="ofq-vcard__colors">
               <span class="color-inline"><span class="swatch-dot" style="background:${guessColor(veh.colorExt)}"></span>외장 ${veh.colorExt || '-'}</span>
               <span class="color-inline"><span class="swatch-dot" style="background:${guessColor(veh.colorInt)}"></span>내장 ${veh.colorInt || '-'}</span>
+              ${deliveryFee ? `<span class="color-inline">탁송 ${veh.snapshot?.deliveryCity || ''}</span>` : ''}
+              ${tintFee ? `<span class="color-inline">선팅 ${veh.snapshot?.tint?.product || ''}</span>` : ''}
+              ${extrasNames.length ? `<span class="color-inline">용품 ${extrasNames.join(', ')}</span>` : ''}
             </div>
           </div>
 
-          ${(deliveryFee || tintFee || extrasNames.length) ? `
-            <div class="ofq-vcard__row ofq-vcard__row--side">
-              <span class="row-key"><i class="ph ph-plus-square"></i>부가</span>
-              <div>${[
-                deliveryFee ? `탁송 ${veh.snapshot?.deliveryCity}` : null,
-                tintFee ? `선팅 ${veh.snapshot?.tint?.product}` : null,
-                extrasNames.length ? `용품 ${extrasNames.join(', ')}` : null,
-              ].filter(Boolean).join(' · ')}</div>
-            </div>
-          ` : ''}
         </div>
 
         <div class="ofq-section__title" style="margin-top:14px;">계약 정보 (월 대여료) <span class="unit">[VAT 포함 · ${cond.km}만km/년]</span></div>
