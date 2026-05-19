@@ -1420,13 +1420,17 @@ function attach() {
       iframe.id = '__print-iframe';
       iframe.style.cssText = 'position:fixed; left:-9999px; top:-9999px; width:210mm; height:297mm; border:0;';
       document.body.appendChild(iframe);
+      // canvas 비율 기반으로 A4 안에 정확히 fit 되는 dimensions 계산
+      const ratio = canvas.height / canvas.width;
+      let imgW = 210, imgH = 210 * ratio;  // mm
+      if (imgH > 297) { imgH = 297; imgW = 297 / ratio; }
       const doc = iframe.contentDocument;
       doc.open();
       doc.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>견적서 출력</title>
 <style>
 @page { size: A4; margin: 0; }
-html, body { margin: 0; padding: 0; background: #fff; }
-img { display: block; width: 210mm; height: auto; }
+html, body { margin: 0; padding: 0; background: #fff; width: 210mm; height: 297mm; overflow: hidden; }
+img { display: block; width: ${imgW}mm; height: ${imgH}mm; margin: 0 auto; }
 </style></head><body><img src="${dataUrl}"></body></html>`);
       doc.close();
       // 이미지 로드 대기 후 print
