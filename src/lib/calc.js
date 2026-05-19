@@ -384,11 +384,3 @@ export function calcQuote(input) {
     },
   };
 }
-
-// 다중 견적 (60/48/36 등)
-export function calcAllQuotes(input, quotes) {
-  return quotes.map((q) => calcQuote({
-    ...input,
-    contract: { ...input.contract, ...q },
-  }));
-}

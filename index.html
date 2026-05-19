@@ -5417,13 +5417,14 @@ window.__welrix_toggleOption = function(id) {
 
 // cascade 진행 중 "다음에 선택해야 할" 섹션 강조
 function setCurrentStep() {
-  const cascade = ['sec-manufacturer', 'sec-model', 'sec-variant', 'sec-trim'];
+  const cascade = ['sec-manufacturer', 'sec-model', 'sec-variant', 'sec-trim', 'sec-color'];
   cascade.forEach((id) => document.getElementById(id)?.classList.remove('is-current'));
   let currentId = null;
   if (!state.manufacturer) currentId = 'sec-manufacturer';
   else if (!state.model)   currentId = 'sec-model';
   else if (!state.variant) currentId = 'sec-variant';
   else if (!state.trim)    currentId = 'sec-trim';
+  else if (state.color == null) currentId = 'sec-color';
   if (currentId) document.getElementById(currentId)?.classList.add('is-current');
 }
 
@@ -5767,7 +5768,8 @@ render();
   }
   .qp-summary-mini .qp-vehicle.empty { color: var(--ink-4); }
   .qp-summary-mini .qp-brand-logo {
-    width: 18px; height: 18px; object-fit: contain;
+    height: 18px; width: auto; max-width: 50px;
+    object-fit: contain;
     flex-shrink: 0;
   }
 
@@ -5794,6 +5796,8 @@ render();
     flex-shrink: 0;
     border: 1px solid rgba(0,0,0,0.12);
   }
+  /* 제네시스 PNG 는 자체 패딩이 있어 contain 시 작아 보임 — 현대/기아와 동일 비율로 보이도록 확대 */
+  .cdd__icon[style*="genesis"] { background-size: 130% !important; }
   .cdd__icon--empty { display: none; }
   .cdd__text {
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -5837,8 +5841,8 @@ render();
     border-radius: 4px;
     font-family: inherit;
   }
-  .cdd__opt:hover { background: var(--accent-soft); }
-  .cdd__opt:hover .cdd__opt-label { color: var(--ink-1); }
+  .cdd__opt:hover { background: var(--brand-50); }
+  .cdd__opt:hover .cdd__opt-label { color: var(--brand); font-weight: 600; }
   .cdd__opt--sel {
     background: var(--brand-50);
     color: var(--brand);
@@ -5857,7 +5861,7 @@ render();
     padding-left: 12px;
     letter-spacing: -0.1px;
   }
-  .cdd__opt:hover .cdd__opt-sub { color: var(--ink-2); }
+  .cdd__opt:hover .cdd__opt-sub { color: var(--brand); font-weight: 600; }
   .cdd__opt--sel .cdd__opt-sub { color: var(--brand); font-weight: 600; }
   .qp-summary-mini .qp-price { font-weight: 500; color: var(--ink-1); font-variant-numeric: tabular-nums; }
   .qp-summary-mini .qp-price:empty { display: none; }
@@ -6496,7 +6500,7 @@ render();
    * 영업이 모달에서 보고, 이미지로 캡쳐해 손님에게 보냄.
    * ============================================================ */
   .quote-doc.official {
-    /* A4 (210×297mm). 1페이지에 맞도록 상하 패딩 최소화. */
+    /* A4 (210×297mm). flex column 으로 푸터를 하단에 붙임 — 빈 공간 자동 채움. */
     width: 210mm;
     min-height: 297mm;
     box-sizing: border-box;
@@ -6508,7 +6512,11 @@ render();
     font-size: 11px;
     line-height: 1.4;
     letter-spacing: -0.2px;
+    display: flex;
+    flex-direction: column;
   }
+  .quote-doc.official .ofq-spacer { flex: 1 1 auto; min-height: 0; }
+  .quote-doc.official .ofq-footer { margin-top: 0; }
   /* 출력 (print) — print-mode 클래스 시 #print-target 만 표시 */
   @media print {
     @page { size: A4; margin: 0; }
@@ -6532,9 +6540,18 @@ render();
     height: 18px; width: auto; display: block;
     margin-bottom: 2px;
   }
+  .ofq-hero__left { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
   .ofq-hero__left .title {
     font-size: 16px; font-weight: 600; color: #1a1a1a;
     letter-spacing: -0.5px; line-height: 1.1;
+  }
+  .ofq-hero__badge {
+    display: inline-block;
+    font-size: 9.5px; font-weight: 600; color: var(--brand);
+    border: 1px solid var(--brand);
+    padding: 1px 6px; border-radius: 2px;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
   }
   .ofq-hero__right {
     text-align: right; font-size: 11px; color: #666;
@@ -6550,10 +6567,15 @@ render();
     margin-bottom: 3px; padding-bottom: 2px;
     border-bottom: 1px solid var(--line);
     text-transform: uppercase;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .ofq-section__title > i.ph {
+    font-size: 12px; color: var(--brand);
+    line-height: 1;
   }
   .ofq-section__title .unit {
     font-size: 10px; color: #999; font-weight: 400;
-    letter-spacing: 0; margin-left: 8px;
+    letter-spacing: 0; margin-left: auto;
   }
 
   /* 표 wrapper — 차량 카드와 동일한 직각 외곽 */
@@ -6782,7 +6804,7 @@ render();
     font-weight: 600; padding: 6px 9px;
     font-size: 11.5px;
     border-right: 1px solid var(--line-2);
-    border-bottom: 1.5px solid var(--line-2);  /* 헤더 ↔ body 구분선 */
+    border-bottom: 1.5px solid var(--brand);  /* 헤더 ↔ body 구분선 — brand 강조 */
   }
   .ofq-terms-table td {
     text-align: center;
@@ -6841,25 +6863,27 @@ render();
   .ofq-docs-table td { font-size: 11px; line-height: 1.6; }
   .ofq-docs-table td small { color: #888; font-size: 10px; }
 
-  /* 푸터 */
+  /* 푸터 — 회사정보만 (밑줄 아래) */
   .ofq-footer {
-    margin-top: 12px; padding-top: 8px;
+    padding-top: 6px;
     border-top: 1.5px solid var(--brand);
   }
+  /* 입금계좌 — 주요 계약사항 섹션 내부 */
   .ofq-footer__bank {
     background: var(--bg-soft); padding: 6px 10px;
     border: 1px solid var(--line-2);
     font-size: 11px; color: var(--ink-1); font-weight: 500;
-    margin-bottom: 6px; font-variant-numeric: tabular-nums;
+    margin-top: 6px;
+    font-variant-numeric: tabular-nums;
   }
   .ofq-footer__bank b { color: var(--brand); }
   .ofq-footer__company {
-    display: flex; flex-direction: column; gap: 2px;
-    font-size: 9.5px; color: var(--ink-3); line-height: 1.45;
-    padding: 0 10px;
+    font-size: 9.5px; color: var(--ink-3); line-height: 1.5;
+    padding: 0 4px;
+    letter-spacing: 0;
+    word-spacing: 1px;
   }
   .ofq-footer__company b { color: var(--ink-2); font-weight: 600; }
-  .ofq-footer__company-left, .ofq-footer__company-right { letter-spacing: 0; }
 
   /* 차종 구분 헤더 (다중 차종) — 정제 톤 */
   .ofq-vehicle-head {

@@ -3,6 +3,8 @@ import { computed } from 'vue';
 import { vehicleState, quoteState } from '../store.js';
 import CustomDropdown from './CustomDropdown.vue';
 
+const isDisabled = computed(() => !vehicleState.trim);
+
 const COLOR_INT = [
   { value: '|0',          label: '내장 선택' },
   { value: '블랙|0',      label: '블랙 (기본)' },
@@ -47,7 +49,7 @@ function onIntChange(value) {
 </script>
 
 <template>
-  <section id="sec-color" :class="{ hidden: !vehicleState.trim }">
+  <section id="sec-color">
     <div class="step-title">색상</div>
     <div class="color-row" style="display:flex; gap:8px;">
       <div style="flex:1; min-width:0;">
@@ -55,7 +57,7 @@ function onIntChange(value) {
           :options="extOptions"
           :model-value="extValue"
           placeholder="외장 색상"
-          :disabled="!vehicleState.trim"
+          :disabled="isDisabled"
           @change="(v) => extValue = v"
         />
       </div>
@@ -64,7 +66,7 @@ function onIntChange(value) {
           :options="intOptions"
           :model-value="intCurrentValue"
           placeholder="내장 선택"
-          :disabled="!vehicleState.trim"
+          :disabled="isDisabled"
           @change="onIntChange"
         />
       </div>

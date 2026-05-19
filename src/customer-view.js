@@ -3,6 +3,7 @@
 // 모바일: 기존 카드형 모바일 레이아웃
 import { loadQuote, markQuoteAccessed } from './firebase/quotes.js';
 import { buildOfficialQuoteHtml } from './lib/build-quote-html.js';
+import { fmt, krw, guessColor } from './lib/format.js';
 
 const params = new URLSearchParams(location.search);
 const quoteId = params.get('q');
@@ -30,24 +31,6 @@ async function bootCustomerView(id) {
     document.body.innerHTML = `<div id="cv-loading" class="cv-loading"><i class="ph ph-spinner"></i><p>견적서를 불러오고 있습니다...</p></div>`;
     render(id);
   }
-}
-
-const fmt = (n) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
-const krw = (n) => `${fmt(n)}원`;
-
-function guessColor(name) {
-  if (!name) return '#e5e5e5';
-  const n = name.toLowerCase();
-  if (n.includes('블랙') || n.includes('어비스') || n.includes('잉크')) return '#1a1a1a';
-  if (n.includes('화이트') || n.includes('아틀라스') || n.includes('스노우')) return '#f5f5f5';
-  if (n.includes('펄')) return '#e8e6e1';
-  if (n.includes('그레이') || n.includes('그래핀') || n.includes('실버')) return '#9aa0a6';
-  if (n.includes('블루') || n.includes('네이비')) return '#3a5d8f';
-  if (n.includes('레드') || n.includes('루비')) return '#a83232';
-  if (n.includes('그린')) return '#4a6d4e';
-  if (n.includes('베이지') || n.includes('샌드')) return '#c9b896';
-  if (n.includes('브라운') || n.includes('초콜릿')) return '#5c3d28';
-  return '#9aa0a6';
 }
 
 async function render(id) {

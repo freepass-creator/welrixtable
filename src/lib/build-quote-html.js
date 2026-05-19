@@ -1,49 +1,12 @@
 // 공식 견적서 HTML 빌더 (pure function) — 영업 미리보기, 출력, 손님 PC 뷰 공통 사용
-// 이전엔 quote.js renderOfficialQuoteDoc 안에서 state 글로벌 의존 → 공유 불가했음.
 // args 로 받은 데이터로만 빌드.
 
-const fmt = (n) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
-const krw = (n) => `${fmt(n)}원`;
-
-function fmtTel(tel) {
-  if (!tel) return '';
-  const d = String(tel).replace(/\D/g, '');
-  if (!d) return '';
-  if (/^01[016789]/.test(d)) {
-    if (d.length === 11) return `${d.slice(0,3)}-${d.slice(3,7)}-${d.slice(7)}`;
-    if (d.length === 10) return `${d.slice(0,3)}-${d.slice(3,6)}-${d.slice(6)}`;
-  }
-  if (d.startsWith('02')) {
-    if (d.length === 10) return `${d.slice(0,2)}-${d.slice(2,6)}-${d.slice(6)}`;
-    if (d.length === 9)  return `${d.slice(0,2)}-${d.slice(2,5)}-${d.slice(5)}`;
-  }
-  if (/^0[3-6]/.test(d)) {
-    if (d.length === 11) return `${d.slice(0,3)}-${d.slice(3,7)}-${d.slice(7)}`;
-    if (d.length === 10) return `${d.slice(0,3)}-${d.slice(3,6)}-${d.slice(6)}`;
-  }
-  if (d.length === 8 && /^1[5-9]/.test(d)) return `${d.slice(0,4)}-${d.slice(4)}`;
-  return tel;
-}
-
-function guessColor(name) {
-  if (!name) return '#e5e5e5';
-  const n = name.toLowerCase();
-  if (n.includes('블랙') || n.includes('어비스') || n.includes('잉크')) return '#1a1a1a';
-  if (n.includes('화이트') || n.includes('아틀라스') || n.includes('스노우')) return '#f5f5f5';
-  if (n.includes('펄')) return '#e8e6e1';
-  if (n.includes('그레이') || n.includes('그래핀') || n.includes('실버')) return '#9aa0a6';
-  if (n.includes('블루') || n.includes('네이비')) return '#3a5d8f';
-  if (n.includes('레드') || n.includes('루비')) return '#a83232';
-  if (n.includes('그린')) return '#4a6d4e';
-  if (n.includes('베이지') || n.includes('샌드')) return '#c9b896';
-  if (n.includes('브라운') || n.includes('초콜릿')) return '#5c3d28';
-  return '#9aa0a6';
-}
+import { fmt, krw, fmtTel, guessColor } from './format.js';
 
 const MAKER_LOGOS = {
   '현대': 'https://cdn.simpleicons.org/hyundai/002C5F',
   '기아':  'https://cdn.simpleicons.org/kia/05141F',
-  '제네시스': '/genesis.png',
+  '제네시스': '/genesis.svg',
 };
 
 /**
@@ -84,7 +47,7 @@ export function buildOfficialQuoteHtml(a) {
             <span>${veh.trim_name || ''}</span>
           </div>
         ` : ''}
-        <div class="ofq-section__title">차량 정보 <span class="unit">[VAT 포함]</span></div>
+        <div class="ofq-section__title"><i class="ph ph-car"></i>차량 정보</div>
         <div class="ofq-vcard">
           <div class="ofq-vcard__head">
             <div class="ofq-vcard__title">
@@ -143,7 +106,7 @@ export function buildOfficialQuoteHtml(a) {
           </div>
         </div>
 
-        <div class="ofq-section__title" style="margin-top:14px;">계약 정보 (월 대여료) <span class="unit">[VAT 포함 · ${cond.km}만km/년]</span></div>
+        <div class="ofq-section__title" style="margin-top:14px;"><i class="ph ph-calendar-blank"></i>계약 정보 (월 대여료)</div>
         <div class="ofq-table-wrap">
           <table class="ofq-table ofq-terms-table">
             <thead>
@@ -174,11 +137,12 @@ export function buildOfficialQuoteHtml(a) {
   const showLogoImg = showLogo && cfgLogoUrl;
 
   return `
-    <div class="quote-doc official" id="quote-doc-content">
+    <div class="quote-doc official">
       <div class="ofq-hero">
         <div class="ofq-hero__left">
           ${showLogoImg ? `<img class="ofq-hero__logo" src="${cfgLogoUrl}" alt="${companyConfig.name || ''}" />` : ''}
           <div class="title">신차 장기렌터카 견적서</div>
+          <span class="ofq-hero__badge">VAT 포함</span>
         </div>
         <div class="ofq-hero__right">
           <div><b>견적번호</b> ${quoteNo}</div>
@@ -202,7 +166,7 @@ export function buildOfficialQuoteHtml(a) {
       ${vehicleBlocks}
 
       <div class="ofq-section">
-        <div class="ofq-section__title">보험가입 내역 <span class="unit">사고처리 1544-3871</span></div>
+        <div class="ofq-section__title"><i class="ph ph-shield-check"></i>보험가입 내역 <span class="unit">사고처리 1544-3871</span></div>
         <div class="ofq-table-wrap">
           <table class="ofq-table ofq-ins-table">
             <tr>
@@ -225,7 +189,7 @@ export function buildOfficialQuoteHtml(a) {
       </div>
 
       <div class="ofq-section">
-        <div class="ofq-section__title">부가서비스 · 정비상품 (${cond.svc || '웰스 Basic'})</div>
+        <div class="ofq-section__title"><i class="ph ph-wrench"></i>부가서비스 · 정비상품 (${cond.svc || '웰스 Basic'})</div>
         <div class="ofq-table-wrap">
           <table class="ofq-table ofq-svc-table">
             <thead>
@@ -250,7 +214,7 @@ export function buildOfficialQuoteHtml(a) {
       </div>
 
       <div class="ofq-section">
-        <div class="ofq-section__title">제출서류 안내</div>
+        <div class="ofq-section__title"><i class="ph ph-file-text"></i>제출서류 안내</div>
         <div class="ofq-table-wrap">
           <table class="ofq-table ofq-docs-table">
             <tr>
@@ -265,22 +229,37 @@ export function buildOfficialQuoteHtml(a) {
       </div>
 
       <div class="ofq-section">
-        <div class="ofq-section__title">주요 계약사항</div>
+        <div class="ofq-section__title"><i class="ph ph-note-pencil"></i>주요 계약사항</div>
         <ol class="ofq-notes">
           <li>상기 견적은 제조사 사정, 조세정책 등에 의해 변경될 수 있습니다.</li>
           <li>당사 심사결과에 따라 신용 또는 보증계약(보증/선납금, 공동임차인)이 추가될 수 있습니다.</li>
           <li>월 대여료에는 자동차 보험료, 정비서비스/차량검사비, 자동차세가 포함됩니다.</li>
           <li>중도해지 시 중도해지수수료가 발생되며, 기간별 상이합니다. (약정서 참고)</li>
         </ol>
-      </div>
-
-      ${showLogo ? `
-      <div class="ofq-footer">
         <div class="ofq-footer__bank">
           <span>계약금 입금계좌</span> · <b>신한은행 140-013-750928 웰릭스모빌리티㈜</b>
         </div>
       </div>
-      ` : ''}
+
+      <div class="ofq-spacer"></div>
+
+      ${showLogo ? (() => {
+        const ci = companyConfig.company_info || {};
+        const parts = [
+          ci.full_name && `<b>${ci.full_name}</b>`,
+          ci.ceo && `대표 ${ci.ceo}`,
+          ci.biz_no && `사업자 ${ci.biz_no}`,
+          ci.address,
+          ci.phone && `T ${ci.phone}`,
+          ci.fax && `F ${ci.fax}`,
+          ci.email,
+          ci.homepage,
+        ].filter(Boolean);
+        return parts.length ? `
+        <div class="ofq-footer">
+          <div class="ofq-footer__company">${parts.join(' · ')}</div>
+        </div>` : '';
+      })() : ''}
     </div>
   `;
 }

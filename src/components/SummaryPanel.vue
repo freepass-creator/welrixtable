@@ -5,7 +5,7 @@ import { quoteState as state } from '../store.js';
 const BRAND_LOGOS = {
   '현대': 'https://cdn.simpleicons.org/hyundai/002C5F',
   '기아': 'https://cdn.simpleicons.org/kia/05141F',
-  '제네시스': '/genesis.png',
+  '제네시스': '/genesis.svg',
 };
 
 function guessColor(name) {
