@@ -143,26 +143,28 @@ async function loadVehicles() {
 function findVehicleMeta(brand, model, trim_name, variant, trim_price_won) {
   if (!VEHICLES?.length) return {};
   // 0) ⭐ 가격 정확 매칭 (Excel 차량DB 가격과 1대1) — 최우선
-  // 잔가율 r24/r36/r48/r60 정확성 보장 핵심
   if (trim_price_won) {
     const exact = VEHICLES.filter(v =>
       v.brand === brand && v.model === model && v.price === trim_price_won
     );
     if (exact.length === 1) return exact[0];
     if (exact.length > 1) {
-      // 같은 가격 트림이 여러개면 trim_name 텍스트로 추가 좁히기
-      if (trim_name) {
-        const tn = exact.find(v => (v.trim || '').includes(trim_name));
-        if (tn) return tn;
-      }
-      // variant 토큰 (예: '하이브리드') 으로 좁히기
-      const tokens = (variant || '').split(/[\s·,()]+/).filter(t => t.length > 1);
+      // 가격 중복(예: GV80 2.5T vs 3.5T 같은 가격) — variant + trim_name 토큰 둘 다 합쳐서 가장 많이 일치하는 거 선택
+      const tokens = [...(variant || '').split(/[\s·,()/]+/), ...(trim_name || '').split(/[\s·,()/]+/)]
+        .filter(t => t && t.length >= 1)
+        .map(t => t.toLowerCase());
       if (tokens.length) {
         const scored = exact.map(m => ({
-          m, score: tokens.reduce((s, t) => s + ((m.trim || '').includes(t) ? 1 : 0), 0)
+          m,
+          score: tokens.reduce((s, t) => s + ((m.trim || '').toLowerCase().includes(t) ? 1 : 0), 0),
         }));
         scored.sort((a, b) => b.score - a.score);
-        if (scored[0].score > 0) return scored[0].m;
+        if (scored[0].score > 0 && scored[0].score > (scored[1]?.score ?? 0)) return scored[0].m;
+        // 동률이면 trim_name 정확 포함하는 거 우선
+        if (trim_name) {
+          const tn = exact.find(v => (v.trim || '').includes(trim_name));
+          if (tn) return tn;
+        }
       }
       return exact[0];
     }
