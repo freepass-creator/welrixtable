@@ -1,8 +1,10 @@
 <script setup>
 import { computed } from 'vue';
-import { quoteState } from '../store.js';
+import { quoteState, vehicleState } from '../store.js';
 import { DELIVERY_REGIONS } from '../data/lookups.js';
 import CustomDropdown from './CustomDropdown.vue';
+
+const isDisabled = computed(() => !vehicleState.trim);
 
 const fmt = (n) => new Intl.NumberFormat('ko-KR').format(n);
 
@@ -15,7 +17,7 @@ const cityOptions = computed(() => {
   return Object.entries(cities).map(([c, fee]) => ({
     value: c,
     label: c,
-    sub: fee > 0 ? `+${fmt(fee)}원` : '무료',
+    sub: fee > 0 ? `+${fmt(fee)}원` : '무료',  // 탁송 무료 — 비용 0 의미
   }));
 });
 
@@ -39,6 +41,7 @@ function onCityChange(v) {
           :options="regionOptions"
           :model-value="quoteState.cond.deliveryRegion"
           placeholder="광역시/도"
+          :disabled="isDisabled"
           @change="onRegionChange"
         />
       </div>
@@ -47,7 +50,7 @@ function onCityChange(v) {
           :options="cityOptions"
           :model-value="quoteState.cond.deliveryCity"
           placeholder="시/군 선택"
-          :disabled="!quoteState.cond.deliveryRegion"
+          :disabled="isDisabled || !quoteState.cond.deliveryRegion"
           @change="onCityChange"
         />
       </div>

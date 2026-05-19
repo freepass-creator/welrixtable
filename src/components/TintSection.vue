@@ -1,8 +1,10 @@
 <script setup>
 import { computed } from 'vue';
-import { quoteState } from '../store.js';
+import { quoteState, vehicleState } from '../store.js';
 import { TINT_PRICES, TINT_AREAS } from '../data/lookups.js';
 import CustomDropdown from './CustomDropdown.vue';
+
+const isDisabled = computed(() => !vehicleState.trim);
 
 const fmt = (n) => new Intl.NumberFormat('ko-KR').format(n);
 
@@ -52,6 +54,7 @@ function toggleArea(key, e) {
         :options="productOptions"
         :model-value="quoteState.tint.product"
         placeholder="없음"
+        :disabled="isDisabled"
         @change="onProductChange"
       />
       <div class="tint-chips" v-if="quoteState.tint.product">

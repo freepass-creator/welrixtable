@@ -94,7 +94,8 @@
         "4만km": -0.10
       },
       "term_surcharge": {
-        "exclude": { "brands": ["제네시스"], "models": ["K9", "하이리무진"] },
+        "_doc": "Excel I22 의 제외 조건은 AW10/AW11 cell ref 오류로 사실상 항상 false → 모든 차에 기간가산 적용. calc.js 도 동일 동작 위해 exclude 비움.",
+        "exclude": { "brands": [], "models": [] },
         "by_term_code": { "3": 0.05, "4": -0.005, "5": -0.03 }
       },
       "brand_adjustment": {

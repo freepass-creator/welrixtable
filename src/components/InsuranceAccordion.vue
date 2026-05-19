@@ -1,7 +1,9 @@
 <script setup>
-import { ref, nextTick } from 'vue';
-import { quoteState } from '../store.js';
+import { ref, computed, nextTick } from 'vue';
+import { quoteState, vehicleState } from '../store.js';
 import CustomDropdown from './CustomDropdown.vue';
+
+const isDisabled = computed(() => !vehicleState.trim);
 
 const open = ref(false);
 function onToggle(e) {
@@ -44,9 +46,9 @@ function onExtra(v) { quoteState.cond.extraDriver = v;  window.__welrix_recomput
         <span class="caret"></span>
       </summary>
       <div style="margin-top:8px; display:grid; grid-template-columns:repeat(3, 1fr); gap:6px;">
-        <CustomDropdown :options="SVC_OPTS"   :model-value="quoteState.cond.svc"          placeholder="웰스 Basic" @change="onSvc" />
-        <CustomDropdown :options="INS_OPTS"   :model-value="quoteState.cond.insProperty"  placeholder="대물 1억"   @change="onIns" />
-        <CustomDropdown :options="EXTRA_OPTS" :model-value="quoteState.cond.extraDriver"  placeholder="추가운전자 없음" @change="onExtra" />
+        <CustomDropdown :options="SVC_OPTS"   :model-value="quoteState.cond.svc"          placeholder="웰스 Basic" :disabled="isDisabled" @change="onSvc" />
+        <CustomDropdown :options="INS_OPTS"   :model-value="quoteState.cond.insProperty"  placeholder="대물 1억"   :disabled="isDisabled" @change="onIns" />
+        <CustomDropdown :options="EXTRA_OPTS" :model-value="quoteState.cond.extraDriver"  placeholder="추가운전자 없음" :disabled="isDisabled" @change="onExtra" />
       </div>
     </details>
   </section>
