@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>웰릭스 모빌리티 · 신차 장기렌터카 견적</title>
+  <meta name="theme-color" content="#0D4E8B" />
+  <meta name="description" content="현대·기아·제네시스 전 차종 신차 장기렌터카 실시간 견적" />
+  <!-- Open Graph (카톡/페북/슬랙 등 링크 미리보기) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="웰릭스 모빌리티 · 신차 장기렌터카 견적" />
+  <meta property="og:description" content="현대·기아·제네시스 전 차종 실시간 견적" />
+  <meta property="og:image" content="/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="웰릭스 모빌리티" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="/og-image.png" />
+  <link rel="icon" type="image/png" href="/welrix-ci.png" />
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet" />
+  <!-- 차량 DB — PC 와 동일 SSOT -->
+  <script src="/vehicle-db.js"></script>
+  <!-- 견적서 이미지 캡쳐용 -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- 견적서(official) CSS — PC 와 동일 스타일 (이미지 캡쳐 시 적용) -->
+  <link rel="stylesheet" href="/quote-doc.css" />
+  <style>
+    :root {
+      --brand: #0D4E8B;
+      --brand-700: #0a3d6e;
+      --brand-100: #cfdce7;
+      --brand-50:  #eef4fa;
+      --ink-1: #0a0a0a;
+      --ink-2: #404040;
+      --ink-3: #737373;
+      --ink-4: #a3a3a3;
+      --bg: #ffffff;
+      --bg-soft: #fafafa;
+      --line: #e5e5e5;
+      --line-2: #d4d4d4;
+      /* 라운드 토큰 — 모바일 통일 규격 */
+      --r-chip: 10px;       /* chip, input, 옵션 항목 */
+      --r-card: 12px;       /* 카드, 액션 버튼 (대부분 통일) */
+      --r-sheet: 16px;      /* bottom sheet, sticky 상단 모서리 */
+      --r-pill: 999px;      /* 알약 (필요 시) */
+      /* 높이 토큰 */
+      --h-chip: 36px;       /* 헤더 알약 */
+      --h-input: 46px;      /* input, select */
+      --h-cta: 54px;        /* 큰 CTA 버튼 (footer + sheet action) */
+      /* 폰트 사이즈 토큰 */
+      --fs-xs:  11px;       /* caption, hint */
+      --fs-sm:  12.5px;     /* meta, sub-label */
+      --fs-md:  13px;       /* label, badge */
+      --fs-base: 14px;      /* 본문, chip */
+      --fs-lg:  15px;       /* 버튼, input, 강조 본문 */
+      --fs-xl:  17px;       /* section 제목 */
+      --fs-2xl: 22px;       /* hero 제목 (step 타이틀) */
+      /* 굵기 */
+      --fw-regular: 400;
+      --fw-medium:  500;
+      --fw-semi:    600;
+      --fw-bold:    700;
+      --safe-top: env(safe-area-inset-top, 0);
+      --safe-bottom: env(safe-area-inset-bottom, 0);
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body {
+      margin: 0; padding: 0;
+      background: var(--bg);
+      color: var(--ink-1);
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      letter-spacing: -0.2px;
+      -webkit-text-size-adjust: 100%;
+      overflow-x: hidden;
+    }
+    /* 1024px 초과 (PC) 진입 시 데스크탑으로 리다이렉트 — 모바일 페이지인데 PC 로 들어오면 어색 */
+    @media (min-width: 1025px) {
+      body::before {
+        content: '데스크탑 환경입니다 — PC 버전으로 이동합니다';
+        position: fixed; inset: 0;
+        display: flex; align-items: center; justify-content: center;
+        background: var(--bg); color: var(--ink-3); font-size: 14px;
+      }
+    }
+    #m-app { min-height: 100vh; display: flex; flex-direction: column; }
+  </style>
+  <script>
+    // PC viewport 로 들어오면 데스크탑 페이지로 redirect (단, ?force=mobile 이면 유지)
+    (function () {
+      const params = new URLSearchParams(location.search);
+      if (params.get('force') === 'mobile') return;
+      if (window.innerWidth > 1024) {
+        const target = location.pathname.replace(/mobile\.html$/, 'index.html');
+        location.replace(target + location.search + location.hash);
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div id="m-app"></div>
+  <script type="module" src="/src/mobile.js"></script>
+</body>
+</html>

@@ -116,6 +116,7 @@ export function buildOfficialQuoteHtml(a) {
               </tr>
             </thead>
             <tbody>
+              ${cond.discount ? `<tr><th class="row-label">추가할인</th>${sent.map(() => `<td style="color:#0D4E8B;font-weight:600;">−${fmt(cond.discount)}만원</td>`).join('')}</tr>` : ''}
               <tr><th class="row-label">약정주행</th>${sent.map(() => `<td>${cond.km}만km/년</td>`).join('')}</tr>
               <tr><th class="row-label">만기처리</th>${sent.map(() => `<td>만기 협의</td>`).join('')}</tr>
               <tr><th class="row-label">만기인수금액</th>${sent.map(m => `<td>${(m.residualPct*100).toFixed(0)}% · ${fmt(m.residualAmt)}원</td>`).join('')}</tr>

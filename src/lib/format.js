@@ -4,24 +4,36 @@
 export const fmt = (n) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
 export const krw = (n) => `${fmt(n)}원`;
 
+// 점진적 하이픈 — 입력 중에도 자동 적용 (PC 의 견적서 표시도 동일 결과)
 export function fmtTel(tel) {
   if (!tel) return '';
-  const d = String(tel).replace(/\D/g, '');
+  const d = String(tel).replace(/\D/g, '').slice(0, 11);
   if (!d) return '';
+  // 휴대폰 010/011~019
   if (/^01[016789]/.test(d)) {
-    if (d.length === 11) return `${d.slice(0,3)}-${d.slice(3,7)}-${d.slice(7)}`;
-    if (d.length === 10) return `${d.slice(0,3)}-${d.slice(3,6)}-${d.slice(6)}`;
+    if (d.length <= 3) return d;
+    if (d.length <= 7) return `${d.slice(0,3)}-${d.slice(3)}`;
+    return `${d.slice(0,3)}-${d.slice(3,7)}-${d.slice(7)}`;
   }
+  // 02 (서울)
   if (d.startsWith('02')) {
-    if (d.length === 10) return `${d.slice(0,2)}-${d.slice(2,6)}-${d.slice(6)}`;
-    if (d.length === 9)  return `${d.slice(0,2)}-${d.slice(2,5)}-${d.slice(5)}`;
+    if (d.length <= 2) return d;
+    if (d.length <= 6) return `${d.slice(0,2)}-${d.slice(2)}`;
+    if (d.length <= 9) return `${d.slice(0,2)}-${d.slice(2,5)}-${d.slice(5)}`;
+    return `${d.slice(0,2)}-${d.slice(2,6)}-${d.slice(6)}`;
   }
+  // 0XX (031~064 지역번호)
   if (/^0[3-6]/.test(d)) {
-    if (d.length === 11) return `${d.slice(0,3)}-${d.slice(3,7)}-${d.slice(7)}`;
-    if (d.length === 10) return `${d.slice(0,3)}-${d.slice(3,6)}-${d.slice(6)}`;
+    if (d.length <= 3) return d;
+    if (d.length <= 7) return `${d.slice(0,3)}-${d.slice(3)}`;
+    return `${d.slice(0,3)}-${d.slice(3,7)}-${d.slice(7)}`;
   }
-  if (d.length === 8 && /^1[5-9]/.test(d)) return `${d.slice(0,4)}-${d.slice(4)}`;
-  return tel;
+  // 1544/1588 등 대표번호
+  if (/^1[5-9]/.test(d)) {
+    if (d.length <= 4) return d;
+    return `${d.slice(0,4)}-${d.slice(4)}`;
+  }
+  return d;
 }
 
 export function guessColor(name) {

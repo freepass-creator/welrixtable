@@ -10,6 +10,7 @@ _audit/excel_db.json
 _audit/inline_db.json
 _audit/diff_report*.json
 _audit/unmatched_classification.json
+_audit/hyu_stock.json
 _audit/vehicles.json.bak*
 _audit/index.html.bak*
 

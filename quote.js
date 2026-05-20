@@ -315,7 +315,7 @@ function recompute() {
   const monthly = state.scenarios.map((sc, idx) => {
     const r = calcQuote({
       vehicle: vehicleRow,
-      options: { optPrice: 0, discount: 0, deliveryFee, itemsFee: itemsFeeForCalc, etc: 0 },
+      options: { optPrice: 0, discount: (state.cond.discount || 0) * 10000, deliveryFee, itemsFee: itemsFeeForCalc, etc: 0 },
       contract: { term: sc.term, km: state.cond.km + '만km', dep: +sc.dep || 0, pre: +sc.pre || 0 },
       customer: { creditGrade: state.cond.credit },
       insurance: { property: state.cond.insProperty, extraDriver: state.cond.extraDriver, exec: '미가입',
@@ -1378,7 +1378,7 @@ ${url}
     state.scenarios.forEach((sc, idx) => {
       const r = calcQuote({
         vehicle: vehicleRow,
-        options: { optPrice: 0, discount: 0, deliveryFee, itemsFee: tintFee, etc: 0 },
+        options: { optPrice: 0, discount: (state.cond.discount || 0) * 10000, deliveryFee, itemsFee: tintFee, etc: 0 },
         contract: { term: sc.term, km: state.cond.km + '만km', dep: +sc.dep || 0, pre: +sc.pre || 0 },
         customer: { creditGrade: state.cond.credit },
         insurance: { property: state.cond.insProperty, extraDriver: state.cond.extraDriver, exec: '미가입',

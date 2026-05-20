@@ -6,6 +6,7 @@ import OptionsList from './components/OptionsList.vue';
 import RightPanel from './components/RightPanel.vue';
 import VehicleCascade from './components/VehicleCascade.vue';
 import ColorSection from './components/ColorSection.vue';
+import DiscountSection from './components/DiscountSection.vue';
 import CustomerStaffForm from './components/CustomerStaffForm.vue';
 import ConditionsForm from './components/ConditionsForm.vue';
 import DeliverySection from './components/DeliverySection.vue';
@@ -27,6 +28,7 @@ function mountOne(id, Component, label) {
 function mountAll() {
   mountOne('vehicle-cascade-root', VehicleCascade, 'VehicleCascade');
   mountOne('color-section-root', ColorSection, 'ColorSection');
+  mountOne('discount-section-root', DiscountSection, 'DiscountSection');
   mountOne('delivery-section-root', DeliverySection, 'DeliverySection');
   mountOne('tint-section-root', TintSection, 'TintSection');
   mountOne('extras-accordion-root', ExtrasAccordion, 'ExtrasAccordion');

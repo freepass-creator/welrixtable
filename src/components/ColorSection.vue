@@ -46,6 +46,7 @@ function onIntChange(value) {
   // 외부 hook (renderQuoteDoc 등)
   window.__welrix_recompute?.();
 }
+
 </script>
 
 <template>

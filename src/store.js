@@ -19,6 +19,8 @@ export const vehicleState = reactive({
   variantOptions: [],       // [{ value, label }]
   trimOptions: [],          // [{ value, label }]
   exteriorColorOptions: [], // [{ value, label, swatch }]
+  // 모바일 wizard sub-step 진행 — brand | model | variant | trim | options | colors
+  subStep: 'brand',
 });
 
 // === 견적 조건 / 사용자 정보 / 기타 ===
@@ -59,10 +61,11 @@ export const quoteState = reactive({
   vehicle: null,            // {brand, model, variant, trim_name, total_manwon, ...}
   cond: {
     credit: '중신용', km: 2, dep: 10, pre: 0,
-    feeRatePct: loadFeeRate(),  // 영업수수료율 — 담당자 정보로 함께 자동 저장
+    feeRatePct: loadFeeRate(),
     deliveryRegion: '광역시', deliveryCity: '서울',
     svc: '웰스 Basic', insProperty: '1억', extraDriver: '없음',
     colorInt: '', colorIntPrice: 0,
+    discount: 0,  // 추가 할인 (만원 단위) — 재고차/특별조건 등 영업이 직접 입력
   },
   tint: { product: '루마 GG', areas: new Set(['front', 'side_rear_with_coupon']) },
   extras: { blackbox: '', navi: '', hipass: '' },
@@ -74,7 +77,7 @@ export const quoteState = reactive({
     { term: 60, dep: 10, pre: 0 },
     { term: 48, dep: 10, pre: 0 },
     { term: 36, dep: 10, pre: 0 },
-  ],
+  ],  // 24개월 운영 안 함
   // 계산된 월대여료 결과 (recompute가 채움) — TermsGrid 컴포넌트가 reactive 읽음
   monthly: [],
 });
