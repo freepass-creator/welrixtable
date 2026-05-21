@@ -236,15 +236,7 @@ function close() { emit('close'); }
         <span class="ss-handle__bar"></span>
       </button>
 
-      <div class="ss-header">
-        <h2 class="ss-title">견적서 보내기</h2>
-        <label class="ss-ci-toggle" :class="{ 'is-on': !quoteState.send_options.showLogo }">
-          <input type="checkbox" :checked="!quoteState.send_options.showLogo"
-                 @change="quoteState.send_options.showLogo = !$event.target.checked" />
-          <i class="ph" :class="!quoteState.send_options.showLogo ? 'ph-check-circle-fill' : 'ph-circle'"></i>
-          <span>CI 제외</span>
-        </label>
-      </div>
+      <h2 class="ss-title">견적서 보내기</h2>
 
       <div class="ss-field">
         <label class="ss-label">손님 성함</label>
@@ -279,6 +271,18 @@ function close() { emit('close'); }
         </div>
         <button v-if="staffEditing" class="ss-staff__done" @click="staffEditing = false">완료</button>
       </div>
+
+      <!-- CI 제외 토글 — 발송 액션 위에 명확하게 -->
+      <label class="ss-ci">
+        <div class="ss-ci__left">
+          <div class="ss-ci__label">웰릭스 CI 제외하고 발송</div>
+          <div class="ss-ci__hint">로고 없이 견적서 작성</div>
+        </div>
+        <input type="checkbox" class="ss-ci__input"
+               :checked="!quoteState.send_options.showLogo"
+               @change="quoteState.send_options.showLogo = !$event.target.checked" />
+        <span class="ss-ci__switch"></span>
+      </label>
 
       <div class="ss-actions">
         <button class="ss-action" :disabled="imgLoading" @click="onSaveImage">
@@ -341,25 +345,59 @@ function close() { emit('close'); }
   border-radius: 2px;
 }
 
-.ss-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin: 0 0 18px;
-}
 .ss-title {
   font-size: var(--fs-xl); font-weight: var(--fw-bold);
   color: var(--ink-1);
   letter-spacing: -0.3px;
-  margin: 0;
+  margin: 0 0 18px;
 }
-.ss-ci-toggle {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: var(--fs-md); color: var(--ink-3); font-weight: var(--fw-medium);
-  cursor: pointer; user-select: none;
+
+/* CI 제외 — iOS 스타일 토글 switch row */
+.ss-ci {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  margin-top: 8px;
+  background: var(--bg-soft);
+  border-radius: var(--r-card);
+  cursor: pointer;
+  position: relative;
 }
-.ss-ci-toggle input { position: absolute; opacity: 0; pointer-events: none; }
-.ss-ci-toggle i { font-size: 17px; color: var(--ink-4); }
-.ss-ci-toggle.is-on { color: var(--brand); font-weight: var(--fw-semi); }
-.ss-ci-toggle.is-on i { color: var(--brand); }
+.ss-ci__left { flex: 1; min-width: 0; }
+.ss-ci__label {
+  font-size: var(--fs-lg); font-weight: var(--fw-semi);
+  color: var(--ink-1); letter-spacing: -0.3px;
+}
+.ss-ci__hint {
+  font-size: var(--fs-xs); color: var(--ink-3);
+  margin-top: 2px;
+}
+.ss-ci__input {
+  position: absolute; opacity: 0; pointer-events: none;
+}
+.ss-ci__switch {
+  flex-shrink: 0;
+  position: relative;
+  width: 52px; height: 30px;
+  background: var(--line-2);
+  border-radius: 999px;
+  transition: background .2s;
+}
+.ss-ci__switch::after {
+  content: '';
+  position: absolute;
+  left: 3px; top: 3px;
+  width: 24px; height: 24px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: transform .2s;
+}
+.ss-ci__input:checked ~ .ss-ci__switch {
+  background: var(--brand);
+}
+.ss-ci__input:checked ~ .ss-ci__switch::after {
+  transform: translateX(22px);
+}
 
 .ss-field { margin-bottom: 14px; }
 .ss-label {

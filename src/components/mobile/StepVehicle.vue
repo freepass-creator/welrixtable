@@ -276,9 +276,6 @@ function selectTrim(t) {
   if (vehicleState.color == null && exteriorColors.value.length) {
     vehicleState.color = 0;
   }
-  // 재고차 자동 할인 — 현대차이고 매칭되는 재고가 있으면 할인 적용
-  const stockDc = findStockDiscount();
-  if (stockDc > 0) quoteState.cond.discount = stockDc;
   syncVehicle();
 }
 
