@@ -367,12 +367,14 @@ function goBack(target) { subStep.value = target; }
         </button>
       </div>
 
-      <!-- 트림 선택 후 — 할인 input + 가격 카드 즉시 표시 -->
-      <div v-if="selectedTrim" class="sv-block" style="margin-top:20px;">
-        <div class="sv-block__label">
-          추가 할인 <span class="sv-block__hint">재고차 자동 적용</span>
-          <span v-if="quoteState.cond.discount" class="sv-block__val">−{{ fmt(quoteState.cond.discount) }}만원</span>
-        </div>
+      <!-- 트림 선택 후 — 할인 (접힘, 클릭하면 열림) -->
+      <details v-if="selectedTrim" class="sv-disclosure" :open="(quoteState.cond.discount || 0) > 0">
+        <summary class="sv-disclosure__summary">
+          <span class="sv-disclosure__label">추가 할인</span>
+          <span v-if="quoteState.cond.discount" class="sv-disclosure__val">−{{ fmt(quoteState.cond.discount) }}만원</span>
+          <span v-else class="sv-disclosure__hint">재고차·특별조건</span>
+          <i class="ph ph-caret-down sv-disclosure__caret"></i>
+        </summary>
         <div class="sv-discount">
           <input
             type="number" min="0" step="10" inputmode="numeric"
@@ -382,7 +384,7 @@ function goBack(target) { subStep.value = target; }
           />
           <span class="sv-discount__unit">만원</span>
         </div>
-      </div>
+      </details>
       <div v-if="selectedTrim" class="sv-total">
         <div class="sv-total__row">
           <span>트림</span>
@@ -493,12 +495,14 @@ function goBack(target) { subStep.value = target; }
         </div>
       </div>
 
-      <!-- 추가 할인 — 재고차/특별조건 -->
-      <div class="sv-block">
-        <div class="sv-block__label">
-          추가 할인
-          <span v-if="quoteState.cond.discount" class="sv-block__val">−{{ fmt(quoteState.cond.discount) }}만원</span>
-        </div>
+      <!-- 추가 할인 — 접힘 (재고차/특별조건) -->
+      <details class="sv-disclosure" :open="(quoteState.cond.discount || 0) > 0">
+        <summary class="sv-disclosure__summary">
+          <span class="sv-disclosure__label">추가 할인</span>
+          <span v-if="quoteState.cond.discount" class="sv-disclosure__val">−{{ fmt(quoteState.cond.discount) }}만원</span>
+          <span v-else class="sv-disclosure__hint">재고차·특별조건</span>
+          <i class="ph ph-caret-down sv-disclosure__caret"></i>
+        </summary>
         <div class="sv-discount">
           <input
             type="number" min="0" step="10" inputmode="numeric"
@@ -508,7 +512,7 @@ function goBack(target) { subStep.value = target; }
           />
           <span class="sv-discount__unit">만원</span>
         </div>
-      </div>
+      </details>
 
       <!-- 최종 차량가격 (할인 반영) -->
       <div class="sv-total">
@@ -675,6 +679,38 @@ function goBack(target) { subStep.value = target; }
   border-radius: 10px;
   color: var(--ink-4); font-size: 13px;
 }
+
+/* 할인 — 접힘 disclosure */
+.sv-disclosure {
+  margin-top: 18px;
+  background: var(--bg-soft);
+  border-radius: var(--r-chip);
+  padding: 12px 14px;
+}
+.sv-disclosure__summary {
+  display: flex; align-items: center; gap: 8px;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+.sv-disclosure__summary::-webkit-details-marker { display: none; }
+.sv-disclosure__label {
+  font-size: 14px; font-weight: 600; color: var(--ink-1);
+}
+.sv-disclosure__val {
+  font-size: 13px; color: var(--brand); font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.sv-disclosure__hint {
+  font-size: 11.5px; color: var(--ink-4);
+}
+.sv-disclosure__caret {
+  margin-left: auto;
+  font-size: 16px; color: var(--ink-3);
+  transition: transform .15s;
+}
+.sv-disclosure[open] .sv-disclosure__caret { transform: rotate(180deg); }
+.sv-disclosure[open] .sv-discount { margin-top: 10px; }
 
 /* 할인 입력 */
 .sv-discount {

@@ -1,8 +1,10 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
-import { docStore, chatStore } from '../store.js';
+import { docStore, chatStore, quoteState } from '../store.js';
 import { sendChatMessage, watchChatMessages, isManager } from '../firebase/chat.js';
 import { waitAuth, auth } from '../firebase/config.js';
+import { createContract, findMyContracts } from '../firebase/contracts.js';
+import { fmtTel } from '../lib/format.js';
 
 const fmtSize = (b) => b < 1024 ? `${b}B` : b < 1048576 ? `${(b/1024).toFixed(1)}KB` : `${(b/1048576).toFixed(1)}MB`;
 
@@ -74,9 +76,103 @@ function onAttDrop(e) {
   if (files.length) docStore.attachments.push(...files);
 }
 
-function submit() {
+const submitting = ref(false);
+const submittedId = ref('');
+const submitPin = ref('');
+
+// 손님 정보 — 이름만 (연락처는 손님이 꺼릴 수 있어 받지 않음, 메모로 보강)
+const custName = ref('');
+
+// 본인 확인 (다른 견적/세션)
+const checkOpen = ref(false);
+const checkTel = ref('');
+const checkPin = ref('');
+const checking = ref(false);
+const myContracts = ref([]);
+
+function onStaffTelInput(e) {
+  quoteState.staff.tel = fmtTel(e.target.value);
+}
+function onCheckTelInput(e) {
+  checkTel.value = fmtTel(e.target.value);
+}
+
+async function submit() {
   if (!docStore.license) { alert('운전면허증을 첨부해 주세요.'); return; }
-  alert(`계약 접수 요청 전송\n- 면허증: ${docStore.license.name}\n- 첨부서류 ${docStore.attachments.length}건\n- 메모: ${memo.value || '(없음)'}\n(다음 단계: Firebase 연동)`);
+  if (!quoteState.staff.name?.trim() || !quoteState.staff.tel?.trim()) {
+    alert('영업자 정보 (이름·연락처) 를 입력해 주세요.'); return;
+  }
+  if (!/^\d{4}$/.test(submitPin.value)) {
+    alert('PIN 4자리를 입력해 주세요. (본인 확인용)'); return;
+  }
+  if (submitting.value) return;
+  submitting.value = true;
+  try {
+    if (!custName.value?.trim()) {
+      alert('손님 이름을 입력해 주세요.'); submitting.value = false; return;
+    }
+    const { contract_id } = await createContract({
+      staff: {
+        name: quoteState.staff.name.trim(),
+        tel: quoteState.staff.tel.trim(),
+      },
+      customer: {
+        name: custName.value.trim(),
+      },
+      license: docStore.license,
+      attachments: docStore.attachments || [],
+      memo: memo.value || '',
+      quoteId: quoteState._lastSentQuoteId || null,
+      pin: submitPin.value,
+    });
+    // 본인 추적용 — localStorage 에 contract_id 누적
+    if (!quoteState.myContracts.includes(contract_id)) {
+      quoteState.myContracts.unshift(contract_id);
+    }
+    submittedId.value = contract_id;
+    alert(`심사 접수 완료\n접수 번호: ${contract_id}\nPIN 은 잘 보관해 주세요.`);
+    docStore.license = null;
+    docStore.attachments.splice(0, docStore.attachments.length);
+    memo.value = '';
+    submitPin.value = '';
+    custName.value = '';
+    if (licInputEl.value) licInputEl.value.value = '';
+    if (attInputEl.value) attInputEl.value.value = '';
+  } catch (e) {
+    alert('업로드 실패: ' + (e?.message || e));
+  } finally {
+    submitting.value = false;
+  }
+}
+
+async function onCheck() {
+  if (!checkTel.value?.trim()) { alert('연락처를 입력하세요'); return; }
+  if (!/^\d{4}$/.test(checkPin.value)) { alert('PIN 4자리를 입력하세요'); return; }
+  checking.value = true;
+  myContracts.value = [];
+  try {
+    const list = await findMyContracts(checkTel.value, checkPin.value);
+    myContracts.value = list;
+    if (!list.length) alert('일치하는 심사 요청이 없습니다');
+  } catch (e) {
+    alert('조회 실패: ' + (e?.message || e));
+  } finally {
+    checking.value = false;
+  }
+}
+
+const STATUS_LABEL = {
+  pending: { label: '대기', color: '#f59e0b' },
+  approved: { label: '승인', color: '#10b981' },
+  rejected: { label: '반려', color: '#ef4444' },
+  revision: { label: '보완 요청', color: '#3b82f6' },
+};
+function fmtDate(ts) {
+  return new Date(ts).toLocaleString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+}
+function latestReview(c) {
+  const r = c.reviews ? Object.values(c.reviews) : [];
+  return r.sort((a,b) => b.at - a.at)[0] || null;
 }
 
 // === 채팅 입력 ===
@@ -121,11 +217,11 @@ function fmtTime(ts) {
 </script>
 
 <template>
-  <!-- 계약 접수 -->
+  <!-- 심사 접수 -->
   <details class="contract-top" :open="accOpen" @toggle="accOpen = $event.target.open">
     <summary class="contract-acc-summary">
       <span class="contract-pane-title" style="margin:0;">
-        <i class="ph ph-clipboard-text"></i>계약 접수
+        <i class="ph ph-clipboard-text"></i>심사 접수
       </span>
       <span class="contract-acc-count" :class="{ has: totalDocs > 0 }">
         {{ totalDocs ? totalDocs + '건' : '' }}
@@ -133,6 +229,41 @@ function fmtTime(ts) {
       <span class="contract-acc-caret"></span>
     </summary>
     <div class="contract-acc-body">
+      <!-- 영업자 본인 확인 정보 — 이름 / 연락처 / PIN 한 카드로 -->
+      <div class="contract-staff-card">
+        <div class="contract-staff-card__title">
+          <i class="ph ph-shield-check"></i>
+          영업자 본인 확인 정보
+        </div>
+        <input class="contract-staff__input"
+               v-model="quoteState.staff.name"
+               placeholder="영업자 이름" />
+        <input class="contract-staff__input"
+               :value="quoteState.staff.tel"
+               @input="onStaffTelInput"
+               placeholder="연락처 010-0000-0000"
+               inputmode="tel" />
+        <div class="contract-staff__pin-row">
+          <input class="contract-staff__pin" type="password" inputmode="numeric" maxlength="4"
+                 v-model="submitPin" placeholder="PIN 4자리" />
+          <small>※ 연락처 + PIN 으로 본인 심사 결과 확인</small>
+        </div>
+      </div>
+
+      <!-- 손님 정보 — 매 심사마다 새로 입력 (연락처는 받지 않음) -->
+      <div class="contract-staff-card">
+        <div class="contract-staff-card__title">
+          <i class="ph ph-user"></i>
+          심사 대상 손님
+        </div>
+        <input class="contract-staff__input"
+               v-model="custName"
+               placeholder="손님 이름 (예: 홍길동)" />
+        <small class="contract-staff-card__hint">
+          ※ 같은 손님의 추가 서류는 <b>동일한 이름</b>으로 입력하면 한 건으로 묶입니다
+        </small>
+      </div>
+
       <!-- 면허증 -->
       <label class="doc-dropzone single"
         :class="{ dragover: licDragOver, 'has-file': !!docStore.license }"
@@ -181,9 +312,48 @@ function fmtTime(ts) {
       </div>
 
       <textarea class="contract-memo" rows="2" placeholder="추가 요청사항이나 메모" style="margin-top:10px;" v-model="memo"></textarea>
-      <button class="contract-submit" @click="submit">
-        계약 접수 요청 <i class="ph ph-arrow-right"></i>
+
+      <button class="contract-submit" @click="submit" :disabled="submitting">
+        <template v-if="submitting"><i class="ph ph-spinner"></i> 업로드 중...</template>
+        <template v-else>계약 심사 요청 <i class="ph ph-arrow-right"></i></template>
       </button>
+      <div v-if="submittedId" class="contract-submitted">
+        <i class="ph ph-check-circle"></i>
+        접수 완료 · <b>{{ submittedId }}</b>
+      </div>
+
+      <!-- 본인 확인 — 다른 세션/디바이스에서도 가능 -->
+      <details class="contract-check" :open="checkOpen" @toggle="checkOpen = $event.target.open" style="margin-top:14px;">
+        <summary>
+          <i class="ph ph-magnifying-glass"></i> 내 심사 요청 확인
+        </summary>
+        <div class="contract-check__body">
+          <input class="contract-staff__input" :value="checkTel" @input="onCheckTelInput"
+                 placeholder="연락처 010-0000-0000" inputmode="tel" />
+          <input class="contract-staff__input" type="password" inputmode="numeric" maxlength="4"
+                 v-model="checkPin" placeholder="PIN 4자리" />
+          <button class="contract-submit" @click="onCheck" :disabled="checking" style="margin-top:6px;">
+            <template v-if="checking"><i class="ph ph-spinner"></i> 조회 중...</template>
+            <template v-else>조회 <i class="ph ph-arrow-right"></i></template>
+          </button>
+          <div v-if="myContracts.length" class="my-contracts">
+            <div v-for="c in myContracts" :key="c.contract_id" class="my-contract">
+              <div class="my-contract__head">
+                <span class="my-contract__id">{{ c.contract_id }}</span>
+                <span class="my-contract__st" :style="{
+                  background: (STATUS_LABEL[c.status]?.color || '#888') + '1a',
+                  color: STATUS_LABEL[c.status]?.color || '#888',
+                }">{{ STATUS_LABEL[c.status]?.label || c.status }}</span>
+              </div>
+              <div class="my-contract__meta">손님 {{ c.customer?.name || '-' }} · {{ fmtDate(c.created_at) }}</div>
+              <div v-if="latestReview(c)" class="my-contract__review">
+                <i class="ph ph-quotes"></i>
+                {{ latestReview(c).comment || '(코멘트 없음)' }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
     </div>
   </details>
 

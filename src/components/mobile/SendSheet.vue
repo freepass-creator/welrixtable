@@ -100,7 +100,8 @@ async function ensureQuoteSaved() {
       send_options: { ...quoteState.send_options },
       source: 'mobile',
     };
-    const { url } = await saveQuote(payload);
+    const { id, url } = await saveQuote(payload);
+    quoteState._lastSentQuoteId = id;
     sentLink.value = url;
     return url;
   } catch (e) {
@@ -298,8 +299,8 @@ function close() { emit('close'); }
           :disabled="sending"
           @click="onShareNative"
         >
-          <i class="ph ph-chat-circle"></i>
-          카톡으로 바로 전송
+          <i class="ph ph-share-network"></i>
+          공유하기 (카톡·문자·메일 등)
         </button>
       </div>
 

@@ -580,9 +580,132 @@
     border-top: 1px solid var(--line);
   }
   section.hidden { display: none; }
+
+  /* 진입 게이트 — PIN 입력 화면 (영업/관리 분기) */
+  .gate-bg {
+    position: fixed; inset: 0;
+    background: linear-gradient(135deg, #f7f7f7, #eef4fa);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+  }
+  .gate-card {
+    width: 100%; max-width: 360px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 36px 28px 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    text-align: center;
+  }
+  .gate-ci {
+    height: 24px; width: auto;
+    margin-bottom: 20px;
+  }
+  .gate-title {
+    font-size: 18px; font-weight: 700; color: var(--ink-1);
+    margin: 0 0 6px; letter-spacing: -0.3px;
+  }
+  .gate-sub {
+    font-size: 13px; color: var(--ink-3);
+    margin: 0 0 22px;
+  }
+  #gate-pin {
+    width: 100%; height: 50px;
+    padding: 0 16px;
+    border: 1.5px solid var(--line);
+    border-radius: 10px;
+    font-family: inherit; font-size: 22px;
+    text-align: center;
+    letter-spacing: 12px;
+    color: var(--ink-1);
+    outline: none;
+    font-variant-numeric: tabular-nums;
+    transition: border-color .12s;
+  }
+  #gate-pin:focus { border-color: var(--brand); }
+  #gate-err {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: #fff1f1;
+    color: #c62828;
+    border-radius: 6px;
+    font-size: 12.5px;
+  }
+  #gate-submit {
+    width: 100%; height: 50px;
+    margin-top: 14px;
+    background: var(--brand); color: #fff;
+    border: 0; border-radius: 10px;
+    font-family: inherit; font-size: 15px; font-weight: 600;
+    cursor: pointer;
+    transition: background .12s;
+  }
+  #gate-submit:hover { background: var(--brand-700); }
+  #gate-admin {
+    width: 100%; height: 38px;
+    margin-top: 8px;
+    background: transparent;
+    color: var(--ink-3);
+    border: 0; border-radius: 8px;
+    font-family: inherit; font-size: 12.5px; font-weight: 500;
+    cursor: pointer;
+    transition: color .12s, background .12s;
+  }
+  #gate-admin:hover { color: var(--ink-1); background: var(--bg-soft); }
 </style>
 </head>
-<body>
+<body style="visibility:hidden">
+<!-- 진입 게이트 — PIN 통과 전엔 body 숨김 -->
+<script>
+  (function () {
+    const params = new URLSearchParams(location.search);
+    // 손님 페이지 / 관리자 페이지 / 계약 페이지 / 모바일 force / 강제 통과 — 게이트 우회
+    if (params.get('q') || params.get('admin') === '1' || params.get('contract') || params.get('force')) {
+      document.body.style.visibility = 'visible';
+      return;
+    }
+    if (sessionStorage.getItem('welrix_mode') === 'agent') {
+      document.body.style.visibility = 'visible';
+      return;
+    }
+    // 게이트 표시
+    showGate();
+    function showGate() {
+      document.body.innerHTML = ''
+        + '<div class="gate-bg">'
+        + '  <div class="gate-card">'
+        + '    <img class="gate-ci" src="/welrix-ci.png" alt="welrix" />'
+        + '    <p class="gate-sub">접속 PIN 을 입력하세요</p>'
+        + '    <input id="gate-pin" type="password" inputmode="numeric" maxlength="4" placeholder="PIN 4자리" autofocus />'
+        + '    <div id="gate-err" hidden></div>'
+        + '    <button id="gate-submit">진입</button>'
+        + '    <button id="gate-admin" type="button">관리자 로그인</button>'
+        + '  </div>'
+        + '</div>';
+      document.body.style.visibility = 'visible';
+      const input = document.getElementById('gate-pin');
+      const err = document.getElementById('gate-err');
+      function submit() {
+        const pin = input.value.trim();
+        const AGENT = (window.__GATE_PINS && window.__GATE_PINS.agent) || '1234';
+        if (pin === AGENT) {
+          sessionStorage.setItem('welrix_mode', 'agent');
+          location.reload();
+          return;
+        }
+        err.textContent = 'PIN 이 일치하지 않습니다';
+        err.hidden = false;
+        input.value = '';
+        input.focus();
+      }
+      document.getElementById('gate-submit').addEventListener('click', submit);
+      document.getElementById('gate-admin').addEventListener('click', function () {
+        location.href = location.pathname + '?admin=1';
+      });
+      input.addEventListener('keydown', function (e) { if (e.key === 'Enter') submit(); });
+    }
+  })();
+</script>
 <!-- 전체 폭 상단바 -->
 <div class="global-topbar">
   <div class="global-topbar__brand"><img class="ci" src="/welrix-ci.png" alt="welrix" /><span class="hidden-brand-name" id="brand-name-top" hidden>웰릭스 모빌리티</span></div>
@@ -609,6 +732,9 @@
     <button class="gt-btn outline" id="reset-btn" title="입력 초기화">
       <i class="ph ph-arrow-counter-clockwise"></i>초기화
     </button>
+    <button class="gt-btn outline" id="btn-admin" title="관리자 모드로 이동" onclick="location.href=location.pathname+'?admin=1'">
+      <i class="ph ph-shield-check"></i>관리자
+    </button>
   </div>
 </div>
 
@@ -628,14 +754,14 @@
   </section>
   <!-- Vue ColorSection.vue mount — 외장/내장 색상 -->
   <div id="color-section-root"></div>
-  <!-- Vue DiscountSection.vue mount — 추가 할인 (재고차/특별조건) -->
-  <div id="discount-section-root"></div>
 
-  <!-- 그룹 3: 부대 (탁송 + 선팅 + 용품) -->
+  <!-- 그룹 3: 부대 (탁송 + 선팅 + 추가 할인 + 용품 + 보험) -->
 
-  <!-- Vue: 탁송지 / 선팅 / 용품 / 서비스·보험·운전자 -->
+  <!-- Vue: 탁송지 / 선팅 / 추가 할인 / 용품 / 서비스·보험·운전자 -->
   <div id="delivery-section-root"></div>
   <div id="tint-section-root"></div>
+  <!-- Vue DiscountSection.vue mount — 추가 할인 (재고차/특별조건) -->
+  <div id="discount-section-root"></div>
   <div id="extras-accordion-root"></div>
   <div id="insurance-accordion-root"></div>
 
@@ -3448,6 +3574,189 @@ render();
   .adm-placeholder p { margin: 0 0 8px; font-size: 14px; }
   .adm-placeholder small { font-size: 11px; color: #bbb; }
 
+  /* === 관리자 — 탭 === */
+  .adm-tabs {
+    display: flex; gap: 4px;
+    padding: 0 24px;
+    background: #fff;
+    border-bottom: 1px solid #e8e8e8;
+  }
+  .adm-tab {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 12px 16px;
+    background: transparent;
+    border: 0; border-bottom: 2px solid transparent;
+    font-family: inherit; font-size: 13px; font-weight: 500;
+    color: #888; cursor: pointer;
+    transition: color .12s, border-color .12s;
+  }
+  .adm-tab:hover { color: #1a1a1a; }
+  .adm-tab.is-active {
+    color: var(--brand, #0D4E8B);
+    border-bottom-color: var(--brand, #0D4E8B);
+  }
+  .adm-tab i { font-size: 15px; }
+  .adm-section { padding: 24px 32px; }
+  .adm-section-title { font-size: 17px; font-weight: 600; color: #1a1a1a; margin: 0 0 16px; }
+  .adm-list { display: flex; flex-direction: column; gap: 6px; }
+  .adm-empty {
+    padding: 30px; text-align: center; color: #aaa;
+    background: #fff; border-radius: 8px;
+  }
+  .adm-contract-row {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 18px;
+    background: #fff; border: 1px solid #eee;
+    border-radius: 8px; cursor: pointer;
+    transition: border-color .12s, transform .08s;
+  }
+  .adm-contract-row:hover { border-color: var(--brand, #0D4E8B); }
+  .adm-contract-row:active { transform: scale(0.995); }
+  .adm-st {
+    display: inline-block; padding: 3px 10px;
+    border-radius: 999px; font-size: 11px; font-weight: 600;
+    flex-shrink: 0;
+  }
+  .adm-contract-row__main { flex: 1; min-width: 0; }
+  .adm-contract-row__id { font-size: 13px; font-weight: 600; color: #1a1a1a; font-family: ui-monospace, Menlo, monospace; }
+  .adm-contract-row__cust { font-size: 13px; color: #555; margin-top: 2px; }
+  .adm-contract-row__date { font-size: 11px; color: #999; margin-top: 2px; }
+  .adm-contract-row__chev { color: #ccc; font-size: 16px; }
+
+  /* 계약 상세 모달 */
+  .adm-modal-bd {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 200; padding: 20px;
+  }
+  .adm-modal {
+    background: #fff; border-radius: 12px;
+    max-width: 720px; width: 100%; max-height: 90vh;
+    display: flex; flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  }
+  .adm-modal__head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 22px; border-bottom: 1px solid #eee;
+  }
+  .adm-modal__head h3 { margin: 0; font-size: 15px; font-weight: 600; }
+  .adm-modal__body { padding: 20px 22px; overflow-y: auto; }
+  .adm-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; font-size: 13px; color: #444; margin-bottom: 16px; }
+  .adm-meta b { color: #1a1a1a; font-weight: 600; margin-right: 6px; }
+  .adm-meta a { color: var(--brand, #0D4E8B); }
+  .adm-modal__body h4 { font-size: 13px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin: 18px 0 8px; }
+  .adm-files { display: flex; flex-direction: column; gap: 4px; }
+  .adm-file {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px;
+    background: #fafafa; border: 1px solid #eee; border-radius: 6px;
+    text-decoration: none; color: #1a1a1a;
+    transition: background .12s;
+  }
+  .adm-file:hover { background: #f0f0f0; }
+  .adm-file i { font-size: 18px; color: var(--brand, #0D4E8B); }
+  .adm-file__meta { font-size: 11px; color: #888; margin-top: 2px; }
+  .adm-reviews { display: flex; flex-direction: column; gap: 8px; }
+  .adm-review { padding: 10px 12px; background: #fafafa; border-radius: 6px; }
+  .adm-review__head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .adm-review__by { font-size: 12px; font-weight: 600; color: #555; }
+  .adm-review__at { font-size: 11px; color: #999; margin-left: auto; }
+  .adm-review__comment { font-size: 13px; color: #333; white-space: pre-wrap; }
+  .adm-review-form textarea {
+    width: 100%; padding: 10px 12px;
+    border: 1px solid #ddd; border-radius: 6px;
+    font-family: inherit; font-size: 13px; line-height: 1.5;
+    resize: vertical; outline: none;
+    margin-bottom: 8px;
+  }
+  .adm-review-form textarea:focus { border-color: var(--brand, #0D4E8B); }
+  .adm-review-form__btns { display: flex; gap: 6px; }
+  .adm-review-form__btns .adm-btn { flex: 1; padding: 10px; font-weight: 600; color: #fff; }
+  .adm-btn.approve { background: #10b981; }
+  .adm-btn.approve:hover { background: #059669; }
+  .adm-btn.revision { background: #3b82f6; }
+  .adm-btn.revision:hover { background: #2563eb; }
+  .adm-btn.reject { background: #ef4444; }
+  .adm-btn.reject:hover { background: #dc2626; }
+
+  /* === 관리자 — 채팅 탭 === */
+  .adm-chats {
+    display: grid; grid-template-columns: 320px 1fr;
+    gap: 16px; height: calc(100vh - 130px);
+  }
+  .adm-chats__list {
+    background: #fff; border: 1px solid #eee; border-radius: 8px;
+    padding: 16px; overflow-y: auto;
+  }
+  .adm-chats__list h3 {
+    font-size: 13px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px;
+    margin: 0 0 12px;
+  }
+  .adm-chat-row {
+    display: flex; align-items: center; gap: 8px;
+    width: 100%; padding: 10px 12px;
+    background: transparent; border: 0;
+    border-radius: 6px;
+    text-align: left; cursor: pointer;
+    transition: background .12s;
+    font-family: inherit;
+  }
+  .adm-chat-row:hover { background: #fafafa; }
+  .adm-chat-row.is-active { background: var(--brand-50, #eef4fa); }
+  .adm-chat-row__main { flex: 1; min-width: 0; }
+  .adm-chat-row__nick { font-size: 13px; font-weight: 600; color: #1a1a1a; }
+  .adm-chat-row__last {
+    font-size: 12px; color: #888; margin-top: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .adm-chat-row__time { font-size: 11px; color: #aaa; flex-shrink: 0; }
+
+  .adm-chats__panel {
+    background: #fff; border: 1px solid #eee; border-radius: 8px;
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .adm-chat-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 14px 18px; border-bottom: 1px solid #eee;
+    font-size: 13px;
+  }
+  .adm-chat-head i { font-size: 18px; color: var(--brand, #0D4E8B); }
+  .adm-chat-messages {
+    flex: 1; overflow-y: auto;
+    padding: 16px; display: flex; flex-direction: column; gap: 10px;
+    background: #fafafa;
+  }
+  .adm-chat-msg {
+    max-width: 70%;
+    padding: 8px 12px; border-radius: 10px;
+    font-size: 13px; line-height: 1.4;
+  }
+  .adm-chat-msg.them { align-self: flex-start; background: #fff; border: 1px solid #e8e8e8; }
+  .adm-chat-msg.mine { align-self: flex-end; background: var(--brand, #0D4E8B); color: #fff; }
+  .adm-chat-msg__name { font-size: 10.5px; color: #999; margin-bottom: 2px; }
+  .adm-chat-msg.mine .adm-chat-msg__name { color: rgba(255,255,255,0.7); }
+  .adm-chat-msg__at { font-size: 10px; opacity: 0.6; margin-top: 4px; }
+
+  .adm-chat-input {
+    display: flex; gap: 8px; padding: 12px 16px;
+    border-top: 1px solid #eee; background: #fff;
+  }
+  .adm-chat-input input {
+    flex: 1; height: 40px; padding: 0 14px;
+    border: 1px solid #ddd; border-radius: 20px;
+    font-family: inherit; font-size: 13px; outline: none;
+    transition: border-color .12s;
+  }
+  .adm-chat-input input:focus { border-color: var(--brand, #0D4E8B); }
+  .adm-chat-input button {
+    width: 40px; height: 40px;
+    background: var(--brand, #0D4E8B); color: #fff;
+    border: 0; border-radius: 50%;
+    cursor: pointer;
+  }
+  .adm-chat-input button:hover { background: var(--brand-700, #0a3d6e); }
+
   /* === 손님 페이지 (?q=<id>) === */
   html.customer-mode, html.customer-mode body {
     margin: 0; padding: 0;
@@ -3805,6 +4114,123 @@ render();
   .doc-file-item .size { color: var(--ink-4); font-size: 10.5px; }
   .doc-file-item .remove { cursor: pointer; color: var(--ink-4); padding: 0 4px; }
   .doc-file-item .remove:hover { color: var(--ink-1); }
+
+  /* 영업자 본인 확인 정보 카드 — 이름/연락처/PIN 묶음 */
+  .contract-staff-card {
+    background: var(--bg-soft);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .contract-staff-card__title {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px; color: var(--ink-3); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+  .contract-staff-card__title i { font-size: 13px; color: var(--brand); }
+  .contract-staff__input {
+    height: 30px; padding: 0 4px;
+    border: 0; border-bottom: 1px solid var(--line-2);
+    background: transparent;
+    font-family: inherit; font-size: 12.5px;
+    color: var(--ink-1); outline: none;
+    transition: border-color .12s;
+  }
+  .contract-staff__input::placeholder { color: var(--ink-4); }
+  .contract-staff__input:hover { border-bottom-color: var(--ink-3); }
+  .contract-staff__input:focus { border-bottom-color: var(--brand); }
+
+  .contract-staff__pin-row {
+    display: grid; grid-template-columns: 110px 1fr; align-items: center;
+    column-gap: 10px; row-gap: 2px;
+    margin-top: 2px;
+  }
+  .contract-staff__pin {
+    height: 30px; padding: 0 8px;
+    border: 1px solid var(--line-2); border-radius: 4px;
+    background: #fff;
+    font-family: inherit; font-size: 13px;
+    letter-spacing: 4px; text-align: center;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-1); outline: none;
+    transition: border-color .12s;
+  }
+  .contract-staff__pin:focus { border-color: var(--brand); }
+  .contract-staff__pin-row small {
+    font-size: 10.5px; color: var(--ink-4);
+  }
+  .contract-staff-card__hint {
+    font-size: 10.5px; color: var(--ink-4); line-height: 1.5;
+    margin-top: 4px;
+  }
+  .contract-staff-card__hint b {
+    color: var(--brand); font-weight: 600;
+  }
+
+  .contract-submitted {
+    margin-top: 10px; padding: 8px 12px;
+    background: rgba(13,78,139,0.06);
+    border-left: 3px solid var(--brand);
+    border-radius: 4px;
+    font-size: 12px; color: var(--brand); font-weight: 500;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .contract-submitted i { font-size: 14px; }
+  .contract-submitted b { font-family: ui-monospace, Menlo, monospace; }
+
+  /* 본인 확인 영역 */
+  .contract-check {
+    border-top: 1px dashed var(--line-2);
+    padding-top: 14px;
+  }
+  .contract-check summary {
+    list-style: none; cursor: pointer;
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12.5px; color: var(--ink-3); font-weight: 500;
+  }
+  .contract-check summary::-webkit-details-marker { display: none; }
+  .contract-check summary i { font-size: 14px; }
+  .contract-check__body {
+    margin-top: 10px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .my-contracts {
+    margin-top: 12px; display: flex; flex-direction: column; gap: 6px;
+    max-height: 320px; overflow-y: auto;
+  }
+  .my-contract {
+    padding: 10px 12px;
+    background: var(--bg-soft);
+    border-radius: 6px;
+    font-size: 12px;
+  }
+  .my-contract__head {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .my-contract__id {
+    font-family: ui-monospace, Menlo, monospace;
+    color: var(--ink-1); font-weight: 600;
+  }
+  .my-contract__st {
+    display: inline-block; padding: 2px 8px;
+    border-radius: 999px; font-size: 10.5px; font-weight: 600;
+    margin-left: auto;
+  }
+  .my-contract__meta {
+    font-size: 11px; color: var(--ink-3); margin-top: 3px;
+  }
+  .my-contract__review {
+    margin-top: 6px; padding: 6px 8px;
+    background: #fff; border-radius: 4px;
+    font-size: 11.5px; color: var(--ink-2);
+    line-height: 1.45;
+    display: flex; gap: 6px;
+  }
+  .my-contract__review i {
+    font-size: 12px; color: var(--ink-4); flex-shrink: 0; margin-top: 2px;
+  }
 
   .contract-memo {
     width: 100%; padding: 8px 2px;

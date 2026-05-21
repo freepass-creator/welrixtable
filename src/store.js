@@ -47,6 +47,18 @@ function loadStaff() {
 function persistStaff(s) {
   try { localStorage.setItem(STAFF_KEY, JSON.stringify(s)); } catch {}
 }
+
+// 영업이 제출한 계약 심사 요청 ID 목록 — 영업 브라우저에서 자기 요청 추적
+const MY_CONTRACTS_KEY = 'welrix_my_contracts_v1';
+function loadMyContracts() {
+  try {
+    const raw = localStorage.getItem(MY_CONTRACTS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+function persistMyContracts(arr) {
+  try { localStorage.setItem(MY_CONTRACTS_KEY, JSON.stringify(arr)); } catch {}
+}
 function loadFeeRate() {
   try {
     const v = parseFloat(localStorage.getItem(FEE_KEY));
@@ -65,8 +77,10 @@ export const quoteState = reactive({
     deliveryRegion: '광역시', deliveryCity: '서울',
     svc: '웰스 Basic', insProperty: '1억', extraDriver: '없음',
     colorInt: '', colorIntPrice: 0,
-    discount: 0,  // 추가 할인 (만원 단위) — 재고차/특별조건 등 영업이 직접 입력
+    discount: 0,
   },
+  _lastSentQuoteId: null,
+  myContracts: loadMyContracts(),  // 내가 제출한 계약 심사 요청 id 들
   tint: { product: '루마 GG', areas: new Set(['front', 'side_rear_with_coupon']) },
   extras: { blackbox: '', navi: '', hipass: '' },
   cust:  { name: '', tel: '' },
@@ -91,6 +105,9 @@ watch(() => quoteState.cond.feeRatePct,
       (v) => { if (typeof v === 'number' && isFinite(v)) persistFeeRate(v); });
 watch(() => ({ ...quoteState.send_options }),
       (v) => persistSendOpts(v),
+      { deep: true });
+watch(() => [...quoteState.myContracts],
+      (v) => persistMyContracts(v),
       { deep: true });
 
 // === 견적 장바구니 — 한 손님에게 N차종 보낼 때 ===
@@ -160,16 +177,19 @@ export const docStore = reactive({
   attachments: [],         // File[]
 });
 
-// === 채팅 대화명 (영업자 자유 입력, 예: '신촌점 홍길동') ===
-// localStorage 영속 — 한 번 설정하면 다음 견적에서 자동
+// === 채팅 대화명 — 자동 부여 후 영속 (사용자가 직접 바꾸기 전까지 동일)
+// 패턴: '영업담당자' + 4자리 random (예: 영업담당자4821)
 const CHAT_NICK_KEY = 'welrix_chat_nick_v1';
-const NICKNAMES = ['익명 호랑이', '익명 사슴', '익명 늑대', '익명 여우', '익명 토끼', '익명 곰'];
 function loadChatNick() {
   try {
     const v = localStorage.getItem(CHAT_NICK_KEY);
     if (v) return v;
   } catch {}
-  return NICKNAMES[Math.floor(Math.random() * NICKNAMES.length)];
+  // 첫 접속 — 자동 부여 + 영속
+  const n = String(Math.floor(1000 + Math.random() * 9000));
+  const generated = `영업담당자${n}`;
+  try { localStorage.setItem(CHAT_NICK_KEY, generated); } catch {}
+  return generated;
 }
 function persistChatNick(v) {
   try { localStorage.setItem(CHAT_NICK_KEY, v); } catch {}
