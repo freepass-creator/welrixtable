@@ -2335,83 +2335,104 @@ render();
     .terms-grid { grid-template-columns: 1fr; }
     .reference-grid { grid-template-columns: 1fr; }
   }
+  /* === term-card 재설계 — 대여료 hero / 조건 muted / 헤어라인만 === */
   .term-card {
-    background: transparent; border: none; border-radius: 0;
-    border-top: 1px solid var(--line-2);
-    padding: 14px 12px 4px; position: relative; transition: background .15s;
+    background: transparent; border: 0; border-radius: 0;
+    border-top: 1px solid var(--line);
+    padding: 18px 16px 16px; position: relative;
+    transition: background var(--t-fast);
+    display: flex; flex-direction: column;
   }
   .term-card:hover { background: var(--bg-soft); }
-  .term-card.recommended {
-    border-top-color: var(--ink-1); border-top-width: 1.5px;
-    background: transparent;
-  }
   .term-card.unchecked { opacity: 0.35; }
+
+  /* 헤더 — 기간 라벨 + 체크 (조용한 톤) */
   .term-card__head {
     display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: 14px;
   }
   .term-card__term-dd {
     appearance: none; -webkit-appearance: none;
-    background: transparent; border: none;
-    font-size: 11px; font-weight: 500; color: var(--ink-1);
+    background: transparent; border: 0;
+    font-size: 11.5px; font-weight: 500; color: var(--ink-3);
     letter-spacing: 0.4px; cursor: pointer;
-    padding: 2px 14px 2px 0;
+    padding: 0 14px 0 0;
     font-family: inherit;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23737373' stroke-width='1.5' stroke-linecap='round'><polyline points='3 5 6 8 9 5'/></svg>");
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23a3a3a3' stroke-width='1.5' stroke-linecap='round'><polyline points='3 5 6 8 9 5'/></svg>");
     background-repeat: no-repeat; background-position: right 0 center; background-size: 10px 10px;
     outline: none;
   }
-  .term-card__term-dd:hover { color: var(--ink-1); }
-  .term-card__cond {
-    display: flex; gap: 10px; margin: 0 0 8px;
-    padding-bottom: 8px; border-bottom: 1px solid var(--line);
-  }
-  .term-card__cond label {
-    flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0;
-  }
-  .term-card__cond label > span:first-child {
-    font-size: 10px; color: var(--ink-4); letter-spacing: 0.2px;
-  }
-  .term-card__cond .pct-cell {
-    display: flex; align-items: center; gap: 2px;
-    border-bottom: 1px solid var(--line-2); padding: 0;
-    font-size: 11px; color: var(--ink-4);
-    transition: border-color .12s;
-  }
-  .term-card__cond .pct-cell:focus-within { border-bottom-color: var(--ink-1); }
-  .term-card__cond .pct-cell input {
-    flex: 1; min-width: 0; height: 22px;
-    border: none; background: transparent; padding: 0;
-    font-size: 12px; color: var(--ink-1); font-variant-numeric: tabular-nums;
-    text-align: right; font-family: inherit;
-    outline: none;
-    -moz-appearance: textfield;
-  }
-  .term-card__cond .pct-cell input::-webkit-outer-spin-button,
-  .term-card__cond .pct-cell input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .term-card__term-dd:hover, .term-card__term-dd:focus { color: var(--ink-1); }
   .term-card__check { display: inline-flex; align-items: center; }
   .term-card__check input {
     width: 14px; height: 14px;
     margin: 0; cursor: pointer; accent-color: var(--brand);
     flex-shrink: 0;
   }
+
+  /* HERO — 월 대여료 */
   .term-card__monthly {
-    font-size: 22px; font-weight: 500; color: var(--ink-1);
-    letter-spacing: -0.03em; font-variant-numeric: tabular-nums;
-    margin-bottom: 6px;
+    font-size: 30px; font-weight: 700; color: var(--ink-1);
+    letter-spacing: -0.04em; font-variant-numeric: tabular-nums;
+    line-height: 1.1;
+    margin-bottom: 14px;
   }
   .term-card__monthly em {
-    font-style: normal; font-size: 12px; font-weight: 400; color: var(--ink-4); margin-left: 2px;
+    font-style: normal; font-size: 13px; font-weight: 400;
+    color: var(--ink-4); margin-left: 4px;
+    letter-spacing: 0;
   }
+
+  /* 편집 조건 (보증금/선납금 % 입력) — 조용히 */
+  .term-card__cond {
+    display: flex; gap: 16px; margin: 0 0 12px;
+  }
+  .term-card__cond label {
+    flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0;
+  }
+  .term-card__cond label > span:first-child {
+    font-size: 10.5px; color: var(--ink-4); font-weight: 400;
+    letter-spacing: 0.2px;
+  }
+  .term-card__cond .pct-cell {
+    display: flex; align-items: center; justify-content: flex-end; gap: 2px;
+    border-bottom: 1px solid var(--line-2); padding: 0;
+    font-size: 12px; color: var(--ink-4);
+    transition: border-color var(--t-fast);
+  }
+  .term-card__cond .pct-cell:focus-within { border-bottom-color: var(--ink-1); }
+  .term-card__cond .pct-cell input {
+    flex: 1; min-width: 0; height: 22px;
+    border: 0; background: transparent; padding: 0;
+    font-size: 13px; color: var(--ink-1); font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    text-align: right; font-family: inherit;
+    outline: none;
+    -moz-appearance: textfield;
+  }
+  .term-card__cond .pct-cell input::-webkit-outer-spin-button,
+  .term-card__cond .pct-cell input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+  /* 결과 행 (만기인수/보증금 금액/선납금 금액) — muted */
   .term-card__divider { display: none; }
   .term-card__row {
-    display: flex; justify-content: space-between; font-size: 11px; padding: 2px 0;
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 11.5px; padding: 4px 0;
   }
-  .term-card__row span { color: var(--ink-4); display: inline-flex; align-items: baseline; gap: 4px; }
-  .term-card__row b { color: var(--ink-2); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .term-card__row + .term-card__row { border-top: 1px dashed var(--line); }
+  .term-card__row span {
+    color: var(--ink-4); display: inline-flex; align-items: baseline; gap: 4px;
+    font-weight: 400;
+  }
+  .term-card__row b {
+    color: var(--ink-2); font-weight: 500; font-variant-numeric: tabular-nums;
+    font-size: 12px;
+  }
   .term-card__row .resid-pct {
     font-style: normal; font-size: 10px; font-weight: 500;
     color: var(--brand); font-variant-numeric: tabular-nums;
+    background: var(--brand-50);
+    padding: 1px 5px; border-radius: var(--radius-pill);
   }
   /* 빈 상태 — 차량 미선택 시 4기간 카드 골격만 노출 */
   .term-card--empty { opacity: 0.5; }
