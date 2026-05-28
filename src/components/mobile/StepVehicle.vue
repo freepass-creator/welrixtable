@@ -59,8 +59,12 @@ const selectedModel = computed(() => {
   return selectedBrand.value.models.find(m => m.model_id === vehicleState.model);
 });
 
-// 세부모델
-const variants = computed(() => selectedModel.value?.variants || []);
+// 세부모델 — 운영 트림(operating !== false) 이 1개 이상 있는 variant 만 노출
+// (vehicle-db.js 카탈로그는 PDF 전체, 실제 노출 차종은 trims 의 operating 플래그 + 엑셀 차량DB 매칭으로 결정)
+const variants = computed(() => {
+  const all = selectedModel.value?.variants || [];
+  return all.filter(v => (v.trims || []).some(t => t.operating !== false));
+});
 
 const selectedVariant = computed(() => {
   if (!selectedModel.value || !vehicleState.variant) return null;

@@ -1707,23 +1707,25 @@ function syncDropdowns() {
       ).join('');
   }
   // 세부모델 (variant) — 가솔린 > 하이브리드 > LPG > 디젤
+  // 운영 트림 (operating !== false) 이 1개 이상인 variant 만 노출
   const ddV = $('dd-variant');
   const model = getModel();
   if (ddV) {
     ddV.disabled = !model;
-    const variants = model ? sortByRank(model.variants || [], (v) => v.variant_name, POPULAR_FUELS) : [];
+    const allVariants = model ? (model.variants || []).filter(v => (v.trims || []).some(t => t.operating !== false)) : [];
+    const variants = model ? sortByRank(allVariants, (v) => v.variant_name, POPULAR_FUELS) : [];
     ddV.innerHTML = '<option value="">세부모델 선택</option>' +
       variants.map((v) =>
         `<option value="${v.variant_id}" ${v.variant_id === state.variant ? 'selected' : ''}>${v.variant_name}</option>`
       ).join('');
   }
-  // 트림 — 가격 낮은 순
+  // 트림 — 가격 낮은 순 + 운영 트림만
   const ddT = $('dd-trim');
   const variant = getVariant();
   if (ddT) {
     ddT.disabled = !variant;
     const trims = variant
-      ? (variant.trims || []).slice().sort((a, b) => getTrimPrice(a, state.tax_rate) - getTrimPrice(b, state.tax_rate))
+      ? (variant.trims || []).filter(t => t.operating !== false).slice().sort((a, b) => getTrimPrice(a, state.tax_rate) - getTrimPrice(b, state.tax_rate))
       : [];
     ddT.innerHTML = '<option value="">트림 선택</option>' +
       trims.map((t) => {
