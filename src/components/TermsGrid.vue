@@ -68,13 +68,15 @@ function onSendToggle(idx, e) {
       >
         <option v-for="t in TERM_OPTIONS" :key="t" :value="t">{{ t }}개월</option>
       </select>
-      <label class="term-card__check">
+      <label class="term-card__check" :class="{ 'is-checked': card.sent, 'is-disabled': !hasResults }">
         <input
           type="checkbox"
           :checked="card.sent"
           :disabled="!hasResults"
           @change="onSendToggle(card.idx, $event)"
         />
+        <i class="ph" :class="card.sent ? 'ph-check-circle-fill' : 'ph-circle'"></i>
+        <span>발송</span>
       </label>
     </div>
     <div class="term-card__monthly">
