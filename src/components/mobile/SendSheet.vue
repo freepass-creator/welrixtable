@@ -11,7 +11,16 @@ defineProps({ open: Boolean });
 const emit = defineEmits(['close']);
 
 function onStaffTelInput(e) {
-  quoteState.staff.tel = fmtTel(e.target.value);
+  const v = fmtTel(e.target.value);
+  quoteState.staff.tel = v;
+  if (e.target.value !== v) e.target.value = v;
+}
+// 공유 텍스트 — 손님 이름 + 차종 + 링크 (카톡/공유 시 본문에 채워짐)
+function buildShareText(url) {
+  const v = quoteState.vehicle;
+  const custName = quoteState.cust.name?.trim() || 'VIP 고객님';
+  const vehicleStr = v ? `${v.brand} ${v.model} ${v.trim_name}` : '신차 장기렌터카';
+  return `[${custName}] ${vehicleStr} 견적서\n월 대여료부터 확인하세요\n${url}`;
 }
 
 // 담당자 정보 완성 여부 — 비어있으면 펼친 상태, 있으면 collapsed
@@ -151,13 +160,13 @@ async function onCopyLink() {
 async function onShareNative() {
   const url = await ensureQuoteSaved();
   if (!url) return;
-  const v = quoteState.vehicle;
-  const text = `[${v?.brand} ${v?.model} ${v?.trim_name}] 견적서\n${url}`;
+  const text = buildShareText(url);
   if (navigator.share) {
     try {
       await navigator.share({ title: '신차 장기렌터카 견적서', text, url });
     } catch {}
   } else {
+    // share API 미지원 (PC Chrome 등) → 링크 복사로 폴백
     onCopyLink();
   }
 }
@@ -286,22 +295,27 @@ function close() { emit('close'); }
       </label>
 
       <div class="ss-actions">
-        <button class="ss-action" :disabled="imgLoading" @click="onSaveImage">
-          <i class="ph" :class="imgLoading ? 'ph-spinner' : 'ph-image'"></i>
-          {{ imgLoading ? '이미지 생성 중…' : '이미지 복사하기' }}
-        </button>
-        <button class="ss-action" :disabled="sending" @click="onCopyLink">
-          <i class="ph" :class="sending ? 'ph-spinner' : 'ph-link'"></i>
-          {{ sending ? '준비 중…' : '링크 복사하기' }}
-        </button>
+        <!-- PRIMARY: 링크 공유 → 핸드폰 공유 시트 (카톡/문자/메모 등 사용자 선택) -->
         <button
           class="ss-action ss-action--primary"
           :disabled="sending"
           @click="onShareNative"
         >
-          <i class="ph ph-share-network"></i>
-          공유하기 (카톡·문자·메일 등)
+          <i class="ph" :class="sending ? 'ph-spinner' : 'ph-share-network'"></i>
+          {{ sending ? '준비 중…' : '링크 공유 (카톡·문자·메모)' }}
         </button>
+
+        <!-- 보조: 수동 붙여넣기용 -->
+        <div class="ss-actions-row">
+          <button class="ss-action ss-action--ghost" :disabled="sending" @click="onCopyLink">
+            <i class="ph" :class="sending ? 'ph-spinner' : 'ph-link'"></i>
+            링크 복사
+          </button>
+          <button class="ss-action ss-action--ghost" :disabled="imgLoading" @click="onSaveImage">
+            <i class="ph" :class="imgLoading ? 'ph-spinner' : 'ph-image'"></i>
+            {{ imgLoading ? '생성 중…' : '이미지 복사' }}
+          </button>
+        </div>
       </div>
 
       <div v-if="sentLink" class="ss-link">
@@ -461,6 +475,8 @@ function close() { emit('close'); }
 .ss-input:focus { border-color: var(--brand); }
 
 .ss-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+.ss-actions-row { display: flex; gap: 8px; }
+.ss-actions-row .ss-action { flex: 1; }
 .ss-action {
   display: flex; align-items: center; justify-content: center; gap: 8px;
   height: var(--h-cta);
@@ -469,6 +485,7 @@ function close() { emit('close'); }
   background: var(--bg);
   font-family: inherit; font-size: var(--fs-lg); font-weight: var(--fw-semi);
   color: var(--ink-1); cursor: pointer;
+  transition: background .12s, border-color .12s;
 }
 .ss-action i { font-size: 18px; }
 .ss-action:active { background: var(--bg-soft); }
@@ -476,29 +493,37 @@ function close() { emit('close'); }
   background: var(--brand); color: #fff; border-color: var(--brand);
 }
 .ss-action--primary:active { background: var(--brand-700); }
-.ss-action:disabled { opacity: 0.6; cursor: not-allowed; }
+.ss-action--ghost {
+  font-size: var(--fs-md);
+  color: var(--ink-2);
+  background: var(--bg-soft);
+  border-color: transparent;
+}
+.ss-action--ghost:active { background: var(--line); }
+.ss-action:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .ss-link {
   padding: 12px 14px;
   background: var(--brand-50);
-  border-radius: 10px;
+  border-radius: var(--r-chip);
   margin-top: 12px;
 }
 .ss-link__label {
-  font-size: 11.5px; color: var(--ink-3); font-weight: 500;
+  font-size: var(--fs-sm); color: var(--ink-3); font-weight: var(--fw-medium);
   margin-bottom: 4px;
 }
 .ss-link__url {
-  font-size: 13px; color: var(--brand); font-weight: 500;
+  font-size: var(--fs-md); color: var(--brand); font-weight: var(--fw-medium);
   word-break: break-all;
   font-family: ui-monospace, Menlo, monospace;
 }
 .ss-error {
   padding: 10px 14px;
-  background: #fff1f1;
-  color: #c62828;
-  border-radius: 10px;
-  font-size: 13px;
+  background: var(--bg-soft);
+  color: var(--ink-1);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-chip);
+  font-size: var(--fs-md);
   margin-top: 12px;
 }
 </style>

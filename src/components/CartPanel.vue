@@ -176,9 +176,12 @@ if (typeof window !== 'undefined') {
 </template>
 
 <style scoped>
+/* === 견적바구니 — 디자인 시스템 토큰 통일 ===
+   좌우 패딩 20px / 폰트 11·12·13·14 / 라운드 sm·md·lg / 컬러 토큰만 사용 */
+
 .cart-backdrop {
   position: fixed; inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0, 0, 0, 0.45);
   display: flex; align-items: center; justify-content: center;
   z-index: 200;
   animation: fadeIn .15s ease-out;
@@ -194,22 +197,26 @@ if (typeof window !== 'undefined') {
   overflow: hidden;
 }
 
+/* ===== Head ===== */
 .cart-panel__head {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 20px;
-  border-bottom: 1px solid #eee;
-  background: #fafafa;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--line-2);
+  background: var(--bg-soft);
 }
 .cart-panel__head h3 {
-  margin: 0; font-size: 14px; font-weight: 500;
+  margin: 0; font-size: 13px; font-weight: 500;
   display: flex; align-items: center; gap: 8px;
-  color: var(--brand);
+  color: var(--ink-1); letter-spacing: -0.2px;
 }
+.cart-panel__head h3 i { font-size: 14px; color: var(--brand); }
 .cart-panel__head .count {
-  font-size: 11px; color: #fff;
-  background: var(--brand);
-  padding: 2px 7px; border-radius: var(--radius-pill);
-  font-weight: 600; font-variant-numeric: tabular-nums;
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 18px; height: 18px; padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--brand); color: #fff;
+  font-size: 11px; font-weight: 600; line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 .cart-close {
   background: transparent; border: 0;
@@ -217,59 +224,64 @@ if (typeof window !== 'undefined') {
   border-radius: var(--radius-sm); cursor: pointer;
   color: var(--ink-3); font-size: 14px;
   display: inline-flex; align-items: center; justify-content: center;
+  transition: background var(--t-fast), color var(--t-fast);
 }
 .cart-close:hover { background: var(--accent-soft); color: var(--ink-1); }
 
-/* 의도 배너 — "차종 담기 → 체크 → 발송" 흐름 한눈에 */
+/* ===== Intent banner — "담기 → 체크 → 발송" 흐름 ===== */
 .cart-intent {
   display: flex; align-items: center; gap: 6px;
   padding: 10px 20px;
-  background: linear-gradient(to right, #fff7f7, #fff);
-  border-bottom: 1px solid #f5e0e0;
-  font-size: 11px; color: #aaa;
-  font-weight: 500;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--line);
+  font-size: 11px; color: var(--ink-4); font-weight: 500;
 }
 .cart-intent .step { letter-spacing: -0.2px; }
-.cart-intent .step.active {
-  color: var(--brand); font-weight: 600;
-}
-.cart-intent i { color: #ddd; font-size: 10px; }
+.cart-intent .step.active { color: var(--brand); font-weight: 600; }
+.cart-intent i { color: var(--ink-5); font-size: 10px; }
 
+/* ===== Body ===== */
 .cart-panel__body {
   flex: 1; overflow-y: auto;
-  padding: 12px 18px 18px;
+  padding: 12px 20px 18px;
 }
+
+/* Empty state */
 .cart-empty {
   padding: 36px 20px 40px;
-  text-align: center; color: #999;
+  text-align: center; color: var(--ink-3);
 }
 .cart-empty i {
-  font-size: 38px; color: var(--brand);
+  font-size: 32px; color: var(--brand);
   opacity: 0.45;
   display: block; margin-bottom: 12px;
 }
 .cart-empty h4 {
-  margin: 0 0 10px;
-  font-size: 14px; font-weight: 600; color: #333;
-  letter-spacing: -0.3px;
+  margin: 0 0 8px;
+  font-size: 13px; font-weight: 600; color: var(--ink-1);
+  letter-spacing: -0.2px;
 }
-.cart-empty p { margin: 0 0 18px; font-size: 12px; line-height: 1.7; color: #888; }
+.cart-empty p {
+  margin: 0 0 16px; font-size: 12px; line-height: 1.7;
+  color: var(--ink-3);
+}
 .cart-empty b { color: var(--brand); font-weight: 600; }
 .cart-empty__cta {
   display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 14px;
   background: var(--brand); color: #fff;
   border: 0; border-radius: var(--radius);
-  padding: 9px 16px;
   font-size: 12px; font-weight: 500;
   font-family: inherit; cursor: pointer;
+  transition: background var(--t-fast);
 }
-.cart-empty__cta:hover { opacity: 0.92; }
-.toolbar-right { display: flex; gap: 4px; }
+.cart-empty__cta:hover { background: var(--brand-700); }
 
+/* Toolbar (select all / ghost buttons) */
 .cart-toolbar {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 6px 4px 12px;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 4px 0 10px;
+  border-bottom: 1px solid var(--line);
   margin-bottom: 8px;
 }
 .select-all {
@@ -284,27 +296,32 @@ if (typeof window !== 'undefined') {
   font-size: 11px;
   font-variant-numeric: tabular-nums;
 }
+.toolbar-right { display: flex; gap: 4px; }
 .ghost {
   background: transparent; border: 0; cursor: pointer;
-  font-size: 11px; color: var(--ink-3);
-  padding: 4px 8px; border-radius: var(--radius-sm);
+  height: 28px; padding: 0 8px;
+  border-radius: var(--radius-sm);
+  font-size: 11px; font-weight: 400; color: var(--ink-3);
   display: inline-flex; align-items: center; gap: 4px;
-  font-family: inherit;
+  font-family: inherit; line-height: 1;
+  transition: background var(--t-fast), color var(--t-fast);
 }
-.ghost:hover { color: var(--ink-1); background: var(--accent-soft); }
+.ghost i { font-size: 12px; }
+.ghost:hover { background: var(--accent-soft); color: var(--ink-1); }
 
+/* List items */
 .cart-list { list-style: none; margin: 0; padding: 0; }
 .cart-item {
   display: grid;
   grid-template-columns: auto 1fr auto auto;
   align-items: center; gap: 10px;
-  padding: 12px 6px;
-  border-bottom: 1px solid #f5f5f5;
-  transition: background .12s;
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--line);
+  transition: background var(--t-fast);
 }
 .cart-item:last-child { border-bottom: 0; }
 .cart-item.off { opacity: 0.45; }
-.cart-item.off .cart-item__price { color: #aaa; }
+.cart-item.off .cart-item__price { color: var(--ink-4); }
 
 .cart-item__check { width: 14px; height: 14px; accent-color: var(--brand); }
 .cart-item__main { min-width: 0; }
@@ -322,7 +339,7 @@ if (typeof window !== 'undefined') {
   display: flex; flex-wrap: wrap; gap: 4px;
 }
 .m-pill {
-  font-size: 10px; padding: 2px 6px;
+  font-size: 11px; padding: 2px 6px;
   background: var(--accent-soft); color: var(--ink-3);
   border-radius: var(--radius-sm);
   font-variant-numeric: tabular-nums;
@@ -335,103 +352,78 @@ if (typeof window !== 'undefined') {
   white-space: nowrap;
 }
 .cart-item__price em {
-  font-style: normal; font-size: 10px; color: var(--ink-4);
-  font-weight: 400; margin-left: 1px;
+  font-style: normal; font-size: 11px; color: var(--ink-4);
+  font-weight: 400; margin-left: 2px;
 }
 .cart-item__remove {
   background: transparent; border: 0;
-  width: 22px; height: 22px;
-  border-radius: 50%; cursor: pointer;
-  color: #bbb; font-size: 11px;
+  width: 24px; height: 24px;
+  border-radius: var(--radius-sm); cursor: pointer;
+  color: var(--ink-4); font-size: 12px;
   display: inline-flex; align-items: center; justify-content: center;
-  transition: background .12s, color .12s;
+  transition: background var(--t-fast), color var(--t-fast);
 }
-.cart-item__remove:hover { background: var(--brand); color: #fff; }
+.cart-item__remove:hover { background: var(--accent-soft); color: var(--ink-1); }
 
+/* ===== Foot ===== */
 .cart-panel__foot {
-  padding: 12px 18px 16px;
-  border-top: 1px solid #eee;
-  background: #fafafa;
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--line-2);
+  background: var(--bg-soft);
 }
 .foot-hint {
-  font-size: 11.5px; color: #777;
+  font-size: 11px; color: var(--ink-3);
   margin-bottom: 10px; text-align: center;
   letter-spacing: -0.2px;
 }
 .foot-hint b { color: var(--brand); font-weight: 600; }
-.foot-hint--warn { color: #c97800; }
+.foot-hint--warn { color: var(--ink-2); }
 
-/* 보조 액션 — 4개 균등 그리드 (미리보기/이미지저장/이미지복사/텍스트) */
+/* 4-grid mini actions (미리보기/이미지/이미지복사/텍스트) */
 .foot-actions-sub {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
   margin-bottom: 10px;
 }
 .mini-action {
   display: flex; flex-direction: column; align-items: center; gap: 4px;
+  height: 48px; padding: 6px 4px;
   background: var(--bg); color: var(--ink-2);
   border: 1px solid var(--line-2); border-radius: var(--radius);
-  padding: 9px 4px;
-  font-size: 10.5px; font-weight: 500;
+  font-size: 11px; font-weight: 500;
   font-family: inherit; cursor: pointer;
   transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
 }
-.mini-action i { font-size: 16px; color: var(--ink-3); }
+.mini-action i { font-size: 14px; color: var(--ink-3); }
 .mini-action:hover {
   background: var(--brand-50); color: var(--brand);
   border-color: var(--brand-100);
 }
 .mini-action:hover i { color: var(--brand); }
 
-.foot-actions { display: flex; gap: 8px; }
-.action {
-  border: 0; border-radius: var(--radius);
-  font-size: 13px; font-weight: 500;
-  font-family: inherit; cursor: pointer;
-  display: inline-flex; align-items: center; justify-content: center;
-  gap: 6px;
-  transition: background var(--t-fast), opacity var(--t-fast), transform .08s;
-}
-.action i { font-size: 15px; }
-.action.outline {
-  background: var(--bg); color: var(--ink-2);
-  border: 1px solid var(--line-2);
-  height: 42px; padding: 0 16px;
-  flex: 0 0 auto;
-}
-.action.outline:hover:not(:disabled) {
-  background: var(--accent-soft); color: var(--ink-1);
-}
-/* 발송 버튼 = 메인 액션, 풀폭 강조 */
+/* 메인 액션 — 풀폭 발송 버튼 */
 .action.send {
   width: 100%;
-  height: 48px;
+  height: 44px;
   background: var(--brand); color: #fff;
   font-size: 14px; font-weight: 600;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.2px;
   border: 0; border-radius: var(--radius);
   cursor: pointer; font-family: inherit;
   display: inline-flex; align-items: center; justify-content: center;
   gap: 6px;
-  box-shadow: var(--shadow);
-  transition: opacity var(--t-fast), transform .08s, box-shadow var(--t-fast);
+  transition: background var(--t-fast), opacity var(--t-fast);
 }
-.action.send i { font-size: 17px; }
+.action.send i { font-size: 15px; }
 .action.send em {
   font-style: normal;
-  background: rgba(255,255,255,0.22);
-  padding: 2px 9px; border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.22);
+  padding: 2px 8px; border-radius: var(--radius-pill);
   font-size: 12px; font-weight: 600;
   margin-left: 4px;
   font-variant-numeric: tabular-nums;
 }
-.action.send:hover:not(:disabled) {
-  opacity: 0.94;
-  transform: translateY(-1px);
-  box-shadow: 0 3px 12px rgba(225, 20, 30, 0.32);
-}
-.action.send:active:not(:disabled) { transform: translateY(0); }
-.action:disabled {
+.action.send:hover:not(:disabled) { background: var(--brand-700); }
+.action.send:disabled {
   opacity: 0.4; cursor: not-allowed;
-  box-shadow: none;
 }
 </style>
