@@ -354,6 +354,11 @@ function recompute() {
   // Vue TermsGrid / ReferenceGrid 가 reactive 읽음
   state.monthly = monthly;
   state.referenceMonthly = referenceMonthly;
+  // 기본 견적 섹션 타이틀의 보증금/선납금 힌트 갱신
+  const depHintEl = document.getElementById('ref-dep-hint');
+  const preHintEl = document.getElementById('ref-pre-hint');
+  if (depHintEl) depHintEl.textContent = refDep;
+  if (preHintEl) preHintEl.textContent = refPre;
   renderQuoteDoc(monthly, totalKrw, tintFee, deliveryFee, itemsFee - tintFee);
 }
 

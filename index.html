@@ -3925,8 +3925,11 @@ render();
   <div id="customer-staff-root"></div>
   <div id="conditions-form-root"></div>
 
-  <!-- 기본 견적 — 36/48/60 보증금10% 선납0% 고정 (참고용) -->
-  <div class="qp-terms__title">기본 견적 <small>· 보증금 10% / 선납 0%</small></div>
+  <!-- 기본 견적 — 36/48/60 × 위 조건 폼의 보증금/선납금 (참고용) -->
+  <div class="qp-terms__title">
+    기본 견적
+    <small>· 보증금 <span id="ref-dep-hint">10</span>% / 선납 <span id="ref-pre-hint">0</span>%</small>
+  </div>
   <div class="reference-grid" id="reference-grid"></div>
 
   <!-- 손님 발송용 견적 — 자유 조합 (기간/보증금/선납금 편집) -->
