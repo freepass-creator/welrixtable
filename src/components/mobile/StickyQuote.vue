@@ -147,13 +147,7 @@ const cards = computed(() => {
         >
           <i class="ph" :class="c.sent ? 'ph-check-circle-fill' : 'ph-circle'"></i>
         </button>
-        <select
-          class="sq-term-card__select"
-          :value="c.term"
-          @change="onTermChange(c.idx, $event)"
-        >
-          <option v-for="t in TERM_OPTIONS" :key="t" :value="t">{{ t }}개월</option>
-        </select>
+        <div class="sq-term-card__term">{{ c.term }}개월</div>
         <div class="sq-term-card__monthly">
           <template v-if="c.monthly">{{ fmt(c.monthly) }}<em>원</em></template>
           <template v-else><span class="muted">—</span></template>
@@ -168,7 +162,15 @@ const cards = computed(() => {
           <tr>
             <th class="sq-table__rowlabel">구분</th>
             <th v-for="c in cards" :key="c.idx"
-                :class="{ 'is-dim': !c.sent }">{{ c.term }}개월</th>
+                :class="{ 'is-dim': !c.sent }">
+              <select
+                class="sq-table__term-select"
+                :value="c.term"
+                @change="onTermChange(c.idx, $event)"
+              >
+                <option v-for="t in TERM_OPTIONS" :key="t" :value="t">{{ t }}개월</option>
+              </select>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -321,17 +323,24 @@ const cards = computed(() => {
   font-size: 16px;
 }
 .sq-term-card.is-checked .sq-term-card__check-btn { color: var(--brand); }
-.sq-term-card__select {
+.sq-term-card__term {
+  font-size: 11px; color: var(--ink-3); font-weight: 500;
+}
+.sq-term-card.is-checked .sq-term-card__term { color: var(--brand); }
+/* 펼침 표 헤더 — 기간 변경 select */
+.sq-table__term-select {
   appearance: none; -webkit-appearance: none;
   background: transparent; border: 0;
   font-family: inherit;
-  font-size: 11px; color: var(--ink-3); font-weight: 500;
+  font-size: 11.5px; font-weight: 600; color: var(--ink-1);
   text-align: center; text-align-last: center;
-  padding: 0 4px;
+  padding: 0 2px;
   cursor: pointer;
   outline: none;
+  width: 100%;
 }
-.sq-term-card__select:focus { color: var(--brand); }
+.sq-table__term-select:focus { color: var(--brand); }
+.sq-table thead th.is-dim .sq-table__term-select { color: var(--ink-4); }
 .sq-term-card__monthly {
   font-size: 15px; font-weight: 700; color: var(--ink-1);
   font-variant-numeric: tabular-nums;
