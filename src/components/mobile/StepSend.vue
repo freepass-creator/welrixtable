@@ -4,20 +4,15 @@ import { quoteState } from '../../store.js';
 import { calcQuote } from '../../lib/calc.js';
 import { saveQuote, buildQuoteUrl } from '../../firebase/quotes.js';
 import { DELIVERY_REGIONS, ACCESSORIES, TINT_PRICES } from '../../data/lookups.js';
+import { fmtTel } from '../../lib/format.js';
 
 const fmt = (n) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
 
-function fmtTel(t) {
-  if (!t) return '';
-  const d = String(t).replace(/\D/g, '');
-  if (/^01[016789]/.test(d) && d.length === 11) return `${d.slice(0,3)}-${d.slice(3,7)}-${d.slice(7)}`;
-  if (d.startsWith('02') && d.length === 10) return `${d.slice(0,2)}-${d.slice(2,6)}-${d.slice(6)}`;
-  return t;
-}
 function onTelInput(e, key) {
   const v = fmtTel(e.target.value);
   if (key === 'cust') quoteState.cust.tel = v;
   else quoteState.staff.tel = v;
+  if (e.target.value !== v) e.target.value = v;
 }
 
 const sending = ref(false);

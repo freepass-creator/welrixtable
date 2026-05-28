@@ -1,5 +1,6 @@
 <script setup>
 import { quoteState } from '../store.js';
+import { fmtTel } from '../lib/format.js';
 
 const FEE_MIN = 0;
 const FEE_MAX = 7;
@@ -9,6 +10,12 @@ function onFeeChange() {
   v = Math.max(FEE_MIN, Math.min(FEE_MAX, Math.round(v * 10) / 10));
   quoteState.cond.feeRatePct = v;
   window.__welrix_recompute?.();
+}
+
+function onTelInput(e) {
+  const formatted = fmtTel(e.target.value);
+  quoteState.staff.tel = formatted;
+  if (e.target.value !== formatted) e.target.value = formatted;
 }
 </script>
 
@@ -24,7 +31,7 @@ function onFeeChange() {
     </div>
     <div class="cs-field">
       <label>연락처</label>
-      <input v-model="quoteState.staff.tel" placeholder="010-0000-0000" inputmode="tel" />
+      <input :value="quoteState.staff.tel" @input="onTelInput" placeholder="010-0000-0000" inputmode="tel" />
     </div>
     <div class="cs-field">
       <label>수수료</label>
