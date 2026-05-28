@@ -2037,7 +2037,8 @@ render();
     box-shadow: 0 4px 16px rgba(0,0,0,0.08);
     z-index: 100;
     padding: 4px;
-    max-height: 280px; overflow-y: auto;
+    /* 뷰포트 크면 더 많이 (최대 70vh, 560px) — 콘텐츠 짧으면 자동 축소 */
+    max-height: min(70vh, 560px); overflow-y: auto;
   }
   /* viewport 바닥 가까우면 위로 펼침 */
   .cdd__menu--up {

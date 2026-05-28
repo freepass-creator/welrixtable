@@ -18,7 +18,11 @@ const current = computed(() => {
   return props.options.find((o) => String(o.value) === String(props.modelValue));
 });
 
-const MENU_HEIGHT = 280; // .cdd__menu max-height
+// .cdd__menu max-height (CSS: min(70vh, 560px)) — flip 결정 시 동적 viewport 반영
+const MENU_HEIGHT_CAP = 560;
+function getMaxMenuHeight() {
+  return Math.min(Math.floor(window.innerHeight * 0.7), MENU_HEIGHT_CAP);
+}
 const ITEM_HEIGHT = 32;
 
 function computeFlip() {
@@ -26,7 +30,7 @@ function computeFlip() {
   const rect = rootEl.value.getBoundingClientRect();
   const spaceBelow = window.innerHeight - rect.bottom;
   const spaceAbove = rect.top;
-  const needed = Math.min(MENU_HEIGHT, props.options.length * ITEM_HEIGHT + 16);
+  const needed = Math.min(getMaxMenuHeight(), props.options.length * ITEM_HEIGHT + 16);
   // 아래 공간이 부족하고 위 공간이 더 넓으면 위로
   flipUp.value = spaceBelow < needed && spaceAbove > spaceBelow;
 }
