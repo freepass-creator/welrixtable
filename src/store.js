@@ -113,15 +113,18 @@ watch(() => [...quoteState.myContracts],
       (v) => persistMyContracts(v),
       { deep: true });
 
-// 위쪽 조건 폼의 보증금/선납금이 바뀌면 손님용 시나리오에도 일괄 반영
-// (사용자는 그 뒤 각 시나리오에서 개별 override 가능)
+// 위쪽 조건 폼의 보증금/선납금이 바뀌면
+//   1) 손님용 시나리오 일괄 sync (사용자는 그 뒤 각 시나리오 개별 override 가능)
+//   2) recompute 강제 호출 → 기본 견적(referenceMonthly) 즉시 갱신
 watch(() => quoteState.cond.dep, (v) => {
   if (typeof v !== 'number' || !isFinite(v)) return;
   quoteState.scenarios.forEach((sc) => { sc.dep = v; });
+  window.__welrix_recompute?.();
 });
 watch(() => quoteState.cond.pre, (v) => {
   if (typeof v !== 'number' || !isFinite(v)) return;
   quoteState.scenarios.forEach((sc) => { sc.pre = v; });
+  window.__welrix_recompute?.();
 });
 
 // === 견적 장바구니 — 한 손님에게 N차종 보낼 때 ===

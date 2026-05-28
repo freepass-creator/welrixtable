@@ -21,10 +21,11 @@ const cards = computed(() => {
 
 <template>
   <!-- term-card 클래스 그대로 사용 — TermsGrid 와 동일 룩 (구성만 read-only) -->
+  <!-- term-card--ref 모디파이어: 애니메이션 X (틀 고정 + 숫자만 갱신) -->
   <div
     v-for="card in cards"
     :key="card.idx"
-    class="term-card"
+    class="term-card term-card--ref"
     :class="{ 'term-card--empty': !hasResults }"
   >
     <div class="term-card__head">

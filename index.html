@@ -2431,6 +2431,8 @@ render();
   @media (prefers-reduced-motion: reduce) {
     .term-card:not(.term-card--empty) { animation: none; }
   }
+  /* 기본 견적 (ReferenceGrid) — 틀 고정, 숫자만 갱신. 애니메이션 X */
+  .term-card.term-card--ref { animation: none !important; }
 
   /* 손님 견적서 (진짜 견적서 디자인) */
   .customer-output {
