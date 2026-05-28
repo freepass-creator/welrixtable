@@ -8,6 +8,25 @@ import * as Fees from '../../lib/compute-fees.js';
 const expanded = ref(false);
 function toggle() { expanded.value = !expanded.value; }
 
+// 스와이프 제스처 — 손잡이/요약 영역에서 위로 끌면 펼침, 아래로 끌면 접힘
+const SWIPE_THRESHOLD = 30;  // px — 이 이상 움직여야 스와이프로 인식
+let touchStartY = 0;
+let touchStartT = 0;
+function onTouchStart(e) {
+  touchStartY = e.touches[0].clientY;
+  touchStartT = Date.now();
+}
+function onTouchEnd(e) {
+  const endY = (e.changedTouches?.[0] || {}).clientY ?? touchStartY;
+  const dy = endY - touchStartY;
+  const dt = Date.now() - touchStartT;
+  // 짧은 탭(움직임 작고 빠른 터치) 은 무시 — @click 이 처리
+  if (Math.abs(dy) < SWIPE_THRESHOLD || dt > 500) return;
+  if (dy < 0) expanded.value = true;     // 위로 → 펼침
+  else        expanded.value = false;    // 아래로 → 접힘
+  e.preventDefault();  // tap 으로 토글되지 않도록
+}
+
 // 비용 — lib/compute-fees.js 통합 함수 사용
 const optPrice = computed(() => Fees.optPrice(quoteState));
 const deliveryFee = computed(() => Fees.deliveryFee(quoteState));
@@ -82,12 +101,23 @@ const scenarios = computed(() => {
 
 <template>
   <div class="sq" :class="{ 'sq--expanded': expanded }">
-    <button class="sq-handle" @click="toggle" aria-label="견적 펼치기">
+    <button
+      class="sq-handle"
+      @click="toggle"
+      @touchstart.passive="onTouchStart"
+      @touchend="onTouchEnd"
+      aria-label="견적 펼치기 (탭 또는 위로 스와이프)"
+    >
       <span class="sq-handle__bar"></span>
     </button>
 
-    <!-- 라벨 -->
-    <div class="sq-summary" @click="toggle">
+    <!-- 라벨 — 탭 + 스와이프 둘 다 지원 -->
+    <div
+      class="sq-summary"
+      @click="toggle"
+      @touchstart.passive="onTouchStart"
+      @touchend="onTouchEnd"
+    >
       <div class="sq-summary__label">
         월 대여료
         <span class="sq-summary__hint">VAT 포함 · 체크된 기간만 발송</span>
