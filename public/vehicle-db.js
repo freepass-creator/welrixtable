@@ -1621,7 +1621,7 @@ window.VEHICLE_DB = {
               // 슈퍼캡 초장축 2WD
               {
                 variant_id: "sc_long_2wd",
-                variant_name: "LPI 슈퍼캡 초장축 2WD",
+                variant_name: "LPI 2.5 슈퍼캡 초장축 2WD",
                 vehicle_type: "1톤 트럭",
                 fuel: "LPI",
                 displacement_cc: 2469,
@@ -1630,13 +1630,13 @@ window.VEHICLE_DB = {
                   // 운영 트림 — 5단 자동 baked in (Excel 차량DB R438/439 매칭)
                   { trim_id: "smart", name: "스마트", seats: 3,
                     base_price_5: 2265, base_price_3_5: 2265,
-                    engine: "스마트스트림 LPG 2.5 터보 + 5단 자동",
+                    engine: "스마트스트림 LPI 2.5 터보 + 5단 자동",
                     fuel_economy: { combined: 7.0, urban: 6.7, highway: 7.4, co2: 188 },
                     standard_features: SMART_F,
                     available_options: SC_NORMAL_2WD_OPTS_SMART.filter(o => o !== 'auto_5') },
                   { trim_id: "modern", name: "모던", seats: 3,
                     base_price_5: 2370, base_price_3_5: 2370,
-                    engine: "스마트스트림 LPG 2.5 터보 + 5단 자동",
+                    engine: "스마트스트림 LPI 2.5 터보 + 5단 자동",
                     fuel_economy: { combined: 7.0, urban: 6.7, highway: 7.4, co2: 188 },
                     standard_features: MODERN_F,
                     available_options: SC_NORMAL_2WD_OPTS_MODERN.filter(o => o !== 'auto_5') },
@@ -1652,7 +1652,7 @@ window.VEHICLE_DB = {
               // 더블캡 초장축 2WD
               {
                 variant_id: "dc_long_2wd",
-                variant_name: "LPI 더블캡 초장축 2WD",
+                variant_name: "LPI 2.5 더블캡 초장축 2WD",
                 vehicle_type: "1톤 트럭 (더블캡)",
                 fuel: "LPI",
                 displacement_cc: 2469,
@@ -1661,13 +1661,13 @@ window.VEHICLE_DB = {
                   // 운영 트림 — 5단 자동 baked in (Excel 차량DB R440/441 매칭)
                   { trim_id: "smart", name: "스마트", seats: 5,
                     base_price_5: 2408, base_price_3_5: 2408,
-                    engine: "스마트스트림 LPG 2.5 터보 + 5단 자동",
+                    engine: "스마트스트림 LPI 2.5 터보 + 5단 자동",
                     fuel_economy: { combined: 6.8, urban: 6.5, highway: 7.2, co2: 195 },
                     standard_features: DC_SMART_F,
                     available_options: DC_2WD_OPTS_SMART.filter(o => o !== 'auto_5') },
                   { trim_id: "modern", name: "모던", seats: 5,
                     base_price_5: 2511, base_price_3_5: 2511,
-                    engine: "스마트스트림 LPG 2.5 터보 + 5단 자동",
+                    engine: "스마트스트림 LPI 2.5 터보 + 5단 자동",
                     fuel_economy: { combined: 6.8, urban: 6.5, highway: 7.2, co2: 195 },
                     standard_features: DC_MODERN_F,
                     available_options: DC_2WD_OPTS_MODERN.filter(o => o !== 'auto_5') },
