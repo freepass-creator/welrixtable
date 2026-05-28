@@ -92,53 +92,66 @@ async function loadVehicles() {
 }
 function findVehicleMeta(brand, model, trim_name, variant, trim_price_won) {
   if (!VEHICLES?.length) return {};
+  // HEV variant 인 경우 vehicles.json 의 "{model} Hybrid" 접미사 우선 시도
+  // (vehicle-db.js 는 model_name 에 Hybrid 접미사 없이 노출하지만 vehicles.json/Excel SSOT 는 접미사 사용)
+  const isHEV = /하이브리드|HEV/i.test(variant || '');
+  const modelCandidates = isHEV ? [`${model} Hybrid`, model] : [model];
+
   // 0) ⭐ 가격 정확 매칭 (Excel 차량DB 가격과 1대1) — 최우선
   if (trim_price_won) {
-    const exact = VEHICLES.filter(v =>
-      v.brand === brand && v.model === model && v.price === trim_price_won
-    );
-    if (exact.length === 1) return exact[0];
-    if (exact.length > 1) {
-      // 가격 중복(예: GV80 2.5T vs 3.5T 같은 가격) — variant + trim_name 토큰 둘 다 합쳐서 가장 많이 일치하는 거 선택
-      const tokens = [...(variant || '').split(/[\s·,()/]+/), ...(trim_name || '').split(/[\s·,()/]+/)]
-        .filter(t => t && t.length >= 1)
-        .map(t => t.toLowerCase());
-      if (tokens.length) {
-        const scored = exact.map(m => ({
-          m,
-          score: tokens.reduce((s, t) => s + ((m.trim || '').toLowerCase().includes(t) ? 1 : 0), 0),
-        }));
-        scored.sort((a, b) => b.score - a.score);
-        if (scored[0].score > 0 && scored[0].score > (scored[1]?.score ?? 0)) return scored[0].m;
-        // 동률이면 trim_name 정확 포함하는 거 우선
-        if (trim_name) {
-          const tn = exact.find(v => (v.trim || '').includes(trim_name));
-          if (tn) return tn;
+    for (const m of modelCandidates) {
+      const exact = VEHICLES.filter(v =>
+        v.brand === brand && v.model === m && v.price === trim_price_won
+      );
+      if (exact.length === 1) return exact[0];
+      if (exact.length > 1) {
+        // 가격 중복(예: GV80 2.5T vs 3.5T 같은 가격) — variant + trim_name 토큰 둘 다 합쳐서 가장 많이 일치하는 거 선택
+        const tokens = [...(variant || '').split(/[\s·,()/]+/), ...(trim_name || '').split(/[\s·,()/]+/)]
+          .filter(t => t && t.length >= 1)
+          .map(t => t.toLowerCase());
+        if (tokens.length) {
+          const scored = exact.map(mm => ({
+            m: mm,
+            score: tokens.reduce((s, t) => s + ((mm.trim || '').toLowerCase().includes(t) ? 1 : 0), 0),
+          }));
+          scored.sort((a, b) => b.score - a.score);
+          if (scored[0].score > 0 && scored[0].score > (scored[1]?.score ?? 0)) return scored[0].m;
+          // 동률이면 trim_name 정확 포함하는 거 우선
+          if (trim_name) {
+            const tn = exact.find(v => (v.trim || '').includes(trim_name));
+            if (tn) return tn;
+          }
         }
+        return exact[0];
       }
-      return exact[0];
     }
   }
   // 1) 텍스트 매칭 — brand + model + variant + trim_name (가격 없거나 미매치 시)
   if (trim_name) {
     const variantTokens = (variant || '').split(/[\s·,()]+/).filter(t => t.length > 1);
-    const matches = VEHICLES.filter(v =>
-      v.brand === brand &&
-      (v.model === model || (v.trim || '').includes(model)) &&
-      (v.trim || '').includes(trim_name)
-    );
-    if (matches.length === 1) return matches[0];
-    if (matches.length > 1 && variantTokens.length) {
-      const scored = matches.map(m => ({
-        m, score: variantTokens.reduce((s, t) => s + ((m.trim || '').includes(t) ? 1 : 0), 0)
-      }));
-      scored.sort((a, b) => b.score - a.score);
-      if (scored[0].score > 0) return scored[0].m;
+    for (const m of modelCandidates) {
+      const matches = VEHICLES.filter(v =>
+        v.brand === brand &&
+        (v.model === m || (v.trim || '').includes(m)) &&
+        (v.trim || '').includes(trim_name)
+      );
+      if (matches.length === 1) return matches[0];
+      if (matches.length > 1 && variantTokens.length) {
+        const scored = matches.map(mm => ({
+          m: mm, score: variantTokens.reduce((s, t) => s + ((mm.trim || '').includes(t) ? 1 : 0), 0)
+        }));
+        scored.sort((a, b) => b.score - a.score);
+        if (scored[0].score > 0) return scored[0].m;
+      }
+      if (matches.length) return matches[0];
     }
-    if (matches.length) return matches[0];
   }
-  // 2) 폴백 — brand + model 만
-  return VEHICLES.find(v => v.brand === brand && v.model === model) || {};
+  // 2) 폴백 — brand + model 만 (modelCandidates 순서대로)
+  for (const m of modelCandidates) {
+    const f = VEHICLES.find(v => v.brand === brand && v.model === m);
+    if (f) return f;
+  }
+  return {};
 }
 
 // ============ UI 초기화 — Vue가 대부분 처리. 아직 남은 vanilla 만 ============

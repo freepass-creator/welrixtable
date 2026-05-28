@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>웰릭스 모빌리티 · 신차 장기렌터카 견적</title>
   <meta name="theme-color" content="#0D4E8B" />
   <meta name="description" content="현대·기아·제네시스 전 차종 신차 장기렌터카 실시간 견적" />
@@ -151,48 +154,10 @@
     })();
   </script>
 </head>
-<body style="visibility:hidden">
-<!-- 진입 게이트 — PIN 통과 전엔 body 숨김 (PC 와 동일 패턴) -->
+<body>
+<!-- 진입 게이트 우회 (단순 견적 모드) -->
 <script>
-  (function () {
-    const params = new URLSearchParams(location.search);
-    if (params.get('q') || params.get('admin') === '1' || params.get('contract')) {
-      document.body.style.visibility = 'visible';
-      return;
-    }
-    if (sessionStorage.getItem('welrix_mode') === 'agent') {
-      document.body.style.visibility = 'visible';
-      return;
-    }
-    document.body.innerHTML = ''
-      + '<div class="gate-bg">'
-      + '  <div class="gate-card">'
-      + '    <img class="gate-ci" src="/welrix-ci.png" alt="welrix" />'
-      + '    <p class="gate-sub">접속 PIN 을 입력하세요</p>'
-      + '    <input id="gate-pin" type="password" inputmode="numeric" maxlength="4" placeholder="PIN 4자리" autofocus />'
-      + '    <div id="gate-err" hidden></div>'
-      + '    <button id="gate-submit">진입</button>'
-      + '  </div>'
-      + '</div>';
-    document.body.style.visibility = 'visible';
-    const input = document.getElementById('gate-pin');
-    const err = document.getElementById('gate-err');
-    function submit() {
-      const pin = input.value.trim();
-      const AGENT = (window.__GATE_PINS && window.__GATE_PINS.agent) || '1234';
-      if (pin === AGENT) {
-        sessionStorage.setItem('welrix_mode', 'agent');
-        location.reload();
-        return;
-      }
-      err.textContent = 'PIN 이 일치하지 않습니다';
-      err.hidden = false;
-      input.value = '';
-      input.focus();
-    }
-    document.getElementById('gate-submit').addEventListener('click', submit);
-    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') submit(); });
-  })();
+  sessionStorage.setItem('welrix_mode', 'agent');
 </script>
   <div id="m-app"></div>
   <script type="module" src="/src/mobile.js"></script>

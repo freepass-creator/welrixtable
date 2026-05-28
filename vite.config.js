@@ -22,6 +22,12 @@ export default defineConfig({
   server: {
     port: 5173,
     open: '/index.html',
+    // 캐시 완전 비활성 — 새로고침만으로 항상 최신 코드 받음
+    headers: {
+      'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+      'Pragma': 'no-cache',
+      'Expires': '0',
+    },
   },
   build: {
     outDir: 'dist',

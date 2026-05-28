@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>웰릭스 모빌리티 — 신차 장기렌터카 견적</title>
 <meta name="description" content="현대·기아·제네시스 전 차종 신차 장기렌터카 실시간 견적" />
 <!-- Open Graph (카톡/페북/슬랙 등 링크 미리보기) -->
@@ -654,57 +657,10 @@
   #gate-admin:hover { color: var(--ink-1); background: var(--bg-soft); }
 </style>
 </head>
-<body style="visibility:hidden">
-<!-- 진입 게이트 — PIN 통과 전엔 body 숨김 -->
+<body>
+<!-- 진입 게이트 우회 (단순 견적 모드) -->
 <script>
-  (function () {
-    const params = new URLSearchParams(location.search);
-    // 손님 페이지 / 관리자 페이지 / 계약 페이지 / 모바일 force / 강제 통과 — 게이트 우회
-    if (params.get('q') || params.get('admin') === '1' || params.get('contract') || params.get('force')) {
-      document.body.style.visibility = 'visible';
-      return;
-    }
-    if (sessionStorage.getItem('welrix_mode') === 'agent') {
-      document.body.style.visibility = 'visible';
-      return;
-    }
-    // 게이트 표시
-    showGate();
-    function showGate() {
-      document.body.innerHTML = ''
-        + '<div class="gate-bg">'
-        + '  <div class="gate-card">'
-        + '    <img class="gate-ci" src="/welrix-ci.png" alt="welrix" />'
-        + '    <p class="gate-sub">접속 PIN 을 입력하세요</p>'
-        + '    <input id="gate-pin" type="password" inputmode="numeric" maxlength="4" placeholder="PIN 4자리" autofocus />'
-        + '    <div id="gate-err" hidden></div>'
-        + '    <button id="gate-submit">진입</button>'
-        + '    <button id="gate-admin" type="button">관리자 로그인</button>'
-        + '  </div>'
-        + '</div>';
-      document.body.style.visibility = 'visible';
-      const input = document.getElementById('gate-pin');
-      const err = document.getElementById('gate-err');
-      function submit() {
-        const pin = input.value.trim();
-        const AGENT = (window.__GATE_PINS && window.__GATE_PINS.agent) || '1234';
-        if (pin === AGENT) {
-          sessionStorage.setItem('welrix_mode', 'agent');
-          location.reload();
-          return;
-        }
-        err.textContent = 'PIN 이 일치하지 않습니다';
-        err.hidden = false;
-        input.value = '';
-        input.focus();
-      }
-      document.getElementById('gate-submit').addEventListener('click', submit);
-      document.getElementById('gate-admin').addEventListener('click', function () {
-        location.href = location.pathname + '?admin=1';
-      });
-      input.addEventListener('keydown', function (e) { if (e.key === 'Enter') submit(); });
-    }
-  })();
+  sessionStorage.setItem('welrix_mode', 'agent');
 </script>
 <!-- 전체 폭 상단바 -->
 <div class="global-topbar">
@@ -4496,6 +4452,15 @@ render();
 
 <!-- Vue 견적바구니 모달 mount root (영업 모드만, 손님은 customer-view가 body 재구성) -->
 <div id="cart-panel-root"></div>
+
+<!-- 단순 견적 모드: 채팅·계약·서류 패널 숨김 (견적바구니는 유지) -->
+<style id="simple-mode-overrides">
+  body { grid-template-columns: minmax(0, 28fr) minmax(0, 72fr) !important; }
+  @media (max-width: 1024px) {
+    body { grid-template-columns: 1fr !important; }
+  }
+  #contract-panel-root { display: none !important; }
+</style>
 
 <!-- URL 모드 분기:
      ?q=<id>   = 손님 견적서 (customer-view 가 body 재구성)
