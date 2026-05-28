@@ -192,7 +192,7 @@ function residualBrandAdj(brand, model) {
 // 자동차보험 기본 (I10)
 function baseInsurance(vehicle, insuranceProperty) {
   const ins = CFG.insurance;
-  if (/포터/.test(vehicle.trim || '')) return ins.base_porter;
+  if (/포터/.test(vehicle.trim || '') || /포터/.test(vehicle.model || '')) return ins.base_porter;
   const isMulti = vehicle.multi_seat === '다인승';
   const base = isMulti ? ins.base_multi_seat : ins.base_normal;
   return base + (ins.property_extra[insuranceProperty] ?? 0);
@@ -239,7 +239,7 @@ export function calcQuote(input) {
   const F8 = round(C8 * 0.82);                              // 과세표준
   const C9 = isExempt ? 0 : round(F8 * 0.035 + F8 * 0.035 * 0.3);  // 개소세+교육세
   const C10 = isExempt ? round(C8 * 0.1) : (C8 + C9) * 0.1; // 부가세
-  const isPorter = /포터/.test(v.trim || '');
+  const isPorter = /포터/.test(v.trim || '') || /포터/.test(v.model || '');
 
   // ====== 3. 취득가/취득원가 ======
   const C11 = C8 + C9;                                      // 취득가액
