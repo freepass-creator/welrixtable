@@ -172,6 +172,16 @@ const cards = computed(() => {
           </tr>
         </thead>
         <tbody>
+          <!-- 대여료 (기간 헤더 바로 밑) — 펼침 시 첫 눈에 보이는 핵심 정보 -->
+          <tr class="sq-table__monthly-row">
+            <th class="sq-table__rowlabel">대여료</th>
+            <td v-for="c in cards" :key="c.idx" class="sq-table__monthly">
+              <template v-if="c.monthly">
+                <b>{{ fmt(c.monthly) }}</b><small>원/월</small>
+              </template>
+              <template v-else>—</template>
+            </td>
+          </tr>
           <tr v-if="quoteState.cond.discount">
             <th class="sq-table__rowlabel">추가 할인</th>
             <td v-for="c in cards" :key="c.idx" class="sq-table__discount">
@@ -406,6 +416,17 @@ const cards = computed(() => {
 }
 .sq-table__discount {
   color: var(--brand); font-weight: var(--fw-semi);
+}
+.sq-table__monthly-row td {
+  background: var(--brand-50);
+}
+.sq-table__monthly b {
+  font-size: 13px; font-weight: 700; color: var(--brand);
+  letter-spacing: -0.3px;
+}
+.sq-table__monthly small {
+  font-size: 10px; color: var(--ink-3); font-weight: 400;
+  margin-left: 2px;
 }
 
 /* 메타 */
