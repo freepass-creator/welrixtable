@@ -75,8 +75,7 @@ function onSendToggle(idx, e) {
           :disabled="!hasResults"
           @change="onSendToggle(card.idx, $event)"
         />
-        <i class="ph" :class="card.sent ? 'ph-check-circle-fill' : 'ph-circle'"></i>
-        <span>발송</span>
+        <span class="term-card__check-cap">견적서에 포함</span>
       </label>
     </div>
     <div class="term-card__monthly">
