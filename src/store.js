@@ -115,14 +115,17 @@ watch(() => [...quoteState.myContracts],
 
 // 위쪽 조건 폼의 보증금/선납금이 바뀌면
 //   1) 손님용 시나리오 일괄 sync (사용자는 그 뒤 각 시나리오 개별 override 가능)
-//   2) recompute 강제 호출 → 기본 견적(referenceMonthly) 즉시 갱신
-watch(() => quoteState.cond.dep, (v) => {
-  if (typeof v !== 'number' || !isFinite(v)) return;
+//   2) 기본 견적 섹션 타이틀의 힌트 span 즉시 갱신 (차량 미선택 상태에서도)
+//   3) recompute 호출 → 기본/손님 견적 양쪽 재계산 (차량 있을 때만 실효)
+watch(() => quoteState.cond.dep, (raw) => {
+  const v = +raw;
+  if (!isFinite(v)) return;
   quoteState.scenarios.forEach((sc) => { sc.dep = v; });
   window.__welrix_recompute?.();
 });
-watch(() => quoteState.cond.pre, (v) => {
-  if (typeof v !== 'number' || !isFinite(v)) return;
+watch(() => quoteState.cond.pre, (raw) => {
+  const v = +raw;
+  if (!isFinite(v)) return;
   quoteState.scenarios.forEach((sc) => { sc.pre = v; });
   window.__welrix_recompute?.();
 });

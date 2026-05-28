@@ -1,36 +1,45 @@
 <script setup>
-// 기본 견적 — 36/48/60 × 보증금 10% × 선납 0% 고정 표시 (편집 X)
-// 손님 발송용 견적(TermsGrid) 위에 reference 로 항상 보임.
-// 스타일은 .term-card 글로벌 CSS (index.html) 를 그대로 활용 — TermsGrid 와 동일 룩.
+// 기본 견적 — 60/48/36 × 위 조건 폼의 보증금/선납금 (편집 X, 항상 노출)
+// 카드 구성: 기간 / 대여료 / 보증금(원) / 선납금(원). 만기인수 표시 X.
+// 차량 미선택 상태에서도 틀은 항상 보임 (숫자만 placeholder).
 import { computed } from 'vue';
 import { quoteState as state } from '../store.js';
 import { fmt } from '../lib/format.js';
 
-const hasResults = computed(() => state.referenceMonthly && state.referenceMonthly.length > 0);
+const FIXED_TERMS = [60, 48, 36];
 
 const cards = computed(() => {
   const arr = state.referenceMonthly || [];
-  return arr.map((m, idx) => ({
-    idx, term: m.term, dep: m.dep, pre: m.pre,
-    monthly: m.monthly ?? null,
-    residualAmt: m.residualAmt ?? null,
-    residualPct: m.residualPct ?? null,
-  }));
+  // 항상 3 카드 — 데이터 없으면 placeholder 로 채움
+  return FIXED_TERMS.map((term, idx) => {
+    const m = arr[idx];
+    if (m && m.term === term) {
+      return {
+        idx, term: m.term, dep: m.dep, pre: m.pre,
+        monthly: m.monthly ?? null,
+        depAmt: m.depAmt ?? null, preAmt: m.preAmt ?? null,
+      };
+    }
+    return {
+      idx, term,
+      dep: state.cond.dep ?? 10, pre: state.cond.pre ?? 0,
+      monthly: null, depAmt: null, preAmt: null,
+    };
+  });
 });
 </script>
 
 <template>
   <!-- term-card 클래스 그대로 사용 — TermsGrid 와 동일 룩 (구성만 read-only) -->
-  <!-- term-card--ref 모디파이어: 애니메이션 X (틀 고정 + 숫자만 갱신) -->
+  <!-- term-card--ref: 애니메이션 X (틀 고정 + 숫자만 swap) -->
   <div
     v-for="card in cards"
     :key="card.idx"
     class="term-card term-card--ref"
-    :class="{ 'term-card--empty': !hasResults }"
+    :class="{ 'term-card--empty': card.monthly == null }"
   >
     <div class="term-card__head">
       <span class="ref-term-label">{{ card.term }}개월</span>
-      <span class="ref-hint">보증금 {{ card.dep }}% · 선납 {{ card.pre }}%</span>
     </div>
     <div class="term-card__monthly">
       <template v-if="card.monthly != null">{{ fmt(card.monthly) }}</template>
@@ -38,10 +47,12 @@ const cards = computed(() => {
       <em>원</em>
     </div>
     <div class="term-card__row">
-      <span>만기인수
-        <em v-if="card.residualPct != null" class="resid-pct">{{ (card.residualPct * 100).toFixed(0) }}%</em>
-      </span>
-      <b>{{ card.residualAmt != null ? fmt(card.residualAmt) : '—' }}</b>
+      <span>보증금 <em class="ref-pct">{{ card.dep }}%</em></span>
+      <b>{{ card.depAmt != null ? fmt(card.depAmt) : '—' }}</b>
+    </div>
+    <div class="term-card__row">
+      <span>선납금 <em class="ref-pct">{{ card.pre }}%</em></span>
+      <b>{{ card.preAmt != null ? fmt(card.preAmt) : '—' }}</b>
     </div>
   </div>
 </template>
@@ -52,8 +63,9 @@ const cards = computed(() => {
   font-size: 11px; font-weight: 500; color: var(--ink-1);
   letter-spacing: 0.4px;
 }
-.ref-hint {
-  font-size: 10px; color: var(--ink-4); letter-spacing: 0;
-  font-weight: 400;
+.ref-pct {
+  font-style: normal; font-size: 10px; font-weight: 500;
+  color: var(--ink-3); margin-left: 2px;
+  font-variant-numeric: tabular-nums;
 }
 </style>
