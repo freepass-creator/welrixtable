@@ -2297,11 +2297,25 @@ render();
     font-size: 12px; font-weight: 500; color: var(--ink-3);
     letter-spacing: 0; padding: 14px 0 8px; margin: 0;
   }
+  .qp-terms__title small {
+    font-size: 11px; font-weight: 400; color: var(--ink-4);
+    margin-left: 4px; letter-spacing: -0.1px;
+  }
+  .qp-terms__title--customer {
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
   .terms-grid {
     display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin-bottom: 14px;
   }
+  /* 기본 견적 — 3 컬럼 (36/48/60 고정) */
+  .reference-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    margin-bottom: 4px;
+  }
   @media (max-width: 480px) {
     .terms-grid { grid-template-columns: 1fr; }
+    .reference-grid { grid-template-columns: 1fr; }
   }
   .term-card {
     background: transparent; border: none; border-radius: 0;
@@ -3911,7 +3925,12 @@ render();
   <div id="customer-staff-root"></div>
   <div id="conditions-form-root"></div>
 
-  <div class="qp-terms__title">기간별 대여료</div>
+  <!-- 기본 견적 — 36/48/60 보증금10% 선납0% 고정 (참고용) -->
+  <div class="qp-terms__title">기본 견적 <small>· 보증금 10% / 선납 0%</small></div>
+  <div class="reference-grid" id="reference-grid"></div>
+
+  <!-- 손님 발송용 견적 — 자유 조합 (기간/보증금/선납금 편집) -->
+  <div class="qp-terms__title qp-terms__title--customer">손님 발송용 견적 <small>· 자유 조합 + 발송 체크</small></div>
   <div class="terms-grid" id="terms-grid"></div>
 
   <!-- 견적서는 모달에서만 (ERP 화면엔 노출 X) -->

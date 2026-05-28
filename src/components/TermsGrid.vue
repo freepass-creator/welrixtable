@@ -3,7 +3,8 @@ import { computed } from 'vue';
 import { quoteState as state } from '../store.js';
 import { fmt } from '../lib/format.js';
 
-const TERM_OPTIONS = [12, 24, 36, 48, 60];
+// 운영 기간 — 36/48/60 만 사용 (12/24 비운영)
+const TERM_OPTIONS = [36, 48, 60];
 
 // 차량+트림 선택돼서 월대여료 계산된 상태
 const hasResults = computed(() => state.monthly && state.monthly.length > 0);

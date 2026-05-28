@@ -94,6 +94,9 @@ export const quoteState = reactive({
   ],  // 24개월 운영 안 함
   // 계산된 월대여료 결과 (recompute가 채움) — TermsGrid 컴포넌트가 reactive 읽음
   monthly: [],
+  // 기본 견적 — 36/48/60 × 보증금10% 선납0% 고정 (recompute 가 같이 채움)
+  // ReferenceGrid 컴포넌트가 read-only 로 표시
+  referenceMonthly: [],
 });
 
 // 담당자 정보(이름/연락처) + 수수료율 + 발송옵션 자동 저장

@@ -325,7 +325,7 @@ function recompute() {
   const itemsFeeForCalc = tintFee + blackboxFee;  // 엑셀과 일치
   const itemsFeeDisplay = tintFee + blackboxFee + naviFee + hipassFee;  // 견적서 표시용
 
-  const monthly = state.scenarios.map((sc, idx) => {
+  function runScenario(sc) {
     const r = calcQuote({
       vehicle: vehicleRow,
       options: { optPrice: 0, discount: (state.cond.discount || 0) * 10000, deliveryFee, itemsFee: itemsFeeForCalc, etc: 0 },
@@ -335,11 +335,19 @@ function recompute() {
                    injury: '무한', self: '1억', uninsured: '2억', deductible: '30만원~', emergency: '가입' },
       fees: { feeRatePct: state.cond.feeRatePct ?? 5.0, svc: state.cond.svc },
     });
-    return { idx, term: sc.term, dep: sc.dep, pre: sc.pre, monthly: r.monthly, residualAmt: r.residualAmt, residualPct: r.residualPct, depAmt: r.depositAmt, preAmt: r.prePayAmt };
-  });
+    return { term: sc.term, dep: sc.dep, pre: sc.pre,
+             monthly: r.monthly, residualAmt: r.residualAmt, residualPct: r.residualPct,
+             depAmt: r.depositAmt, preAmt: r.prePayAmt };
+  }
 
-  // Vue TermsGrid 컴포넌트가 reactive 읽도록 state에 저장
+  const monthly = state.scenarios.map((sc, idx) => ({ idx, ...runScenario(sc) }));
+  // 기본 견적 — 36/48/60 × 보증금 10% × 선납 0% 고정
+  const REF_SCENARIOS = [{ term: 36, dep: 10, pre: 0 }, { term: 48, dep: 10, pre: 0 }, { term: 60, dep: 10, pre: 0 }];
+  const referenceMonthly = REF_SCENARIOS.map((sc, idx) => ({ idx, ...runScenario(sc) }));
+
+  // Vue TermsGrid / ReferenceGrid 가 reactive 읽음
   state.monthly = monthly;
+  state.referenceMonthly = referenceMonthly;
   renderQuoteDoc(monthly, totalKrw, tintFee, deliveryFee, itemsFee - tintFee);
 }
 
@@ -403,8 +411,9 @@ window.__welrix_removeCart = removeFromCart;
 window.__welrix_clearCart = clearCart;
 
 function renderEmpty() {
-  // 4기간 카드는 Vue TermsGrid 컴포넌트가 자동 렌더 (state.monthly 비면 placeholder)
+  // 카드는 Vue TermsGrid / ReferenceGrid 가 자동 렌더 (state.monthly 비면 placeholder)
   state.monthly = [];
+  state.referenceMonthly = [];
   $('quote-doc').innerHTML = '<div class="quote-doc__empty">차량과 트림을 선택하면 견적서가 생성됩니다.</div>';
   return;
   // 이하 옛 DOM 코드 (실행 안 됨, Vue가 대체)

@@ -32,8 +32,8 @@ const optPrice = computed(() => Fees.optPrice(quoteState));
 const deliveryFee = computed(() => Fees.deliveryFee(quoteState));
 const itemsFee = computed(() => Fees.itemsFee(quoteState));
 
-// 선택 가능한 기간 — PC TermsGrid 와 동일
-const TERM_OPTIONS = [12, 24, 36, 48, 60];
+// 운영 기간 — 36/48/60 만 사용 (PC TermsGrid 와 동일)
+const TERM_OPTIONS = [36, 48, 60];
 
 // state.scenarios 가 3슬롯 미만이면 채워서 항상 3개 유지
 while (quoteState.scenarios.length < 3) {
