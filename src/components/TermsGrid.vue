@@ -29,14 +29,19 @@ function onTermChange(idx, e) {
   state.scenarios[idx].term = +e.target.value;
   window.__welrix_recompute?.();
 }
+// 숫자만 허용 (한글/영문/기호 입력 시 즉시 제거)
+function stripNonDigits(e) {
+  const cleaned = e.target.value.replace(/\D/g, '');
+  if (cleaned !== e.target.value) e.target.value = cleaned;
+}
 function onDepChange(idx, e) {
-  const v = Math.max(0, Math.min(100, +e.target.value || 0));
+  const v = Math.max(0, Math.min(100, +e.target.value.replace(/\D/g, '') || 0));
   e.target.value = v;
   state.scenarios[idx].dep = v;
   window.__welrix_recompute?.();
 }
 function onPreChange(idx, e) {
-  const v = Math.max(0, Math.min(100, +e.target.value || 0));
+  const v = Math.max(0, Math.min(100, +e.target.value.replace(/\D/g, '') || 0));
   e.target.value = v;
   state.scenarios[idx].pre = v;
   window.__welrix_recompute?.();
@@ -83,9 +88,12 @@ function onSendToggle(idx, e) {
         <span class="pct-cell" :class="{ 'pct-cell--static': !hasResults }">
           <template v-if="hasResults">
             <input
-              type="number"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              maxlength="3"
               :value="card.dep"
-              min="0" max="100"
+              @input="stripNonDigits($event)"
               @change="onDepChange(card.idx, $event)"
             />%
           </template>
@@ -97,9 +105,12 @@ function onSendToggle(idx, e) {
         <span class="pct-cell" :class="{ 'pct-cell--static': !hasResults }">
           <template v-if="hasResults">
             <input
-              type="number"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              maxlength="3"
               :value="card.pre"
-              min="0" max="100"
+              @input="stripNonDigits($event)"
               @change="onPreChange(card.idx, $event)"
             />%
           </template>

@@ -35,9 +35,15 @@ const itemsFee = computed(() => Fees.itemsFee(quoteState));
 // 운영 기간 — 36/48/60 만 사용 (PC TermsGrid 와 동일)
 const TERM_OPTIONS = [36, 48, 60];
 
-// state.scenarios 가 3슬롯 미만이면 채워서 항상 3개 유지
+// state.scenarios 가 3슬롯 미만이면 60/48/36 순서로 채워서 항상 3개 유지
+const DEFAULT_TERMS = [60, 48, 36];
 while (quoteState.scenarios.length < 3) {
-  quoteState.scenarios.push({ term: 36, dep: 10, pre: 0 });
+  const idx = quoteState.scenarios.length;
+  quoteState.scenarios.push({
+    term: DEFAULT_TERMS[idx] ?? 36,
+    dep: quoteState.cond.dep ?? 10,
+    pre: quoteState.cond.pre ?? 0,
+  });
 }
 if (!Array.isArray(quoteState.send) || quoteState.send.length < quoteState.scenarios.length) {
   quoteState.send = quoteState.scenarios.map(() => true);
@@ -46,13 +52,17 @@ if (!Array.isArray(quoteState.send) || quoteState.send.length < quoteState.scena
 function onTermChange(idx, e) {
   quoteState.scenarios[idx].term = +e.target.value;
 }
+function stripNonDigits(e) {
+  const cleaned = e.target.value.replace(/\D/g, '');
+  if (cleaned !== e.target.value) e.target.value = cleaned;
+}
 function onDepChange(idx, e) {
-  const v = Math.max(0, Math.min(100, +e.target.value || 0));
+  const v = Math.max(0, Math.min(100, +e.target.value.replace(/\D/g, '') || 0));
   e.target.value = v;
   quoteState.scenarios[idx].dep = v;
 }
 function onPreChange(idx, e) {
-  const v = Math.max(0, Math.min(100, +e.target.value || 0));
+  const v = Math.max(0, Math.min(100, +e.target.value.replace(/\D/g, '') || 0));
   e.target.value = v;
   quoteState.scenarios[idx].pre = v;
 }
@@ -213,10 +223,13 @@ const cards = computed(() => {
             <td v-for="c in cards" :key="c.idx">
               <span class="sq-pct-cell">
                 <input
-                  type="number"
+                  type="text"
+                  inputmode="numeric"
+                  pattern="[0-9]*"
+                  maxlength="3"
                   class="sq-pct-input"
                   :value="c.dep"
-                  min="0" max="100"
+                  @input="stripNonDigits($event)"
                   @change="onDepChange(c.idx, $event)"
                 />%
               </span>
@@ -228,10 +241,13 @@ const cards = computed(() => {
             <td v-for="c in cards" :key="c.idx">
               <span class="sq-pct-cell">
                 <input
-                  type="number"
+                  type="text"
+                  inputmode="numeric"
+                  pattern="[0-9]*"
+                  maxlength="3"
                   class="sq-pct-input"
                   :value="c.pre"
-                  min="0" max="100"
+                  @input="stripNonDigits($event)"
                   @change="onPreChange(c.idx, $event)"
                 />%
               </span>

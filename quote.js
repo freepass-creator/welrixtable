@@ -341,8 +341,14 @@ function recompute() {
   }
 
   const monthly = state.scenarios.map((sc, idx) => ({ idx, ...runScenario(sc) }));
-  // 기본 견적 — 36/48/60 × 보증금 10% × 선납 0% 고정
-  const REF_SCENARIOS = [{ term: 36, dep: 10, pre: 0 }, { term: 48, dep: 10, pre: 0 }, { term: 60, dep: 10, pre: 0 }];
+  // 기본 견적 — 60/48/36 × 현재 cond.dep/pre (위쪽 조건 폼 따라 일괄 변경)
+  const refDep = +state.cond.dep || 0;
+  const refPre = +state.cond.pre || 0;
+  const REF_SCENARIOS = [
+    { term: 60, dep: refDep, pre: refPre },
+    { term: 48, dep: refDep, pre: refPre },
+    { term: 36, dep: refDep, pre: refPre },
+  ];
   const referenceMonthly = REF_SCENARIOS.map((sc, idx) => ({ idx, ...runScenario(sc) }));
 
   // Vue TermsGrid / ReferenceGrid 가 reactive 읽음
