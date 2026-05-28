@@ -2296,17 +2296,35 @@ render();
   .qp-terms__title {
     font-size: 12px; font-weight: 500; color: var(--ink-3);
     letter-spacing: 0; padding: 14px 0 8px; margin: 0;
+    display: flex; align-items: baseline; gap: 8px;
   }
   .qp-terms__title small {
     font-size: 11px; font-weight: 400; color: var(--ink-4);
     margin-left: 4px; letter-spacing: -0.1px;
   }
+  /* 손님 발송용 — brand 색 강조로 시각 구분 */
   .qp-terms__title--customer {
-    padding-top: 22px;
-    border-top: 1px solid var(--line);
+    margin-top: 18px;
+    padding: 12px 14px 8px;
+    background: var(--brand-50);
+    border: 1px solid var(--brand-100);
+    border-bottom: 0;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    color: var(--brand); font-weight: 600;
+  }
+  .qp-terms__title--customer small { color: var(--brand); opacity: 0.7; }
+  .qp-terms__title--customer::before {
+    content: ''; display: inline-block;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--brand);
   }
   .terms-grid {
     display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; margin-bottom: 14px;
+    background: var(--brand-50);
+    border: 1px solid var(--brand-100);
+    border-top: 0;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    padding: 0 12px 8px;
   }
   /* 기본 견적 — 3 컬럼 (36/48/60 고정) */
   .reference-grid {
