@@ -1,7 +1,8 @@
-// 포맷터 SSOT — quote.js / build-quote-html.js / customer-view.js 공유
-// 이전엔 각 파일이 같은 함수를 복사·재정의 → 변형 누적 → 일관성 파괴
+// 포맷터 SSOT — 전 컴포넌트가 import 해서 사용. 인라인 재정의 금지.
+// Intl.NumberFormat 은 무거우므로 모듈 레벨 싱글톤 (매 호출마다 new 생성 X)
 
-export const fmt = (n) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
+const _KRW_FMT = new Intl.NumberFormat('ko-KR');
+export const fmt = (n) => _KRW_FMT.format(Math.round(n || 0));
 export const krw = (n) => `${fmt(n)}원`;
 
 // 점진적 하이픈 — 입력 중에도 자동 적용 (PC 의 견적서 표시도 동일 결과)

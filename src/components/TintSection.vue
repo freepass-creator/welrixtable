@@ -3,10 +3,9 @@ import { computed } from 'vue';
 import { quoteState, vehicleState } from '../store.js';
 import { TINT_PRICES, TINT_AREAS } from '../data/lookups.js';
 import CustomDropdown from './CustomDropdown.vue';
+import { fmt } from '../lib/format.js';
 
 const isDisabled = computed(() => !vehicleState.trim);
-
-const fmt = (n) => new Intl.NumberFormat('ko-KR').format(n);
 
 const productOptions = computed(() =>
   [{ value: '', label: '없음' }, ...Object.keys(TINT_PRICES).map((p) => ({ value: p, label: p }))]

@@ -1,8 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { vehicleState } from '../store.js';
-
-const fmt = (n) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
+import { fmt } from '../lib/format.js';
 
 // 현재 트림의 옵션 목록 (인라인 스크립트가 syncToVueStore에서 채움)
 const options = computed(() => vehicleState.optionsForCurrentTrim || []);

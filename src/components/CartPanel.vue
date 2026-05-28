@@ -2,9 +2,9 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { cartStore, removeFromCart, clearCart, toggleCartItem, setCartAllSelected } from '../store.js';
+import { fmt } from '../lib/format.js';
 
 const open = ref(false);
-const fmt = (n) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
 
 const selectedIds = computed(() =>
   cartStore.vehicles.filter(v => v.selected !== false).map(v => v.id)

@@ -5,7 +5,7 @@ import { calcQuote } from '../../lib/calc.js';
 import { saveQuote, buildQuoteUrl } from '../../firebase/quotes.js';
 import { buildOfficialQuoteHtml } from '../../lib/build-quote-html.js';
 import { fmt, fmtTel } from '../../lib/format.js';
-import { DELIVERY_REGIONS, ACCESSORIES, TINT_PRICES } from '../../data/lookups.js';
+import * as Fees from '../../lib/compute-fees.js';
 
 defineProps({ open: Boolean });
 const emit = defineEmits(['close']);
@@ -31,20 +31,9 @@ const sending = ref(false);
 const sentLink = ref('');
 const errorMsg = ref('');
 
-const optPrice = computed(() => {
-  const v = quoteState.vehicle;
-  return (v?.options_price_manwon || 0) * 10000 + (quoteState.cond.colorIntPrice || 0);
-});
-const deliveryFee = computed(() => DELIVERY_REGIONS[quoteState.cond.deliveryRegion]?.[quoteState.cond.deliveryCity] || 0);
-const tintFee = computed(() => {
-  const p = quoteState.tint?.product; const areas = quoteState.tint?.areas;
-  if (!p || !areas?.size || !TINT_PRICES[p]) return 0;
-  let t = 0; areas.forEach(a => { t += TINT_PRICES[p][a] || 0; }); return t;
-});
-const accessoryFee = computed(() => {
-  const e = quoteState.extras || {};
-  return (ACCESSORIES.blackbox[e.blackbox] || 0) + (ACCESSORIES.navi[e.navi] || 0) + (ACCESSORIES.hipass[e.hipass] || 0);
-});
+const optPrice = computed(() => Fees.optPrice(quoteState));
+const deliveryFee = computed(() => Fees.deliveryFee(quoteState));
+const itemsFee = computed(() => Fees.itemsFee(quoteState));
 
 const monthlyResults = computed(() => {
   const v = quoteState.vehicle;
@@ -64,7 +53,7 @@ const monthlyResults = computed(() => {
           optPrice: optPrice.value,
           discount: (quoteState.cond.discount || 0) * 10000,
           deliveryFee: deliveryFee.value,
-          itemsFee: tintFee.value + accessoryFee.value, etc: 0,
+          itemsFee: itemsFee.value, etc: 0,
         },
         contract: { term: s.term, km: (quoteState.cond.km || 2) + '만km', dep: s.dep ?? 10, pre: s.pre ?? 0 },
         customer: { creditGrade: quoteState.cond.credit || '중신용' },

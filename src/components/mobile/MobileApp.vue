@@ -217,7 +217,7 @@ function openSend() {
   color: var(--ink-2);
   font-size: 14px;
 }
-.m-btn--ghost:active { background: #ebebeb; }
+.m-btn--ghost:active { background: var(--line-2); }
 .m-btn--primary {
   flex: 1;
   background: var(--brand); color: #fff;

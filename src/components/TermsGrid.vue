@@ -1,9 +1,9 @@
 <script setup>
 import { computed } from 'vue';
 import { quoteState as state } from '../store.js';
+import { fmt } from '../lib/format.js';
 
 const TERM_OPTIONS = [12, 24, 36, 48, 60];
-const fmt = (n) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
 
 // 차량+트림 선택돼서 월대여료 계산된 상태
 const hasResults = computed(() => state.monthly && state.monthly.length > 0);

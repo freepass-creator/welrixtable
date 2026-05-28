@@ -2,8 +2,8 @@
 import { computed } from 'vue';
 import { quoteState } from '../../store.js';
 import { DELIVERY_REGIONS, ACCESSORIES, TINT_AREAS, TINT_PRICES } from '../../data/lookups.js';
-
-const fmt = (n) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
+import { fmt } from '../../lib/format.js';
+import * as Fees from '../../lib/compute-fees.js';
 
 // 짧은 옵션은 chip 유지
 const SVC = [
@@ -29,11 +29,7 @@ const cities = computed(() => {
   const r = quoteState.cond.deliveryRegion;
   return r && DELIVERY_REGIONS[r] ? Object.keys(DELIVERY_REGIONS[r]) : [];
 });
-const deliveryFee = computed(() => {
-  const r = quoteState.cond.deliveryRegion;
-  const c = quoteState.cond.deliveryCity;
-  return (DELIVERY_REGIONS[r] && DELIVERY_REGIONS[r][c]) || 0;
-});
+const deliveryFee = computed(() => Fees.deliveryFee(quoteState));
 function onRegionChange(e) {
   const r = e.target.value;
   quoteState.cond.deliveryRegion = r;
@@ -59,14 +55,7 @@ function toggleTintArea(key) {
     if (ex && set.has(ex)) set.delete(ex);
   }
 }
-const tintFee = computed(() => {
-  const p = quoteState.tint.product;
-  const areas = quoteState.tint.areas;
-  if (!p || !areas?.size || !TINT_PRICES[p]) return 0;
-  const map = TINT_PRICES[p];
-  let total = 0; areas.forEach(a => { total += map[a] || 0; });
-  return total;
-});
+const tintFee = computed(() => Fees.tintFee(quoteState));
 
 // 용품 — native select 옵션 빌드
 function buildOpts(map) {

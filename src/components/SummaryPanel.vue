@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { quoteState as state } from '../store.js';
+import { fmt } from '../lib/format.js';
 
 const BRAND_LOGOS = {
   '현대': 'https://cdn.simpleicons.org/hyundai/002C5F',
@@ -29,8 +30,6 @@ const totalKrw = computed(() => {
   return v.total_manwon * 10000 + (state.cond.colorIntPrice || 0);
 });
 const totalManwon = computed(() => Math.round(totalKrw.value / 10000));
-
-const fmt = (n) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
 
 const options = computed(() => state.vehicle?.options || []);
 const colorExt = computed(() => state.vehicle?.colorExt || null);

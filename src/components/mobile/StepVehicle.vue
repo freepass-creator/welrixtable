@@ -2,7 +2,7 @@
 import { computed, ref, onMounted } from 'vue';
 import { vehicleState, quoteState } from '../../store.js';
 import { POPULAR_BRAND, POPULAR_MODELS, sortByRank } from '../../data/popular-rankings.js';
-import { guessColor } from '../../lib/format.js';
+import { fmt, guessColor } from '../../lib/format.js';
 
 const props = defineProps({
   vehicles: { type: Array, default: () => [] },
@@ -13,8 +13,6 @@ const BRAND_LOGOS = {
   kia:      'https://cdn.simpleicons.org/kia/05141F',
   genesis:  '/genesis.svg',
 };
-
-const fmt = (n) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
 
 // 내장 색상 — lookups.js 와 동일 (PC 와 일치) + swatch 자동 계산
 const COLOR_INT = [

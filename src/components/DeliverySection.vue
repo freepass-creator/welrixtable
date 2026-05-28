@@ -3,10 +3,9 @@ import { computed } from 'vue';
 import { quoteState, vehicleState } from '../store.js';
 import { DELIVERY_REGIONS } from '../data/lookups.js';
 import CustomDropdown from './CustomDropdown.vue';
+import { fmt } from '../lib/format.js';
 
 const isDisabled = computed(() => !vehicleState.trim);
-
-const fmt = (n) => new Intl.NumberFormat('ko-KR').format(n);
 
 const regionOptions = computed(() =>
   Object.keys(DELIVERY_REGIONS).map((r) => ({ value: r, label: r }))

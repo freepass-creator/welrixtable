@@ -2,47 +2,16 @@
 import { ref, computed } from 'vue';
 import { quoteState, vehicleState } from '../../store.js';
 import { calcQuote } from '../../lib/calc.js';
-import { DELIVERY_REGIONS, ACCESSORIES, TINT_PRICES } from '../../data/lookups.js';
-
-const fmt = (n) => new Intl.NumberFormat('ko-KR').format(Math.round(n || 0));
+import { fmt } from '../../lib/format.js';
+import * as Fees from '../../lib/compute-fees.js';
 
 const expanded = ref(false);
 function toggle() { expanded.value = !expanded.value; }
 
-// 옵션 가격 합산 (트림 옵션 + 색상)
-const optPrice = computed(() => {
-  const v = quoteState.vehicle;
-  if (!v) return 0;
-  // options_price_manwon (만원) + colorIntPrice (원)
-  return (v.options_price_manwon || 0) * 10000 + (quoteState.cond.colorIntPrice || 0);
-});
-
-// 탁송비
-const deliveryFee = computed(() => {
-  const r = quoteState.cond.deliveryRegion;
-  const c = quoteState.cond.deliveryCity;
-  return (DELIVERY_REGIONS[r]?.[c]) || 0;
-});
-
-// 선팅비
-const tintFee = computed(() => {
-  const p = quoteState.tint?.product;
-  const areas = quoteState.tint?.areas;
-  if (!p || !areas?.size || !TINT_PRICES[p]) return 0;
-  const map = TINT_PRICES[p];
-  let total = 0; areas.forEach(a => { total += map[a] || 0; });
-  return total;
-});
-
-// 용품비 (블박/내비/하이패스)
-const accessoryFee = computed(() => {
-  const e = quoteState.extras || {};
-  return (ACCESSORIES.blackbox[e.blackbox] || 0)
-       + (ACCESSORIES.navi[e.navi] || 0)
-       + (ACCESSORIES.hipass[e.hipass] || 0);
-});
-
-const itemsFee = computed(() => tintFee.value + accessoryFee.value);
+// 비용 — lib/compute-fees.js 통합 함수 사용
+const optPrice = computed(() => Fees.optPrice(quoteState));
+const deliveryFee = computed(() => Fees.deliveryFee(quoteState));
+const itemsFee = computed(() => Fees.itemsFee(quoteState));
 
 // 전체 기간 (체크 안된 것도 카드는 표시) — 60 / 48 / 36 항상
 const ALL_TERMS = [60, 48, 36];
