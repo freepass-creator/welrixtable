@@ -87,9 +87,12 @@ function openSend() {
 
 <template>
   <div class="m-shell">
-    <!-- 헤더 — 좌측 진짜 CI + 우측 발송 -->
+    <!-- 헤더 — 좌측: CI + 페이지 타이틀, 우측: 발송 -->
     <header class="m-header">
-      <img class="m-ci" src="/welrix-ci.png" alt="웰릭스 모빌리티" />
+      <div class="m-header__brand">
+        <img class="m-ci" src="/welrix-ci.png" alt="웰릭스 모빌리티" />
+        <span class="m-title">신차장기 렌터카 견적기</span>
+      </div>
       <button class="m-act m-act--primary" :disabled="!vehicleState.trim" @click="openSend">
         <i class="ph ph-paper-plane-tilt"></i>
         <span>견적 발송하기</span>
@@ -147,10 +150,18 @@ function openSend() {
   background: var(--bg);
   gap: 8px;
 }
+.m-header__brand {
+  display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1;
+}
 .m-ci {
   height: 20px; width: auto;
   object-fit: contain;
   flex-shrink: 0;
+}
+.m-title {
+  font-size: 12.5px; font-weight: 600; color: var(--ink-1);
+  letter-spacing: -0.3px; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
 }
 .m-header__actions {
   display: flex; gap: 6px; flex-shrink: 0;

@@ -32,33 +32,46 @@ const optPrice = computed(() => Fees.optPrice(quoteState));
 const deliveryFee = computed(() => Fees.deliveryFee(quoteState));
 const itemsFee = computed(() => Fees.itemsFee(quoteState));
 
-// 전체 기간 (체크 안된 것도 카드는 표시) — 60 / 48 / 36 항상
-const ALL_TERMS = [60, 48, 36];
+// 선택 가능한 기간 — PC TermsGrid 와 동일
+const TERM_OPTIONS = [12, 24, 36, 48, 60];
 
-function isChecked(term) {
-  return (quoteState.scenarios || []).some(s => s.term === term);
+// state.scenarios 가 3슬롯 미만이면 채워서 항상 3개 유지
+while (quoteState.scenarios.length < 3) {
+  quoteState.scenarios.push({ term: 36, dep: 10, pre: 0 });
+}
+if (!Array.isArray(quoteState.send) || quoteState.send.length < quoteState.scenarios.length) {
+  quoteState.send = quoteState.scenarios.map(() => true);
 }
 
-function toggleTerm(term) {
-  const list = quoteState.scenarios || [];
-  const idx = list.findIndex(s => s.term === term);
-  if (idx >= 0) {
-    if (list.length === 1) return;  // 최소 1개 유지
-    list.splice(idx, 1);
-  } else {
-    list.push({ term, dep: quoteState.cond.dep || 10, pre: quoteState.cond.pre || 0 });
-    list.sort((a, b) => b.term - a.term);
-  }
+function onTermChange(idx, e) {
+  quoteState.scenarios[idx].term = +e.target.value;
+}
+function onDepChange(idx, e) {
+  const v = Math.max(0, Math.min(100, +e.target.value || 0));
+  e.target.value = v;
+  quoteState.scenarios[idx].dep = v;
+}
+function onPreChange(idx, e) {
+  const v = Math.max(0, Math.min(100, +e.target.value || 0));
+  e.target.value = v;
+  quoteState.scenarios[idx].pre = v;
+}
+function onSendToggle(idx) {
+  quoteState.send[idx] = !quoteState.send[idx];
 }
 
-// 모든 기간에 대해 계산 (선택 여부와 무관)
-const scenarios = computed(() => {
+// 각 시나리오 슬롯(0/1/2)에 대해 계산
+const cards = computed(() => {
   const v = quoteState.vehicle;
-  if (!v || !v._src) return [];
-  const t = v._src;
-  return ALL_TERMS.map((term) => {
-    const s = (quoteState.scenarios || []).find(x => x.term === term)
-              || { term, dep: quoteState.cond.dep || 10, pre: quoteState.cond.pre || 0 };
+  return quoteState.scenarios.map((sc, idx) => {
+    const base = {
+      idx, term: sc.term, dep: sc.dep ?? 10, pre: sc.pre ?? 0,
+      sent: quoteState.send[idx] !== false,
+      monthly: null, residualAmt: null, residualPct: null,
+      depAmt: null, preAmt: null,
+    };
+    if (!v || !v._src) return base;
+    const t = v._src;
     try {
       const result = calcQuote({
         vehicle: {
@@ -70,12 +83,12 @@ const scenarios = computed(() => {
         },
         options: {
           optPrice: optPrice.value,
-          discount: (quoteState.cond.discount || 0) * 10000,  // 만원 → 원
+          discount: (quoteState.cond.discount || 0) * 10000,
           deliveryFee: deliveryFee.value,
           itemsFee: itemsFee.value,
           etc: 0,
         },
-        contract: { term: s.term, km: (quoteState.cond.km || 2) + '만km', dep: s.dep ?? 10, pre: s.pre ?? 0 },
+        contract: { term: sc.term, km: (quoteState.cond.km || 2) + '만km', dep: sc.dep ?? 10, pre: sc.pre ?? 0 },
         customer: { creditGrade: quoteState.cond.credit || '중신용' },
         insurance: {
           property: quoteState.cond.insProperty || '1억',
@@ -86,14 +99,13 @@ const scenarios = computed(() => {
         fees: { feeRatePct: quoteState.cond.feeRatePct ?? 5.0, svc: quoteState.cond.svc || '웰스 Basic' },
       });
       return {
-        term: s.term, dep: s.dep, pre: s.pre,
+        ...base,
         monthly: result.monthly,
         residualAmt: result.residualAmt, residualPct: result.residualPct,
         depAmt: result.depAmt, preAmt: result.preAmt,
-        checked: isChecked(s.term),
       };
     } catch (e) {
-      return { term: s.term, monthly: null, checked: isChecked(s.term) };
+      return base;
     }
   });
 });
@@ -101,96 +113,117 @@ const scenarios = computed(() => {
 
 <template>
   <div class="sq" :class="{ 'sq--expanded': expanded }">
-    <button
-      class="sq-handle"
-      @click="toggle"
-      @touchstart.passive="onTouchStart"
-      @touchend="onTouchEnd"
-      aria-label="견적 펼치기 (탭 또는 위로 스와이프)"
-    >
-      <span class="sq-handle__bar"></span>
-    </button>
-
-    <!-- 라벨 — 탭 + 스와이프 둘 다 지원 -->
+    <!-- 단일 어포던스 — 손잡이 바 + 라벨이 한 영역, 탭/스와이프 모두 지원 -->
     <div
       class="sq-summary"
       @click="toggle"
       @touchstart.passive="onTouchStart"
       @touchend="onTouchEnd"
+      role="button"
+      :aria-expanded="expanded"
+      aria-label="견적 펼치기 (탭 또는 위로 스와이프)"
     >
-      <div class="sq-summary__label">
-        월 대여료
-        <span class="sq-summary__hint">VAT 포함 · 체크된 기간만 발송</span>
+      <span class="sq-summary__bar"></span>
+      <div class="sq-summary__row">
+        <div class="sq-summary__label">
+          월 대여료
+          <span class="sq-summary__hint">VAT 포함 · 체크된 기간만 발송</span>
+        </div>
+        <i class="ph sq-summary__caret" :class="expanded ? 'ph-caret-down' : 'ph-caret-up'"></i>
       </div>
-      <i class="ph sq-summary__caret" :class="expanded ? 'ph-caret-down' : 'ph-caret-up'"></i>
     </div>
 
-    <!-- 기간별 카드 — 클릭으로 체크/해제, 체크된 것만 발송 -->
-    <div class="sq-terms" v-if="scenarios.length">
-      <button
-        v-for="s in scenarios" :key="s.term"
+    <!-- 기간별 카드 — 기간 변경 select + 월대여료 + 발송 체크 -->
+    <div class="sq-terms">
+      <div
+        v-for="c in cards" :key="c.idx"
         class="sq-term-card"
-        :class="{ 'is-checked': s.checked }"
-        @click="toggleTerm(s.term)"
+        :class="{ 'is-checked': c.sent }"
       >
-        <i class="ph sq-term-card__check"
-           :class="s.checked ? 'ph-check-circle-fill' : 'ph-circle'"></i>
-        <div class="sq-term-card__term">{{ s.term }}개월</div>
+        <button
+          class="sq-term-card__check-btn"
+          @click="onSendToggle(c.idx)"
+          :aria-label="(c.sent ? '발송 제외' : '발송 포함') + ' ' + c.term + '개월'"
+        >
+          <i class="ph" :class="c.sent ? 'ph-check-circle-fill' : 'ph-circle'"></i>
+        </button>
+        <select
+          class="sq-term-card__select"
+          :value="c.term"
+          @change="onTermChange(c.idx, $event)"
+        >
+          <option v-for="t in TERM_OPTIONS" :key="t" :value="t">{{ t }}개월</option>
+        </select>
         <div class="sq-term-card__monthly">
-          <template v-if="s.monthly">{{ fmt(s.monthly) }}<em>원</em></template>
+          <template v-if="c.monthly">{{ fmt(c.monthly) }}<em>원</em></template>
           <template v-else><span class="muted">—</span></template>
         </div>
-      </button>
+      </div>
     </div>
-    <div v-else class="sq-empty">차량 선택 후 계산</div>
 
-    <!-- 펼침 — PC 견적표 (약정주행/만기인수/보증금/선납/정비) -->
-    <div v-if="expanded && scenarios.length" class="sq-detail">
+    <!-- 펼침 — 보증금/선납금 편집 + 만기인수/약정/정비 표시 -->
+    <div v-if="expanded" class="sq-detail">
       <table class="sq-table">
         <thead>
           <tr>
             <th class="sq-table__rowlabel">구분</th>
-            <th v-for="s in scenarios" :key="s.term"
-                :class="{ 'is-dim': !s.checked }">{{ s.term }}개월</th>
+            <th v-for="c in cards" :key="c.idx"
+                :class="{ 'is-dim': !c.sent }">{{ c.term }}개월</th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="quoteState.cond.discount">
             <th class="sq-table__rowlabel">추가 할인</th>
-            <td v-for="s in scenarios" :key="s.term" class="sq-table__discount">
+            <td v-for="c in cards" :key="c.idx" class="sq-table__discount">
               −{{ fmt(quoteState.cond.discount) }}만원
             </td>
           </tr>
           <tr>
             <th class="sq-table__rowlabel">약정주행</th>
-            <td v-for="s in scenarios" :key="s.term">{{ quoteState.cond.km || 2 }}만km/년</td>
+            <td v-for="c in cards" :key="c.idx">{{ quoteState.cond.km || 2 }}만km/년</td>
           </tr>
           <tr>
             <th class="sq-table__rowlabel">만기인수</th>
-            <td v-for="s in scenarios" :key="s.term">
-              <template v-if="s.residualAmt">
-                {{ (s.residualPct * 100).toFixed(0) }}%<br>
-                <small>{{ fmt(s.residualAmt) }}원</small>
+            <td v-for="c in cards" :key="c.idx">
+              <template v-if="c.residualAmt">
+                {{ (c.residualPct * 100).toFixed(0) }}%<br>
+                <small>{{ fmt(c.residualAmt) }}원</small>
               </template>
               <template v-else>—</template>
             </td>
           </tr>
           <tr>
             <th class="sq-table__rowlabel">정비서비스</th>
-            <td v-for="s in scenarios" :key="s.term">{{ quoteState.cond.svc || '웰스 Basic' }}</td>
+            <td v-for="c in cards" :key="c.idx">{{ quoteState.cond.svc || '웰스 Basic' }}</td>
           </tr>
           <tr>
             <th class="sq-table__rowlabel">보증금</th>
-            <td v-for="s in scenarios" :key="s.term">
-              {{ s.dep || quoteState.cond.dep || 0 }}%<br>
-              <small v-if="s.depAmt">{{ fmt(s.depAmt) }}원</small>
+            <td v-for="c in cards" :key="c.idx">
+              <span class="sq-pct-cell">
+                <input
+                  type="number"
+                  class="sq-pct-input"
+                  :value="c.dep"
+                  min="0" max="100"
+                  @change="onDepChange(c.idx, $event)"
+                />%
+              </span>
+              <small v-if="c.depAmt">{{ fmt(c.depAmt) }}원</small>
             </td>
           </tr>
           <tr>
             <th class="sq-table__rowlabel">선납금</th>
-            <td v-for="s in scenarios" :key="s.term">
-              {{ s.pre || quoteState.cond.pre || 0 }}%<br>
-              <small v-if="s.preAmt">{{ fmt(s.preAmt) }}원</small>
+            <td v-for="c in cards" :key="c.idx">
+              <span class="sq-pct-cell">
+                <input
+                  type="number"
+                  class="sq-pct-input"
+                  :value="c.pre"
+                  min="0" max="100"
+                  @change="onPreChange(c.idx, $event)"
+                />%
+              </span>
+              <small v-if="c.preAmt">{{ fmt(c.preAmt) }}원</small>
             </td>
           </tr>
         </tbody>
@@ -227,22 +260,21 @@ const scenarios = computed(() => {
   max-height: 75vh; overflow-y: auto;
 }
 
-.sq-handle {
-  display: flex; align-items: center; justify-content: center;
-  width: 100%; height: 18px;
-  border: 0; background: transparent;
+.sq-summary {
+  display: flex; flex-direction: column; align-items: stretch;
+  padding: 6px 20px 8px;
   cursor: pointer;
+  user-select: none;
 }
-.sq-handle__bar {
+.sq-summary__bar {
+  align-self: center;
   width: 38px; height: 4px;
   background: var(--line-2);
   border-radius: 2px;
+  margin-bottom: 6px;
 }
-
-.sq-summary {
+.sq-summary__row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 4px 20px 8px;
-  cursor: pointer;
 }
 .sq-summary__label {
   display: flex; align-items: baseline; gap: 6px;
@@ -259,27 +291,37 @@ const scenarios = computed(() => {
 .sq-term-card {
   position: relative;
   display: flex; flex-direction: column; align-items: center; gap: 3px;
-  padding: 10px 6px 8px;
+  padding: 8px 6px;
   background: var(--bg-soft);
   border: 1.5px solid transparent;
   border-radius: var(--r-card);
   font-family: inherit;
-  cursor: pointer;
   transition: background .12s, border-color .12s;
 }
-.sq-term-card:active { background: var(--brand-50); }
 .sq-term-card.is-checked {
   border-color: var(--brand);
   background: var(--brand-50);
 }
-.sq-term-card__check {
-  font-size: 16px;
+.sq-term-card__check-btn {
+  position: absolute; top: 4px; right: 4px;
+  width: 22px; height: 22px;
+  background: transparent; border: 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
   color: var(--ink-4);
+  font-size: 16px;
 }
-.sq-term-card.is-checked .sq-term-card__check { color: var(--brand); }
-.sq-term-card__term {
+.sq-term-card.is-checked .sq-term-card__check-btn { color: var(--brand); }
+.sq-term-card__select {
+  appearance: none; -webkit-appearance: none;
+  background: transparent; border: 0;
+  font-family: inherit;
   font-size: 11px; color: var(--ink-3); font-weight: 500;
+  text-align: center; text-align-last: center;
+  padding: 0 4px;
+  cursor: pointer;
+  outline: none;
 }
+.sq-term-card__select:focus { color: var(--brand); }
 .sq-term-card__monthly {
   font-size: 15px; font-weight: 700; color: var(--ink-1);
   font-variant-numeric: tabular-nums;
@@ -291,6 +333,27 @@ const scenarios = computed(() => {
   margin-left: 1px;
 }
 .sq-term-card.is-checked .sq-term-card__monthly { color: var(--brand); }
+
+/* 펼침: 보증금/선납금 % 입력 */
+.sq-pct-cell {
+  display: inline-flex; align-items: center; gap: 1px;
+}
+.sq-pct-input {
+  width: 32px; height: 22px;
+  border: 1px solid var(--line-2); border-radius: var(--radius-sm);
+  background: var(--bg);
+  font-family: inherit;
+  font-size: 11px; color: var(--ink-1); font-weight: 600;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+  padding: 0 2px;
+}
+.sq-pct-input:focus { border-color: var(--brand); }
+/* 숫자 input 화살표 제거 */
+.sq-pct-input::-webkit-outer-spin-button,
+.sq-pct-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.sq-pct-input { -moz-appearance: textfield; }
 
 .sq-empty {
   padding: 20px 16px;
