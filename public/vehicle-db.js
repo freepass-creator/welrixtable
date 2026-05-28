@@ -1621,9 +1621,9 @@ window.VEHICLE_DB = {
               // 슈퍼캡 초장축 2WD
               {
                 variant_id: "sc_long_2wd",
-                variant_name: "슈퍼캡 초장축 2WD",
+                variant_name: "LPI 슈퍼캡 초장축 2WD",
                 vehicle_type: "1톤 트럭",
-                fuel: "LPG",
+                fuel: "LPI",
                 displacement_cc: 2469,
                 transmission: "5단 자동",
                 trims: [
@@ -1652,9 +1652,9 @@ window.VEHICLE_DB = {
               // 더블캡 초장축 2WD
               {
                 variant_id: "dc_long_2wd",
-                variant_name: "더블캡 초장축 2WD",
+                variant_name: "LPI 더블캡 초장축 2WD",
                 vehicle_type: "1톤 트럭 (더블캡)",
-                fuel: "LPG",
+                fuel: "LPI",
                 displacement_cc: 2469,
                 transmission: "5단 자동",
                 trims: [
