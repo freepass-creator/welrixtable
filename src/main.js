@@ -4,6 +4,7 @@ import SummaryPanel from './components/SummaryPanel.vue';
 import TermsGrid from './components/TermsGrid.vue';
 import ReferenceGrid from './components/ReferenceGrid.vue';
 import StandardPriceTable from './components/StandardPriceTable.vue';
+import TodayHistory from './components/TodayHistory.vue';
 import OptionsList from './components/OptionsList.vue';
 import RightPanel from './components/RightPanel.vue';
 import VehicleCascade from './components/VehicleCascade.vue';
@@ -41,6 +42,7 @@ function mountAll() {
   mountOne('standard-price-root', StandardPriceTable, 'StandardPriceTable');
   mountOne('reference-grid', ReferenceGrid, 'ReferenceGrid');
   mountOne('terms-grid', TermsGrid, 'TermsGrid');
+  mountOne('today-history-root', TodayHistory, 'TodayHistory');
   mountOne('options', OptionsList, 'OptionsList');
   mountOne('contract-panel-root', RightPanel, 'RightPanel');
   mountOne('cart-panel-root', CartPanel, 'CartPanel');
