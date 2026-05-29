@@ -3,6 +3,7 @@ import { createApp } from 'vue';
 import SummaryPanel from './components/SummaryPanel.vue';
 import TermsGrid from './components/TermsGrid.vue';
 import ReferenceGrid from './components/ReferenceGrid.vue';
+import StandardPriceTable from './components/StandardPriceTable.vue';
 import OptionsList from './components/OptionsList.vue';
 import RightPanel from './components/RightPanel.vue';
 import VehicleCascade from './components/VehicleCascade.vue';
@@ -37,6 +38,7 @@ function mountAll() {
   mountOne('qp-summary-mini', SummaryPanel, 'SummaryPanel');
   mountOne('customer-staff-root', CustomerStaffForm, 'CustomerStaffForm');
   mountOne('conditions-form-root', ConditionsForm, 'ConditionsForm');
+  mountOne('standard-price-root', StandardPriceTable, 'StandardPriceTable');
   mountOne('reference-grid', ReferenceGrid, 'ReferenceGrid');
   mountOne('terms-grid', TermsGrid, 'TermsGrid');
   mountOne('options', OptionsList, 'OptionsList');
