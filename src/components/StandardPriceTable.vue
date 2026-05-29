@@ -101,61 +101,153 @@ function selectBrand(b) {
   selectedModel.value = '';  // 브랜드 바꾸면 모델 리셋
 }
 
-function downloadPdf() {
+function buildHtmlForCurrentView() {
   const rows = computedRows.value;
-  if (!rows.length) { alert('표시된 차량이 없습니다'); return; }
+  if (!rows.length) return '';
   const titleSuffix = selectedModel.value || '전체';
-  const html = buildPrintHtml(`${selectedBrand.value} — ${titleSuffix}`, rows);
+  return buildPrintHtml(`${selectedBrand.value} — ${titleSuffix}`, rows);
+}
+
+function downloadPdf() {
+  const html = buildHtmlForCurrentView();
+  if (!html) { alert('표시된 차량이 없습니다'); return; }
   const win = window.open('', '_blank');
   if (!win) { alert('팝업이 차단됐어요. 브라우저 팝업 차단 해제 후 다시 시도'); return; }
   win.document.open();
   win.document.write(html);
   win.document.close();
-  // 인쇄 다이얼로그 자동 호출 — 사용자가 'PDF 저장' 선택
   win.addEventListener('load', () => setTimeout(() => win.print(), 100));
+}
+
+// 미리보기 — 새 탭으로 print HTML 만 표시 (자동 인쇄 안 함)
+function openPreview() {
+  const html = buildHtmlForCurrentView();
+  if (!html) { alert('표시된 차량이 없습니다'); return; }
+  const win = window.open('', '_blank');
+  if (!win) { alert('팝업이 차단됐어요'); return; }
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+}
+
+// 이미지 복사 — html2canvas 로 캡쳐 → clipboard
+const copyingImage = ref(false);
+async function copyAsImage() {
+  if (copyingImage.value) return;
+  const html = buildHtmlForCurrentView();
+  if (!html) { alert('표시된 차량이 없습니다'); return; }
+  if (!window.html2canvas) { alert('이미지 캡쳐 라이브러리 로드 실패'); return; }
+  copyingImage.value = true;
+  try {
+    // 오프스크린에 렌더 후 캡쳐
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'position:fixed; left:-9999px; top:0; width:297mm; background:#fff;';
+    wrap.innerHTML = html;
+    document.body.appendChild(wrap);
+    // 인쇄용 HTML 안의 body 컨테이너 캡쳐 (html2canvas 는 body 노드 직접 못 받음)
+    const target = wrap.querySelector('body') || wrap.firstElementChild;
+    const canvas = await window.html2canvas(target, { scale: 2, backgroundColor: '#fff', useCORS: true });
+    document.body.removeChild(wrap);
+    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+    if (navigator.clipboard?.write && window.ClipboardItem) {
+      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+      alert('이미지 복사 완료 — 카톡·메일에 붙여넣기 하세요');
+    } else {
+      // fallback — 다운로드
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `welrix-price-${selectedBrand.value}-${Date.now()}.png`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+  } catch (e) {
+    alert('이미지 복사 실패: ' + (e?.message || e));
+  } finally {
+    copyingImage.value = false;
+  }
+}
+
+// 제조사 공식 가격표 PDF (public/manufacturer-pdfs/{slug}.pdf)
+const MFR_PDF_SLUG = { '현대': 'hyundai', '기아': 'kia', '제네시스': 'genesis' };
+function openManufacturerPdf() {
+  const slug = MFR_PDF_SLUG[selectedBrand.value];
+  if (!slug) return;
+  // 새 탭에서 열기 — 파일이 없으면 404, 사용자가 public/manufacturer-pdfs/{slug}.pdf 추가
+  window.open(`/manufacturer-pdfs/${slug}.pdf`, '_blank');
 }
 
 function buildPrintHtml(brand, rows) {
   const today = new Date();
   const dateStr = today.toLocaleDateString('ko-KR');
-  const tbody = rows.map(r => `
-    <tr>
-      <td>${escape(r.model)}</td>
-      <td class="trim">${escape(r.trim)}</td>
-      <td class="num">${fmt(r.price)}</td>
-      ${r.monthlies.map(m => `<td class="num mono">${m != null ? fmt(m) : '—'}</td>`).join('')}
-    </tr>
+  const cards = rows.map(r => `
+    <article class="card">
+      <header class="card-h">
+        <div class="brand">${escape(r.brand)}</div>
+        <div class="model">${escape(r.model)}</div>
+        <div class="trim">${escape(r.trim)}</div>
+      </header>
+      <div class="price">
+        <span class="lbl">차량가</span>
+        <span class="val">${fmt(r.price)}<small>원</small></span>
+      </div>
+      <div class="terms">
+        ${r.monthlies.map((m, i) => `
+          <div class="term">
+            <div class="t-lbl">${STANDARD_TERMS[i]}개월</div>
+            <div class="t-val">${m != null ? fmt(m) : '—'}<small>원/월</small></div>
+          </div>
+        `).join('')}
+      </div>
+    </article>
   `).join('');
   return `<!DOCTYPE html>
 <html lang="ko"><head><meta charset="UTF-8">
-<title>웰릭스 표준 가격표 — ${escape(brand)}</title>
+<title>웰릭스 표준 견적 — ${escape(brand)}</title>
 <style>
-  @page { size: A4 landscape; margin: 12mm; }
+  @page { size: A4; margin: 12mm; }
   * { box-sizing: border-box; }
   body { font-family: -apple-system, 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
-         color: #0a0a0a; margin: 0; padding: 0; font-size: 11px; }
+         color: #0a0a0a; margin: 0; padding: 0; font-size: 11px;
+         font-variant-numeric: tabular-nums; }
   .hdr { display: flex; justify-content: space-between; align-items: flex-end;
-         padding-bottom: 8px; border-bottom: 1.5px solid #0a0a0a; margin-bottom: 12px; }
-  .hdr h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+         padding-bottom: 10px; border-bottom: 2px solid #0D4E8B; margin-bottom: 14px; }
+  .hdr h1 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.3px; color: #0D4E8B; }
+  .hdr .sub { font-size: 12px; color: #737373; margin-top: 4px; }
   .hdr .meta { font-size: 10px; color: #737373; text-align: right; line-height: 1.5; }
-  .cond { font-size: 10px; color: #737373; margin-bottom: 10px; }
-  table { width: 100%; border-collapse: collapse; }
-  thead th { background: #f5f5f5; color: #0a0a0a; font-weight: 600;
-             padding: 6px 8px; text-align: left; border-bottom: 1px solid #d4d4d4;
-             font-size: 10px; letter-spacing: 0.2px; }
-  thead th.num { text-align: right; }
-  tbody td { padding: 5px 8px; border-bottom: 1px solid #f0f0f0;
-             font-size: 10.5px; vertical-align: middle; }
-  tbody td.num { text-align: right; font-variant-numeric: tabular-nums; }
-  tbody td.mono { font-weight: 600; color: #0D4E8B; }
-  tbody td.trim { color: #404040; }
-  .ftr { margin-top: 12px; font-size: 9px; color: #a3a3a3; text-align: center;
-         border-top: 1px solid #f0f0f0; padding-top: 6px; }
-  @media print { .no-print { display: none; } }
+  .cond { font-size: 10px; color: #737373; margin-bottom: 14px; padding: 6px 10px;
+          background: #f5f5f5; border-radius: 4px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .card { border: 1px solid #d4d4d4; border-radius: 6px; padding: 12px 14px;
+          break-inside: avoid; page-break-inside: avoid;
+          display: flex; flex-direction: column; gap: 8px; }
+  .card-h .brand { font-size: 9.5px; color: #737373; font-weight: 500;
+                   letter-spacing: 0.4px; }
+  .card-h .model { font-size: 14px; font-weight: 700; color: #0a0a0a;
+                   letter-spacing: -0.2px; margin-top: 2px; }
+  .card-h .trim { font-size: 11px; color: #404040; margin-top: 1px; }
+  .card .price { display: flex; align-items: baseline; justify-content: space-between;
+                 padding: 6px 0; border-top: 1px dashed #e5e5e5;
+                 border-bottom: 1px dashed #e5e5e5; }
+  .card .price .lbl { font-size: 10px; color: #737373; }
+  .card .price .val { font-size: 13px; font-weight: 600; }
+  .card .price .val small { font-size: 9px; color: #737373; font-weight: 400; margin-left: 2px; }
+  .card .terms { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .card .term { background: #eef4fa; border-radius: 4px; padding: 7px 8px; text-align: center; }
+  .card .term .t-lbl { font-size: 9.5px; color: #737373; font-weight: 500;
+                       letter-spacing: 0.3px; }
+  .card .term .t-val { font-size: 12.5px; font-weight: 700; color: #0D4E8B;
+                       margin-top: 2px; letter-spacing: -0.3px; }
+  .card .term .t-val small { font-size: 8.5px; color: #737373; font-weight: 400;
+                             margin-left: 1px; }
+  .ftr { margin-top: 14px; font-size: 9px; color: #a3a3a3; text-align: center;
+         border-top: 1px solid #f0f0f0; padding-top: 8px; }
 </style></head>
 <body>
   <div class="hdr">
-    <h1>웰릭스 표준 가격표 — ${escape(brand)}</h1>
+    <div>
+      <h1>웰릭스 표준 견적</h1>
+      <div class="sub">${escape(brand)}</div>
+    </div>
     <div class="meta">
       ${dateStr}<br>웰릭스 모빌리티
     </div>
@@ -163,18 +255,8 @@ function buildPrintHtml(brand, rows) {
   <div class="cond">
     ※ 표준 조건: 중신용 · 보증금 10% · 선납 0% · 약정 2만km/년 · 자동차보험 대물 1억 · 정비 웰스 Basic
   </div>
-  <table>
-    <thead>
-      <tr>
-        <th>모델</th>
-        <th>트림</th>
-        <th class="num">차량가</th>
-        ${STANDARD_TERMS.map(t => `<th class="num">${t}개월 월대여료</th>`).join('')}
-      </tr>
-    </thead>
-    <tbody>${tbody}</tbody>
-  </table>
-  <div class="ftr">전 가격은 부가세 포함, 실제 출고 시 변경 가능</div>
+  <div class="grid">${cards}</div>
+  <div class="ftr">전 가격은 부가세 포함, 실제 출고 시 변경 가능 · 표준 견적 자료, 손님 발송 견적과 별도</div>
 </body></html>`;
 }
 
@@ -189,8 +271,8 @@ function escape(s) {
     <div class="spt-panel">
       <div class="spt-head">
         <h3>
-          <i class="ph ph-list"></i>
-          웰릭스 표준 가격표
+          <i class="ph ph-file-text"></i>
+          웰릭스 표준 견적
         </h3>
         <button class="spt-close" @click="closePanel" aria-label="닫기">
           <i class="ph ph-x"></i>
@@ -218,8 +300,17 @@ function escape(s) {
           </select>
           <div class="spt-actions">
             <span class="spt-count">{{ computedRows.length }}건</span>
-            <button class="spt-download" :disabled="!computedRows.length" @click="downloadPdf">
-              <i class="ph ph-file-pdf"></i> PDF 다운로드
+            <button class="spt-act" :disabled="!computedRows.length" @click="openPreview" title="새 탭에서 미리보기">
+              <i class="ph ph-eye"></i>미리보기
+            </button>
+            <button class="spt-act" :disabled="!computedRows.length || copyingImage" @click="copyAsImage" title="이미지로 복사 (카톡 붙여넣기)">
+              <i class="ph" :class="copyingImage ? 'ph-spinner' : 'ph-clipboard'"></i>이미지 복사
+            </button>
+            <button class="spt-act spt-act--primary" :disabled="!computedRows.length" @click="downloadPdf" title="PDF 다운로드 (브라우저 인쇄→PDF)">
+              <i class="ph ph-file-pdf"></i>PDF
+            </button>
+            <button class="spt-act" @click="openManufacturerPdf" title="제조사 공식 가격표 PDF 열기">
+              <i class="ph ph-file-arrow-down"></i>공식 가격표
             </button>
           </div>
         </div>
@@ -231,29 +322,33 @@ function escape(s) {
         <div v-if="loading" class="spt-loading">차량 데이터 로드 중…</div>
         <div v-else-if="errorMsg" class="spt-error">{{ errorMsg }}</div>
         <div v-else-if="!computedRows.length" class="spt-empty">표시할 차종이 없습니다</div>
-        <div v-else class="spt-table-wrap">
-          <table class="spt-table">
-            <thead>
-              <tr>
-                <th>모델</th>
-                <th>트림</th>
-                <th class="spt-table__num">차량가</th>
-                <th class="spt-table__num">36개월</th>
-                <th class="spt-table__num">48개월</th>
-                <th class="spt-table__num">60개월</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="r in computedRows" :key="r.idx">
-                <td>{{ r.model }}</td>
-                <td class="spt-table__trim">{{ r.trim }}</td>
-                <td class="spt-table__num">{{ fmt(r.price) }}</td>
-                <td v-for="(m, i) in r.monthlies" :key="i" class="spt-table__num spt-table__mono">
-                  {{ m != null ? fmt(m) : '—' }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- 세로 카드 — 견적서 형태. 각 트림 1장 -->
+        <div v-else class="spt-cards" ref="cardsContainer">
+          <article
+            v-for="r in computedRows" :key="r.idx"
+            class="spt-card"
+          >
+            <header class="spt-card__head">
+              <div class="spt-card__brand">{{ r.brand }}</div>
+              <div class="spt-card__model">{{ r.model }}</div>
+              <div class="spt-card__trim">{{ r.trim }}</div>
+            </header>
+            <div class="spt-card__price">
+              <span class="spt-card__price-label">차량가</span>
+              <span class="spt-card__price-val">{{ fmt(r.price) }}<small>원</small></span>
+            </div>
+            <div class="spt-card__terms">
+              <div v-for="(m, i) in r.monthlies" :key="i" class="spt-card__term">
+                <div class="spt-card__term-label">{{ [36,48,60][i] }}개월</div>
+                <div class="spt-card__term-monthly">
+                  {{ m != null ? fmt(m) : '—' }}<small>원/월</small>
+                </div>
+              </div>
+            </div>
+            <div class="spt-card__cond">
+              ※ 중신용 · 보증금 10% · 선납 0% · 약정 2만km/년 · 보험 대물 1억 · 웰스 Basic
+            </div>
+          </article>
         </div>
       </div>
     </div>
@@ -344,17 +439,25 @@ function escape(s) {
 }
 .spt-mini:hover { background: var(--bg-soft); color: var(--ink-1); }
 .spt-count { font-size: 11px; color: var(--ink-4); font-variant-numeric: tabular-nums; }
-.spt-download {
-  display: inline-flex; align-items: center; gap: 5px;
-  background: var(--brand); color: #fff;
-  border: 0; border-radius: var(--radius-sm);
-  padding: 7px 12px; font-family: inherit;
-  font-size: 12px; font-weight: 500; cursor: pointer;
-  transition: background var(--t-fast);
+.spt-act {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--bg); color: var(--ink-2);
+  border: 1px solid var(--line-2); border-radius: var(--radius-sm);
+  padding: 6px 10px; font-family: inherit;
+  font-size: 11.5px; font-weight: 500; cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
 }
-.spt-download:hover:not(:disabled) { background: var(--brand-700); }
-.spt-download:disabled { opacity: 0.4; cursor: not-allowed; }
-.spt-download i { font-size: 14px; }
+.spt-act i { font-size: 13px; }
+.spt-act:hover:not(:disabled) {
+  background: var(--bg-soft); color: var(--ink-1); border-color: var(--ink-4);
+}
+.spt-act:disabled { opacity: 0.4; cursor: not-allowed; }
+.spt-act--primary {
+  background: var(--brand); color: #fff; border-color: var(--brand);
+}
+.spt-act--primary:hover:not(:disabled) {
+  background: var(--brand-700); color: #fff; border-color: var(--brand-700);
+}
 
 .spt-cond-hint {
   font-size: 11px; color: var(--ink-4);
@@ -369,35 +472,74 @@ function escape(s) {
   color: var(--ink-3); font-size: 12px;
 }
 
-.spt-table-wrap {
-  border: 1px solid var(--line-2); border-radius: var(--radius-sm);
+/* === 세로 카드 그리드 === */
+.spt-cards {
   flex: 1; min-height: 0; overflow-y: auto;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 10px;
+  padding: 4px;
+  font-variant-numeric: tabular-nums;
 }
-.spt-table {
-  width: 100%; border-collapse: collapse;
-  font-size: 11.5px; font-variant-numeric: tabular-nums;
+.spt-card {
+  background: var(--bg);
+  border: 1px solid var(--line-2); border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: border-color var(--t-fast);
 }
-.spt-table thead th {
-  position: sticky; top: 0; z-index: 1;
-  background: var(--bg-soft); color: var(--ink-1);
-  padding: 8px 10px; text-align: left;
-  font-weight: 600; font-size: 11px;
-  border-bottom: 1px solid var(--line-2);
-  letter-spacing: 0.2px;
+.spt-card:hover { border-color: var(--ink-4); }
+
+.spt-card__head { display: flex; flex-direction: column; gap: 1px; }
+.spt-card__brand {
+  font-size: 10px; color: var(--ink-4); font-weight: 500;
+  letter-spacing: 0.4px;
 }
-.spt-table thead th.spt-table__num { text-align: right; }
-.spt-table thead th.spt-table__chk { width: 32px; padding: 8px 4px; }
-.spt-table tbody td {
-  padding: 7px 10px;
-  border-bottom: 1px solid var(--line);
-  vertical-align: middle;
+.spt-card__model {
+  font-size: 14px; font-weight: 700; color: var(--ink-1);
+  letter-spacing: -0.2px;
 }
-.spt-table tbody tr { cursor: pointer; transition: background var(--t-fast); }
-.spt-table tbody tr:hover { background: var(--bg-soft); }
-.spt-table tbody tr.is-checked { background: var(--brand-50); }
-.spt-table__chk { text-align: center; }
-.spt-table__chk input { width: 14px; height: 14px; accent-color: var(--brand); cursor: pointer; }
-.spt-table__num { text-align: right; }
-.spt-table__mono { font-weight: 600; color: var(--brand); }
-.spt-table__trim { color: var(--ink-3); font-size: 11px; }
+.spt-card__trim {
+  font-size: 11px; color: var(--ink-2);
+  letter-spacing: -0.1px;
+}
+
+.spt-card__price {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 6px 0;
+  border-top: 1px dashed var(--line);
+  border-bottom: 1px dashed var(--line);
+}
+.spt-card__price-label { font-size: 10.5px; color: var(--ink-4); }
+.spt-card__price-val {
+  font-size: 13px; font-weight: 600; color: var(--ink-1);
+}
+.spt-card__price-val small {
+  font-size: 9.5px; color: var(--ink-4); font-weight: 400; margin-left: 2px;
+}
+
+.spt-card__terms {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+}
+.spt-card__term {
+  background: var(--brand-50);
+  border-radius: var(--radius-sm);
+  padding: 8px 6px;
+  text-align: center;
+}
+.spt-card__term-label {
+  font-size: 10px; color: var(--ink-3); font-weight: 500;
+  letter-spacing: 0.3px;
+}
+.spt-card__term-monthly {
+  font-size: 13px; font-weight: 700; color: var(--brand);
+  margin-top: 2px; letter-spacing: -0.3px;
+}
+.spt-card__term-monthly small {
+  font-size: 9px; color: var(--ink-4); font-weight: 400; margin-left: 1px;
+}
+
+.spt-card__cond {
+  font-size: 9.5px; color: var(--ink-4);
+  letter-spacing: -0.1px;
+}
 </style>
