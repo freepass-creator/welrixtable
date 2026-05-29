@@ -19,7 +19,7 @@ const STD = {
   svc: '웰스 Basic',
 };
 
-const expanded = ref(false);
+const open = ref(false);
 const vehicles = ref([]);
 const selectedBrand = ref('현대');
 const checked = ref(new Set());
@@ -42,9 +42,15 @@ async function loadVehicles() {
   }
 }
 
-function toggle() {
-  expanded.value = !expanded.value;
-  if (expanded.value) loadVehicles();
+function openPanel() {
+  open.value = true;
+  loadVehicles();
+}
+function closePanel() { open.value = false; }
+
+// 상단바 버튼이 외부에서 열도록
+if (typeof window !== 'undefined') {
+  window.__welrix_openStandardPriceTable = openPanel;
 }
 
 // 현재 브랜드 행
@@ -188,102 +194,126 @@ function escape(s) {
 </script>
 
 <template>
-  <details class="spt" :open="expanded" @toggle="expanded = $event.target.open; if (expanded) loadVehicles()">
-    <summary class="spt-summary">
-      <i class="ph ph-list"></i>
-      웰릭스 표준 가격표 (제조사별 다운로드)
-      <i class="ph ph-caret-down spt-caret"></i>
-    </summary>
-
-    <div class="spt-body">
-      <div class="spt-controls">
-        <div class="spt-tabs">
-          <button
-            v-for="b in BRANDS" :key="b"
-            class="spt-tab"
-            :class="{ 'is-active': selectedBrand === b }"
-            @click="selectBrand(b)"
-          >{{ b }}</button>
-        </div>
-        <div class="spt-actions">
-          <button class="spt-mini" @click="allSelected ? deselectAll() : selectAll()">
-            {{ allSelected ? '전체 해제' : '전체 선택' }}
-          </button>
-          <span class="spt-count">{{ selectedCountInBrand }} / {{ brandRows.length }}건</span>
-          <button class="spt-download" :disabled="selectedCountInBrand === 0" @click="downloadPdf">
-            <i class="ph ph-file-pdf"></i> PDF 다운로드
-          </button>
-        </div>
+  <div v-if="open" class="spt-backdrop" @click.self="closePanel">
+    <div class="spt-panel">
+      <div class="spt-head">
+        <h3>
+          <i class="ph ph-list"></i>
+          웰릭스 표준 가격표
+        </h3>
+        <button class="spt-close" @click="closePanel" aria-label="닫기">
+          <i class="ph ph-x"></i>
+        </button>
       </div>
 
-      <div class="spt-cond-hint">
-        ※ 표준 조건: <b>중신용 · 보증금 10% · 선납 0% · 약정 2만km/년 · 보험 대물 1억 · 웰스 Basic</b>
-      </div>
+      <div class="spt-body">
+        <div class="spt-controls">
+          <div class="spt-tabs">
+            <button
+              v-for="b in BRANDS" :key="b"
+              class="spt-tab"
+              :class="{ 'is-active': selectedBrand === b }"
+              @click="selectBrand(b)"
+            >{{ b }}</button>
+          </div>
+          <div class="spt-actions">
+            <button class="spt-mini" @click="allSelected ? deselectAll() : selectAll()">
+              {{ allSelected ? '전체 해제' : '전체 선택' }}
+            </button>
+            <span class="spt-count">{{ selectedCountInBrand }} / {{ brandRows.length }}건</span>
+            <button class="spt-download" :disabled="selectedCountInBrand === 0" @click="downloadPdf">
+              <i class="ph ph-file-pdf"></i> PDF 다운로드
+            </button>
+          </div>
+        </div>
 
-      <div v-if="loading" class="spt-loading">차량 데이터 로드 중…</div>
-      <div v-else-if="errorMsg" class="spt-error">{{ errorMsg }}</div>
-      <div v-else-if="!brandRows.length" class="spt-empty">{{ selectedBrand }} 차종 없음</div>
-      <div v-else class="spt-table-wrap">
-        <table class="spt-table">
-          <thead>
-            <tr>
-              <th class="spt-table__chk"></th>
-              <th>모델</th>
-              <th>트림</th>
-              <th class="spt-table__num">차량가</th>
-              <th class="spt-table__num">36개월</th>
-              <th class="spt-table__num">48개월</th>
-              <th class="spt-table__num">60개월</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="r in computedRows" :key="r.idx"
-              :class="{ 'is-checked': isChecked(r.idx) }"
-              @click="toggleRow(r.idx)"
-            >
-              <td class="spt-table__chk">
-                <input type="checkbox" :checked="isChecked(r.idx)" @click.stop="toggleRow(r.idx)" />
-              </td>
-              <td>{{ r.model }}</td>
-              <td class="spt-table__trim">{{ r.trim }}</td>
-              <td class="spt-table__num">{{ fmt(r.price) }}</td>
-              <td v-for="(m, i) in r.monthlies" :key="i" class="spt-table__num spt-table__mono">
-                {{ m != null ? fmt(m) : '—' }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="spt-cond-hint">
+          ※ 표준 조건: <b>중신용 · 보증금 10% · 선납 0% · 약정 2만km/년 · 보험 대물 1억 · 웰스 Basic</b>
+        </div>
+
+        <div v-if="loading" class="spt-loading">차량 데이터 로드 중…</div>
+        <div v-else-if="errorMsg" class="spt-error">{{ errorMsg }}</div>
+        <div v-else-if="!brandRows.length" class="spt-empty">{{ selectedBrand }} 차종 없음</div>
+        <div v-else class="spt-table-wrap">
+          <table class="spt-table">
+            <thead>
+              <tr>
+                <th class="spt-table__chk"></th>
+                <th>모델</th>
+                <th>트림</th>
+                <th class="spt-table__num">차량가</th>
+                <th class="spt-table__num">36개월</th>
+                <th class="spt-table__num">48개월</th>
+                <th class="spt-table__num">60개월</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="r in computedRows" :key="r.idx"
+                :class="{ 'is-checked': isChecked(r.idx) }"
+                @click="toggleRow(r.idx)"
+              >
+                <td class="spt-table__chk">
+                  <input type="checkbox" :checked="isChecked(r.idx)" @click.stop="toggleRow(r.idx)" />
+                </td>
+                <td>{{ r.model }}</td>
+                <td class="spt-table__trim">{{ r.trim }}</td>
+                <td class="spt-table__num">{{ fmt(r.price) }}</td>
+                <td v-for="(m, i) in r.monthlies" :key="i" class="spt-table__num spt-table__mono">
+                  {{ m != null ? fmt(m) : '—' }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </details>
+  </div>
 </template>
 
 <style scoped>
-.spt {
-  border: 1px solid var(--line-2);
-  border-radius: var(--radius-md);
-  margin: 0 0 16px;
-  background: var(--bg);
+/* === 모달 = backdrop + panel === */
+.spt-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200;
+  animation: spt-fade .15s ease-out;
+}
+@keyframes spt-fade { from { opacity: 0; } to { opacity: 1; } }
+
+.spt-panel {
+  background: var(--bg); border-radius: var(--radius-lg);
+  width: 92vw; max-width: 1200px;
+  max-height: 88vh;
+  display: flex; flex-direction: column;
+  box-shadow: var(--shadow-xl);
   overflow: hidden;
 }
-.spt[open] { border-color: var(--ink-4); }
 
-.spt-summary {
-  list-style: none; cursor: pointer; user-select: none;
-  display: flex; align-items: center; gap: 8px;
-  padding: 12px 18px;
-  font-size: 13px; font-weight: 600; color: var(--ink-1);
-  letter-spacing: -0.2px;
-  transition: background var(--t-fast);
+.spt-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line-2);
+  background: var(--bg-soft);
 }
-.spt-summary::-webkit-details-marker { display: none; }
-.spt-summary:hover { background: var(--bg-soft); }
-.spt-summary i { font-size: 16px; color: var(--ink-3); }
-.spt-summary .spt-caret { margin-left: auto; transition: transform .15s; }
-.spt[open] .spt-summary .spt-caret { transform: rotate(180deg); }
+.spt-head h3 {
+  margin: 0; font-size: 14px; font-weight: 600; color: var(--ink-1);
+  display: flex; align-items: center; gap: 8px;
+  letter-spacing: -0.2px;
+}
+.spt-head h3 i { font-size: 16px; color: var(--ink-3); }
+.spt-close {
+  background: transparent; border: 0;
+  width: 28px; height: 28px;
+  border-radius: var(--radius-sm); cursor: pointer;
+  color: var(--ink-3); font-size: 14px;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.spt-close:hover { background: var(--accent-soft); color: var(--ink-1); }
 
-.spt-body { padding: 0 18px 18px; }
+.spt-body { padding: 14px 20px 20px; flex: 1; min-height: 0; display: flex; flex-direction: column; }
 
 .spt-controls {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
@@ -338,7 +368,7 @@ function escape(s) {
 
 .spt-table-wrap {
   border: 1px solid var(--line-2); border-radius: var(--radius-sm);
-  max-height: 480px; overflow-y: auto;
+  flex: 1; min-height: 0; overflow-y: auto;
 }
 .spt-table {
   width: 100%; border-collapse: collapse;

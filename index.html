@@ -697,6 +697,10 @@
     <span class="gt-divider" aria-hidden="true"></span>
 
     <!-- 보조 액션 — 모두 outline 통일 -->
+    <button class="gt-btn outline" id="btn-standard-price" title="제조사별 표준 가격표 보기 + PDF 다운로드"
+            onclick="window.__welrix_openStandardPriceTable && window.__welrix_openStandardPriceTable()">
+      <i class="ph ph-list"></i>표준 가격표
+    </button>
     <button class="gt-btn outline" id="btn-copy-sign-link" title="조회 동의 페이지 링크 복사">
       <i class="ph ph-signature"></i>조회동의
     </button>
@@ -3968,9 +3972,6 @@ render();
 </style>
 
 <section class="quote-panel" id="quote-section">
-  <!-- 웰릭스 표준 가격표 — 제조사별 PDF 다운로드 (상단 별도 섹션) -->
-  <div id="standard-price-root"></div>
-
   <!-- 차량 선택 시만 노출되는 작은 정보 줄 -->
   <div class="qp-summary-mini" id="qp-summary-mini">
     <div class="qp-summary-mini__row">
@@ -4549,6 +4550,8 @@ render();
 
 <!-- Vue 견적바구니 모달 mount root (영업 모드만, 손님은 customer-view가 body 재구성) -->
 <div id="cart-panel-root"></div>
+<!-- Vue 웰릭스 표준 가격표 모달 mount root -->
+<div id="standard-price-root"></div>
 
 <!-- 단순 견적 모드: 채팅·계약·서류 패널 숨김 (견적바구니는 유지) -->
 <style id="simple-mode-overrides">
