@@ -21,8 +21,8 @@ const STD = {
 
 const open = ref(false);
 const vehicles = ref([]);
-const selectedBrand = ref('현대');
-const checked = ref(new Set());
+const selectedBrand = ref('현대');   // 카스케이드: 제조사
+const selectedModel = ref('');       // 카스케이드: 모델 (빈값 = 전체)
 const loading = ref(false);
 const errorMsg = ref('');
 
@@ -33,8 +33,6 @@ async function loadVehicles() {
     const r = await fetch('./data/vehicles.json?t=' + Date.now());
     const data = await r.json();
     vehicles.value = data;
-    // 디폴트: 현재 브랜드 전체 체크
-    data.forEach((v, i) => { if (v.brand === selectedBrand.value) checked.value.add(i); });
   } catch (e) {
     errorMsg.value = '차량 데이터 로드 실패: ' + (e?.message || e);
   } finally {
@@ -53,16 +51,30 @@ if (typeof window !== 'undefined') {
   window.__welrix_openStandardPriceTable = openPanel;
 }
 
-// 현재 브랜드 행
-const brandRows = computed(() =>
-  vehicles.value
+// 브랜드 별 모델 목록 (드롭다운용) — 중복 제거, 등장 순서 유지
+const modelsInBrand = computed(() => {
+  const seen = new Set();
+  const out = [];
+  for (const v of vehicles.value) {
+    if (v.brand !== selectedBrand.value) continue;
+    if (seen.has(v.model)) continue;
+    seen.add(v.model);
+    out.push(v.model);
+  }
+  return out;
+});
+
+// 필터된 행 (제조사 + 모델). 모델 비어있으면 브랜드 전체.
+const filteredRows = computed(() => {
+  return vehicles.value
     .map((v, idx) => ({ idx, ...v }))
     .filter(v => v.brand === selectedBrand.value)
-);
+    .filter(v => !selectedModel.value || v.model === selectedModel.value);
+});
 
-// 행별 표준 견적 계산
+// 표준 견적 계산
 const computedRows = computed(() => {
-  return brandRows.value.map(v => {
+  return filteredRows.value.map(v => {
     const monthlies = STANDARD_TERMS.map(term => {
       try {
         const r = calcQuote({
@@ -84,37 +96,16 @@ const computedRows = computed(() => {
   });
 });
 
-function isChecked(idx) { return checked.value.has(idx); }
-function toggleRow(idx) {
-  if (checked.value.has(idx)) checked.value.delete(idx);
-  else checked.value.add(idx);
-  // reactivity
-  checked.value = new Set(checked.value);
-}
-function selectAll() { brandRows.value.forEach(r => checked.value.add(r.idx)); checked.value = new Set(checked.value); }
-function deselectAll() { brandRows.value.forEach(r => checked.value.delete(r.idx)); checked.value = new Set(checked.value); }
-
-const allSelected = computed(() => brandRows.value.length > 0 && brandRows.value.every(r => checked.value.has(r.idx)));
-const selectedCountInBrand = computed(() => brandRows.value.filter(r => checked.value.has(r.idx)).length);
-
 function selectBrand(b) {
   selectedBrand.value = b;
-  // 디폴트: 새 브랜드 전체 체크 (현재 비어있을 때만)
-  const currentBrandRows = vehicles.value.filter(v => v.brand === b);
-  const anyChecked = currentBrandRows.some((v, i) => {
-    const realIdx = vehicles.value.indexOf(v);
-    return checked.value.has(realIdx);
-  });
-  if (!anyChecked) {
-    vehicles.value.forEach((v, i) => { if (v.brand === b) checked.value.add(i); });
-    checked.value = new Set(checked.value);
-  }
+  selectedModel.value = '';  // 브랜드 바꾸면 모델 리셋
 }
 
 function downloadPdf() {
-  const selected = computedRows.value.filter(r => checked.value.has(r.idx));
-  if (!selected.length) { alert('선택된 차량이 없습니다'); return; }
-  const html = buildPrintHtml(selectedBrand.value, selected);
+  const rows = computedRows.value;
+  if (!rows.length) { alert('표시된 차량이 없습니다'); return; }
+  const titleSuffix = selectedModel.value || '전체';
+  const html = buildPrintHtml(`${selectedBrand.value} — ${titleSuffix}`, rows);
   const win = window.open('', '_blank');
   if (!win) { alert('팝업이 차단됐어요. 브라우저 팝업 차단 해제 후 다시 시도'); return; }
   win.document.open();
@@ -208,6 +199,7 @@ function escape(s) {
 
       <div class="spt-body">
         <div class="spt-controls">
+          <!-- 카스케이드: 제조사 탭 + 모델 드롭다운 -->
           <div class="spt-tabs">
             <button
               v-for="b in BRANDS" :key="b"
@@ -216,12 +208,17 @@ function escape(s) {
               @click="selectBrand(b)"
             >{{ b }}</button>
           </div>
+          <select
+            class="spt-model-dd"
+            v-model="selectedModel"
+            :disabled="!modelsInBrand.length"
+          >
+            <option value="">전체 모델</option>
+            <option v-for="m in modelsInBrand" :key="m" :value="m">{{ m }}</option>
+          </select>
           <div class="spt-actions">
-            <button class="spt-mini" @click="allSelected ? deselectAll() : selectAll()">
-              {{ allSelected ? '전체 해제' : '전체 선택' }}
-            </button>
-            <span class="spt-count">{{ selectedCountInBrand }} / {{ brandRows.length }}건</span>
-            <button class="spt-download" :disabled="selectedCountInBrand === 0" @click="downloadPdf">
+            <span class="spt-count">{{ computedRows.length }}건</span>
+            <button class="spt-download" :disabled="!computedRows.length" @click="downloadPdf">
               <i class="ph ph-file-pdf"></i> PDF 다운로드
             </button>
           </div>
@@ -233,12 +230,11 @@ function escape(s) {
 
         <div v-if="loading" class="spt-loading">차량 데이터 로드 중…</div>
         <div v-else-if="errorMsg" class="spt-error">{{ errorMsg }}</div>
-        <div v-else-if="!brandRows.length" class="spt-empty">{{ selectedBrand }} 차종 없음</div>
+        <div v-else-if="!computedRows.length" class="spt-empty">표시할 차종이 없습니다</div>
         <div v-else class="spt-table-wrap">
           <table class="spt-table">
             <thead>
               <tr>
-                <th class="spt-table__chk"></th>
                 <th>모델</th>
                 <th>트림</th>
                 <th class="spt-table__num">차량가</th>
@@ -248,14 +244,7 @@ function escape(s) {
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-for="r in computedRows" :key="r.idx"
-                :class="{ 'is-checked': isChecked(r.idx) }"
-                @click="toggleRow(r.idx)"
-              >
-                <td class="spt-table__chk">
-                  <input type="checkbox" :checked="isChecked(r.idx)" @click.stop="toggleRow(r.idx)" />
-                </td>
+              <tr v-for="r in computedRows" :key="r.idx">
                 <td>{{ r.model }}</td>
                 <td class="spt-table__trim">{{ r.trim }}</td>
                 <td class="spt-table__num">{{ fmt(r.price) }}</td>
@@ -320,6 +309,20 @@ function escape(s) {
   padding: 10px 0; flex-wrap: wrap;
 }
 .spt-tabs { display: flex; gap: 4px; }
+.spt-model-dd {
+  appearance: none; -webkit-appearance: none;
+  border: 1px solid var(--line-2); background: var(--bg);
+  font-family: inherit; font-size: 12px; color: var(--ink-1);
+  padding: 6px 28px 6px 10px; border-radius: var(--radius-sm);
+  cursor: pointer; min-width: 180px; max-width: 280px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23737373' stroke-width='1.5' stroke-linecap='round'><polyline points='3 5 6 8 9 5'/></svg>");
+  background-repeat: no-repeat; background-position: right 8px center; background-size: 10px 10px;
+  outline: none;
+  transition: border-color var(--t-fast);
+}
+.spt-model-dd:hover { border-color: var(--ink-4); }
+.spt-model-dd:focus { border-color: var(--ink-1); }
+.spt-model-dd:disabled { opacity: 0.5; cursor: not-allowed; }
 .spt-tab {
   border: 1px solid var(--line-2);
   background: var(--bg); color: var(--ink-2);
