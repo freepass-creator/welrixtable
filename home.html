@@ -104,24 +104,25 @@
     }
     .topnav__brand {
       display: flex; align-items: center; gap: 10px;
-      font-size: 15px; font-weight: 700; letter-spacing: -0.3px;
+      font-size: 14.5px; font-weight: 700; letter-spacing: -0.02em;
     }
     .topnav__brand img { height: 22px; width: auto; }
     .topnav__partner {
       display: inline-flex; align-items: center;
-      padding: 4px 10px;
+      padding: 4px 11px;
       background: var(--ink-1); color: #fff;
-      border-radius: 4px;
-      font-size: 12.5px; font-weight: 700; letter-spacing: 0.2px;
+      border-radius: 5px;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.02em;
     }
     .topnav__x {
-      color: var(--ink-4); font-weight: 400; font-size: 14px;
+      color: var(--ink-4); font-weight: 300; font-size: 14px;
     }
     .topnav__menu {
       display: flex; align-items: center; gap: 28px;
     }
     .topnav__menu a {
       font-size: 13.5px; color: var(--ink-2); font-weight: 500;
+      letter-spacing: -0.01em;
       transition: color var(--t-fast);
     }
     .topnav__menu a:hover { color: var(--ink-1); }
@@ -160,63 +161,55 @@
       width: 100%;
     }
 
-    .hero__badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--ink-1); color: #fff;
-      padding: 7px 14px; border-radius: var(--radius-pill);
-      font-size: 12px; font-weight: 600; letter-spacing: 0.2px;
-      margin-bottom: 22px;
+    /* 단일 eyebrow — 트러스트 + 컨텍스트 한 줄 */
+    .hero__eyebrow {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 13px; font-weight: 600; color: var(--ink-2);
+      letter-spacing: -0.01em;
+      margin-bottom: 28px;
+      padding: 7px 14px;
+      background: var(--bg);
+      border: 1px solid var(--line-2);
+      border-radius: var(--radius-pill);
     }
-    .hero__badge i { color: var(--brand); }
-
-    /* 웰컴저축은행 계열 신뢰 라인 */
-    .hero__group {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 12px; color: var(--ink-3);
-      margin-bottom: 18px;
-    }
-    .hero__group b { color: var(--ink-1); font-weight: 700; }
-    .hero__group i { font-size: 14px; color: var(--brand); }
+    .hero__eyebrow i { font-size: 14px; color: var(--brand); }
 
     .hero__title {
-      font-size: 60px; font-weight: 800;
-      line-height: 1.08; letter-spacing: -0.045em;
+      font-size: 58px; font-weight: 700;
+      line-height: 1.12; letter-spacing: -0.04em;
       color: var(--ink-1);
-      margin: 0 0 22px;
+      margin: 0 0 24px;
     }
     .hero__title em {
-      font-style: normal;
-      background: linear-gradient(120deg, var(--brand) 0%, #ff5862 100%);
-      -webkit-background-clip: text; background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-style: normal; font-weight: 800;
+      color: var(--brand);
     }
     .hero__sub {
-      font-size: 17px; color: var(--ink-2);
-      line-height: 1.75; max-width: 560px;
-      margin: 0 0 32px;
-      letter-spacing: -0.2px;
+      font-size: 17px; font-weight: 400;
+      color: var(--ink-3);
+      line-height: 1.7;
+      max-width: 580px;
+      margin: 0 auto 36px;
+      letter-spacing: -0.015em;
     }
-    @media (max-width: 980px) { .hero__sub { margin-left: auto; margin-right: auto; } }
-    .hero__sub b { color: var(--ink-1); font-weight: 700; }
+    .hero__sub b { color: var(--ink-1); font-weight: 600; }
 
     .hero__cta {
       display: inline-flex; gap: 10px; flex-wrap: wrap;
     }
 
     .hero__pills {
-      display: flex; gap: 6px; flex-wrap: wrap;
-      margin-top: 32px;
-    }
-    @media (max-width: 980px) {
-      .hero__pills { justify-content: center; }
+      display: flex; gap: 8px; flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 28px;
     }
     .hero__pill {
       display: inline-flex; align-items: center; gap: 5px;
       background: var(--bg);
       border: 1px solid var(--line-2);
-      padding: 6px 12px; border-radius: var(--radius-pill);
-      font-size: 12px; font-weight: 500; color: var(--ink-2);
-      letter-spacing: -0.1px;
+      padding: 7px 13px; border-radius: var(--radius-pill);
+      font-size: 12.5px; font-weight: 500; color: var(--ink-2);
+      letter-spacing: -0.01em;
     }
     .hero__pill i { font-size: 13px; color: var(--brand); }
 
@@ -353,13 +346,11 @@
     }
     .btn--outline:hover { background: #fff; transform: translateY(-1px); }
     @media (max-width: 768px) {
-      .hero { padding: 62px 0 76px; }
-      .hero__title { font-size: 40px; }
+      .hero { padding: 60px 0 72px; }
+      .hero__title { font-size: 38px; line-height: 1.15; }
       .hero__sub { font-size: 15.5px; margin-bottom: 28px; }
-      .hero__from { padding: 10px 18px; margin-bottom: 24px; }
-      .hero__from-num { font-size: 22px; }
-      .hero__from-label, .hero__from-sub { font-size: 11.5px; }
-      .hero__pills { margin-top: 28px; gap: 6px; }
+      .hero__eyebrow { font-size: 12px; padding: 6px 12px; margin-bottom: 22px; }
+      .hero__pills { margin-top: 24px; gap: 6px; }
       .hero__pill { padding: 6px 11px; font-size: 11.5px; }
       .btn { padding: 12px 22px; font-size: 14px; }
     }
@@ -380,16 +371,17 @@
     }
     .section--dark .container { position: relative; z-index: 1; }
     .section__title {
-      font-size: 34px; font-weight: 800;
-      letter-spacing: -0.03em; line-height: 1.25;
+      font-size: 32px; font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.3;
       color: var(--ink-1);
-      margin: 0 0 12px;
+      margin: 0 0 14px;
       text-align: center;
     }
     .section__sub {
-      font-size: 16px; color: var(--ink-3);
-      max-width: 620px; margin: 0 auto 48px;
-      text-align: center; line-height: 1.65;
+      font-size: 15.5px; color: var(--ink-3); font-weight: 400;
+      max-width: 580px; margin: 0 auto 56px;
+      text-align: center; line-height: 1.7;
+      letter-spacing: -0.01em;
     }
     @media (max-width: 768px) {
       .section { padding: 64px 0; }
@@ -672,35 +664,62 @@
       font-size: 13px;
     }
     .footer__group {
-      display: flex; align-items: flex-end; justify-content: space-between;
-      flex-wrap: wrap; gap: 12px;
-      margin-bottom: 18px;
+      display: flex; align-items: flex-start; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+      padding-bottom: 28px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
     }
+    .footer__brand-block { display: flex; flex-direction: column; gap: 6px; }
     .footer__brand {
-      font-size: 15px; font-weight: 700; color: #fff;
+      font-size: 17px; font-weight: 700; color: #fff;
+      letter-spacing: -0.02em;
     }
-    .footer__family {
-      display: flex; align-items: center; gap: 10px;
-      font-size: 12px; color: var(--ink-4);
+    .footer__brand-tagline {
+      font-size: 11.5px; color: var(--ink-4); font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+    .footer__partners {
+      display: flex; align-items: center; gap: 12px;
       flex-wrap: wrap;
     }
-    .footer__family-label {
-      color: rgba(255,255,255,0.4); font-weight: 500;
+    .footer__partners-label {
+      color: rgba(255,255,255,0.35); font-size: 10.5px; font-weight: 600;
+      letter-spacing: 0.4px; text-transform: uppercase;
     }
-    .footer__family a {
-      color: rgba(255,255,255,0.85);
+    .footer__partners a {
+      color: rgba(255,255,255,0.7); font-size: 12px; font-weight: 500;
       text-decoration: none;
       transition: color var(--t-fast);
     }
-    .footer__family a:hover { color: #fff; text-decoration: underline; }
+    .footer__partners a:hover { color: #fff; }
     .footer__info {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
       line-height: 1.85;
+      font-size: 12px;
+      margin-bottom: 28px;
+    }
+    @media (max-width: 720px) {
+      .footer__info { grid-template-columns: 1fr; gap: 22px; }
+    }
+    .footer__info-col {
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .footer__info-title {
+      font-size: 10.5px; font-weight: 700; color: rgba(255,255,255,0.5);
+      letter-spacing: 0.5px; text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .footer__warn {
+      color: #ff8b91; font-weight: 500;
+      margin-top: 4px;
     }
     .footer__info b { color: #e5e5e5; font-weight: 500; margin-right: 4px; }
     .footer__bottom {
-      margin-top: 32px; padding-top: 20px;
+      padding-top: 20px;
       border-top: 1px solid rgba(255,255,255,0.08);
-      font-size: 11.5px; color: var(--ink-4);
+      font-size: 11.5px; color: var(--ink-4); font-weight: 400;
       display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
     }
     .footer__links a { color: var(--ink-4); margin-left: 14px; }
@@ -736,20 +755,17 @@
     <div class="hero__bg-grid" aria-hidden="true"></div>
     <div class="container hero__inner">
       <div class="hero__left">
-        <div class="hero__group">
+        <div class="hero__eyebrow">
           <i class="ph ph-shield-check"></i>
-          <span><b>웰컴저축은행</b> 계열 · 믿을 수 있는 장기렌터카</span>
+          웰컴저축은행 계열 · 신차 장기렌터카
         </div>
-        <span class="hero__badge">
-          <i class="ph ph-receipt"></i> 신차 장기렌터카 · 소득 기준 심사
-        </span>
         <h1 class="hero__title">
-          꾸준한 소득만 있다면<br>
-          <em>장기렌터카로</em> 신차 OK
+          꾸준한 소득만 있다면,<br>
+          <em>장기렌터카로</em> 신차.
         </h1>
         <p class="hero__sub">
-          <b>안정적인 월 소득 기준 심사</b> — 직장인·자영업자 모두 가능.<br>
-          장기렌터카 36 / 48 / 60개월, <b>자동차 보험료·각종 세금 포함</b>.
+          안정적인 월 소득 기준 심사 — 직장인·자영업자 모두 가능합니다.<br>
+          36 / 48 / 60개월 자유 선택. 자동차 보험료·자동차세 모두 포함.
         </p>
 
         <div class="hero__cta">
@@ -969,26 +985,46 @@
   <footer class="footer">
     <div class="container">
       <div class="footer__group">
-        <div class="footer__brand">웰릭스 모빌리티</div>
-        <div class="footer__family">
-          <span class="footer__family-label">패밀리 사이트</span>
-          <a href="https://www.welrix.com/" target="_blank" rel="noopener">웰릭스</a>
+        <div class="footer__brand-block">
+          <div class="footer__brand">[브랜드명]</div>
+          <div class="footer__brand-tagline">신차 장기렌터카 전문 상담 · 웰릭스 모빌리티 협력사</div>
+        </div>
+        <div class="footer__partners">
+          <span class="footer__partners-label">금융·렌탈 파트너</span>
+          <a href="https://www.welrix.com/" target="_blank" rel="noopener">웰릭스 모빌리티</a>
           <a href="https://welcomesb.co.kr/" target="_blank" rel="noopener">웰컴저축은행</a>
           <a href="#" target="_blank" rel="noopener">웰컴금융그룹</a>
         </div>
       </div>
+
       <div class="footer__info">
-        <div><b>대표</b>—</div>
-        <div><b>사업자번호</b>—</div>
-        <div><b>주소</b>—</div>
-        <div><b>대표전화</b>1544-0000</div>
-        <div><b>고객상담</b>평일 09:00 – 18:00 (점심시간 12:00 – 13:00 제외)</div>
+        <div class="footer__info-col">
+          <div class="footer__info-title">사업자 정보</div>
+          <div><b>상호</b>—</div>
+          <div><b>대표</b>—</div>
+          <div><b>사업자번호</b>—</div>
+          <div><b>주소</b>—</div>
+        </div>
+        <div class="footer__info-col">
+          <div class="footer__info-title">고객 상담</div>
+          <div><b>대표전화</b>1544-0000</div>
+          <div><b>운영시간</b>평일 09:00 – 18:00</div>
+          <div><b>점심시간</b>12:00 – 13:00 제외</div>
+          <div><b>휴일</b>주말 · 공휴일 휴무</div>
+        </div>
+        <div class="footer__info-col">
+          <div class="footer__info-title">안내</div>
+          <div class="footer__warn">⚠ 영업사원 개인 계좌 입금은 절대 금지입니다.</div>
+          <div>모든 결제는 법인 계좌로만 진행됩니다.</div>
+        </div>
       </div>
+
       <div class="footer__bottom">
-        <span>© 2026 웰릭스 모빌리티. All rights reserved.</span>
+        <span>© 2026 [브랜드명]. All rights reserved.</span>
         <span class="footer__links">
           <a href="#">이용약관</a>
           <a href="#">개인정보처리방침</a>
+          <a href="#">상담사 등록 정보</a>
         </span>
       </div>
     </div>
