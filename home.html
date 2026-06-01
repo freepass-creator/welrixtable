@@ -952,6 +952,17 @@
       letter-spacing: 0.5px; text-transform: uppercase;
       margin-bottom: 8px;
     }
+    .footer__agent-link {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 9px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 999px;
+      transition: background var(--t-fast), color var(--t-fast);
+    }
+    .footer__agent-link:hover {
+      background: var(--brand); color: #fff !important;
+    }
+    .footer__agent-link i { font-size: 11px; }
     .footer__warn {
       color: #ff8b91; font-weight: 500;
       margin-top: 4px;
@@ -1276,6 +1287,9 @@
           <a href="#">이용약관</a>
           <a href="#">개인정보처리방침</a>
           <a href="#">상담사 등록 정보</a>
+          <a href="/agent.html" class="footer__agent-link">
+            <i class="ph ph-lock-key"></i> 영업자 견적기
+          </a>
         </span>
       </div>
     </div>

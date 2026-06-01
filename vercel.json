@@ -1,6 +1,8 @@
 {
   "rewrites": [
-    { "source": "/guide/:slug", "destination": "/guide.html?slug=:slug" }
+    { "source": "/guide/:slug", "destination": "/guide.html?slug=:slug" },
+    { "source": "/agent", "destination": "/agent.html" },
+    { "source": "/pro", "destination": "/agent.html" }
   ],
   "headers": [
     {
