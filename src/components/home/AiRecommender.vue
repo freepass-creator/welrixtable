@@ -56,33 +56,28 @@ const MODEL_META = {
   '코나 Hybrid':         { body: 'suv-mid', size: 'M', age: ['20s','30s','40s'],    usage: ['commute','leisure'],          mileage: 'high', image: '/cars/kona.png' },
   '투싼':                { body: 'suv-mid', size: 'M', age: ['30s','40s'],          usage: ['commute','leisure','family'], mileage: 'any' },
   '투싼 Hybrid':         { body: 'suv-mid', size: 'M', age: ['30s','40s'],          usage: ['commute','leisure'],          mileage: 'high' },
-  '디 올 뉴 싼타페':      { body: 'suv-large', size: 'L', age: ['30s','40s'],        usage: ['leisure','family'],           mileage: 'any' },
-  '디 올 뉴 싼타페 Hybrid': { body: 'suv-large', size: 'L', age: ['30s','40s'],      usage: ['leisure','family'],           mileage: 'high' },
+  '싼타페':              { body: 'suv-large', size: 'L', age: ['30s','40s'],        usage: ['leisure','family'],           mileage: 'any' },
+  '싼타페 Hybrid':       { body: 'suv-large', size: 'L', age: ['30s','40s'],        usage: ['leisure','family'],           mileage: 'high' },
   '디 올 뉴 팰리세이드':  { body: 'suv-large', size: 'XL', age: ['30s','40s','50plus'], usage: ['leisure','family','business'], mileage: 'any', image: '/cars/palisade.jpg',
     story: '2025년 1월 풀체인지급 페이스리프트(LX3 세대). 7·9인승 풀사이즈 SUV의 정점. 12.3" 듀얼 디스플레이 + 어드밴스드 안전 패키지 기본. 통풍·열선 시트, 스마트 파워테일게이트 — 가족 차로서 빠진 옵션이 없습니다.', },
   '디 올 뉴 팰리세이드 Hybrid': { body: 'suv-large', size: 'XL', age: ['30s','40s','50plus'], usage: ['leisure','family'], mileage: 'high', image: '/cars/palisade.jpg' },
   '포터2':               { body: 'truck',   size: 'L', age: ['30s','40s','50plus'], usage: ['business'],                   mileage: 'high' },
   // 기아
   '모닝':                { body: 'compact', size: 'S', age: ['20s'],                usage: ['commute'],                    mileage: 'any', image: '/cars/morning.png' },
-  '더 뉴 레이 TAM':       { body: 'compact', size: 'S', age: ['20s','30s'],          usage: ['commute','hobby'],            mileage: 'any', image: '/cars/ray.png' },
+  '레이':                { body: 'compact', size: 'S', age: ['20s','30s'],          usage: ['commute','hobby'],            mileage: 'any', image: '/cars/ray.png' },
   'K3':                  { body: 'sedan',   size: 'M', age: ['20s','30s'],          usage: ['commute'],                    mileage: 'any' },
-  '디 올 뉴 K5':         { body: 'sedan',   size: 'L', age: ['20s','30s','40s'],    usage: ['commute','leisure'],          mileage: 'any', image: '/cars/k5.png' },
-  '디 올 뉴 K5 Hybrid':  { body: 'sedan',   size: 'L', age: ['30s','40s'],          usage: ['commute'],                    mileage: 'high', image: '/cars/k5.png' },
+  'K5':                  { body: 'sedan',   size: 'L', age: ['20s','30s','40s'],    usage: ['commute','leisure'],          mileage: 'any', image: '/cars/k5.png' },
   'K8':                  { body: 'sedan',   size: 'XL', age: ['40s','50plus'],      usage: ['business'],                   mileage: 'any', image: '/cars/k8.png' },
-  'K8 Hybrid':           { body: 'sedan',   size: 'XL', age: ['40s','50plus'],      usage: ['business'],                   mileage: 'high', image: '/cars/k8.png' },
   '셀토스':              { body: 'suv-mid', size: 'M', age: ['20s','30s'],          usage: ['commute','leisure','hobby'],  mileage: 'any', image: '/cars/seltos.png' },
   '스포티지':            { body: 'suv-mid', size: 'M', age: ['30s','40s'],          usage: ['commute','leisure','family'], mileage: 'any', image: '/cars/sportage.png' },
-  '스포티지 Hybrid':     { body: 'suv-mid', size: 'M', age: ['30s','40s'],          usage: ['commute','leisure'],          mileage: 'high', image: '/cars/sportage.png' },
   '쏘렌토':              { body: 'suv-large', size: 'L', age: ['30s','40s'],        usage: ['leisure','family'],           mileage: 'any', image: '/cars/sorento.png' },
-  '쏘렌토 Hybrid':       { body: 'suv-large', size: 'L', age: ['30s','40s'],        usage: ['leisure','family'],           mileage: 'high', image: '/cars/sorento.png' },
   '카니발':              { body: 'minivan', size: 'XL', age: ['30s','40s','50plus'], usage: ['leisure','family','business'], mileage: 'any', image: '/cars/carnival.png',
     story: '국내 미니밴 부동의 1위. 4세대 KA4는 SUV 같은 디자인 + 9인승 실내 공간을 둘 다 잡았습니다. 양쪽 슬라이딩 도어 + 2열 통풍·열선 시트 + 하이리무진 옵션까지. 가족·임원·영업 등 활용 범위가 가장 넓은 차종.', },
-  '카니발 Hybrid':       { body: 'minivan', size: 'XL', age: ['30s','40s'],         usage: ['family'],                     mileage: 'high', image: '/cars/carnival.png' },
   // 제네시스
   'G70':                 { body: 'luxury',  size: 'L', age: ['30s','40s'],          usage: ['business','hobby'],           mileage: 'any', image: '/cars/g70.png' },
-  '디 올 뉴 G80 RG3':    { body: 'luxury',  size: 'XL', age: ['40s','50plus'],      usage: ['business'],                   mileage: 'any', image: '/cars/g80.png',
+  'G80':                 { body: 'luxury',  size: 'XL', age: ['40s','50plus'],      usage: ['business'],                   mileage: 'any', image: '/cars/g80.png',
     story: '제네시스의 정통 럭셔리 세단 RG3 세대. 라디에이터 그릴부터 인테리어까지 완전히 새로 만든 풀체인지. 다이내믹 주행감과 정중한 디자인을 동시에. 임원 의전·비즈니스 미팅에서 가장 많이 보이는 선택.', },
-  'G90 RS4':             { body: 'luxury',  size: 'XL', age: ['50plus'],            usage: ['business'],                   mileage: 'low', image: '/cars/g90.png' },
+  'G90':                 { body: 'luxury',  size: 'XL', age: ['50plus'],            usage: ['business'],                   mileage: 'low', image: '/cars/g90.png' },
   'GV70':                { body: 'suv-mid', size: 'L', age: ['30s','40s'],          usage: ['leisure','business'],         mileage: 'any', image: '/cars/gv70.png' },
   'GV80':                { body: 'suv-large', size: 'XL', age: ['40s','50plus'],    usage: ['business','family'],          mileage: 'any', image: '/cars/gv80.png' },
 };
@@ -309,8 +304,13 @@ function goToContact(p) {
           <div class="ai-form__eyebrow">
             <i class="ph ph-sparkle"></i> AI 차종 추천
           </div>
+          <h2 class="ai-form__headline">
+            나에게 딱 맞는 차,<br>
+            <em>30초</em>면 찾습니다.
+          </h2>
           <div class="ai-form__hint">
-            <b>5가지</b>만 알려주시면, AI가 딱 맞는 신차 <b>3대</b>를 골라드립니다.
+            <b>5가지</b>만 알려주시면, AI가 신차 <b>3대</b>를 골라드려요.<br>
+            <span class="ai-form__hint-sub">월 부담·라이프스타일·연식까지 한 번에 비교</span>
           </div>
         </div>
       <div class="ai-field">
@@ -514,8 +514,8 @@ function goToContact(p) {
   padding: 36px 16px;
 }
 .ai-form__head {
-  display: flex; flex-direction: column; gap: 6px;
-  margin-bottom: 6px;
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 10px;
 }
 .ai-form__eyebrow {
   display: inline-flex; align-items: center; gap: 5px;
@@ -525,12 +525,25 @@ function goToContact(p) {
   align-self: flex-start;
 }
 .ai-form__eyebrow i { font-size: 12px; }
+.ai-form__headline {
+  margin: 2px 0 2px;
+  font-size: 22px; font-weight: 800; color: var(--ink-1);
+  letter-spacing: -0.03em; line-height: 1.25;
+}
+.ai-form__headline em {
+  font-style: normal; font-weight: 800; color: var(--brand);
+}
 .ai-form__hint {
   font-size: 12.5px; color: var(--ink-3);
-  letter-spacing: -0.01em; line-height: 1.5;
+  letter-spacing: -0.01em; line-height: 1.55;
 }
 .ai-form__hint b { color: var(--ink-1); font-weight: 800; }
+.ai-form__hint-sub {
+  display: inline-block; margin-top: 2px;
+  font-size: 11.5px; color: var(--ink-4);
+}
 @media (max-width: 540px) {
+  .ai-form__headline { font-size: 19px; }
   .ai-form__hint { font-size: 12px; }
 }
 

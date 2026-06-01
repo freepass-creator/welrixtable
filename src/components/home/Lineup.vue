@@ -27,7 +27,7 @@ const PICKS = [
     image: '/cars/carnival.png',
   },
   {
-    brand: '제네시스', model: '디 올 뉴 G80 RG3', tagline: '비즈니스 세단',
+    brand: '제네시스', model: 'G80', tagline: '비즈니스 세단',
     blurb: '국산 럭셔리 세단의 정점. 비즈니스·임원 의전에 정형화된 디자인과 다이내믹 주행감.',
     pros: ['풀체인지 신차', '럭셔리 인테리어', '주행감 우수'],
     image: '/cars/g80.png',
