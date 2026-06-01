@@ -1,4 +1,7 @@
 {
+  "rewrites": [
+    { "source": "/guide/:slug", "destination": "/guide.html?slug=:slug" }
+  ],
   "headers": [
     {
       "source": "/(.*\\.html)?",
