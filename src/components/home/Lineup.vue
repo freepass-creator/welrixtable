@@ -5,12 +5,32 @@ import { ref, computed, onMounted } from 'vue';
 import { calcQuote } from '../../lib/calc.js';
 import { fmt } from '../../lib/format.js';
 
-// 4종 picks — 보편적 베스트셀러
+// 4종 picks — 인기 차종 + 블로그 스타일 추천 컬럼
 const PICKS = [
-  { brand: '현대', model: '더 뉴 캐스퍼', tagline: '경형 SUV 베스트', desc: '도심형 가성비 베스트셀러' },
-  { brand: '현대', model: '디 올 뉴 팰리세이드', tagline: '대형 SUV 인기', desc: '가족용 풀옵션 7/9인승' },
-  { brand: '기아', model: '카니발', tagline: '미니밴 No.1', desc: '9인승 패밀리·VIP 영업용' },
-  { brand: '제네시스', model: '디 올 뉴 G80 RG3', tagline: '럭셔리 세단', desc: '비즈니스·임원 의전' },
+  {
+    brand: '현대', model: '더 뉴 캐스퍼', tagline: '입문 SUV',
+    blurb: '도심에서 가장 잘 어울리는 경형 SUV. 작지만 알찬 실내, 1인·2인 가구의 첫 차로 만족도 높습니다.',
+    pros: ['가성비 최강', '주차 쉬움', '연비 우수'],
+    image: 'https://www.hyundai.com/contents/repn-car/the-new-casper.png',
+  },
+  {
+    brand: '현대', model: '디 올 뉴 팰리세이드', tagline: '대형 SUV',
+    blurb: '7·9인승 풀사이즈 SUV. 가족 여행·등하원·골프까지 한 대로. 통풍·열선·어드밴스드 안전 패키지 기본.',
+    pros: ['7/9인승', '풀옵션 기본', '공간 여유'],
+    image: 'https://www.hyundai.com/content/dam/hyundai/wcvi/kr/cars/lx3/highlights/lx3-hero.png',
+  },
+  {
+    brand: '기아', model: '카니발', tagline: '미니밴 1위',
+    blurb: '국내 미니밴 표준. 9인승 풀옵션으로 가족·임원·영업까지 만능. 슬라이딩 도어 + 통풍 시트는 보너스.',
+    pros: ['9인승', '슬라이딩 도어', '하이리무진 옵션'],
+    image: 'https://www.kia.com/content/dam/kwcms/kr/ko/images/showroom/carnival/showroom/index/info/index_kv01.png',
+  },
+  {
+    brand: '제네시스', model: '디 올 뉴 G80 RG3', tagline: '비즈니스 세단',
+    blurb: '국산 럭셔리 세단의 정점. 비즈니스·임원 의전에 정형화된 디자인과 다이내믹 주행감.',
+    pros: ['풀체인지 신차', '럭셔리 인테리어', '주행감 우수'],
+    image: 'https://www.genesis.com/content/dam/genesis/kr/cars/g80-rg3/highlight/g80-rg3-hero.png',
+  },
 ];
 
 const vehicles = ref([]);
@@ -78,11 +98,26 @@ function goToQuote(card) {
         v-for="(c, i) in cards" :key="i"
         class="lu-card"
       >
-        <div class="lu-card__top">
+        <!-- 차량 이미지 (제조사 공식 PNG → SVG fallback) -->
+        <div class="lu-card__image">
           <span class="lu-card__badge">{{ c.tagline }}</span>
+          <img v-if="c.image"
+               :src="c.image"
+               :alt="c.model"
+               class="lu-card__img"
+               @error="c.image = null" />
+          <i v-else class="ph ph-car-profile lu-card__fallback"></i>
+        </div>
+
+        <div class="lu-card__top">
           <div class="lu-card__brand">{{ c.brand }}</div>
           <div class="lu-card__model">{{ c.model }}</div>
-          <div class="lu-card__desc">{{ c.desc }}</div>
+          <div class="lu-card__blurb">{{ c.blurb }}</div>
+          <div class="lu-card__pros">
+            <span v-for="(p, pi) in c.pros" :key="pi" class="lu-card__pro">
+              <i class="ph ph-check"></i> {{ p }}
+            </span>
+          </div>
         </div>
 
         <div class="lu-card__price">
@@ -139,27 +174,62 @@ function goToQuote(card) {
   box-shadow: var(--shadow);
 }
 
-.lu-card__top { display: flex; flex-direction: column; gap: 6px; }
-.lu-card__badge {
-  align-self: flex-start;
-  font-size: 10.5px; font-weight: 600; color: var(--brand);
-  background: var(--brand-50);
-  padding: 3px 10px; border-radius: var(--radius-pill);
-  letter-spacing: 0.2px;
+/* 차량 이미지 영역 */
+.lu-card__image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background:
+    linear-gradient(135deg, #f8f9fb 0%, #ebeef3 100%);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
   margin-bottom: 4px;
 }
+.lu-card__img {
+  width: 92%; height: 92%; object-fit: contain;
+  filter: drop-shadow(0 8px 14px rgba(0,0,0,0.15));
+  transition: transform var(--t-fast);
+}
+.lu-card:hover .lu-card__img { transform: scale(1.04); }
+.lu-card__fallback {
+  font-size: 80px; color: var(--ink-4); opacity: 0.5;
+}
+.lu-card__badge {
+  position: absolute; top: 12px; left: 12px;
+  font-size: 10px; font-weight: 700; color: #fff;
+  background: var(--brand);
+  padding: 4px 10px; border-radius: var(--radius-pill);
+  letter-spacing: 0.3px;
+  z-index: 1;
+  box-shadow: 0 4px 10px rgba(225, 20, 30, 0.3);
+}
+
+.lu-card__top { display: flex; flex-direction: column; gap: 6px; }
 .lu-card__brand {
   font-size: 11px; color: var(--ink-4); font-weight: 500;
   letter-spacing: 0.3px;
 }
 .lu-card__model {
-  font-size: 18px; font-weight: 800; color: var(--ink-1);
-  letter-spacing: -0.3px; line-height: 1.25;
+  font-size: 19px; font-weight: 800; color: var(--ink-1);
+  letter-spacing: -0.3px; line-height: 1.2;
 }
-.lu-card__desc {
+.lu-card__blurb {
   font-size: 12.5px; color: var(--ink-3);
-  line-height: 1.55;
+  line-height: 1.6;
+  margin-top: 2px;
 }
+.lu-card__pros {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  margin-top: 8px;
+}
+.lu-card__pro {
+  display: inline-flex; align-items: center; gap: 3px;
+  background: var(--bg-soft);
+  padding: 3px 8px; border-radius: var(--radius-pill);
+  font-size: 10.5px; font-weight: 600; color: var(--ink-2);
+}
+.lu-card__pro i { font-size: 11px; color: var(--brand); }
 
 .lu-card__price {
   padding: 14px 0;
