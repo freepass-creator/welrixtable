@@ -28,10 +28,12 @@
 
   <style>
     :root {
-      --brand: #0D4E8B;
-      --brand-700: #0a3d6e;
-      --brand-100: #cfdce7;
-      --brand-50: #eef4fa;
+      /* 웰릭스 모빌리티 브랜드 — 레드 (CI 색상) */
+      --brand: #e1141e;
+      --brand-700: #b50f17;
+      --brand-100: #f7d4d6;
+      --brand-50: #fef0f1;
+      --navy: #0D4E8B;
       --ink-1: #0a0a0a;
       --ink-2: #404040;
       --ink-3: #737373;
@@ -113,108 +115,190 @@
     .topnav__menu a:hover { color: var(--ink-1); }
     .topnav__cta {
       display: inline-flex; align-items: center; gap: 6px;
-      background: var(--brand); color: #fff;
+      background: var(--ink-1); color: #fff;
       border: 0; border-radius: var(--radius-pill);
       padding: 9px 18px;
       font-size: 13px; font-weight: 600;
       transition: background var(--t-fast);
     }
-    .topnav__cta:hover { background: var(--brand-700); }
+    .topnav__cta:hover { background: var(--brand); }
     @media (max-width: 768px) {
       .topnav__menu { display: none; }
     }
 
-    /* === Hero === */
+    /* === Hero === 라이트 + 우측 견적 카드 (hana-car 톤) === */
     .hero {
-      padding: 100px 0 110px;
-      background: linear-gradient(180deg, var(--bg) 0%, var(--brand-50) 100%);
+      padding: 80px 0 100px;
+      background:
+        radial-gradient(circle at 90% 0%, var(--brand-50) 0%, transparent 50%),
+        linear-gradient(180deg, #fafafa 0%, #fff 100%);
+      color: var(--ink-1);
       position: relative; overflow: hidden;
     }
     .hero__bg-grid {
       position: absolute; inset: 0;
       background-image:
-        radial-gradient(circle at 20% 30%, rgba(13, 78, 139, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 80% 70%, rgba(13, 78, 139, 0.05) 0%, transparent 50%);
+        radial-gradient(circle at 15% 70%, rgba(225, 20, 30, 0.04) 0%, transparent 40%);
       pointer-events: none;
     }
     .hero__inner {
-      max-width: 900px; margin: 0 auto;
-      text-align: center;
+      max-width: 1180px; margin: 0 auto;
+      display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px;
+      align-items: center;
       position: relative; z-index: 1;
     }
+    @media (max-width: 980px) {
+      .hero__inner { grid-template-columns: 1fr; gap: 36px; }
+    }
+    .hero__left { text-align: left; }
+    @media (max-width: 980px) {
+      .hero__left { text-align: center; }
+    }
+
     .hero__badge {
       display: inline-flex; align-items: center; gap: 6px;
       background: var(--ink-1); color: #fff;
-      padding: 7px 16px; border-radius: var(--radius-pill);
+      padding: 7px 14px; border-radius: var(--radius-pill);
       font-size: 12px; font-weight: 600; letter-spacing: 0.2px;
-      margin-bottom: 28px;
+      margin-bottom: 22px;
     }
+    .hero__badge i { color: var(--brand); }
+
+    /* 웰컴저축은행 계열 신뢰 라인 */
+    .hero__group {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--ink-3);
+      margin-bottom: 18px;
+    }
+    .hero__group b { color: var(--ink-1); font-weight: 700; }
+    .hero__group i { font-size: 14px; color: var(--brand); }
+
     .hero__title {
-      font-size: 64px; font-weight: 800;
-      line-height: 1.1; letter-spacing: -0.045em;
+      font-size: 60px; font-weight: 800;
+      line-height: 1.08; letter-spacing: -0.045em;
       color: var(--ink-1);
-      margin: 0 0 24px;
+      margin: 0 0 22px;
     }
     .hero__title em {
-      font-style: normal; color: var(--brand);
-      background: linear-gradient(120deg, var(--brand) 0%, #1e6ab8 100%);
+      font-style: normal;
+      background: linear-gradient(120deg, var(--brand) 0%, #ff5862 100%);
       -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     .hero__sub {
-      font-size: 18px; color: var(--ink-2);
-      line-height: 1.75; max-width: 620px;
-      margin: 0 auto 36px;
+      font-size: 17px; color: var(--ink-2);
+      line-height: 1.75; max-width: 560px;
+      margin: 0 0 32px;
       letter-spacing: -0.2px;
     }
+    @media (max-width: 980px) { .hero__sub { margin-left: auto; margin-right: auto; } }
     .hero__sub b { color: var(--ink-1); font-weight: 700; }
-
-    /* FROM 가격 lockup */
-    .hero__from {
-      display: inline-flex; align-items: baseline; gap: 10px;
-      padding: 14px 24px;
-      background: var(--bg);
-      border: 1.5px solid var(--ink-1);
-      border-radius: var(--radius-pill);
-      margin-bottom: 30px;
-      box-shadow: 0 6px 24px rgba(13, 78, 139, 0.12);
-    }
-    .hero__from-label {
-      font-size: 12px; font-weight: 600; color: var(--ink-3);
-      letter-spacing: 0.3px;
-    }
-    .hero__from-num {
-      font-size: 28px; font-weight: 800; color: var(--ink-1);
-      letter-spacing: -0.04em;
-      font-variant-numeric: tabular-nums;
-    }
-    .hero__from-num small {
-      font-size: 14px; font-weight: 500; color: var(--ink-3);
-      margin-left: 2px;
-    }
-    .hero__from-sub {
-      font-size: 13px; color: var(--ink-3); font-weight: 500;
-    }
 
     .hero__cta {
       display: inline-flex; gap: 10px; flex-wrap: wrap;
-      justify-content: center;
     }
 
     .hero__pills {
-      display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
-      margin-top: 36px;
+      display: flex; gap: 6px; flex-wrap: wrap;
+      margin-top: 32px;
+    }
+    @media (max-width: 980px) {
+      .hero__pills { justify-content: center; }
     }
     .hero__pill {
       display: inline-flex; align-items: center; gap: 5px;
-      background: rgba(255,255,255,0.7);
+      background: var(--bg);
       border: 1px solid var(--line-2);
-      padding: 7px 14px; border-radius: var(--radius-pill);
-      font-size: 12.5px; font-weight: 500; color: var(--ink-2);
-      backdrop-filter: blur(4px);
+      padding: 6px 12px; border-radius: var(--radius-pill);
+      font-size: 12px; font-weight: 500; color: var(--ink-2);
       letter-spacing: -0.1px;
     }
-    .hero__pill i { font-size: 14px; color: var(--brand); }
+    .hero__pill i { font-size: 13px; color: var(--brand); }
+
+    /* 우측 견적 카드 */
+    .hero__card {
+      background: #fff; color: var(--ink-1);
+      border-radius: 20px;
+      padding: 28px 28px 24px;
+      box-shadow:
+        0 24px 60px rgba(225, 20, 30, 0.08),
+        0 8px 24px rgba(0,0,0,0.06),
+        0 2px 4px rgba(0,0,0,0.04);
+      display: flex; flex-direction: column; gap: 16px;
+      position: relative;
+      max-width: 420px; width: 100%; margin: 0 auto;
+      border: 1px solid var(--line);
+    }
+    .hero__card::before {
+      content: ''; position: absolute; top: -1px; left: -1px; right: -1px; bottom: -1px;
+      background: linear-gradient(135deg, rgba(225, 20, 30, 0.25), transparent 50%);
+      border-radius: 21px; z-index: -1; pointer-events: none;
+    }
+    .hero__card-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--ink-1); color: #fff;
+      padding: 4px 10px; border-radius: var(--radius-pill);
+      font-size: 10.5px; font-weight: 700; letter-spacing: 0.3px;
+      align-self: flex-start;
+    }
+    .hero__card-vehicle {
+      font-size: 11px; color: var(--ink-4); font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+    .hero__card-model {
+      font-size: 22px; font-weight: 800; color: var(--ink-1);
+      letter-spacing: -0.3px;
+      margin-top: -8px;
+    }
+    .hero__card-monthly-block {
+      background: linear-gradient(135deg, var(--brand-50) 0%, #fff 100%);
+      border-radius: 12px;
+      padding: 18px 20px;
+    }
+    .hero__card-monthly-label {
+      font-size: 11.5px; color: var(--ink-3); font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+    .hero__card-monthly {
+      display: flex; align-items: baseline; gap: 3px;
+      margin-top: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+    .hero__card-monthly-num {
+      font-size: 38px; font-weight: 800; color: var(--ink-1);
+      letter-spacing: -0.04em; line-height: 1;
+    }
+    .hero__card-monthly small {
+      font-size: 14px; color: var(--ink-3); font-weight: 500;
+    }
+    .hero__card-rows {
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .hero__card-row {
+      display: flex; justify-content: space-between;
+      font-size: 12px; color: var(--ink-3);
+      padding: 5px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+    .hero__card-row:last-child { border-bottom: 0; }
+    .hero__card-row b { color: var(--ink-1); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .hero__card-row .pill {
+      background: var(--brand-50); color: var(--brand);
+      padding: 1px 7px; border-radius: var(--radius-pill);
+      font-size: 10.5px; font-weight: 700;
+    }
+    .hero__card-cta {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      background: var(--ink-1); color: #fff;
+      border: 0; border-radius: var(--radius-pill);
+      padding: 13px 0;
+      font-family: inherit; font-size: 14px; font-weight: 700;
+      cursor: pointer;
+      transition: background var(--t-fast);
+      text-decoration: none;
+    }
+    .hero__card-cta:hover { background: var(--brand); }
+    .hero__card-cta i { font-size: 16px; }
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 14px 26px;
@@ -225,9 +309,10 @@
       letter-spacing: -0.2px;
     }
     .btn--primary {
-      background: var(--ink-1); color: #fff;
+      background: var(--brand); color: #fff;
+      box-shadow: 0 4px 14px rgba(225, 20, 30, 0.25);
     }
-    .btn--primary:hover { background: var(--brand); transform: translateY(-1px); }
+    .btn--primary:hover { background: var(--brand-700); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(225, 20, 30, 0.32); }
     .btn--outline {
       background: rgba(255,255,255,0.85); color: var(--ink-1);
       border: 1.5px solid var(--ink-1);
@@ -504,38 +589,61 @@
   <section class="hero">
     <div class="hero__bg-grid" aria-hidden="true"></div>
     <div class="container hero__inner">
-      <span class="hero__badge">
-        <i class="ph ph-shield-check"></i> 장기렌터카 전문 상담
-      </span>
-      <h1 class="hero__title">
-        꾸준한 소득만 있다면<br>
-        <em>신차로 출고</em>합니다
-      </h1>
-      <p class="hero__sub">
-        <b>안정적인 월 소득 기준 심사</b> — 직장인·자영업자 모두 가능.<br>
-        장기렌터카 36 / 48 / 60개월, <b>자동차 보험료·각종 세금 모두 포함</b>.
-      </p>
+      <div class="hero__left">
+        <div class="hero__group">
+          <i class="ph ph-shield-check"></i>
+          <span><b>웰컴저축은행</b> 계열 · 믿을 수 있는 장기렌터카</span>
+        </div>
+        <span class="hero__badge">
+          <i class="ph ph-receipt"></i> 신차 장기렌터카 · 소득 기준 심사
+        </span>
+        <h1 class="hero__title">
+          꾸준한 소득만 있다면<br>
+          <em>장기렌터카로</em> 신차 OK
+        </h1>
+        <p class="hero__sub">
+          <b>안정적인 월 소득 기준 심사</b> — 직장인·자영업자 모두 가능.<br>
+          장기렌터카 36 / 48 / 60개월, <b>자동차 보험료·각종 세금 포함</b>.
+        </p>
 
-      <div class="hero__from">
-        <span class="hero__from-label">월 대여료</span>
-        <span class="hero__from-num">220,000<small>원</small></span>
-        <span class="hero__from-sub">부터</span>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="#quote">
+            <i class="ph ph-magnifying-glass"></i> 1분 견적 받기
+          </a>
+          <a class="btn btn--outline" href="#contact">
+            <i class="ph ph-chat-circle-dots"></i> 무료 상담
+          </a>
+        </div>
+
+        <div class="hero__pills">
+          <span class="hero__pill"><i class="ph ph-shield-check"></i> 웰컴저축은행 계열</span>
+          <span class="hero__pill"><i class="ph ph-receipt"></i> 소득 기준 심사</span>
+          <span class="hero__pill"><i class="ph ph-car"></i> 무보증 가능</span>
+          <span class="hero__pill"><i class="ph ph-truck"></i> 출고 7일 이내</span>
+        </div>
       </div>
 
-      <div class="hero__cta">
-        <a class="btn btn--primary" href="#quote">
-          <i class="ph ph-magnifying-glass"></i> 1분 견적 받기
+      <!-- 우측: 견적 미리보기 카드 -->
+      <div class="hero__card">
+        <span class="hero__card-tag">★ 베스트 픽</span>
+        <div class="hero__card-vehicle">현대 · 인기 차종</div>
+        <div class="hero__card-model">더 뉴 캐스퍼</div>
+        <div class="hero__card-monthly-block">
+          <div class="hero__card-monthly-label">60개월 월 대여료부터</div>
+          <div class="hero__card-monthly">
+            <span class="hero__card-monthly-num">220,000</span>
+            <small>원/월</small>
+          </div>
+        </div>
+        <div class="hero__card-rows">
+          <div class="hero__card-row"><span>약정 주행거리</span><b>2만km/년</b></div>
+          <div class="hero__card-row"><span>보증금</span><b>10%</b></div>
+          <div class="hero__card-row"><span>포함</span><b>보험료 · 자동차세</b></div>
+          <div class="hero__card-row"><span>심사 기준</span><span class="pill">소득 기준</span></div>
+        </div>
+        <a class="hero__card-cta" href="#quote">
+          <i class="ph ph-magnifying-glass"></i> 내 차 견적 보기
         </a>
-        <a class="btn btn--outline" href="#contact">
-          <i class="ph ph-chat-circle-dots"></i> 무료 상담
-        </a>
-      </div>
-
-      <div class="hero__pills">
-        <span class="hero__pill"><i class="ph ph-receipt"></i> 소득 기준 심사</span>
-        <span class="hero__pill"><i class="ph ph-car"></i> 무보증 출고 가능</span>
-        <span class="hero__pill"><i class="ph ph-truck"></i> 출고 7일 이내</span>
-        <span class="hero__pill"><i class="ph ph-currency-krw"></i> 월 1회 통합 납부</span>
       </div>
     </div>
   </section>
