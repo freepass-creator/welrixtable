@@ -38,7 +38,6 @@ export default defineConfig({
         home: resolve(__dirname, 'home.html'),
         vehicles: resolve(__dirname, 'vehicles.html'),
         guide: resolve(__dirname, 'guide.html'),
-        agent: resolve(__dirname, 'agent.html'),
       },
     },
   },
