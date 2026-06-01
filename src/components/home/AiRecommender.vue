@@ -48,7 +48,8 @@ const MILEAGES = [
 // size: S/M/L/XL  /  age: 적합 연령대 set
 // usage: 적합 용도 set  /  mileage: 적합 주행거리 ('any'/'low'/'mid'/'high')
 const MODEL_META = {
-  '더 뉴 캐스퍼':         { body: 'compact', size: 'S', age: ['20s','30s'],          usage: ['commute','hobby'],            mileage: 'low',  image: '/cars/casper.jpg' },
+  '더 뉴 캐스퍼':         { body: 'compact', size: 'S', age: ['20s','30s'],          usage: ['commute','hobby'],            mileage: 'low',  image: '/cars/casper.jpg',
+    story: '경형 SUV 시장의 표준. 1.0 터보 + 4단 자동변속기 조합으로 연비·가속 균형. 비좁아 보여도 트렁크 + 풀폴딩 시트로 실내 활용도 의외로 좋습니다. 1인·2인 가구의 첫 차로 가장 많이 선택되는 모델.', },
   '아반떼':              { body: 'sedan',   size: 'M', age: ['20s','30s'],          usage: ['commute','hobby'],            mileage: 'any' },
   '아반떼 Hybrid':       { body: 'sedan',   size: 'M', age: ['20s','30s','40s'],    usage: ['commute'],                    mileage: 'high' },
   '쏘나타 디 엣지':      { body: 'sedan',   size: 'L', age: ['30s','40s'],          usage: ['commute','business','leisure'], mileage: 'any' },
@@ -62,7 +63,8 @@ const MODEL_META = {
   '투싼 Hybrid':         { body: 'suv-mid', size: 'M', age: ['30s','40s'],          usage: ['commute','leisure'],          mileage: 'high' },
   '디 올 뉴 싼타페':      { body: 'suv-large', size: 'L', age: ['30s','40s'],        usage: ['leisure','family'],           mileage: 'any' },
   '디 올 뉴 싼타페 Hybrid': { body: 'suv-large', size: 'L', age: ['30s','40s'],      usage: ['leisure','family'],           mileage: 'high' },
-  '디 올 뉴 팰리세이드':  { body: 'suv-large', size: 'XL', age: ['30s','40s','50plus'], usage: ['leisure','family','business'], mileage: 'any', image: '/cars/palisade.jpg' },
+  '디 올 뉴 팰리세이드':  { body: 'suv-large', size: 'XL', age: ['30s','40s','50plus'], usage: ['leisure','family','business'], mileage: 'any', image: '/cars/palisade.jpg',
+    story: '2025년 1월 풀체인지급 페이스리프트(LX3 세대). 7·9인승 풀사이즈 SUV의 정점. 12.3" 듀얼 디스플레이 + 어드밴스드 안전 패키지 기본. 통풍·열선 시트, 스마트 파워테일게이트 — 가족 차로서 빠진 옵션이 없습니다.', },
   '디 올 뉴 팰리세이드 Hybrid': { body: 'suv-large', size: 'XL', age: ['30s','40s','50plus'], usage: ['leisure','family'], mileage: 'high', image: '/cars/palisade.jpg' },
   '포터2':               { body: 'truck',   size: 'L', age: ['30s','40s','50plus'], usage: ['business'],                   mileage: 'high' },
   // 기아
@@ -78,11 +80,13 @@ const MODEL_META = {
   '스포티지 Hybrid':     { body: 'suv-mid', size: 'M', age: ['30s','40s'],          usage: ['commute','leisure'],          mileage: 'high' },
   '쏘렌토':              { body: 'suv-large', size: 'L', age: ['30s','40s'],        usage: ['leisure','family'],           mileage: 'any' },
   '쏘렌토 Hybrid':       { body: 'suv-large', size: 'L', age: ['30s','40s'],        usage: ['leisure','family'],           mileage: 'high' },
-  '카니발':              { body: 'minivan', size: 'XL', age: ['30s','40s','50plus'], usage: ['leisure','family','business'], mileage: 'any', image: '/cars/carnival.jpg' },
+  '카니발':              { body: 'minivan', size: 'XL', age: ['30s','40s','50plus'], usage: ['leisure','family','business'], mileage: 'any', image: '/cars/carnival.jpg',
+    story: '국내 미니밴 부동의 1위. 4세대 KA4는 SUV 같은 디자인 + 9인승 실내 공간을 둘 다 잡았습니다. 양쪽 슬라이딩 도어 + 2열 통풍·열선 시트 + 하이리무진 옵션까지. 가족·임원·영업 등 활용 범위가 가장 넓은 차종.', },
   '카니발 Hybrid':       { body: 'minivan', size: 'XL', age: ['30s','40s'],         usage: ['family'],                     mileage: 'high', image: '/cars/carnival.jpg' },
   // 제네시스
   'G70':                 { body: 'luxury',  size: 'L', age: ['30s','40s'],          usage: ['business','hobby'],           mileage: 'any' },
-  '디 올 뉴 G80 RG3':    { body: 'luxury',  size: 'XL', age: ['40s','50plus'],      usage: ['business'],                   mileage: 'any', image: '/cars/g80.jpg' },
+  '디 올 뉴 G80 RG3':    { body: 'luxury',  size: 'XL', age: ['40s','50plus'],      usage: ['business'],                   mileage: 'any', image: '/cars/g80.jpg',
+    story: '제네시스의 정통 럭셔리 세단 RG3 세대. 라디에이터 그릴부터 인테리어까지 완전히 새로 만든 풀체인지. 다이내믹 주행감과 정중한 디자인을 동시에. 임원 의전·비즈니스 미팅에서 가장 많이 보이는 선택.', },
   'G90 RS4':             { body: 'luxury',  size: 'XL', age: ['50plus'],            usage: ['business'],                   mileage: 'low' },
   'GV70':                { body: 'suv-mid', size: 'L', age: ['30s','40s'],          usage: ['leisure','business'],         mileage: 'any' },
   'GV80':                { body: 'suv-large', size: 'XL', age: ['40s','50plus'],    usage: ['business','family'],          mileage: 'any' },
@@ -268,8 +272,31 @@ function pickIcon(p) {
   return map[p.meta.body] || 'ph-car-profile';
 }
 
-function submit() { submitted.value = true; }
+function submit() {
+  submitted.value = true;
+  // 결과로 자연스럽게 스크롤
+  setTimeout(() => {
+    document.querySelector('.ai-result')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
 function reset() { submitted.value = false; }
+
+function slugify(model) {
+  return (model || '')
+    .toLowerCase()
+    .replace(/디\s+올\s+뉴\s+/g, '')
+    .replace(/더\s+뉴\s+/g, '')
+    .replace(/hybrid/i, 'hev')
+    .replace(/\s+/g, '-')
+    .replace(/[^\w가-힣-]/g, '');
+}
+function goToGuide(p) {
+  if (!p) return;
+  // 차종 가이드 섹션 (앵커) — 추후 /guide/{slug} 전용 페이지로 확장 가능
+  const slug = slugify(p.row.model);
+  document.getElementById('guide-' + slug)?.scrollIntoView({ behavior: 'smooth' })
+    || document.getElementById('lineup')?.scrollIntoView({ behavior: 'smooth' });
+}
 
 function goToContact(p) {
   if (!p) return;
@@ -285,10 +312,11 @@ function goToContact(p) {
 
 <template>
   <div class="ai">
-    <div class="ai-wrap">
-      <!-- 왼쪽: 폼 -->
-      <div class="ai-form">
-        <div class="ai-field">
+    <div class="ai-form">
+      <div class="ai-form__eyebrow">
+        <i class="ph ph-sparkle"></i> AI 차종 추천
+      </div>
+      <div class="ai-field">
           <label class="ai-label">나이대</label>
           <div class="ai-chips">
             <button v-for="a in AGES" :key="a.id"
@@ -427,6 +455,14 @@ function goToContact(p) {
                 </li>
               </ul>
 
+              <!-- 차종 썰 / 스토리 -->
+              <div v-if="topPick.meta.story" class="ai-hero__story">
+                <div class="ai-hero__story-label">
+                  <i class="ph ph-book-open"></i> 이 차의 이야기
+                </div>
+                <p>{{ topPick.meta.story }}</p>
+              </div>
+
               <div class="ai-hero__price">
                 <div class="ai-hero__monthly">
                   <span class="ai-hero__monthly-num">{{ fmt(topPick.monthly) }}</span>
@@ -437,9 +473,14 @@ function goToContact(p) {
                 </div>
               </div>
 
-              <button class="ai-hero__cta" @click="goToContact(topPick)">
-                <i class="ph ph-chat-circle-dots"></i> 이 차로 상담 신청
-              </button>
+              <div class="ai-hero__cta-row">
+                <button class="ai-hero__cta ai-hero__cta--primary" @click="goToContact(topPick)">
+                  <i class="ph ph-chat-circle-dots"></i> 상담 신청
+                </button>
+                <button class="ai-hero__cta ai-hero__cta--outline" @click="goToGuide(topPick)">
+                  <i class="ph ph-book-open"></i> 상세보기
+                </button>
+              </div>
             </div>
           </div>
 
@@ -460,9 +501,14 @@ function goToContact(p) {
               </div>
               <div class="ai-alt__bottom">
                 <div class="ai-alt__monthly">{{ fmt(alt.monthly) }}<small>원/월</small></div>
-                <button class="ai-alt__cta" @click="goToContact(alt)">
-                  상담 <i class="ph ph-arrow-right"></i>
-                </button>
+                <div class="ai-alt__btns">
+                  <button class="ai-alt__cta" @click="goToGuide(alt)" title="상세보기">
+                    <i class="ph ph-book-open"></i>
+                  </button>
+                  <button class="ai-alt__cta ai-alt__cta--primary" @click="goToContact(alt)">
+                    상담 <i class="ph ph-arrow-right"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -480,7 +526,7 @@ function goToContact(p) {
 .ai { max-width: 1180px; margin: 0 auto; }
 
 .ai-wrap {
-  display: grid; grid-template-columns: 1fr 1.1fr; gap: 24px;
+  display: flex; flex-direction: column; gap: 20px;
   background: var(--bg);
   border-radius: 18px;
   padding: 28px;
@@ -490,8 +536,17 @@ function goToContact(p) {
   border: 1px solid var(--line);
 }
 @media (max-width: 980px) {
-  .ai-wrap { grid-template-columns: 1fr; padding: 22px; gap: 18px; }
+  .ai-wrap { padding: 22px; gap: 16px; }
 }
+.ai-form__eyebrow {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--brand); color: #fff;
+  padding: 5px 12px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.3px;
+  align-self: flex-start;
+  margin-bottom: 4px;
+}
+.ai-form__eyebrow i { font-size: 12px; }
 
 /* === 폼 === */
 .ai-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
@@ -736,18 +791,46 @@ function goToContact(p) {
   text-align: right;
 }
 
+/* 차종 스토리/썰 */
+.ai-hero__story {
+  margin: 0 0 16px;
+  padding: 14px 16px;
+  background: var(--bg-soft);
+  border-radius: 10px;
+}
+.ai-hero__story-label {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 700; color: var(--brand);
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+.ai-hero__story-label i { font-size: 12px; }
+.ai-hero__story p {
+  margin: 0;
+  font-size: 12.5px; color: var(--ink-2);
+  line-height: 1.7; letter-spacing: -0.01em;
+}
+
+.ai-hero__cta-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+}
 .ai-hero__cta {
-  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-  width: 100%; height: 46px;
-  background: var(--ink-1); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 46px;
   border: 0; border-radius: 999px;
   font-family: inherit;
-  font-size: 13.5px; font-weight: 700;
+  font-size: 13px; font-weight: 700;
   cursor: pointer;
-  transition: background var(--t-fast);
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
 }
-.ai-hero__cta:hover { background: var(--brand); }
 .ai-hero__cta i { font-size: 15px; }
+.ai-hero__cta--primary { background: var(--ink-1); color: #fff; }
+.ai-hero__cta--primary:hover { background: var(--brand); }
+.ai-hero__cta--outline {
+  background: var(--bg); color: var(--ink-2);
+  border: 1.5px solid var(--line-2);
+}
+.ai-hero__cta--outline:hover { border-color: var(--ink-1); color: var(--ink-1); }
 
 /* === Alternates === */
 .ai-alt-title {
@@ -817,6 +900,7 @@ function goToContact(p) {
   font-size: 9.5px; color: var(--ink-4); font-weight: 500;
   margin-left: 1px;
 }
+.ai-alt__btns { display: flex; gap: 4px; }
 .ai-alt__cta {
   display: inline-flex; align-items: center; gap: 3px;
   background: transparent; color: var(--ink-2);
@@ -827,9 +911,9 @@ function goToContact(p) {
   cursor: pointer;
   transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
 }
-.ai-alt__cta:hover {
-  background: var(--ink-1); color: #fff; border-color: var(--ink-1);
-}
+.ai-alt__cta:hover { border-color: var(--ink-1); color: var(--ink-1); }
+.ai-alt__cta--primary { background: var(--ink-1); color: #fff; border-color: var(--ink-1); }
+.ai-alt__cta--primary:hover { background: var(--brand); border-color: var(--brand); }
 .ai-alt__cta i { font-size: 11px; }
 
 .ai-result__again {
