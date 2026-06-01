@@ -5,6 +5,7 @@ import { ref, computed, onMounted } from 'vue';
 import { calcQuote } from '../../lib/calc.js';
 import { fmt } from '../../lib/format.js';
 import { SLUG_META, SLUG_BASE_MODEL, imageOf } from '../../lib/slug.js';
+import { groupBySubModel } from '../../lib/trim.js';
 import { STORIES } from './stories.js';
 import { YOUTUBE_PICKS } from './youtube.js';
 
@@ -69,6 +70,17 @@ const trims = computed(() => {
 
 const minMonthly = computed(() => trims.value.filter(t => t.monthly).reduce((m, t) => !m || t.monthly < m ? t.monthly : m, null));
 const minPrice = computed(() => trims.value[0]?.price);
+
+// 세부모델별 그룹화 (대표는 그룹 최저가, 펼치면 등급 트림 전체)
+const trimGroups = computed(() => groupBySubModel(trims.value));
+const openGroups = ref(new Set());
+function toggleGroup(subModel) {
+  if (openGroups.value.has(subModel)) openGroups.value.delete(subModel);
+  else openGroups.value.add(subModel);
+  // Vue reactivity 트리거
+  openGroups.value = new Set(openGroups.value);
+}
+function isOpen(subModel) { return openGroups.value.has(subModel); }
 
 // 경쟁 차종 — 같은 body 카테고리에서 자기 자신 제외
 const competitors = computed(() => {
@@ -181,34 +193,51 @@ const PERSONA_ICONS = {
       </div>
     </section>
 
-    <!-- TRIM 비교표 -->
+    <!-- TRIM 비교표 — 세부모델 accordion -->
     <section class="gd-section" id="trims">
       <div class="gd-container">
         <h2 class="gd-section__title">
           <i class="ph ph-table"></i> 트림별 견적 비교
         </h2>
-        <p class="gd-section__sub">{{ trims.length }}개 트림의 차량가와 60개월 월 대여료를 한눈에. 가장 저렴한 트림부터 정렬됩니다.</p>
+        <p class="gd-section__sub">
+          세부모델 {{ trimGroups.length }}개 · 총 {{ trims.length }}개 트림.
+          대표 견적은 각 세부모델의 최저가입니다. 펼치면 등급별 트림이 모두 보입니다.
+        </p>
 
-        <div v-if="trims.length" class="gd-trim-table">
-          <div class="gd-trim-table__head">
-            <div>트림</div>
-            <div>차량가</div>
-            <div>60개월 월</div>
-            <div></div>
-          </div>
-          <div v-for="(t, i) in trims" :key="i" class="gd-trim-row" :class="{ 'is-cheapest': i === 0 }">
-            <div class="gd-trim-row__name">
-              <span v-if="i === 0" class="gd-trim-row__badge">최저</span>
-              <span v-if="t.isHybrid" class="gd-trim-row__hev">HEV</span>
-              {{ t.trim }}
-            </div>
-            <div class="gd-trim-row__price">{{ fmt(t.price) }}<small>원</small></div>
-            <div class="gd-trim-row__monthly">
-              <template v-if="t.monthly"><b>{{ fmt(t.monthly) }}</b><small>원/월</small></template>
-              <template v-else>—</template>
-            </div>
-            <div class="gd-trim-row__cta">
-              <button class="gd-trim-row__btn" @click="goContact">상담</button>
+        <div v-if="trimGroups.length" class="gd-trim-groups">
+          <div v-for="(g, gi) in trimGroups" :key="g.subModel"
+               class="gd-trim-group"
+               :class="{ 'is-open': isOpen(g.subModel), 'is-cheapest': gi === 0 }">
+            <!-- 그룹 헤더 (대표 트림 = 최저가) -->
+            <button class="gd-trim-group__head" @click="toggleGroup(g.subModel)">
+              <div class="gd-trim-group__head-left">
+                <span v-if="gi === 0" class="gd-trim-row__badge">최저</span>
+                <span v-if="g.isHybrid" class="gd-trim-row__hev">HEV</span>
+                <span class="gd-trim-group__name">{{ g.subModel }}</span>
+                <span class="gd-trim-group__count">{{ g.count }}개 등급</span>
+              </div>
+              <div class="gd-trim-group__head-right">
+                <div class="gd-trim-group__monthly">
+                  <template v-if="g.minMonthly">
+                    월 <b>{{ fmt(g.minMonthly) }}</b>원~
+                  </template>
+                  <template v-else>—</template>
+                </div>
+                <i class="ph ph-caret-down gd-trim-group__caret"></i>
+              </div>
+            </button>
+
+            <!-- 펼침 영역 — 등급 트림 리스트 -->
+            <div v-show="isOpen(g.subModel)" class="gd-trim-group__body">
+              <div v-for="(t, ti) in g.items" :key="ti" class="gd-trim-grade">
+                <div class="gd-trim-grade__name">{{ t.grade || t.trim }}</div>
+                <div class="gd-trim-grade__price">{{ fmt(t.price) }}<small>원</small></div>
+                <div class="gd-trim-grade__monthly">
+                  <template v-if="t.monthly"><b>{{ fmt(t.monthly) }}</b><small>원/월</small></template>
+                  <template v-else>—</template>
+                </div>
+                <button class="gd-trim-grade__btn" @click.stop="goContact">상담</button>
+              </div>
             </div>
           </div>
         </div>
@@ -561,6 +590,123 @@ const PERSONA_ICONS = {
   }
   .gd-trim-row__price::before { content: '차량가: '; font-size: 11px; color: var(--ink-4); }
   .gd-trim-row__monthly::before { content: '월 대여료: '; font-size: 11px; color: var(--ink-4); }
+}
+
+/* === 세부모델 accordion === */
+.gd-trim-groups {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.gd-trim-group {
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color var(--t-fast);
+}
+.gd-trim-group:hover { border-color: var(--line-2); }
+.gd-trim-group.is-cheapest { border-color: var(--brand); background: var(--brand-50); }
+.gd-trim-group.is-open { border-color: var(--ink-1); }
+
+.gd-trim-group__head {
+  width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
+  background: transparent;
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+.gd-trim-group__head-left {
+  display: flex; align-items: center; gap: 7px;
+  flex: 1; min-width: 0;
+}
+.gd-trim-group__head-right {
+  display: flex; align-items: center; gap: 12px;
+}
+.gd-trim-group__name {
+  font-size: 14.5px; font-weight: 700; color: var(--ink-1);
+  letter-spacing: -0.02em;
+}
+.gd-trim-group__count {
+  font-size: 11px; font-weight: 600; color: var(--ink-4);
+  background: var(--bg-soft);
+  padding: 2px 8px; border-radius: 999px;
+}
+.gd-trim-group__monthly {
+  font-size: 13px; color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.gd-trim-group__monthly b {
+  font-size: 17px; color: var(--ink-1); font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.gd-trim-group__caret {
+  font-size: 14px; color: var(--ink-3);
+  transition: transform var(--t-fast);
+}
+.gd-trim-group.is-open .gd-trim-group__caret { transform: rotate(180deg); }
+
+.gd-trim-group__body {
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+}
+.gd-trim-group.is-cheapest .gd-trim-group__body { background: var(--bg); }
+
+.gd-trim-grade {
+  display: grid;
+  grid-template-columns: 1fr 130px 150px 78px;
+  gap: 12px;
+  align-items: center;
+  padding: 11px 18px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+.gd-trim-grade:last-child { border-bottom: 0; }
+.gd-trim-grade__name {
+  color: var(--ink-2); font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.gd-trim-grade__price {
+  color: var(--ink-2); font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.gd-trim-grade__price small { font-size: 11px; color: var(--ink-4); margin-left: 1px; }
+.gd-trim-grade__monthly {
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.gd-trim-grade__monthly b {
+  font-size: 14.5px; color: var(--ink-1); font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.gd-trim-grade__monthly small { font-size: 11px; color: var(--ink-4); margin-left: 1px; }
+.gd-trim-grade__btn {
+  height: 30px; padding: 0 12px;
+  background: var(--ink-1); color: #fff;
+  border: 0; border-radius: 999px;
+  font-family: inherit; font-size: 11.5px; font-weight: 700;
+  cursor: pointer;
+  transition: background var(--t-fast);
+}
+.gd-trim-grade__btn:hover { background: var(--brand); }
+
+@media (max-width: 700px) {
+  .gd-trim-group__head { padding: 14px 16px; }
+  .gd-trim-group__head-right { gap: 8px; }
+  .gd-trim-group__monthly { font-size: 11.5px; }
+  .gd-trim-group__monthly b { font-size: 15px; }
+  .gd-trim-grade {
+    grid-template-columns: 1fr 80px;
+    gap: 8px;
+    padding: 12px 16px;
+    row-gap: 4px;
+  }
+  .gd-trim-grade__price { display: none; }
+  .gd-trim-grade__monthly { grid-column: 1; }
+  .gd-trim-grade__btn { grid-row: 1 / span 2; grid-column: 2; align-self: center; }
 }
 
 /* === 페르소나 === */
