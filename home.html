@@ -90,9 +90,19 @@
     }
     .topnav__brand {
       display: flex; align-items: center; gap: 10px;
-      font-size: 16px; font-weight: 700; letter-spacing: -0.3px;
+      font-size: 15px; font-weight: 700; letter-spacing: -0.3px;
     }
     .topnav__brand img { height: 22px; width: auto; }
+    .topnav__partner {
+      display: inline-flex; align-items: center;
+      padding: 4px 10px;
+      background: var(--ink-1); color: #fff;
+      border-radius: 4px;
+      font-size: 12.5px; font-weight: 700; letter-spacing: 0.2px;
+    }
+    .topnav__x {
+      color: var(--ink-4); font-weight: 400; font-size: 14px;
+    }
     .topnav__menu {
       display: flex; align-items: center; gap: 28px;
     }
@@ -258,16 +268,18 @@
   <nav class="topnav">
     <div class="container topnav__wrap">
       <a class="topnav__brand" href="/home.html">
+        <span class="topnav__partner">총판</span>
+        <span class="topnav__x">×</span>
         <img src="/welrix-ci.png" alt="웰릭스 모빌리티" />
-        <span>웰릭스 모빌리티</span>
       </a>
       <div class="topnav__menu">
-        <a href="#why">왜 웰릭스?</a>
-        <a href="#quote">즉시 견적</a>
+        <a href="#why">전문가 플랜</a>
+        <a href="#quote">추천 견적</a>
         <a href="#contact">상담 신청</a>
+        <a href="#guide">이용 안내</a>
       </div>
       <a class="topnav__cta" href="#contact">
-        <i class="ph ph-phone"></i> 상담 신청
+        <i class="ph ph-chat-circle-dots"></i> 상담 신청
       </a>
     </div>
   </nav>
@@ -276,15 +288,15 @@
   <section class="hero">
     <div class="container hero__inner">
       <span class="hero__badge">
-        <i class="ph ph-shield-check"></i> 신용점수 보지 않습니다
+        <i class="ph ph-shield-check"></i> 웰릭스 모빌리티 공식 총판
       </span>
       <h1 class="hero__title">
         월 소득만 확인하고<br>
         <em>신차 출고</em> 합니다
       </h1>
       <p class="hero__sub">
-        복잡한 신용 심사 대신, 월 소득 기준으로 심사하는 신차 장기렌터카.<br>
-        36 / 48 / 60개월 자유 선택 · 무보증 가능 · 보험 포함 월 1회 납부.
+        장기렌터카·리스, 전문가와 함께하세요.<br>
+        복잡한 신용 심사 대신 월 소득 기준 — 36 / 48 / 60개월 자유 선택, 무보증 가능.
       </p>
       <div class="hero__cta">
         <a class="btn btn--primary" href="#quote">

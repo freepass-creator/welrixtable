@@ -1,26 +1,40 @@
 <script setup>
-// 손님 셀프 견적 — 차종 카스케이드 + 기간 선택 → 월 대여료 즉시 표시
-// 표준 조건: 중신용 / 보증금 10% / 선납 0% / 2만km / 보험 1억
+// 손님 셀프 견적 — ERP 카스케이드 로직(vehicle-db.js + vehicles.json 매칭) 그대로 활용.
+// 4단계: 제조사 → 모델 → 세부모델(variant) → 트림 → 기간 → 결과.
+// operating !== false 필터, Hybrid 모델명 접미사 매칭, calc.js 표준 조건 호출.
 import { ref, computed, onMounted } from 'vue';
 import { calcQuote } from '../../lib/calc.js';
 import { fmt } from '../../lib/format.js';
 
-const BRANDS = ['현대', '기아', '제네시스'];
 const TERMS = [60, 48, 36];
 
+// vehicle-db (카탈로그) + vehicles.json (calc 데이터)
+const db = ref(null);
 const vehicles = ref([]);
 const loading = ref(true);
 const error = ref('');
 
-const selectedBrand = ref('현대');
-const selectedModel = ref('');
-const selectedTrim = ref(null);   // 행 직접 보관 (간소화)
+// 카스케이드 상태 — 브랜드는 상단 탭으로 항상 노출, 단계는 모델 → 세부모델 → 트림
+const brandId = ref('');   // 상단 탭 (manufacturer_id)
+const modelId = ref('');
+const variantId = ref('');
+const trim = ref(null);     // 직접 트림 객체 보관
 const selectedTerm = ref(60);
 
 onMounted(async () => {
   try {
+    let tries = 0;
+    while (!window.VEHICLE_DB && tries < 50) {
+      await new Promise(r => setTimeout(r, 50));
+      tries++;
+    }
+    if (!window.VEHICLE_DB) throw new Error('VEHICLE_DB 미로드');
+    db.value = window.VEHICLE_DB;
     const r = await fetch('/data/vehicles.json?t=' + Date.now());
     vehicles.value = await r.json();
+    // 첫 브랜드 자동 선택 — 브랜드 탭은 항상 노출, 카스케이드는 모델부터 시작
+    const first = db.value.manufacturers?.[0];
+    if (first) brandId.value = first.manufacturer_id;
   } catch (e) {
     error.value = '차량 데이터 로드 실패';
   } finally {
@@ -28,50 +42,107 @@ onMounted(async () => {
   }
 });
 
-const modelsInBrand = computed(() => {
-  const seen = new Set();
-  const out = [];
-  for (const v of vehicles.value) {
-    if (v.brand !== selectedBrand.value) continue;
-    if (seen.has(v.model)) continue;
-    seen.add(v.model);
-    out.push(v.model);
-  }
-  return out;
+// 카스케이드 옵션
+const manufacturers = computed(() => db.value?.manufacturers || []);
+const selectedManufacturer = computed(() =>
+  manufacturers.value.find(m => m.manufacturer_id === brandId.value)
+);
+const models = computed(() => selectedManufacturer.value?.models || []);
+const selectedModel = computed(() =>
+  models.value.find(m => m.model_id === modelId.value)
+);
+// 운영 트림(operating !== false) 이 1개 이상인 variant 만
+const variants = computed(() => {
+  const all = selectedModel.value?.variants || [];
+  return all.filter(v => (v.trims || []).some(t => t.operating !== false));
+});
+const selectedVariant = computed(() =>
+  variants.value.find(v => v.variant_id === variantId.value)
+);
+// 운영 트림만, 가격 낮은 순
+const trims = computed(() => {
+  if (!selectedVariant.value) return [];
+  return (selectedVariant.value.trims || [])
+    .filter(t => t.operating !== false)
+    .slice()
+    .sort((a, b) => (a.base_price_5 || 0) - (b.base_price_5 || 0));
 });
 
-const trimsInModel = computed(() => {
-  if (!selectedModel.value) return [];
-  return vehicles.value
-    .filter(v => v.brand === selectedBrand.value && v.model === selectedModel.value)
-    .sort((a, b) => a.price - b.price);
-});
-
-function selectBrand(b) {
-  selectedBrand.value = b;
-  selectedModel.value = '';
-  selectedTrim.value = null;
+function selectBrand(m) {
+  brandId.value = m.manufacturer_id;
+  // 브랜드 변경 시 하위 모두 리셋
+  modelId.value = ''; variantId.value = ''; trim.value = null;
 }
 function selectModel(m) {
-  selectedModel.value = m;
-  selectedTrim.value = null;
-  // 자동 첫 트림 선택 — 손님 빠른 결과 보게
-  setTimeout(() => {
-    const first = trimsInModel.value[0];
-    if (first) selectedTrim.value = first;
-  }, 0);
+  modelId.value = m.model_id;
+  variantId.value = ''; trim.value = null;
+  // variant 1개면 자동 선택
+  const vs = (m.variants || []).filter(v => (v.trims || []).some(t => t.operating !== false));
+  if (vs.length === 1) selectVariant(vs[0]);
 }
-function selectTrim(t) { selectedTrim.value = t; }
+function selectVariant(v) {
+  variantId.value = v.variant_id;
+  trim.value = null;
+  // 트림 1개면 자동 선택
+  const ts = (v.trims || []).filter(t => t.operating !== false);
+  if (ts.length === 1) selectTrim(ts[0]);
+}
+function selectTrim(t) { trim.value = t; }
 function selectTerm(t) { selectedTerm.value = t; }
 
+// 표시 정보
+const selectedBrandName = computed(() => selectedManufacturer.value?.manufacturer_name || '');
+const selectedModelName = computed(() => selectedModel.value?.model_name || '');
+const selectedVariantName = computed(() => selectedVariant.value?.variant_name || '');
+const selectedTrimName = computed(() => trim.value?.name || '');
+const selectedTrimPriceKrw = computed(() => (trim.value?.base_price_5 || 0) * 10000);
+
+// vehicles.json 에서 해당 트림 row 찾기 (ERP quote.js findVehicleMeta 동일 로직)
+const matchedRow = computed(() => {
+  const t = trim.value;
+  const v = selectedVariant.value;
+  const m = selectedModel.value;
+  const mfr = selectedManufacturer.value;
+  if (!t || !v || !m || !mfr) return null;
+  const brand = mfr.manufacturer_name;
+  const model = m.model_name;
+  const priceWon = (t.base_price_5 || 0) * 10000;
+  // HEV variant 면 model + ' Hybrid' 도 시도
+  const isHEV = /하이브리드|HEV/i.test(v.variant_name || '');
+  const candidates = isHEV ? [`${model} Hybrid`, model] : [model];
+  for (const mm of candidates) {
+    const exact = vehicles.value.filter(x =>
+      x.brand === brand && x.model === mm && x.price === priceWon
+    );
+    if (exact.length === 1) return exact[0];
+    if (exact.length > 1) {
+      // 트림명 토큰 매칭
+      const tokens = [...(v.variant_name || '').split(/[\s·,()/]+/), ...(t.name || '').split(/[\s·,()/]+/)]
+        .filter(s => s && s.length >= 1).map(s => s.toLowerCase());
+      const scored = exact.map(row => ({
+        row, score: tokens.reduce((s, tok) => s + ((row.trim || '').toLowerCase().includes(tok) ? 1 : 0), 0)
+      }));
+      scored.sort((a, b) => b.score - a.score);
+      return scored[0].row;
+    }
+  }
+  // 폴백 — brand+model 만
+  for (const mm of candidates) {
+    const f = vehicles.value.find(x => x.brand === brand && x.model === mm);
+    if (f) return f;
+  }
+  return null;
+});
+
+// 표준 견적 계산
 const result = computed(() => {
-  const v = selectedTrim.value;
-  if (!v) return null;
+  const row = matchedRow.value;
+  if (!row) return null;
   try {
     const r = calcQuote({
-      vehicle: v,
+      vehicle: row,
       options: { optPrice: 0, discount: 0, deliveryFee: 0, itemsFee: 0, etc: 0 },
-      contract: { term: selectedTerm.value, km: '2만km', dep: 10, pre: 0 },
+      contract: { term: selectedTerm.value, km: '2만km', dep: 0, pre: 0 },
       customer: { creditGrade: '중신용' },
       insurance: {
         property: '1억', extraDriver: '없음',
@@ -91,12 +162,11 @@ const result = computed(() => {
   }
 });
 
-// 상담 신청으로 이 견적 정보 보내기 — section 스크롤
+// 상담 신청 점프
 function goToContact() {
-  // 선택 정보 쿼리스트링으로 (LeadForm 이 읽어감)
-  if (selectedTrim.value) {
+  if (trim.value && matchedRow.value) {
     const params = new URLSearchParams({
-      vehicle: `${selectedTrim.value.brand} ${selectedTrim.value.model} ${selectedTrim.value.trim}`,
+      vehicle: `${selectedBrandName.value} ${selectedModelName.value} ${selectedVariantName.value} ${selectedTrimName.value}`.trim(),
       term: selectedTerm.value,
       monthly: result.value?.monthly || '',
     });
@@ -104,6 +174,10 @@ function goToContact() {
   }
   document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
 }
+
+// "뒤로" 단계 이동 (브랜드는 탭이라 step out 안 함)
+function backToModel() { modelId.value = ''; variantId.value = ''; trim.value = null; }
+function backToVariant() { variantId.value = ''; trim.value = null; }
 </script>
 
 <template>
@@ -111,45 +185,78 @@ function goToContact() {
     <div v-if="loading" class="qw-loading">차량 데이터 로드 중…</div>
     <div v-else-if="error" class="qw-error">{{ error }}</div>
     <div v-else class="qw-grid">
-      <!-- 좌측: 선택 영역 -->
+      <!-- 좌측: 브랜드 탭(상단) + 카스케이드 (모델 → 세부모델 → 트림) -->
       <div class="qw-pickers">
-        <div class="qw-field">
-          <label class="qw-label">제조사</label>
-          <div class="qw-brands">
-            <button
-              v-for="b in BRANDS" :key="b"
-              class="qw-brand-btn"
-              :class="{ 'is-active': selectedBrand === b }"
-              @click="selectBrand(b)"
-            >{{ b }}</button>
-          </div>
+        <!-- 브랜드 탭 (항상 노출) -->
+        <div class="qw-brand-tabs">
+          <button
+            v-for="m in manufacturers" :key="m.manufacturer_id"
+            class="qw-brand-tab"
+            :class="{ 'is-active': brandId === m.manufacturer_id }"
+            @click="selectBrand(m)"
+          >{{ m.manufacturer_name }}</button>
         </div>
 
-        <div class="qw-field">
-          <label class="qw-label">모델</label>
-          <select class="qw-select" v-model="selectedModel" @change="selectModel($event.target.value)">
-            <option value="">모델 선택</option>
-            <option v-for="m in modelsInBrand" :key="m" :value="m">{{ m }}</option>
-          </select>
+        <!-- 브레드크럼 (카스케이드 진행) -->
+        <div class="qw-crumbs" v-if="modelId || variantId || trim">
+          <button class="qw-crumb" @click="backToModel">{{ selectedModelName }}</button>
+          <i class="ph ph-caret-right" v-if="variantId"></i>
+          <button class="qw-crumb" v-if="variantId" @click="backToVariant">{{ selectedVariantName }}</button>
+          <i class="ph ph-caret-right" v-if="trim"></i>
+          <span class="qw-crumb qw-crumb--current" v-if="trim">{{ selectedTrimName }}</span>
         </div>
 
-        <div class="qw-field" v-if="trimsInModel.length">
-          <label class="qw-label">트림</label>
-          <div class="qw-trims">
+        <!-- 1) 모델 -->
+        <div v-if="!modelId" class="qw-step">
+          <div class="qw-step-label">모델 선택</div>
+          <div class="qw-row-list">
             <button
-              v-for="t in trimsInModel" :key="t.trim"
-              class="qw-trim-btn"
-              :class="{ 'is-active': selectedTrim?.trim === t.trim }"
-              @click="selectTrim(t)"
+              v-for="m in models" :key="m.model_id"
+              class="qw-row"
+              @click="selectModel(m)"
             >
-              <div class="qw-trim-name">{{ t.trim }}</div>
-              <div class="qw-trim-price">{{ fmt(t.price) }}<small>원</small></div>
+              <span class="qw-row-name">{{ m.model_name }}</span>
+              <i class="ph ph-caret-right qw-row-chev"></i>
             </button>
           </div>
         </div>
 
-        <div class="qw-field">
-          <label class="qw-label">기간</label>
+        <!-- 2) 세부모델 (variant) -->
+        <div v-else-if="!variantId" class="qw-step">
+          <div class="qw-step-label">세부 모델 선택</div>
+          <div class="qw-row-list">
+            <button
+              v-for="v in variants" :key="v.variant_id"
+              class="qw-row"
+              @click="selectVariant(v)"
+            >
+              <span class="qw-row-name">{{ v.variant_name }}</span>
+              <i class="ph ph-caret-right qw-row-chev"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3) 트림 -->
+        <div v-else-if="!trim" class="qw-step">
+          <div class="qw-step-label">트림 선택</div>
+          <div class="qw-row-list">
+            <button
+              v-for="t in trims" :key="t.trim_id"
+              class="qw-row qw-row--trim"
+              @click="selectTrim(t)"
+            >
+              <div>
+                <div class="qw-row-name">{{ t.name }}</div>
+                <div class="qw-row-sub" v-if="t.seats">{{ t.seats }}인승 · {{ t.engine }}</div>
+              </div>
+              <div class="qw-row-price">{{ fmt(t.base_price_5 * 10000) }}<small>원</small></div>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4) 기간 (트림 선택 후) -->
+        <div v-if="trim" class="qw-step">
+          <div class="qw-step-label">기간 선택</div>
           <div class="qw-terms">
             <button
               v-for="t in TERMS" :key="t"
@@ -163,14 +270,14 @@ function goToContact() {
 
       <!-- 우측: 결과 -->
       <aside class="qw-result">
-        <div v-if="!selectedTrim" class="qw-result__empty">
+        <div v-if="!trim" class="qw-result__empty">
           <i class="ph ph-car-profile"></i>
           <p>차종을 선택하면<br>즉시 월 대여료가 계산됩니다.</p>
         </div>
         <template v-else>
           <div class="qw-result__head">
-            <div class="qw-result__brand">{{ selectedTrim.brand }} · {{ selectedTrim.model }}</div>
-            <div class="qw-result__trim">{{ selectedTrim.trim }}</div>
+            <div class="qw-result__brand">{{ selectedBrandName }} · {{ selectedModelName }}</div>
+            <div class="qw-result__trim">{{ selectedVariantName }} {{ selectedTrimName }}</div>
           </div>
 
           <div class="qw-result__hero">
@@ -184,11 +291,11 @@ function goToContact() {
           <div class="qw-result__rows">
             <div class="qw-result__row">
               <span>차량가</span>
-              <b>{{ fmt(selectedTrim.price) }}원</b>
+              <b>{{ fmt(selectedTrimPriceKrw) }}원</b>
             </div>
             <div class="qw-result__row">
-              <span>보증금 (10%)</span>
-              <b>{{ result ? fmt(result.depAmt) : '—' }}원</b>
+              <span>보증금</span>
+              <b class="qw-result__no-deposit">무보증</b>
             </div>
             <div class="qw-result__row">
               <span>만기인수 (선택)</span>
@@ -197,7 +304,7 @@ function goToContact() {
           </div>
 
           <div class="qw-result__cond">
-            ※ 표준 조건: 중신용 · 보증금 10% · 선납 0% · 약정 2만km/년 · 보험 대물 1억<br>
+            ※ 표준 조건: 중신용 · 무보증 · 선납 0% · 약정 2만km/년 · 보험 대물 1억<br>
             실제 견적은 신용·소득·차량 옵션에 따라 다를 수 있습니다.
           </div>
 
@@ -226,74 +333,93 @@ function goToContact() {
   .qw-grid { grid-template-columns: 1fr; gap: 20px; }
 }
 
-/* === 선택 영역 === */
+/* === 좌측: 카스케이드 === */
 .qw-pickers {
   background: var(--bg);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
-  padding: 24px;
-  display: flex; flex-direction: column; gap: 22px;
+  padding: 22px;
+  display: flex; flex-direction: column; gap: 18px;
+  min-height: 380px;
 }
-.qw-field { display: flex; flex-direction: column; gap: 8px; }
-.qw-label {
+
+/* 브랜드 탭 (항상 노출) */
+.qw-brand-tabs {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+}
+.qw-brand-tab {
+  padding: 12px 8px;
+  border: 1.5px solid var(--line-2);
+  background: var(--bg); color: var(--ink-2);
+  border-radius: var(--radius-sm);
+  font-family: inherit; font-size: 14px; font-weight: 500;
+  cursor: pointer;
+  transition: background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+}
+.qw-brand-tab:hover { border-color: var(--ink-4); }
+.qw-brand-tab.is-active {
+  background: var(--ink-1); color: #fff; border-color: var(--ink-1);
+}
+
+/* 브레드크럼 */
+.qw-crumbs {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+  padding-bottom: 14px; border-bottom: 1px solid var(--line);
+}
+.qw-crumb {
+  border: 0; background: transparent;
+  font-family: inherit; font-size: 12px; color: var(--ink-3);
+  padding: 4px 6px; border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.qw-crumb:hover { background: var(--bg-soft); color: var(--ink-1); }
+.qw-crumb--current {
+  color: var(--ink-1); font-weight: 600;
+  cursor: default;
+}
+.qw-crumb--current:hover { background: transparent; }
+.qw-crumbs i { font-size: 10px; color: var(--ink-4); }
+
+/* 스텝 */
+.qw-step { display: flex; flex-direction: column; gap: 10px; }
+.qw-step-label {
   font-size: 12px; font-weight: 600; color: var(--ink-2);
   letter-spacing: -0.1px;
 }
 
-/* 제조사 버튼 그룹 */
-.qw-brands { display: flex; gap: 6px; }
-.qw-brand-btn {
-  flex: 1; padding: 12px 8px;
-  border: 1.5px solid var(--line-2);
-  background: var(--bg); color: var(--ink-2);
-  border-radius: var(--radius-sm);
-  font-size: 14px; font-weight: 500;
-  transition: background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+/* 행 리스트 (제조사/모델/세부모델) */
+.qw-row-list {
+  display: flex; flex-direction: column; gap: 6px;
+  max-height: 320px; overflow-y: auto;
 }
-.qw-brand-btn:hover { border-color: var(--ink-4); }
-.qw-brand-btn.is-active {
-  background: var(--ink-1); color: #fff; border-color: var(--ink-1);
-}
-
-/* 모델 select */
-.qw-select {
-  appearance: none; -webkit-appearance: none;
-  width: 100%; height: 46px;
-  padding: 0 38px 0 14px;
-  border: 1.5px solid var(--line-2); border-radius: var(--radius-sm);
-  background: var(--bg);
-  font-family: inherit; font-size: 14.5px; color: var(--ink-1);
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23737373' stroke-width='1.5' stroke-linecap='round'><polyline points='3 5 6 8 9 5'/></svg>");
-  background-repeat: no-repeat; background-position: right 12px center; background-size: 12px 12px;
-  outline: none;
-  transition: border-color var(--t-fast);
-}
-.qw-select:focus { border-color: var(--brand); }
-
-/* 트림 버튼 그리드 */
-.qw-trims {
-  display: grid; grid-template-columns: 1fr; gap: 6px;
-  max-height: 240px; overflow-y: auto;
-}
-.qw-trim-btn {
+.qw-row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 14px;
+  padding: 14px 16px;
   border: 1.5px solid var(--line-2);
   background: var(--bg); color: var(--ink-1);
   border-radius: var(--radius-sm);
   font-family: inherit; text-align: left;
+  cursor: pointer;
   transition: background var(--t-fast), border-color var(--t-fast);
 }
-.qw-trim-btn:hover { border-color: var(--ink-4); background: var(--bg-soft); }
-.qw-trim-btn.is-active {
-  background: var(--brand-50); border-color: var(--brand);
+.qw-row:hover { background: var(--bg-soft); border-color: var(--ink-4); }
+.qw-row-name {
+  font-size: 14px; font-weight: 600; letter-spacing: -0.2px;
 }
-.qw-trim-name { font-size: 13px; font-weight: 500; letter-spacing: -0.1px; }
-.qw-trim-price {
+.qw-row-sub {
+  font-size: 11.5px; color: var(--ink-4); margin-top: 2px;
+}
+.qw-row-chev { font-size: 14px; color: var(--ink-4); }
+
+/* 트림 행 — 가격 표시 */
+.qw-row--trim { align-items: center; gap: 12px; }
+.qw-row-price {
   font-size: 13.5px; font-weight: 700; color: var(--brand);
   font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
 }
-.qw-trim-price small {
+.qw-row-price small {
   font-size: 10px; color: var(--ink-4); font-weight: 400; margin-left: 1px;
 }
 
@@ -304,7 +430,8 @@ function goToContact() {
   border: 1.5px solid var(--line-2);
   background: var(--bg); color: var(--ink-2);
   border-radius: var(--radius-sm);
-  font-size: 14px; font-weight: 500;
+  font-family: inherit; font-size: 14px; font-weight: 500;
+  cursor: pointer;
   transition: background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
 }
 .qw-term-btn:hover { border-color: var(--ink-4); }
@@ -312,7 +439,7 @@ function goToContact() {
   background: var(--ink-1); color: #fff; border-color: var(--ink-1);
 }
 
-/* === 결과 카드 === */
+/* === 우측: 결과 (네이비 카드) === */
 .qw-result {
   background: var(--ink-1); color: #fff;
   border-radius: var(--radius-md);
@@ -371,6 +498,12 @@ function goToContact() {
 .qw-result__row b {
   color: #fff; font-weight: 600; font-variant-numeric: tabular-nums;
 }
+.qw-result__no-deposit {
+  color: #fff; font-weight: 700;
+  background: rgba(13, 78, 139, 0.55); color: #fff;
+  padding: 2px 8px; border-radius: var(--radius-pill);
+  font-size: 11px; letter-spacing: 0.2px;
+}
 
 .qw-result__cond {
   font-size: 11px; color: rgba(255,255,255,0.4);
@@ -383,6 +516,7 @@ function goToContact() {
   border: 0; border-radius: var(--radius-pill);
   padding: 14px 22px;
   font-size: 14px; font-weight: 700;
+  font-family: inherit; cursor: pointer;
   transition: background var(--t-fast), transform var(--t-fast);
 }
 .qw-result__cta:hover { background: var(--brand-50); transform: translateY(-1px); }
