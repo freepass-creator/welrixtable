@@ -5,6 +5,7 @@ import { createApp } from 'vue';
 import QuoteWidget from './components/home/QuoteWidget.vue';
 import LeadForm from './components/home/LeadForm.vue';
 import Lineup from './components/home/Lineup.vue';
+import HeroBest from './components/home/HeroBest.vue';
 import AiRecommender from './components/home/AiRecommender.vue';
 
 function mountOne(id, Component, label) {
@@ -20,6 +21,7 @@ function mountAll() {
     setTimeout(mountAll, 50);
     return;
   }
+  mountOne('hero-best-root', HeroBest, 'HeroBest');
   mountOne('lineup-root', Lineup, 'Lineup');
   mountOne('ai-recommender-root', AiRecommender, 'AiRecommender');
   mountOne('quote-widget-root', QuoteWidget, 'QuoteWidget');
