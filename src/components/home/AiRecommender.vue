@@ -1,5 +1,5 @@
 <script setup>
-// AI 추천 — 6가지 입력 (나이/성별/라이프스타일/용도/주행거리/소득)
+// AI 추천 — 5가지 입력 (나이/성별/라이프스타일/용도/소득)
 // 다요소 가중합 점수 → top 1 hero + 2 alt
 // 개인화 narrative + 매치 %
 import { ref, computed, onMounted } from 'vue';
@@ -37,12 +37,6 @@ const USAGES = [
   { id: 'business', label: '비즈니스', sub: '의전·영업' },
   { id: 'hobby', label: '여가', sub: '취미·아웃도어' },
 ];
-const MILEAGES = [
-  { id: 'low', label: '적게', sub: '1만km/년↓', km: 1 },
-  { id: 'mid', label: '보통', sub: '2만km/년', km: 2 },
-  { id: 'high', label: '많이', sub: '3만km/년↑', km: 3 },
-];
-
 // === 차종 카탈로그 (스코어링용 메타) ===
 // body: compact / sedan / suv-mid / suv-large / minivan / luxury
 // size: S/M/L/XL  /  age: 적합 연령대 set
@@ -111,7 +105,6 @@ const age = ref('30s');
 const gender = ref('m');
 const lifestyle = ref('couple');
 const usage = ref('commute');
-const mileage = ref('mid');
 const income = ref(400);
 const submitted = ref(false);
 
@@ -128,7 +121,7 @@ function calcMonthly(row, depPct) {
     const r = calcQuote({
       vehicle: row,
       options: { optPrice: 0, discount: 0, deliveryFee: DEFAULT_DELIVERY_FEE, itemsFee: DEFAULT_TINT_FEE, etc: 0 },
-      contract: { term: 60, km: (mileage.value === 'low' ? '1만km' : mileage.value === 'high' ? '3만km' : '2만km'), dep: depPct, pre: 0 },
+      contract: { term: 60, km: '2만km', dep: depPct, pre: 0 },
       customer: { creditGrade: '중신용' },
       insurance: {
         property: '1억', extraDriver: '없음',
@@ -168,7 +161,7 @@ const scored = computed(() => {
     if (!r) return null;
     const monthly = r.monthly;
 
-    // 예산 적합도 (35% 가중)
+    // 예산 적합도 (40% 가중)
     let budgetScore;
     if (monthly <= budget) budgetScore = 1.0;
     else if (monthly <= budget * 1.15) budgetScore = 0.7;
@@ -181,24 +174,17 @@ const scored = computed(() => {
     // 나이대 매치 (15%)
     const ageScore = meta.age.includes(age.value) ? 1.0 : 0.5;
 
-    // 용도 매치 (15%)
+    // 용도 매치 (20%)
     const usageScore = meta.usage.includes(usage.value) ? 1.0 : 0.55;
-
-    // 주행거리 매치 (10%)
-    let mileageScore = 1.0;
-    if (meta.mileage === 'low' && mileage.value !== 'low') mileageScore = 0.7;
-    if (meta.mileage === 'high' && mileage.value === 'low') mileageScore = 0.75;
-    if (meta.mileage === 'any') mileageScore = 0.95;
 
     // 성별 미세 보정
     const genderBoost = genderBias[meta.body] || 1.0;
 
     const composite = (
-      budgetScore   * 0.35 +
+      budgetScore   * 0.40 +
       lifestyleScore * 0.25 +
       ageScore      * 0.15 +
-      usageScore    * 0.15 +
-      mileageScore  * 0.10
+      usageScore    * 0.20
     ) * genderBoost;
 
     const matchPct = Math.min(99, Math.round(composite * 100));
@@ -209,7 +195,7 @@ const scored = computed(() => {
       depAmt: r.depositAmt,
       residualPct: r.residualPct, residualAmt: r.residualAmt,
       details: {
-        budgetScore, lifestyleScore, ageScore, usageScore, mileageScore,
+        budgetScore, lifestyleScore, ageScore, usageScore,
       },
     };
   }).filter(Boolean);
@@ -230,8 +216,7 @@ const personaTagline = computed(() => {
 });
 const personaSub = computed(() => {
   const inc = +income.value || 0;
-  const mileageLabel = MILEAGES.find(m => m.id === mileage.value)?.label || '';
-  return `월 소득 ${fmt(inc)}만원 · 주행 ${mileageLabel}`;
+  return `월 소득 ${fmt(inc)}만원`;
 });
 
 function pickNarrative(p) {
@@ -314,8 +299,13 @@ function goToContact(p) {
   <div class="ai">
     <div class="ai-wrap">
       <div class="ai-form">
-        <div class="ai-form__eyebrow">
-          <i class="ph ph-sparkle"></i> AI 차종 추천
+        <div class="ai-form__head">
+          <div class="ai-form__eyebrow">
+            <i class="ph ph-sparkle"></i> AI 차종 추천
+          </div>
+          <div class="ai-form__hint">
+            <b>4가지</b>만 선택하시면, 당신에게 딱 맞는 신차를 추천해드립니다.
+          </div>
         </div>
       <div class="ai-field">
           <label class="ai-label">나이대</label>
@@ -365,19 +355,6 @@ function goToContact(p) {
                     @click="usage = u.id; submitted = false">
               <span>{{ u.label }}</span>
               <small>{{ u.sub }}</small>
-            </button>
-          </div>
-        </div>
-
-        <div class="ai-field">
-          <label class="ai-label">주행거리</label>
-          <div class="ai-chips ai-chips--3">
-            <button v-for="m in MILEAGES" :key="m.id"
-                    class="ai-chip"
-                    :class="{ 'is-active': mileage === m.id }"
-                    @click="mileage = m.id; submitted = false">
-              <span>{{ m.label }}</span>
-              <small>{{ m.sub }}</small>
             </button>
           </div>
         </div>
@@ -532,17 +509,20 @@ function goToContact(p) {
 .ai { width: 100%; }
 
 .ai-wrap {
-  display: flex; flex-direction: column; gap: 16px;
+  display: flex; flex-direction: column; gap: 12px;
   background: var(--bg);
   border-radius: 18px;
-  padding: 24px;
+  padding: 20px 22px;
   box-shadow:
     0 20px 50px rgba(0,0,0,0.07),
     0 4px 12px rgba(0,0,0,0.05);
   border: 1px solid var(--line);
 }
 @media (max-width: 980px) {
-  .ai-wrap { padding: 22px; gap: 16px; }
+  .ai-wrap { padding: 18px 18px; gap: 12px; }
+}
+@media (max-width: 540px) {
+  .ai-wrap { padding: 16px 16px; border-radius: 14px; }
 }
 
 /* 결과 — Teleport 된 히어로 아래 섹션 */
@@ -552,19 +532,30 @@ function goToContact(p) {
 .ai-result-out:not(.is-shown) .ai-result__empty {
   padding: 36px 16px;
 }
+.ai-form__head {
+  display: flex; flex-direction: column; gap: 6px;
+  margin-bottom: 6px;
+}
 .ai-form__eyebrow {
   display: inline-flex; align-items: center; gap: 5px;
   background: var(--brand); color: #fff;
   padding: 5px 12px; border-radius: 999px;
   font-size: 11px; font-weight: 700; letter-spacing: 0.3px;
   align-self: flex-start;
-  margin-bottom: 4px;
 }
 .ai-form__eyebrow i { font-size: 12px; }
+.ai-form__hint {
+  font-size: 12.5px; color: var(--ink-3);
+  letter-spacing: -0.01em; line-height: 1.5;
+}
+.ai-form__hint b { color: var(--ink-1); font-weight: 800; }
+@media (max-width: 540px) {
+  .ai-form__hint { font-size: 12px; }
+}
 
 /* === 폼 === */
-.ai-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-.ai-row { display: grid; grid-template-columns: 0.7fr 1.5fr; gap: 12px; margin-bottom: 16px; }
+.ai-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+.ai-row { display: grid; grid-template-columns: 0.7fr 1.5fr; gap: 10px; margin-bottom: 10px; }
 .ai-row .ai-field { margin-bottom: 0; }
 @media (max-width: 540px) {
   .ai-row { grid-template-columns: 1fr; gap: 16px; }
@@ -583,7 +574,7 @@ function goToContact(p) {
 
 .ai-chip {
   display: flex; flex-direction: column; align-items: center; gap: 2px;
-  padding: 10px 4px;
+  padding: 8px 4px;
   border: 1.5px solid var(--line-2);
   background: var(--bg); color: var(--ink-2);
   border-radius: 8px;
@@ -601,7 +592,7 @@ function goToContact(p) {
   background: var(--ink-1); color: #fff; border-color: var(--ink-1);
 }
 .ai-chip.is-active small { color: rgba(255,255,255,0.6); }
-.ai-chip--sm { padding: 9px 2px; font-size: 11.5px; }
+.ai-chip--sm { padding: 8px 2px; font-size: 11.5px; }
 .ai-chip--sm small { font-size: 9px; }
 
 .ai-income {
@@ -612,7 +603,7 @@ function goToContact(p) {
 }
 .ai-income:focus-within { border-color: var(--brand); }
 .ai-income__input {
-  flex: 1; min-width: 0; height: 44px;
+  flex: 1; min-width: 0; height: 40px;
   border: 0; background: transparent;
   padding: 0 14px;
   font-family: inherit; font-size: 16px; font-weight: 600;
@@ -630,22 +621,22 @@ function goToContact(p) {
   display: flex; align-items: center; gap: 6px;
   font-size: 11.5px; color: var(--ink-3);
   background: var(--bg-soft);
-  padding: 8px 12px; border-radius: 6px;
-  margin-top: 4px;
+  padding: 7px 12px; border-radius: 6px;
+  margin-top: 2px;
 }
 .ai-budget i { font-size: 13px; color: var(--brand); }
 .ai-budget b { color: var(--ink-1); font-weight: 700; font-variant-numeric: tabular-nums; }
 
 .ai-submit {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  width: 100%; height: 50px;
+  width: 100%; height: 46px;
   background: var(--brand); color: #fff;
   border: 0; border-radius: 999px;
   font-family: inherit;
   font-size: 14.5px; font-weight: 700;
   letter-spacing: -0.01em;
   cursor: pointer;
-  margin-top: 6px;
+  margin-top: 4px;
   transition: background var(--t-fast), transform var(--t-fast);
 }
 .ai-submit:hover { background: var(--brand-700); transform: translateY(-1px); }

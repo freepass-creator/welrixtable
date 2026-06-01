@@ -150,12 +150,18 @@
     .hero__bg-grid { display: none; }
     .hero__inner {
       max-width: 1180px; margin: 0 auto;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+      display: grid; grid-template-columns: 1.05fr 1fr; gap: 44px;
       align-items: center;
       position: relative; z-index: 1;
     }
+    @media (max-width: 1100px) {
+      .hero__inner { gap: 32px; }
+    }
     @media (max-width: 980px) {
-      .hero__inner { grid-template-columns: 1fr; gap: 32px; }
+      .hero__inner { grid-template-columns: 1fr; gap: 28px; }
+    }
+    @media (max-width: 640px) {
+      .hero { padding: 56px 0 64px; }
     }
     .hero__left {
       text-align: left;
@@ -796,12 +802,12 @@
           웰컴저축은행 계열 · 신차 장기렌터카
         </div>
         <h1 class="hero__title">
-          신용 등급 대신,<br>
+          신용 점수 대신,<br>
           <em>꾸준한 소득</em>으로<br>
           보겠습니다.
         </h1>
         <p class="hero__sub">
-          복잡한 신용 심사는 잊으세요.<br>
+          복잡한 신용 점수 심사는 잊으세요.<br>
           안정적인 <b>월 소득</b>만 있다면 — 직장인·자영업자·프리랜서<br>
           모두 같은 기준으로 신차 장기렌터카를 출고합니다.
         </p>
@@ -906,7 +912,7 @@
           <div class="promise__num">02</div>
           <h3 class="promise__title">소득 기준 심사</h3>
           <p class="promise__desc">
-            복잡한 신용 등급 대신 안정적인 월 소득으로 심사.
+            복잡한 신용 점수 대신 안정적인 월 소득으로 심사.
             직장인·자영업자·프리랜서 모두 동일한 기준으로.
           </p>
         </div>
