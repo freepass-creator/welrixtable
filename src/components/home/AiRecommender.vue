@@ -206,7 +206,12 @@ const scored = computed(() => {
 });
 
 const topPick = computed(() => scored.value[0] || null);
-const alternates = computed(() => scored.value.slice(1, 3));
+const podium = computed(() => scored.value.slice(0, 3));
+const PODIUM_META = [
+  { label: '1순위', medal: '금', tone: 'gold' },
+  { label: '2순위', medal: '은', tone: 'silver' },
+  { label: '3순위', medal: '동', tone: 'bronze' },
+];
 
 // === 개인화 narrative ===
 const personaTagline = computed(() => {
@@ -305,7 +310,7 @@ function goToContact(p) {
             <i class="ph ph-sparkle"></i> AI 차종 추천
           </div>
           <div class="ai-form__hint">
-            <b>4가지</b>만 선택하시면, 당신에게 딱 맞는 신차를 추천해드립니다.
+            <b>5가지</b>만 알려주시면, AI가 딱 맞는 신차 <b>3대</b>를 골라드립니다.
           </div>
         </div>
       <div class="ai-field">
@@ -411,89 +416,64 @@ function goToContact(p) {
             </div>
           </div>
 
-          <!-- Top Pick (hero card) -->
-          <div class="ai-hero">
-            <div class="ai-hero__rank">
-              <span class="ai-hero__rank-badge">BEST MATCH</span>
-              <span class="ai-hero__match">{{ topPick.matchPct }}<small>%</small></span>
-              <span class="ai-hero__match-label">매치</span>
-            </div>
-            <div class="ai-hero__visual">
-              <img v-if="topPick.meta.image"
-                   :src="topPick.meta.image"
-                   :alt="topPick.row.model"
-                   class="ai-hero__img"
-                   @error="topPick.meta.image = null" />
-              <i v-else :class="`ph ${pickIcon(topPick)} ai-hero__icon`"></i>
-            </div>
-            <div class="ai-hero__body">
-              <div class="ai-hero__brand">{{ topPick.row.brand }}</div>
-              <h3 class="ai-hero__model">{{ topPick.row.model }}</h3>
-              <div class="ai-hero__trim">{{ topPick.row.trim }}</div>
+          <!-- 1/2/3 순위 — 금/은/동 통일 카드 -->
+          <div class="ai-podium">
+            <article v-for="(p, i) in podium" :key="i"
+                     class="ai-card"
+                     :class="[`ai-card--${PODIUM_META[i].tone}`, { 'ai-card--top': i === 0 }]">
+              <div class="ai-card__rank">
+                <span class="ai-card__medal">{{ PODIUM_META[i].medal }}</span>
+                <span class="ai-card__rank-label">{{ PODIUM_META[i].label }}</span>
+                <span class="ai-card__match">매치 {{ p.matchPct }}%</span>
+              </div>
+              <div class="ai-card__visual">
+                <img v-if="p.meta.image"
+                     :src="p.meta.image"
+                     :alt="p.row.model"
+                     class="ai-card__img"
+                     @error="p.meta.image = null" />
+                <i v-else :class="`ph ${pickIcon(p)} ai-card__icon`"></i>
+              </div>
+              <div class="ai-card__body">
+                <div class="ai-card__brand">{{ p.row.brand }}</div>
+                <h3 class="ai-card__model">{{ p.row.model }}</h3>
+                <div class="ai-card__trim">{{ p.row.trim }}</div>
 
-              <ul class="ai-hero__reasons">
-                <li v-for="(rsn, i) in pickNarrative(topPick)" :key="i">
-                  <i class="ph ph-check-circle-fill"></i>
-                  {{ rsn }}
-                </li>
-              </ul>
+                <ul class="ai-card__reasons">
+                  <li v-for="(rsn, j) in pickNarrative(p).slice(0, i === 0 ? 4 : 2)" :key="j">
+                    <i class="ph ph-check-circle-fill"></i>
+                    {{ rsn }}
+                  </li>
+                </ul>
 
-              <!-- 차종 썰 / 스토리 -->
-              <div v-if="topPick.meta.story" class="ai-hero__story">
-                <div class="ai-hero__story-label">
-                  <i class="ph ph-book-open"></i> 이 차의 이야기
+                <!-- 1순위만 스토리 노출 -->
+                <div v-if="i === 0 && p.meta.story" class="ai-card__story">
+                  <div class="ai-card__story-label">
+                    <i class="ph ph-book-open"></i> 이 차의 이야기
+                  </div>
+                  <p>{{ p.meta.story }}</p>
                 </div>
-                <p>{{ topPick.meta.story }}</p>
-              </div>
 
-              <div class="ai-hero__price">
-                <div class="ai-hero__monthly">
-                  <span class="ai-hero__monthly-num">{{ fmt(topPick.monthly) }}</span>
-                  <small>원/월</small>
+                <div class="ai-card__price">
+                  <div class="ai-card__monthly">
+                    <span class="ai-card__monthly-num">{{ fmt(p.monthly) }}</span>
+                    <small>원/월</small>
+                  </div>
+                  <div class="ai-card__sub">
+                    60개월 · 보증금 10% · 월 부담 {{ ((p.monthly / (income * 10000)) * 100).toFixed(0) }}%
+                  </div>
                 </div>
-                <div class="ai-hero__sub">
-                  60개월 · 보증금 10% · 월 부담 {{ ((topPick.monthly / (income * 10000)) * 100).toFixed(0) }}%
-                </div>
-              </div>
 
-              <div class="ai-hero__cta-row">
-                <button class="ai-hero__cta ai-hero__cta--primary" @click="goToContact(topPick)">
-                  <i class="ph ph-chat-circle-dots"></i> 상담 신청
-                </button>
-                <button class="ai-hero__cta ai-hero__cta--outline" @click="goToGuide(topPick)">
-                  <i class="ph ph-book-open"></i> 상세보기
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Alternates -->
-          <div class="ai-alt-title">
-            <i class="ph ph-list-magnifying-glass"></i> 다음으로 추천드리는 차종
-          </div>
-          <div class="ai-alts">
-            <div v-for="(alt, i) in alternates" :key="i" class="ai-alt">
-              <div class="ai-alt__head">
-                <div class="ai-alt__rank">No. {{ i + 2 }}</div>
-                <div class="ai-alt__match">매치 {{ alt.matchPct }}%</div>
-              </div>
-              <div class="ai-alt__main">
-                <div class="ai-alt__brand">{{ alt.row.brand }}</div>
-                <div class="ai-alt__model">{{ alt.row.model }}</div>
-                <div class="ai-alt__trim">{{ alt.row.trim }}</div>
-              </div>
-              <div class="ai-alt__bottom">
-                <div class="ai-alt__monthly">{{ fmt(alt.monthly) }}<small>원/월</small></div>
-                <div class="ai-alt__btns">
-                  <button class="ai-alt__cta" @click="goToGuide(alt)" title="상세보기">
-                    <i class="ph ph-book-open"></i>
+                <div class="ai-card__ctas">
+                  <button class="ai-card__cta ai-card__cta--outline" @click="goToGuide(p)">
+                    <i class="ph ph-book-open"></i> 상세보기
                   </button>
-                  <button class="ai-alt__cta ai-alt__cta--primary" @click="goToContact(alt)">
-                    상담 <i class="ph ph-arrow-right"></i>
+                  <button class="ai-card__cta ai-card__cta--primary" @click="goToContact(p)">
+                    <i class="ph ph-chat-circle-dots"></i> 상담 신청
                   </button>
                 </div>
               </div>
-            </div>
+            </article>
           </div>
 
           <button class="ai-result__again" @click="reset">
@@ -686,241 +666,188 @@ function goToContact(p) {
   margin-top: 1px;
 }
 
-/* === Top Pick Hero === */
-.ai-hero {
-  position: relative;
-  background: linear-gradient(180deg, #fff 0%, var(--bg-soft) 100%);
-  border: 2px solid var(--ink-1);
-  border-radius: 14px;
-  padding: 0;
-  overflow: hidden;
-  animation: ai-pop .4s ease-out both;
+/* === Podium 1/2/3 — 금/은/동 통일 카드 === */
+.ai-podium {
+  display: flex; flex-direction: column; gap: 14px;
 }
 @keyframes ai-pop {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.ai-hero__rank {
-  display: flex; align-items: baseline; gap: 8px;
-  padding: 12px 16px;
-  background: var(--ink-1); color: #fff;
+
+.ai-card {
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  animation: ai-pop .4s ease-out both;
 }
-.ai-hero__rank-badge {
-  background: var(--brand); color: #fff;
-  padding: 3px 8px; border-radius: 999px;
-  font-size: 10px; font-weight: 800; letter-spacing: 0.4px;
-  font-family: 'Inter', sans-serif;
-}
-.ai-hero__match {
-  font-size: 22px; font-weight: 800;
-  font-family: 'Inter', sans-serif;
-  font-variant-numeric: tabular-nums;
-  margin-left: auto;
-  letter-spacing: -0.02em;
-}
-.ai-hero__match small {
-  font-size: 12px; font-weight: 600;
-  margin-left: 1px; opacity: 0.7;
-}
-.ai-hero__match-label {
-  font-size: 11px; font-weight: 500;
-  opacity: 0.7;
+.ai-card:nth-child(2) { animation-delay: 0.06s; }
+.ai-card:nth-child(3) { animation-delay: 0.12s; }
+@media (max-width: 720px) {
+  .ai-card { grid-template-columns: 1fr; }
 }
 
-.ai-hero__visual {
-  width: 100%; aspect-ratio: 16/9;
+/* 금/은/동 톤 — 좌측 thin border ribbon */
+.ai-card--gold   { border-color: #d4a93a; box-shadow: 0 4px 14px rgba(212, 169, 58, 0.10); }
+.ai-card--silver { border-color: #b6b8bd; }
+.ai-card--bronze { border-color: #c08a5c; }
+
+.ai-card--top { border-width: 2px; }
+
+/* 상단 랭크 영역 — 카드 폭 전체 */
+.ai-card__rank {
+  grid-column: 1 / -1;
+  position: relative;
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--line);
+}
+.ai-card--gold   .ai-card__rank { background: linear-gradient(90deg, #fff8e6 0%, #fdf4d6 100%); }
+.ai-card--silver .ai-card__rank { background: linear-gradient(90deg, #f3f4f6 0%, #e9eaee 100%); }
+.ai-card--bronze .ai-card__rank { background: linear-gradient(90deg, #fbf0e6 0%, #f5e3d2 100%); }
+
+.ai-card__medal {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 50%;
+  font-family: 'Pretendard Variable', sans-serif;
+  font-size: 12px; font-weight: 800; color: #fff;
+  letter-spacing: -0.02em;
+}
+.ai-card--gold   .ai-card__medal { background: linear-gradient(135deg, #e8b53a 0%, #b58520 100%); box-shadow: 0 2px 4px rgba(184, 134, 32, 0.3); }
+.ai-card--silver .ai-card__medal { background: linear-gradient(135deg, #b6b9be 0%, #8c8e93 100%); box-shadow: 0 2px 4px rgba(140, 142, 147, 0.3); }
+.ai-card--bronze .ai-card__medal { background: linear-gradient(135deg, #cd8b58 0%, #976138 100%); box-shadow: 0 2px 4px rgba(151, 97, 56, 0.3); }
+
+.ai-card__rank-label {
+  font-size: 12.5px; font-weight: 800; color: var(--ink-1);
+  letter-spacing: -0.02em;
+}
+.ai-card__match {
+  margin-left: auto;
+  font-size: 11px; font-weight: 600; color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* 좌측 차량 이미지 */
+.ai-card__visual {
+  grid-row: span 1;
+  width: 100%; aspect-ratio: 16/10;
   background: transparent;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
+  padding: 4px 8px;
 }
-.ai-hero__img {
-  width: 96%; height: 96%;
-  object-fit: contain;
+@media (max-width: 720px) {
+  .ai-card__visual { grid-row: auto; aspect-ratio: 16/8; }
+}
+.ai-card__img {
+  width: 96%; height: 96%; object-fit: contain;
   filter: drop-shadow(0 6px 10px rgba(0,0,0,0.10));
 }
-.ai-hero__icon {
-  font-size: 90px; color: var(--ink-4); opacity: 0.5;
-}
+.ai-card__icon { font-size: 72px; color: var(--ink-4); opacity: 0.5; }
 
-.ai-hero__body { padding: 20px 22px 22px; }
-.ai-hero__brand {
-  font-size: 11px; color: var(--ink-4); font-weight: 600;
+/* 우측 본문 */
+.ai-card__body {
+  padding: 16px 18px 18px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.ai-card__brand {
+  font-size: 10.5px; color: var(--ink-4); font-weight: 600;
   letter-spacing: 0.3px;
 }
-.ai-hero__model {
-  margin: 2px 0 4px;
-  font-size: 22px; font-weight: 800; color: var(--ink-1);
-  letter-spacing: -0.03em; line-height: 1.2;
+.ai-card__model {
+  margin: 0;
+  font-size: 18px; font-weight: 800; color: var(--ink-1);
+  letter-spacing: -0.02em; line-height: 1.2;
 }
-.ai-hero__trim {
-  font-size: 12px; color: var(--ink-3);
-  line-height: 1.4;
+.ai-card__trim {
+  font-size: 11.5px; color: var(--ink-3); line-height: 1.4;
 }
 
-.ai-hero__reasons {
-  margin: 14px 0 16px;
-  padding: 14px 0;
-  border-top: 1px dashed var(--line);
-  border-bottom: 1px dashed var(--line);
+.ai-card__reasons {
+  margin: 6px 0 0; padding: 0;
   list-style: none;
-  display: flex; flex-direction: column; gap: 7px;
+  display: flex; flex-direction: column; gap: 5px;
 }
-.ai-hero__reasons li {
-  display: flex; align-items: flex-start; gap: 8px;
-  font-size: 12.5px; color: var(--ink-2); line-height: 1.55;
+.ai-card__reasons li {
+  display: flex; align-items: flex-start; gap: 6px;
+  font-size: 12px; color: var(--ink-2); line-height: 1.5;
 }
-.ai-hero__reasons i {
-  font-size: 14px; color: var(--brand);
-  flex-shrink: 0; margin-top: 2px;
+.ai-card__reasons i {
+  font-size: 13px; flex-shrink: 0; margin-top: 1px;
+}
+.ai-card--gold   .ai-card__reasons i { color: #b58520; }
+.ai-card--silver .ai-card__reasons i { color: #8c8e93; }
+.ai-card--bronze .ai-card__reasons i { color: #976138; }
+
+.ai-card__story {
+  margin-top: 4px;
+  padding: 10px 12px;
+  background: var(--bg-soft);
+  border-radius: 8px;
+}
+.ai-card__story-label {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10.5px; font-weight: 700; color: var(--ink-2);
+  margin-bottom: 4px;
+}
+.ai-card__story-label i { font-size: 11px; color: #b58520; }
+.ai-card__story p {
+  margin: 0;
+  font-size: 12px; color: var(--ink-2);
+  line-height: 1.65; letter-spacing: -0.01em;
 }
 
-.ai-hero__price {
+.ai-card__price {
   display: flex; align-items: baseline; justify-content: space-between;
-  gap: 10px; flex-wrap: wrap;
-  margin-bottom: 14px;
+  gap: 8px; flex-wrap: wrap;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
 }
-.ai-hero__monthly {
+.ai-card__monthly {
   display: inline-flex; align-items: baseline; gap: 2px;
   font-family: 'Inter', 'Pretendard Variable', sans-serif;
   font-variant-numeric: tabular-nums;
 }
-.ai-hero__monthly-num {
-  font-size: 26px; font-weight: 800; color: var(--ink-1);
+.ai-card__monthly-num {
+  font-size: 22px; font-weight: 800; color: var(--ink-1);
   letter-spacing: -0.04em; line-height: 1;
 }
-.ai-hero__monthly small {
-  font-size: 13px; color: var(--ink-3); font-weight: 500;
+.ai-card__monthly small {
+  font-size: 12px; color: var(--ink-3); font-weight: 500;
   margin-left: 1px;
 }
-.ai-hero__sub {
-  font-size: 10.5px; color: var(--ink-4);
+.ai-card__sub {
+  font-size: 10px; color: var(--ink-4);
   text-align: right;
 }
 
-/* 차종 스토리/썰 */
-.ai-hero__story {
-  margin: 0 0 16px;
-  padding: 14px 16px;
-  background: var(--bg-soft);
-  border-radius: 10px;
-}
-.ai-hero__story-label {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 11px; font-weight: 700; color: var(--brand);
-  letter-spacing: -0.01em;
-  margin-bottom: 6px;
-}
-.ai-hero__story-label i { font-size: 12px; }
-.ai-hero__story p {
-  margin: 0;
-  font-size: 12.5px; color: var(--ink-2);
-  line-height: 1.7; letter-spacing: -0.01em;
-}
-
-.ai-hero__cta-row {
+.ai-card__ctas {
   display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  margin-top: 4px;
 }
-.ai-hero__cta {
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  height: 46px;
+.ai-card__cta {
+  display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+  height: 40px;
   border: 0; border-radius: 999px;
   font-family: inherit;
-  font-size: 13px; font-weight: 700;
+  font-size: 12.5px; font-weight: 700;
   cursor: pointer;
   transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
 }
-.ai-hero__cta i { font-size: 15px; }
-.ai-hero__cta--primary { background: var(--ink-1); color: #fff; }
-.ai-hero__cta--primary:hover { background: var(--brand); }
-.ai-hero__cta--outline {
+.ai-card__cta i { font-size: 13px; }
+.ai-card__cta--primary { background: var(--ink-1); color: #fff; }
+.ai-card__cta--primary:hover { background: var(--brand); }
+.ai-card__cta--outline {
   background: var(--bg); color: var(--ink-2);
   border: 1.5px solid var(--line-2);
 }
-.ai-hero__cta--outline:hover { border-color: var(--ink-1); color: var(--ink-1); }
-
-/* === Alternates === */
-.ai-alt-title {
-  display: flex; align-items: center; gap: 5px;
-  font-size: 12px; font-weight: 600; color: var(--ink-3);
-  letter-spacing: -0.01em;
-  margin-top: 4px;
-}
-.ai-alt-title i { font-size: 13px; }
-
-.ai-alts {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-}
-@media (max-width: 540px) {
-  .ai-alts { grid-template-columns: 1fr; }
-}
-
-.ai-alt {
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 12px 14px;
-  display: flex; flex-direction: column; gap: 8px;
-  transition: border-color var(--t-fast), transform var(--t-fast);
-  animation: ai-pop .4s ease-out both;
-  animation-delay: 0.1s;
-}
-.ai-alt:hover { border-color: var(--ink-4); transform: translateY(-1px); }
-
-.ai-alt__head {
-  display: flex; align-items: center; justify-content: space-between;
-}
-.ai-alt__rank {
-  font-size: 10.5px; font-weight: 700; color: var(--ink-4);
-  letter-spacing: 0.3px;
-  font-family: 'Inter', sans-serif;
-}
-.ai-alt__match {
-  font-size: 10.5px; font-weight: 700; color: var(--brand);
-  font-variant-numeric: tabular-nums;
-}
-.ai-alt__brand {
-  font-size: 10px; color: var(--ink-4); font-weight: 600;
-  letter-spacing: 0.2px;
-}
-.ai-alt__model {
-  font-size: 14px; font-weight: 700; color: var(--ink-1);
-  letter-spacing: -0.02em;
-  margin-top: 1px;
-}
-.ai-alt__trim {
-  font-size: 10.5px; color: var(--ink-4);
-  margin-top: 1px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.ai-alt__bottom {
-  display: flex; align-items: center; justify-content: space-between;
-  padding-top: 8px;
-  border-top: 1px dashed var(--line);
-}
-.ai-alt__monthly {
-  font-size: 13px; font-weight: 800; color: var(--ink-1);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-}
-.ai-alt__monthly small {
-  font-size: 9.5px; color: var(--ink-4); font-weight: 500;
-  margin-left: 1px;
-}
-.ai-alt__btns { display: flex; gap: 4px; }
-.ai-alt__cta {
-  display: inline-flex; align-items: center; gap: 3px;
-  background: transparent; color: var(--ink-2);
-  border: 1px solid var(--line-2);
-  border-radius: 999px;
-  padding: 5px 10px;
-  font-family: inherit; font-size: 10.5px; font-weight: 700;
-  cursor: pointer;
-  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
-}
-.ai-alt__cta:hover { border-color: var(--ink-1); color: var(--ink-1); }
-.ai-alt__cta--primary { background: var(--ink-1); color: #fff; border-color: var(--ink-1); }
-.ai-alt__cta--primary:hover { background: var(--brand); border-color: var(--brand); }
-.ai-alt__cta i { font-size: 11px; }
+.ai-card__cta--outline:hover { border-color: var(--ink-1); color: var(--ink-1); }
 
 .ai-result__again {
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
