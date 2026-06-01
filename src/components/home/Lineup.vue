@@ -4,34 +4,31 @@
 import { ref, computed, onMounted } from 'vue';
 import { calcQuote } from '../../lib/calc.js';
 import { fmt } from '../../lib/format.js';
-import { MODEL_SLUG } from '../../lib/slug.js';
+import { MODEL_SLUG, imageOf } from '../../lib/slug.js';
 
 // 4종 picks — 인기 차종 + 블로그 스타일 추천 컬럼
 // 차량 이미지는 /public/cars/{slug}.jpg 에 직접 드롭 (없으면 SVG fallback)
+// image 는 PICKS 에서 빼고 cards computed 에서 imageOf(slug) 로 단일 매핑
 const PICKS = [
   {
     brand: '현대', model: '더 뉴 캐스퍼', tagline: '입문 SUV',
     blurb: '도심에서 가장 잘 어울리는 경형 SUV. 작지만 알찬 실내, 1인·2인 가구의 첫 차로 만족도 높습니다.',
     pros: ['가성비 최강', '주차 쉬움', '연비 우수'],
-    image: '/cars/casper.png',
   },
   {
     brand: '현대', model: '디 올 뉴 팰리세이드', tagline: '대형 SUV',
     blurb: '7·9인승 풀사이즈 SUV. 가족 여행·등하원·골프까지 한 대로. 통풍·열선·어드밴스드 안전 패키지 기본.',
     pros: ['7/9인승', '풀옵션 기본', '공간 여유'],
-    image: '/cars/palisade.jpg',
   },
   {
     brand: '기아', model: '카니발', tagline: '미니밴 1위',
     blurb: '국내 미니밴 표준. 9인승 풀옵션으로 가족·임원·영업까지 만능. 슬라이딩 도어 + 통풍 시트는 보너스.',
     pros: ['9인승', '슬라이딩 도어', '하이리무진 옵션'],
-    image: '/cars/carnival.png',
   },
   {
     brand: '제네시스', model: 'G80', tagline: '비즈니스 세단',
     blurb: '국산 럭셔리 세단의 정점. 비즈니스·임원 의전에 정형화된 디자인과 다이내믹 주행감.',
     pros: ['풀체인지 신차', '럭셔리 인테리어', '주행감 우수'],
-    image: '/cars/g80.png',
   },
 ];
 
@@ -49,13 +46,12 @@ onMounted(async () => {
 // 각 pick — vehicles.json 에서 가장 저렴한 트림 1개 잡고 60개월 표준 견적
 const cards = computed(() => {
   return PICKS.map(pick => {
-    // pick.model 매칭 — Hybrid 접미사 무시하고 베이스 모델 매칭
+    const slug = MODEL_SLUG[pick.model];
+    const image = imageOf(slug);
     const candidates = vehicles.value
       .filter(v => v.brand === pick.brand)
-      .filter(v => v.model === pick.model || v.model === pick.model + ' Hybrid')
-      // 가솔린 우선 (Hybrid 제외) — 인기 트림 = 가솔린 베이스
       .filter(v => v.model === pick.model);
-    if (!candidates.length) return { ...pick, monthly: null, price: null };
+    if (!candidates.length) return { ...pick, image, monthly: null, price: null };
     const cheapest = candidates.reduce((m, c) => (!m || c.price < m.price) ? c : m, null);
     try {
       const r = calcQuote({
@@ -70,9 +66,9 @@ const cards = computed(() => {
         },
         fees: { feeRatePct: 5.0, svc: '웰스 Basic' },
       });
-      return { ...pick, monthly: r.monthly, price: cheapest.price, trim: cheapest.trim };
+      return { ...pick, image, monthly: r.monthly, price: cheapest.price, trim: cheapest.trim };
     } catch {
-      return { ...pick, monthly: null, price: cheapest.price, trim: cheapest.trim };
+      return { ...pick, image, monthly: null, price: cheapest.price, trim: cheapest.trim };
     }
   });
 });
