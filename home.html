@@ -138,33 +138,26 @@
       .topnav__menu { display: none; }
     }
 
-    /* === Hero === 라이트 + 우측 견적 카드 (hana-car 톤) === */
+    /* === Hero === 모노톤 + 빨강은 포인트만 === */
     .hero {
       padding: 80px 0 100px;
-      background:
-        radial-gradient(circle at 90% 0%, var(--brand-50) 0%, transparent 50%),
-        linear-gradient(180deg, #fafafa 0%, #fff 100%);
+      background: #fafafa;
       color: var(--ink-1);
       position: relative; overflow: hidden;
+      border-bottom: 1px solid var(--line);
     }
-    .hero__bg-grid {
-      position: absolute; inset: 0;
-      background-image:
-        radial-gradient(circle at 15% 70%, rgba(225, 20, 30, 0.04) 0%, transparent 40%);
-      pointer-events: none;
-    }
+    .hero__bg-grid { display: none; }
     .hero__inner {
       max-width: 1180px; margin: 0 auto;
-      display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px;
-      align-items: center;
+      display: flex; flex-direction: column; gap: 48px;
       position: relative; z-index: 1;
     }
-    @media (max-width: 980px) {
-      .hero__inner { grid-template-columns: 1fr; gap: 36px; }
+    .hero__left {
+      text-align: center;
+      max-width: 760px; margin: 0 auto;
     }
-    .hero__left { text-align: left; }
-    @media (max-width: 980px) {
-      .hero__left { text-align: center; }
+    .hero__interact {
+      width: 100%;
     }
 
     .hero__badge {
@@ -761,7 +754,10 @@
 
         <div class="hero__cta">
           <a class="btn btn--primary" href="#quote">
-            <i class="ph ph-magnifying-glass"></i> 1분 견적 받기
+            <i class="ph ph-calculator"></i> 직접 견적 계산
+          </a>
+          <a class="btn btn--outline" href="#lineup">
+            <i class="ph ph-list-magnifying-glass"></i> 차종 가이드
           </a>
           <a class="btn btn--outline" href="#contact">
             <i class="ph ph-chat-circle-dots"></i> 무료 상담
@@ -776,70 +772,9 @@
         </div>
       </div>
 
-      <!-- 우측: 차량 비주얼 + 스펙 블록 (CARTWO 톤) -->
-      <div class="hero__feature">
-        <!-- 차량 이미지: 제조사 공식 PNG 우선, 실패 시 SVG 실루엣 fallback -->
-        <div class="hero__car">
-          <img class="hero__car-img"
-               src="/cars/palisade.png"
-               alt="디 올 뉴 팰리세이드"
-               onerror="this.style.display='none'; document.getElementById('hero-car-fallback').style.display='block';" />
-          <svg id="hero-car-fallback" class="hero__car-svg" style="display:none;"
-               viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg"
-               aria-label="vehicle silhouette">
-            <defs>
-              <linearGradient id="carGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#2a2a2a" />
-                <stop offset="100%" stop-color="#0a0a0a" />
-              </linearGradient>
-            </defs>
-            <path d="M30 110 L65 105 C75 70, 95 60, 130 58 L240 58 C275 60, 295 75, 305 100 L330 108 L335 120 L325 130 L295 132 C290 142, 280 148, 268 148 C256 148, 246 142, 241 132 L119 132 C114 142, 104 148, 92 148 C80 148, 70 142, 65 132 L35 130 L25 122 Z" fill="url(#carGrad)" />
-            <path d="M75 95 L88 70 C95 65, 105 63, 120 63 L160 63 L170 95 Z" fill="rgba(255,255,255,0.15)" />
-            <path d="M180 95 L175 63 L225 63 C245 63, 260 70, 268 95 Z" fill="rgba(255,255,255,0.15)" />
-            <circle cx="92" cy="132" r="18" fill="#0a0a0a" />
-            <circle cx="92" cy="132" r="10" fill="#1a1a1a" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" />
-            <circle cx="268" cy="132" r="18" fill="#0a0a0a" />
-            <circle cx="268" cy="132" r="10" fill="#1a1a1a" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" />
-          </svg>
-          <div class="hero__car-shadow"></div>
-        </div>
-
-        <!-- 스펙 블록 (CARTWO 스타일) -->
-        <div class="hero__spec">
-          <div class="hero__spec-meta">
-            <span class="hero__spec-brand">[현대]</span>
-            <span class="hero__spec-name">디 올 뉴 팰리세이드</span>
-          </div>
-          <h3 class="hero__spec-headline">가족과 함께, 어디든.</h3>
-          <p class="hero__spec-blurb">
-            7인승 풀옵션 가족 SUV. 통풍·열선 시트, 어드밴스드 안전 패키지 기본 탑재.
-            <b>여행·등하원·출퇴근 모두 만족</b>하는 대형 SUV의 표준.
-          </p>
-          <div class="hero__spec-grid">
-            <div class="hero__spec-cell">
-              <span class="hero__spec-label">추천 연령대</span>
-              <b class="hero__spec-val">30~40대</b>
-            </div>
-            <div class="hero__spec-cell">
-              <span class="hero__spec-label">약정 주행거리</span>
-              <b class="hero__spec-val">2만km<small>/년</small></b>
-            </div>
-            <div class="hero__spec-cell">
-              <span class="hero__spec-label">약정 기간</span>
-              <b class="hero__spec-val">60<small>개월</small></b>
-            </div>
-            <div class="hero__spec-cell hero__spec-cell--brand">
-              <span class="hero__spec-label">월 렌탈료</span>
-              <b class="hero__spec-val">759,000<small>원~</small></b>
-            </div>
-          </div>
-          <div class="hero__spec-note">
-            ※ 중신용 · 보증금 10% · 선납 0% 기준. 차량 옵션·계약 조건에 따라 변동.
-          </div>
-          <a class="hero__card-cta" href="#contact">
-            <i class="ph ph-chat-circle-dots"></i> 이 차로 상담 신청
-          </a>
-        </div>
+      <!-- 메인 인터랙션: AI 추천 (히어로 메인) -->
+      <div class="hero__interact">
+        <div id="ai-recommender-root"></div>
       </div>
     </div>
   </section>
@@ -951,15 +886,6 @@
       <h2 class="section__title">지금 인기 있는 차종</h2>
       <p class="section__sub">월 부담을 한눈에. 표시 가격은 표준 조건(중신용·보증금 10%·60개월) 기준입니다.</p>
       <div id="lineup-root"></div>
-    </div>
-  </section>
-
-  <!-- AI 추천 (Vue mounted) -->
-  <section class="section" id="ai">
-    <div class="container">
-      <h2 class="section__title">내게 맞는 차 AI 추천</h2>
-      <p class="section__sub">나이대 · 가족 구성 · 월 소득 — 3가지만 알려주시면<br>딱 맞는 차종 3대를 골라드립니다.</p>
-      <div id="ai-recommender-root"></div>
     </div>
   </section>
 

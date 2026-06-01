@@ -279,8 +279,8 @@ function goToContact(rec) {
   border-radius: var(--radius-lg);
   padding: 32px;
   box-shadow:
-    0 24px 70px rgba(225, 20, 30, 0.08),
-    0 8px 24px rgba(0,0,0,0.05);
+    0 20px 50px rgba(0,0,0,0.08),
+    0 4px 12px rgba(0,0,0,0.04);
   border: 1px solid var(--line);
 }
 @media (max-width: 980px) {
@@ -290,8 +290,7 @@ function goToContact(rec) {
 /* === 왼쪽 폼 === */
 .ai-eyebrow {
   display: inline-flex; align-items: center; gap: 5px;
-  background: linear-gradient(135deg, var(--brand) 0%, #ff5862 100%);
-  color: #fff;
+  background: var(--brand); color: #fff;
   padding: 5px 12px; border-radius: var(--radius-pill);
   font-size: 11px; font-weight: 700; letter-spacing: 0.3px;
   margin-bottom: 14px;
@@ -384,20 +383,17 @@ function goToContact(rec) {
 .ai-submit {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   width: 100%; height: 52px;
-  background: linear-gradient(135deg, var(--brand) 0%, #ff5862 100%);
-  color: #fff;
+  background: var(--brand); color: #fff;
   border: 0; border-radius: var(--radius-pill);
   font-family: inherit;
   font-size: 15px; font-weight: 700;
   letter-spacing: -0.2px;
   cursor: pointer;
   margin-top: 8px;
-  box-shadow: 0 8px 24px rgba(225, 20, 30, 0.32);
-  transition: transform var(--t-fast), box-shadow var(--t-fast);
+  transition: background var(--t-fast), transform var(--t-fast);
 }
 .ai-submit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(225, 20, 30, 0.42);
+  background: var(--brand-700); transform: translateY(-1px);
 }
 .ai-submit:active { transform: translateY(0); }
 
@@ -418,13 +414,7 @@ function goToContact(rec) {
   color: var(--ink-3);
   position: relative;
 }
-.ai-result__empty-glow {
-  position: absolute; top: 30%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 200px; height: 200px;
-  background: radial-gradient(circle, var(--brand-50) 0%, transparent 70%);
-  z-index: 0;
-}
+.ai-result__empty-glow { display: none; }
 .ai-result__empty i, .ai-result__empty h4, .ai-result__empty p {
   position: relative; z-index: 1;
 }
@@ -448,8 +438,7 @@ function goToContact(rec) {
 .ai-result__icon {
   display: inline-flex; align-items: center; justify-content: center;
   width: 24px; height: 24px;
-  background: linear-gradient(135deg, var(--brand) 0%, #ff5862 100%);
-  color: #fff; border-radius: var(--radius-sm);
+  background: var(--brand); color: #fff; border-radius: var(--radius-sm);
   font-size: 13px;
 }
 .ai-result__list { display: flex; flex-direction: column; gap: 10px; flex: 1; }
@@ -470,8 +459,8 @@ function goToContact(rec) {
 }
 .ai-card.is-top {
   border-color: var(--brand);
-  background: linear-gradient(135deg, var(--brand-50) 0%, #fff 100%);
-  box-shadow: 0 8px 24px rgba(225, 20, 30, 0.12);
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
 }
 .ai-card__rank {
   font-size: 22px;
