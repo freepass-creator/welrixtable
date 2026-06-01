@@ -7,6 +7,8 @@ import { calcQuote } from '../../lib/calc.js';
 import { fmt } from '../../lib/format.js';
 
 const TERMS = [60, 48, 36];
+const DEPOSIT_PRESETS = [0, 10, 20, 30];
+const PREPAY_PRESETS = [0, 10, 20, 30];
 
 // vehicle-db (카탈로그) + vehicles.json (calc 데이터)
 const db = ref(null);
@@ -20,6 +22,8 @@ const modelId = ref('');
 const variantId = ref('');
 const trim = ref(null);     // 직접 트림 객체 보관
 const selectedTerm = ref(60);
+const deposit = ref(10);    // 보증금 % (기본 10)
+const prepay = ref(0);      // 선납금 % (기본 0)
 
 onMounted(async () => {
   try {
@@ -142,7 +146,7 @@ const result = computed(() => {
     const r = calcQuote({
       vehicle: row,
       options: { optPrice: 0, discount: 0, deliveryFee: 0, itemsFee: 0, etc: 0 },
-      contract: { term: selectedTerm.value, km: '2만km', dep: 0, pre: 0 },
+      contract: { term: selectedTerm.value, km: '2만km', dep: +deposit.value || 0, pre: +prepay.value || 0 },
       customer: { creditGrade: '중신용' },
       insurance: {
         property: '1억', extraDriver: '없음',
@@ -154,6 +158,7 @@ const result = computed(() => {
     return {
       monthly: r.monthly,
       depAmt: r.depositAmt,
+      preAmt: r.prePayAmt,
       residualPct: r.residualPct,
       residualAmt: r.residualAmt,
     };
@@ -254,18 +259,44 @@ function backToVariant() { variantId.value = ''; trim.value = null; }
           </div>
         </div>
 
-        <!-- 4) 기간 (트림 선택 후) -->
-        <div v-if="trim" class="qw-step">
-          <div class="qw-step-label">기간 선택</div>
-          <div class="qw-terms">
-            <button
-              v-for="t in TERMS" :key="t"
-              class="qw-term-btn"
-              :class="{ 'is-active': selectedTerm === t }"
-              @click="selectTerm(t)"
-            >{{ t }}개월</button>
+        <!-- 4) 기간 + 조건 (트림 선택 후) -->
+        <template v-if="trim">
+          <div class="qw-step">
+            <div class="qw-step-label">기간</div>
+            <div class="qw-chips">
+              <button
+                v-for="t in TERMS" :key="t"
+                class="qw-chip qw-chip--lg"
+                :class="{ 'is-active': selectedTerm === t }"
+                @click="selectTerm(t)"
+              >{{ t }}개월</button>
+            </div>
           </div>
-        </div>
+
+          <div class="qw-step">
+            <div class="qw-step-label">보증금 <small class="qw-step-hint">(차량가의 %)</small></div>
+            <div class="qw-chips">
+              <button
+                v-for="p in DEPOSIT_PRESETS" :key="p"
+                class="qw-chip"
+                :class="{ 'is-active': deposit === p }"
+                @click="deposit = p"
+              >{{ p === 0 ? '무보증' : p + '%' }}</button>
+            </div>
+          </div>
+
+          <div class="qw-step">
+            <div class="qw-step-label">선납금 <small class="qw-step-hint">(차량가의 %)</small></div>
+            <div class="qw-chips">
+              <button
+                v-for="p in PREPAY_PRESETS" :key="p"
+                class="qw-chip"
+                :class="{ 'is-active': prepay === p }"
+                @click="prepay = p"
+              >{{ p === 0 ? '없음' : p + '%' }}</button>
+            </div>
+          </div>
+        </template>
       </div>
 
       <!-- 우측: 결과 -->
@@ -294,8 +325,14 @@ function backToVariant() { variantId.value = ''; trim.value = null; }
               <b>{{ fmt(selectedTrimPriceKrw) }}원</b>
             </div>
             <div class="qw-result__row">
-              <span>보증금</span>
-              <b class="qw-result__no-deposit">무보증</b>
+              <span v-if="deposit === 0">보증금</span>
+              <span v-else>보증금 ({{ deposit }}%)</span>
+              <b v-if="deposit === 0" class="qw-result__pill">무보증</b>
+              <b v-else>{{ result ? fmt(result.depAmt) : '—' }}원</b>
+            </div>
+            <div class="qw-result__row" v-if="prepay > 0">
+              <span>선납금 ({{ prepay }}%)</span>
+              <b>{{ result ? fmt(result.preAmt) : '—' }}원</b>
             </div>
             <div class="qw-result__row">
               <span>만기인수 (선택)</span>
@@ -304,7 +341,8 @@ function backToVariant() { variantId.value = ''; trim.value = null; }
           </div>
 
           <div class="qw-result__cond">
-            ※ 표준 조건: 중신용 · 무보증 · 선납 0% · 약정 2만km/년 · 보험 대물 1억<br>
+            ※ 표준 조건: 중신용 · 약정 2만km/년 · 보험 대물 1억 · 정비/자동차세 포함<br>
+            장기렌터카 · 보험·정비·자동차세 모두 포함된 월 1회 납부 구조입니다.<br>
             실제 견적은 신용·소득·차량 옵션에 따라 다를 수 있습니다.
           </div>
 
@@ -423,21 +461,35 @@ function backToVariant() { variantId.value = ''; trim.value = null; }
   font-size: 10px; color: var(--ink-4); font-weight: 400; margin-left: 1px;
 }
 
-/* 기간 버튼 */
-.qw-terms { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.qw-term-btn {
-  padding: 12px 0;
+/* Step hint (작은 설명) */
+.qw-step-hint {
+  font-size: 10.5px; font-weight: 400; color: var(--ink-4);
+  margin-left: 2px;
+}
+
+/* Chip — 보증금/선납금/기간 공통 */
+.qw-chips {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+}
+.qw-chip {
+  padding: 10px 0;
   border: 1.5px solid var(--line-2);
   background: var(--bg); color: var(--ink-2);
   border-radius: var(--radius-sm);
-  font-family: inherit; font-size: 14px; font-weight: 500;
+  font-family: inherit; font-size: 13px; font-weight: 500;
   cursor: pointer;
   transition: background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
 }
-.qw-term-btn:hover { border-color: var(--ink-4); }
-.qw-term-btn.is-active {
+.qw-chip:hover { border-color: var(--ink-4); }
+.qw-chip.is-active {
   background: var(--ink-1); color: #fff; border-color: var(--ink-1);
 }
+.qw-chip--lg {
+  padding: 12px 0;
+  font-size: 14px;
+}
+/* 기간은 3개 칩 */
+.qw-step:has(.qw-chip--lg) .qw-chips { grid-template-columns: repeat(3, 1fr); }
 
 /* === 우측: 결과 (네이비 카드) === */
 .qw-result {
@@ -498,11 +550,10 @@ function backToVariant() { variantId.value = ''; trim.value = null; }
 .qw-result__row b {
   color: #fff; font-weight: 600; font-variant-numeric: tabular-nums;
 }
-.qw-result__no-deposit {
-  color: #fff; font-weight: 700;
+.qw-result__pill {
   background: rgba(13, 78, 139, 0.55); color: #fff;
-  padding: 2px 8px; border-radius: var(--radius-pill);
-  font-size: 11px; letter-spacing: 0.2px;
+  padding: 2px 10px; border-radius: var(--radius-pill);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.2px;
 }
 
 .qw-result__cond {
