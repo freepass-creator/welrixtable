@@ -1,0 +1,1 @@
+차량 이미지 폴더\n=================\n\n파일명 규칙:\n- /public/cars/casper.png\n- /public/cars/palisade.png\n- /public/cars/carnival.png\n- /public/cars/g80.png\n\n제조사 공식 PNG 다운로드 후 파일명 맞춰 저장.\n없으면 ph-car-profile 아이콘 fallback.
