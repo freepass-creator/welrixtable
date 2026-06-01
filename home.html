@@ -440,10 +440,28 @@
       padding: 48px 0 32px;
       font-size: 13px;
     }
+    .footer__group {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+      margin-bottom: 18px;
+    }
     .footer__brand {
       font-size: 15px; font-weight: 700; color: #fff;
-      margin-bottom: 12px;
     }
+    .footer__family {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px; color: var(--ink-4);
+      flex-wrap: wrap;
+    }
+    .footer__family-label {
+      color: rgba(255,255,255,0.4); font-weight: 500;
+    }
+    .footer__family a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      transition: color var(--t-fast);
+    }
+    .footer__family a:hover { color: #fff; text-decoration: underline; }
     .footer__info {
       line-height: 1.85;
     }
@@ -490,12 +508,12 @@
         <i class="ph ph-shield-check"></i> 장기렌터카 전문 상담
       </span>
       <h1 class="hero__title">
-        신용점수가 낮아도<br>
+        꾸준한 소득만 있다면<br>
         <em>신차로 출고</em>합니다
       </h1>
       <p class="hero__sub">
-        복잡한 신용 심사 대신 <b>월 소득 기준 심사</b>로<br>
-        장기렌터카 36 / 48 / 60개월, 보험·정비·자동차세 모두 포함.
+        <b>안정적인 월 소득 기준 심사</b> — 직장인·자영업자 모두 가능.<br>
+        장기렌터카 36 / 48 / 60개월, <b>자동차 보험료·각종 세금 모두 포함</b>.
       </p>
 
       <div class="hero__from">
@@ -526,12 +544,12 @@
   <section class="section" id="why">
     <div class="container">
       <h2 class="section__title">왜 웰릭스 모빌리티인가요?</h2>
-      <p class="section__sub">신용 등급에 가로막혀 신차 구매를 미루셨다면,<br>웰릭스의 소득 기준 심사로 새 차를 받으세요.</p>
+      <p class="section__sub">안정적인 월 소득만 있다면 누구나 가능합니다.<br>직장인·자영업자·프리랜서 모두 환영.</p>
       <div class="why-grid">
         <div class="why-card">
           <div class="why-card__icon"><i class="ph ph-receipt"></i></div>
           <h3 class="why-card__title">소득 기준 심사</h3>
-          <p class="why-card__desc">신용 등급 대신 월 소득 기준으로 심사합니다. 신용 점수가 낮아도, 금융 이력이 짧아도 안정적인 소득만 있다면 출고 가능합니다.</p>
+          <p class="why-card__desc">월 소득 증빙 서류만 있으면 됩니다. 직장인의 재직증명·자영업자의 사업자등록 + 소득금액증명으로 빠르게 심사합니다.</p>
         </div>
         <div class="why-card">
           <div class="why-card__icon"><i class="ph ph-car"></i></div>
@@ -541,7 +559,7 @@
         <div class="why-card">
           <div class="why-card__icon"><i class="ph ph-calendar-check"></i></div>
           <h3 class="why-card__title">36·48·60개월 자유</h3>
-          <p class="why-card__desc">월 부담을 줄이는 60개월, 짧고 부담 없는 36개월. 자동차 보험·정비·자동차세 모두 포함된 월 1회 납부 구조.</p>
+          <p class="why-card__desc">월 부담을 줄이는 60개월, 짧고 부담 없는 36개월. <b>자동차 보험료 + 자동차세 포함</b>으로 월 1회만 납부하면 끝.</p>
         </div>
       </div>
     </div>
@@ -635,12 +653,21 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer__brand">웰릭스 모빌리티</div>
+      <div class="footer__group">
+        <div class="footer__brand">웰릭스 모빌리티</div>
+        <div class="footer__family">
+          <span class="footer__family-label">패밀리 사이트</span>
+          <a href="https://www.welrix.com/" target="_blank" rel="noopener">웰릭스</a>
+          <a href="https://welcomesb.co.kr/" target="_blank" rel="noopener">웰컴저축은행</a>
+          <a href="#" target="_blank" rel="noopener">웰컴금융그룹</a>
+        </div>
+      </div>
       <div class="footer__info">
         <div><b>대표</b>—</div>
         <div><b>사업자번호</b>—</div>
         <div><b>주소</b>—</div>
         <div><b>대표전화</b>1544-0000</div>
+        <div><b>고객상담</b>평일 09:00 – 18:00 (점심시간 12:00 – 13:00 제외)</div>
       </div>
       <div class="footer__bottom">
         <span>© 2026 웰릭스 모빌리티. All rights reserved.</span>
