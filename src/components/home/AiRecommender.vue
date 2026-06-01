@@ -312,10 +312,11 @@ function goToContact(p) {
 
 <template>
   <div class="ai">
-    <div class="ai-form">
-      <div class="ai-form__eyebrow">
-        <i class="ph ph-sparkle"></i> AI 차종 추천
-      </div>
+    <div class="ai-wrap">
+      <div class="ai-form">
+        <div class="ai-form__eyebrow">
+          <i class="ph ph-sparkle"></i> AI 차종 추천
+        </div>
       <div class="ai-field">
           <label class="ai-label">나이대</label>
           <div class="ai-chips">
