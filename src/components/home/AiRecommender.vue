@@ -42,18 +42,18 @@ const USAGES = [
 // size: S/M/L/XL  /  age: 적합 연령대 set
 // usage: 적합 용도 set  /  mileage: 적합 주행거리 ('any'/'low'/'mid'/'high')
 const MODEL_META = {
-  '더 뉴 캐스퍼':         { body: 'compact', size: 'S', age: ['20s','30s'],          usage: ['commute','hobby'],            mileage: 'low',  image: '/cars/casper.jpg',
+  '더 뉴 캐스퍼':         { body: 'compact', size: 'S', age: ['20s','30s'],          usage: ['commute','hobby'],            mileage: 'low',  image: '/cars/casper.png',
     story: '경형 SUV 시장의 표준. 1.0 터보 + 4단 자동변속기 조합으로 연비·가속 균형. 비좁아 보여도 트렁크 + 풀폴딩 시트로 실내 활용도 의외로 좋습니다. 1인·2인 가구의 첫 차로 가장 많이 선택되는 모델.', },
   '아반떼':              { body: 'sedan',   size: 'M', age: ['20s','30s'],          usage: ['commute','hobby'],            mileage: 'any', image: '/cars/avante.jpg' },
   '아반떼 Hybrid':       { body: 'sedan',   size: 'M', age: ['20s','30s','40s'],    usage: ['commute'],                    mileage: 'high', image: '/cars/avante.jpg' },
-  '쏘나타 디 엣지':      { body: 'sedan',   size: 'L', age: ['30s','40s'],          usage: ['commute','business','leisure'], mileage: 'any', image: '/cars/sonata.jpg' },
-  '쏘나타 디 엣지 Hybrid': { body: 'sedan', size: 'L', age: ['30s','40s'],          usage: ['commute','business'],         mileage: 'high', image: '/cars/sonata.jpg' },
-  '더 뉴 그랜저':        { body: 'sedan',   size: 'XL', age: ['40s','50plus'],      usage: ['business','leisure'],         mileage: 'any', image: '/cars/grandeur.jpg',
+  '쏘나타 디 엣지':      { body: 'sedan',   size: 'L', age: ['30s','40s'],          usage: ['commute','business','leisure'], mileage: 'any', image: '/cars/sonata.png' },
+  '쏘나타 디 엣지 Hybrid': { body: 'sedan', size: 'L', age: ['30s','40s'],          usage: ['commute','business'],         mileage: 'high', image: '/cars/sonata.png' },
+  '더 뉴 그랜저':        { body: 'sedan',   size: 'XL', age: ['40s','50plus'],      usage: ['business','leisure'],         mileage: 'any', image: '/cars/grandeur.png',
     story: '국산 플래그십 세단의 표준. 7세대 GN7 그랜저는 1세대를 오마주한 디자인 + 최신 인포테인먼트의 결합. 비즈니스·가족 어느 쪽에도 무난하게 어울리는 정중함이 강점. 임원 의전·40·50대 가족 차로 가장 익숙한 선택.', },
-  '더 뉴 그랜저 Hybrid': { body: 'sedan',   size: 'XL', age: ['40s','50plus'],      usage: ['business'],                   mileage: 'high', image: '/cars/grandeur.jpg' },
+  '더 뉴 그랜저 Hybrid': { body: 'sedan',   size: 'XL', age: ['40s','50plus'],      usage: ['business'],                   mileage: 'high', image: '/cars/grandeur.png' },
   '베뉴':                { body: 'compact', size: 'S', age: ['20s','30s'],          usage: ['commute','hobby'],            mileage: 'any', image: '/cars/venue.jpg' },
-  '코나':                { body: 'suv-mid', size: 'M', age: ['20s','30s'],          usage: ['commute','leisure','hobby'],  mileage: 'any', image: '/cars/kona.jpg' },
-  '코나 Hybrid':         { body: 'suv-mid', size: 'M', age: ['20s','30s','40s'],    usage: ['commute','leisure'],          mileage: 'high', image: '/cars/kona.jpg' },
+  '코나':                { body: 'suv-mid', size: 'M', age: ['20s','30s'],          usage: ['commute','leisure','hobby'],  mileage: 'any', image: '/cars/kona.png' },
+  '코나 Hybrid':         { body: 'suv-mid', size: 'M', age: ['20s','30s','40s'],    usage: ['commute','leisure'],          mileage: 'high', image: '/cars/kona.png' },
   '투싼':                { body: 'suv-mid', size: 'M', age: ['30s','40s'],          usage: ['commute','leisure','family'], mileage: 'any' },
   '투싼 Hybrid':         { body: 'suv-mid', size: 'M', age: ['30s','40s'],          usage: ['commute','leisure'],          mileage: 'high' },
   '디 올 뉴 싼타페':      { body: 'suv-large', size: 'L', age: ['30s','40s'],        usage: ['leisure','family'],           mileage: 'any' },
@@ -63,28 +63,28 @@ const MODEL_META = {
   '디 올 뉴 팰리세이드 Hybrid': { body: 'suv-large', size: 'XL', age: ['30s','40s','50plus'], usage: ['leisure','family'], mileage: 'high', image: '/cars/palisade.jpg' },
   '포터2':               { body: 'truck',   size: 'L', age: ['30s','40s','50plus'], usage: ['business'],                   mileage: 'high' },
   // 기아
-  '모닝':                { body: 'compact', size: 'S', age: ['20s'],                usage: ['commute'],                    mileage: 'any', image: '/cars/morning.jpg' },
-  '더 뉴 레이 TAM':       { body: 'compact', size: 'S', age: ['20s','30s'],          usage: ['commute','hobby'],            mileage: 'any', image: '/cars/ray.jpg' },
+  '모닝':                { body: 'compact', size: 'S', age: ['20s'],                usage: ['commute'],                    mileage: 'any', image: '/cars/morning.png' },
+  '더 뉴 레이 TAM':       { body: 'compact', size: 'S', age: ['20s','30s'],          usage: ['commute','hobby'],            mileage: 'any', image: '/cars/ray.png' },
   'K3':                  { body: 'sedan',   size: 'M', age: ['20s','30s'],          usage: ['commute'],                    mileage: 'any' },
-  '디 올 뉴 K5':         { body: 'sedan',   size: 'L', age: ['20s','30s','40s'],    usage: ['commute','leisure'],          mileage: 'any', image: '/cars/k5.jpg' },
-  '디 올 뉴 K5 Hybrid':  { body: 'sedan',   size: 'L', age: ['30s','40s'],          usage: ['commute'],                    mileage: 'high', image: '/cars/k5.jpg' },
-  'K8':                  { body: 'sedan',   size: 'XL', age: ['40s','50plus'],      usage: ['business'],                   mileage: 'any', image: '/cars/k8.jpg' },
-  'K8 Hybrid':           { body: 'sedan',   size: 'XL', age: ['40s','50plus'],      usage: ['business'],                   mileage: 'high', image: '/cars/k8.jpg' },
-  '셀토스':              { body: 'suv-mid', size: 'M', age: ['20s','30s'],          usage: ['commute','leisure','hobby'],  mileage: 'any', image: '/cars/seltos.jpg' },
-  '스포티지':            { body: 'suv-mid', size: 'M', age: ['30s','40s'],          usage: ['commute','leisure','family'], mileage: 'any', image: '/cars/sportage.jpg' },
-  '스포티지 Hybrid':     { body: 'suv-mid', size: 'M', age: ['30s','40s'],          usage: ['commute','leisure'],          mileage: 'high', image: '/cars/sportage.jpg' },
-  '쏘렌토':              { body: 'suv-large', size: 'L', age: ['30s','40s'],        usage: ['leisure','family'],           mileage: 'any', image: '/cars/sorento.jpg' },
-  '쏘렌토 Hybrid':       { body: 'suv-large', size: 'L', age: ['30s','40s'],        usage: ['leisure','family'],           mileage: 'high', image: '/cars/sorento.jpg' },
-  '카니발':              { body: 'minivan', size: 'XL', age: ['30s','40s','50plus'], usage: ['leisure','family','business'], mileage: 'any', image: '/cars/carnival.jpg',
+  '디 올 뉴 K5':         { body: 'sedan',   size: 'L', age: ['20s','30s','40s'],    usage: ['commute','leisure'],          mileage: 'any', image: '/cars/k5.png' },
+  '디 올 뉴 K5 Hybrid':  { body: 'sedan',   size: 'L', age: ['30s','40s'],          usage: ['commute'],                    mileage: 'high', image: '/cars/k5.png' },
+  'K8':                  { body: 'sedan',   size: 'XL', age: ['40s','50plus'],      usage: ['business'],                   mileage: 'any', image: '/cars/k8.png' },
+  'K8 Hybrid':           { body: 'sedan',   size: 'XL', age: ['40s','50plus'],      usage: ['business'],                   mileage: 'high', image: '/cars/k8.png' },
+  '셀토스':              { body: 'suv-mid', size: 'M', age: ['20s','30s'],          usage: ['commute','leisure','hobby'],  mileage: 'any', image: '/cars/seltos.png' },
+  '스포티지':            { body: 'suv-mid', size: 'M', age: ['30s','40s'],          usage: ['commute','leisure','family'], mileage: 'any', image: '/cars/sportage.png' },
+  '스포티지 Hybrid':     { body: 'suv-mid', size: 'M', age: ['30s','40s'],          usage: ['commute','leisure'],          mileage: 'high', image: '/cars/sportage.png' },
+  '쏘렌토':              { body: 'suv-large', size: 'L', age: ['30s','40s'],        usage: ['leisure','family'],           mileage: 'any', image: '/cars/sorento.png' },
+  '쏘렌토 Hybrid':       { body: 'suv-large', size: 'L', age: ['30s','40s'],        usage: ['leisure','family'],           mileage: 'high', image: '/cars/sorento.png' },
+  '카니발':              { body: 'minivan', size: 'XL', age: ['30s','40s','50plus'], usage: ['leisure','family','business'], mileage: 'any', image: '/cars/carnival.png',
     story: '국내 미니밴 부동의 1위. 4세대 KA4는 SUV 같은 디자인 + 9인승 실내 공간을 둘 다 잡았습니다. 양쪽 슬라이딩 도어 + 2열 통풍·열선 시트 + 하이리무진 옵션까지. 가족·임원·영업 등 활용 범위가 가장 넓은 차종.', },
-  '카니발 Hybrid':       { body: 'minivan', size: 'XL', age: ['30s','40s'],         usage: ['family'],                     mileage: 'high', image: '/cars/carnival.jpg' },
+  '카니발 Hybrid':       { body: 'minivan', size: 'XL', age: ['30s','40s'],         usage: ['family'],                     mileage: 'high', image: '/cars/carnival.png' },
   // 제네시스
-  'G70':                 { body: 'luxury',  size: 'L', age: ['30s','40s'],          usage: ['business','hobby'],           mileage: 'any', image: '/cars/g70.jpg' },
-  '디 올 뉴 G80 RG3':    { body: 'luxury',  size: 'XL', age: ['40s','50plus'],      usage: ['business'],                   mileage: 'any', image: '/cars/g80.jpg',
+  'G70':                 { body: 'luxury',  size: 'L', age: ['30s','40s'],          usage: ['business','hobby'],           mileage: 'any', image: '/cars/g70.png' },
+  '디 올 뉴 G80 RG3':    { body: 'luxury',  size: 'XL', age: ['40s','50plus'],      usage: ['business'],                   mileage: 'any', image: '/cars/g80.png',
     story: '제네시스의 정통 럭셔리 세단 RG3 세대. 라디에이터 그릴부터 인테리어까지 완전히 새로 만든 풀체인지. 다이내믹 주행감과 정중한 디자인을 동시에. 임원 의전·비즈니스 미팅에서 가장 많이 보이는 선택.', },
-  'G90 RS4':             { body: 'luxury',  size: 'XL', age: ['50plus'],            usage: ['business'],                   mileage: 'low', image: '/cars/g90.jpg' },
-  'GV70':                { body: 'suv-mid', size: 'L', age: ['30s','40s'],          usage: ['leisure','business'],         mileage: 'any', image: '/cars/gv70.jpg' },
-  'GV80':                { body: 'suv-large', size: 'XL', age: ['40s','50plus'],    usage: ['business','family'],          mileage: 'any', image: '/cars/gv80.jpg' },
+  'G90 RS4':             { body: 'luxury',  size: 'XL', age: ['50plus'],            usage: ['business'],                   mileage: 'low', image: '/cars/g90.png' },
+  'GV70':                { body: 'suv-mid', size: 'L', age: ['30s','40s'],          usage: ['leisure','business'],         mileage: 'any', image: '/cars/gv70.png' },
+  'GV80':                { body: 'suv-large', size: 'XL', age: ['40s','50plus'],    usage: ['business','family'],          mileage: 'any', image: '/cars/gv80.png' },
 };
 
 // 라이프스타일 → 적합 body 우선순위
@@ -729,8 +729,7 @@ function goToContact(p) {
 
 .ai-hero__visual {
   width: 100%; aspect-ratio: 16/9;
-  background: #fff;
-  border-bottom: 1px solid var(--line);
+  background: transparent;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
 }
