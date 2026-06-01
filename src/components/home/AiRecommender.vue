@@ -405,12 +405,16 @@ function goToContact(p) {
         </button>
       </div>
 
-      <!-- 오른쪽: 결과 -->
-      <div class="ai-result">
+    </div>
+
+    <!-- 결과: 히어로 아래 별도 섹션으로 Teleport -->
+    <Teleport to="#ai-result-anchor">
+      <div class="ai-result-out" :class="{ 'is-shown': submitted }">
+        <div class="ai-result">
         <div v-if="!submitted" class="ai-result__empty">
           <i class="ph ph-magic-wand"></i>
           <h4>당신만의 추천 차종</h4>
-          <p>6가지 정보를 입력하면<br>딱 맞는 차종을 골라드립니다.</p>
+          <p>왼쪽에서 정보를 입력하고 <b>'AI 추천 받기'</b>를 누르면<br>딱 맞는 차종이 여기 표시됩니다.</p>
         </div>
 
         <div v-else-if="!topPick" class="ai-result__empty">
@@ -518,26 +522,35 @@ function goToContact(p) {
             <i class="ph ph-arrow-counter-clockwise"></i> 다시 추천 받기
           </button>
         </template>
+        </div>
       </div>
-    </div>
+    </Teleport>
   </div>
 </template>
 
 <style scoped>
-.ai { max-width: 1180px; margin: 0 auto; }
+.ai { width: 100%; }
 
 .ai-wrap {
-  display: flex; flex-direction: column; gap: 20px;
+  display: flex; flex-direction: column; gap: 16px;
   background: var(--bg);
   border-radius: 18px;
-  padding: 28px;
+  padding: 24px;
   box-shadow:
-    0 20px 50px rgba(0,0,0,0.06),
-    0 4px 12px rgba(0,0,0,0.04);
+    0 20px 50px rgba(0,0,0,0.07),
+    0 4px 12px rgba(0,0,0,0.05);
   border: 1px solid var(--line);
 }
 @media (max-width: 980px) {
   .ai-wrap { padding: 22px; gap: 16px; }
+}
+
+/* 결과 — Teleport 된 히어로 아래 섹션 */
+.ai-result-out {
+  max-width: 980px; margin: 0 auto;
+}
+.ai-result-out:not(.is-shown) .ai-result__empty {
+  padding: 36px 16px;
 }
 .ai-form__eyebrow {
   display: inline-flex; align-items: center; gap: 5px;
