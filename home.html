@@ -190,17 +190,63 @@
       color: var(--brand);
     }
     .hero__sub {
-      font-size: 17px; font-weight: 400;
+      font-size: 15.5px; font-weight: 400;
       color: var(--ink-3);
-      line-height: 1.7;
+      line-height: 1.75;
       max-width: 540px;
-      margin: 0 0 28px;
+      margin: 0 0 24px;
       letter-spacing: -0.015em;
     }
     @media (max-width: 980px) {
       .hero__sub { margin-left: auto; margin-right: auto; }
     }
-    .hero__sub b { color: var(--ink-1); font-weight: 600; }
+    .hero__sub b { color: var(--ink-1); font-weight: 700; }
+
+    /* 좌측 본문 — 3 bullets */
+    .hero__bullets {
+      display: flex; flex-direction: column; gap: 12px;
+      margin-bottom: 24px;
+      padding: 18px 20px;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+    .hero__bullet {
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .hero__bullet i {
+      font-size: 18px; color: var(--brand);
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .hero__bullet b {
+      display: block;
+      font-size: 13.5px; font-weight: 700; color: var(--ink-1);
+      letter-spacing: -0.02em;
+      margin-bottom: 2px;
+    }
+    .hero__bullet span {
+      font-size: 12px; color: var(--ink-3); line-height: 1.55;
+    }
+
+    /* 우측 폼으로 자연스럽게 연결 */
+    .hero__arrow {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--ink-2);
+      line-height: 1.55; letter-spacing: -0.01em;
+      padding: 12px 16px;
+      background: var(--bg-soft);
+      border-left: 3px solid var(--brand);
+      border-radius: 0 8px 8px 0;
+    }
+    .hero__arrow i {
+      font-size: 18px; color: var(--brand);
+      flex-shrink: 0;
+    }
+    .hero__arrow b { color: var(--brand); font-weight: 700; }
+    @media (max-width: 980px) {
+      .hero__arrow i { display: none; }
+      .hero__bullets { padding: 16px; }
+    }
 
     .hero__cta {
       display: inline-flex; gap: 10px; flex-wrap: wrap;
@@ -750,13 +796,45 @@
           웰컴저축은행 계열 · 신차 장기렌터카
         </div>
         <h1 class="hero__title">
-          <em>몇 가지만</em> 알려주시면,<br>
-          AI가 차종을 골라드립니다.
+          신용 등급 대신,<br>
+          <em>꾸준한 소득</em>으로<br>
+          보겠습니다.
         </h1>
         <p class="hero__sub">
-          꾸준한 소득만 있다면 — 직장인·자영업자 모두 가능.<br>
-          웰릭스가 36 / 48 / 60개월 장기렌터카로 신차를 출고합니다.
+          복잡한 신용 심사는 잊으세요.<br>
+          안정적인 <b>월 소득</b>만 있다면 — 직장인·자영업자·프리랜서<br>
+          모두 같은 기준으로 신차 장기렌터카를 출고합니다.
         </p>
+
+        <div class="hero__bullets">
+          <div class="hero__bullet">
+            <i class="ph ph-check-circle-fill"></i>
+            <div>
+              <b>웰컴저축은행 계열의 검증된 시스템</b>
+              <span>표준 약관 + 법인 계좌 한정 결제 — 안심 거래</span>
+            </div>
+          </div>
+          <div class="hero__bullet">
+            <i class="ph ph-check-circle-fill"></i>
+            <div>
+              <b>보험료 · 자동차세 모두 포함</b>
+              <span>월 1회 통합 납부 — 숨은 비용 없음</span>
+            </div>
+          </div>
+          <div class="hero__bullet">
+            <i class="ph ph-check-circle-fill"></i>
+            <div>
+              <b>36 / 48 / 60개월 자유, 무보증 가능</b>
+              <span>출고 평균 7일 이내</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero__arrow">
+          <i class="ph ph-arrow-right"></i>
+          오른쪽에 <b>6가지</b>만 알려주세요.
+          AI가 딱 맞는 차종 3대를 골라드립니다.
+        </div>
       </div>
 
       <!-- 우: AI 폼 (히어로 우측) -->
