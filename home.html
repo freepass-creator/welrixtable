@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>웰릭스 모빌리티 · 소득만으로 심사하는 신차 장기렌터카</title>
+  <meta name="description" content="신용점수 보지 않습니다. 월 소득만 확인하고 출고하는 신차 장기렌터카. 36/48/60개월 자유 선택 · 무보증." />
+  <meta name="theme-color" content="#0D4E8B" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="웰릭스 모빌리티 · 소득만으로 심사하는 신차 장기렌터카" />
+  <meta property="og:description" content="신용점수 보지 않습니다. 월 소득만 확인하고 출고합니다." />
+  <meta property="og:image" content="/og-image.png" />
+  <meta property="og:site_name" content="웰릭스 모빌리티" />
+  <link rel="icon" type="image/png" href="/welrix-ci.png" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="/welrix-icon-192.png" />
+
+  <!-- Fonts + Icons -->
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+
+  <!-- Vehicle DB SSOT (PC/모바일/홈 공유) -->
+  <script src="/vehicle-db.js"></script>
+
+  <style>
+    :root {
+      --brand: #0D4E8B;
+      --brand-700: #0a3d6e;
+      --brand-100: #cfdce7;
+      --brand-50: #eef4fa;
+      --ink-1: #0a0a0a;
+      --ink-2: #404040;
+      --ink-3: #737373;
+      --ink-4: #a3a3a3;
+      --ink-5: #d4d4d4;
+      --line: #f0f0f0;
+      --line-2: #e5e5e5;
+      --bg: #ffffff;
+      --bg-soft: #fafafa;
+      --bg-grey: #f5f5f5;
+      --accent-soft: #f5f5f5;
+      --radius-sm: 4px;
+      --radius: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --radius-pill: 999px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow: 0 2px 8px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.10);
+      --t-fast: .12s;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body {
+      margin: 0; padding: 0;
+      font-family: 'Pretendard', -apple-system, 'Apple SD Gothic Neo', sans-serif;
+      color: var(--ink-1); background: var(--bg);
+      font-size: 15px; line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; }
+    img { max-width: 100%; display: block; }
+
+    /* === Container === */
+    .container {
+      width: 100%; max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    @media (max-width: 768px) {
+      .container { padding: 0 18px; }
+      html, body { font-size: 14.5px; }
+    }
+
+    /* === Top Nav === */
+    .topnav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: saturate(180%) blur(10px);
+      -webkit-backdrop-filter: saturate(180%) blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    .topnav__wrap {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .topnav__brand {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 16px; font-weight: 700; letter-spacing: -0.3px;
+    }
+    .topnav__brand img { height: 22px; width: auto; }
+    .topnav__menu {
+      display: flex; align-items: center; gap: 28px;
+    }
+    .topnav__menu a {
+      font-size: 13.5px; color: var(--ink-2); font-weight: 500;
+      transition: color var(--t-fast);
+    }
+    .topnav__menu a:hover { color: var(--ink-1); }
+    .topnav__cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--brand); color: #fff;
+      border: 0; border-radius: var(--radius-pill);
+      padding: 9px 18px;
+      font-size: 13px; font-weight: 600;
+      transition: background var(--t-fast);
+    }
+    .topnav__cta:hover { background: var(--brand-700); }
+    @media (max-width: 768px) {
+      .topnav__menu { display: none; }
+    }
+
+    /* === Hero === */
+    .hero {
+      padding: 80px 0 100px;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--brand-50) 100%);
+      position: relative; overflow: hidden;
+    }
+    .hero__inner {
+      max-width: 880px; margin: 0 auto;
+      text-align: center;
+    }
+    .hero__badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(13, 78, 139, 0.08); color: var(--brand);
+      padding: 6px 14px; border-radius: var(--radius-pill);
+      font-size: 12px; font-weight: 600; letter-spacing: 0.2px;
+      margin-bottom: 24px;
+    }
+    .hero__title {
+      font-size: 56px; font-weight: 800;
+      line-height: 1.15; letter-spacing: -0.04em;
+      color: var(--ink-1);
+      margin: 0 0 22px;
+    }
+    .hero__title em {
+      font-style: normal; color: var(--brand);
+    }
+    .hero__sub {
+      font-size: 18px; color: var(--ink-2);
+      line-height: 1.7; max-width: 620px;
+      margin: 0 auto 36px;
+      letter-spacing: -0.2px;
+    }
+    .hero__cta {
+      display: inline-flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 26px;
+      border-radius: var(--radius-pill);
+      font-size: 15px; font-weight: 600;
+      border: 0; cursor: pointer;
+      transition: background var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
+      letter-spacing: -0.2px;
+    }
+    .btn--primary {
+      background: var(--ink-1); color: #fff;
+    }
+    .btn--primary:hover { background: var(--brand); transform: translateY(-1px); }
+    .btn--outline {
+      background: rgba(255,255,255,0.85); color: var(--ink-1);
+      border: 1.5px solid var(--ink-1);
+    }
+    .btn--outline:hover { background: #fff; transform: translateY(-1px); }
+    @media (max-width: 768px) {
+      .hero { padding: 56px 0 72px; }
+      .hero__title { font-size: 38px; }
+      .hero__sub { font-size: 16px; }
+      .btn { padding: 12px 22px; font-size: 14px; }
+    }
+
+    /* === Sections === */
+    .section { padding: 90px 0; }
+    .section--soft { background: var(--bg-soft); }
+    .section__title {
+      font-size: 34px; font-weight: 800;
+      letter-spacing: -0.03em; line-height: 1.25;
+      color: var(--ink-1);
+      margin: 0 0 12px;
+      text-align: center;
+    }
+    .section__sub {
+      font-size: 16px; color: var(--ink-3);
+      max-width: 620px; margin: 0 auto 48px;
+      text-align: center; line-height: 1.65;
+    }
+    @media (max-width: 768px) {
+      .section { padding: 64px 0; }
+      .section__title { font-size: 26px; }
+      .section__sub { font-size: 14.5px; margin-bottom: 36px; }
+    }
+
+    /* === Why grid === */
+    .why-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+    }
+    .why-card {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 32px 28px;
+      transition: border-color var(--t-fast), transform var(--t-fast);
+    }
+    .why-card:hover { border-color: var(--ink-4); transform: translateY(-2px); }
+    .why-card__icon {
+      width: 48px; height: 48px;
+      background: var(--brand-50); color: var(--brand);
+      border-radius: var(--radius-md);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      margin-bottom: 18px;
+    }
+    .why-card__title {
+      font-size: 18px; font-weight: 700;
+      letter-spacing: -0.2px; margin: 0 0 8px;
+    }
+    .why-card__desc {
+      font-size: 14px; color: var(--ink-3); line-height: 1.7;
+      margin: 0;
+    }
+    @media (max-width: 768px) {
+      .why-grid { grid-template-columns: 1fr; gap: 12px; }
+      .why-card { padding: 24px 20px; }
+    }
+
+    /* === Footer === */
+    .footer {
+      background: var(--ink-1); color: var(--ink-4);
+      padding: 48px 0 32px;
+      font-size: 13px;
+    }
+    .footer__brand {
+      font-size: 15px; font-weight: 700; color: #fff;
+      margin-bottom: 12px;
+    }
+    .footer__info {
+      line-height: 1.85;
+    }
+    .footer__info b { color: #e5e5e5; font-weight: 500; margin-right: 4px; }
+    .footer__bottom {
+      margin-top: 32px; padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 11.5px; color: var(--ink-4);
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .footer__links a { color: var(--ink-4); margin-left: 14px; }
+    .footer__links a:hover { color: #e5e5e5; }
+  </style>
+</head>
+<body>
+  <!-- Top Nav -->
+  <nav class="topnav">
+    <div class="container topnav__wrap">
+      <a class="topnav__brand" href="/home.html">
+        <img src="/welrix-ci.png" alt="웰릭스 모빌리티" />
+        <span>웰릭스 모빌리티</span>
+      </a>
+      <div class="topnav__menu">
+        <a href="#why">왜 웰릭스?</a>
+        <a href="#quote">즉시 견적</a>
+        <a href="#contact">상담 신청</a>
+      </div>
+      <a class="topnav__cta" href="#contact">
+        <i class="ph ph-phone"></i> 상담 신청
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero__inner">
+      <span class="hero__badge">
+        <i class="ph ph-shield-check"></i> 신용점수 보지 않습니다
+      </span>
+      <h1 class="hero__title">
+        월 소득만 확인하고<br>
+        <em>신차 출고</em> 합니다
+      </h1>
+      <p class="hero__sub">
+        복잡한 신용 심사 대신, 월 소득 기준으로 심사하는 신차 장기렌터카.<br>
+        36 / 48 / 60개월 자유 선택 · 무보증 가능 · 보험 포함 월 1회 납부.
+      </p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="#quote">
+          <i class="ph ph-magnifying-glass"></i> 1분 견적 받기
+        </a>
+        <a class="btn btn--outline" href="#contact">
+          <i class="ph ph-chat-circle-dots"></i> 무료 상담
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why -->
+  <section class="section" id="why">
+    <div class="container">
+      <h2 class="section__title">왜 웰릭스 모빌리티인가요?</h2>
+      <p class="section__sub">신용 등급에 가로막혀 신차 구매를 미루셨다면,<br>웰릭스의 소득 기준 심사로 새 차를 받으세요.</p>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-card__icon"><i class="ph ph-receipt"></i></div>
+          <h3 class="why-card__title">소득 기준 심사</h3>
+          <p class="why-card__desc">신용 등급 대신 월 소득 기준으로 심사합니다. 신용 점수가 낮아도, 금융 이력이 짧아도 안정적인 소득만 있다면 출고 가능합니다.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card__icon"><i class="ph ph-car"></i></div>
+          <h3 class="why-card__title">신차 출고 · 보증금 옵션</h3>
+          <p class="why-card__desc">현대·기아·제네시스 전 차종 신차 출고. 무보증 옵션 가능, 일반 영업번호판으로 등록되어 운전 이력에 부담 없습니다.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card__icon"><i class="ph ph-calendar-check"></i></div>
+          <h3 class="why-card__title">36·48·60개월 자유</h3>
+          <p class="why-card__desc">월 부담을 줄이는 60개월, 짧고 부담 없는 36개월. 자동차 보험·정비·자동차세 모두 포함된 월 1회 납부 구조.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Quote (Vue mounted) -->
+  <section class="section section--soft" id="quote">
+    <div class="container">
+      <h2 class="section__title">1분 견적</h2>
+      <p class="section__sub">차종과 기간만 선택하면 즉시 월 대여료를 확인할 수 있습니다.</p>
+      <div id="quote-widget-root"></div>
+    </div>
+  </section>
+
+  <!-- Lead form (Vue mounted) -->
+  <section class="section section--soft" id="contact">
+    <div class="container">
+      <h2 class="section__title">무료 상담 신청</h2>
+      <p class="section__sub">전문 상담사가 1영업일 이내 연락드립니다.<br>관심 차종을 알려주시면 맞춤 견적과 함께 안내해 드립니다.</p>
+      <div id="lead-form-root"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__brand">웰릭스 모빌리티</div>
+      <div class="footer__info">
+        <div><b>대표</b>—</div>
+        <div><b>사업자번호</b>—</div>
+        <div><b>주소</b>—</div>
+        <div><b>대표전화</b>1544-0000</div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2026 웰릭스 모빌리티. All rights reserved.</span>
+        <span class="footer__links">
+          <a href="#">이용약관</a>
+          <a href="#">개인정보처리방침</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/src/home.js"></script>
+</body>
+</html>

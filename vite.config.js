@@ -35,6 +35,7 @@ export default defineConfig({
       input: {
         index: resolve(__dirname, 'index.html'),
         mobile: resolve(__dirname, 'mobile.html'),
+        home: resolve(__dirname, 'home.html'),
       },
     },
   },
