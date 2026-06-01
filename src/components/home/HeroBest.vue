@@ -1,33 +1,57 @@
 <script setup>
-// 히어로 우측 — BEST 1 차종 큰 카드
-// "월 N만원" 으로 증명: 우리 상품이 얼마인지 1초에 보여줌
-// 캐스퍼 (가장 저렴 → 진입 장벽 낮은 흥미) 디폴트
-import { ref, computed, onMounted } from 'vue';
+// 히어로 우측 — BEST 인기 차종 4종 슬라이드 (자동 회전)
+// 각 슬라이드: 차량 이미지 + 월 가격으로 "이만큼만 내면 신차" 즉시 증명
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { calcQuote } from '../../lib/calc.js';
 import { fmt } from '../../lib/format.js';
 import { MODEL_SLUG, imageOf } from '../../lib/slug.js';
 
-// 회전 후보 (3초마다 자동 변경 가능 — 일단 정적 표시)
-const FEATURED = {
-  brand: '현대',
-  model: '더 뉴 캐스퍼',
-  tagline: '입문 SUV · 가성비 BEST',
-  story: '1.0 터보 + 4단 자동변속기. 도심 출퇴근에 부담없는 경형 SUV.',
-};
+const FEATURED = [
+  { brand: '현대',    model: '더 뉴 캐스퍼',       tagline: '가성비 BEST · 입문 SUV' },
+  { brand: '기아',    model: '카니발',             tagline: '미니밴 1위 · 9인승 만능' },
+  { brand: '현대',    model: '디 올 뉴 팰리세이드', tagline: '7·9인승 풀사이즈 SUV' },
+  { brand: '제네시스', model: 'G80',                tagline: '비즈니스 세단의 정점' },
+];
+const AUTO_MS = 4500;
 
 const vehicles = ref([]);
+const activeIndex = ref(0);
+let timer = null;
+
 onMounted(async () => {
   try {
     const r = await fetch('/data/vehicles.json?t=' + Date.now());
     vehicles.value = await r.json();
   } catch {}
+  startAuto();
 });
 
-const card = computed(() => {
-  const slug = MODEL_SLUG[FEATURED.model];
+onBeforeUnmount(() => { if (timer) clearInterval(timer); });
+
+function startAuto() {
+  if (timer) clearInterval(timer);
+  timer = setInterval(() => {
+    activeIndex.value = (activeIndex.value + 1) % FEATURED.length;
+  }, AUTO_MS);
+}
+function selectSlide(i) {
+  activeIndex.value = i;
+  startAuto();
+}
+function prev() {
+  activeIndex.value = (activeIndex.value - 1 + FEATURED.length) % FEATURED.length;
+  startAuto();
+}
+function next() {
+  activeIndex.value = (activeIndex.value + 1) % FEATURED.length;
+  startAuto();
+}
+
+const slides = computed(() => FEATURED.map(f => {
+  const slug = MODEL_SLUG[f.model];
   const image = imageOf(slug);
-  const candidates = vehicles.value.filter(v => v.brand === FEATURED.brand && v.model === FEATURED.model);
-  if (!candidates.length) return { ...FEATURED, slug, image, monthly: null, price: null };
+  const candidates = vehicles.value.filter(v => v.brand === f.brand && v.model === f.model);
+  if (!candidates.length) return { ...f, slug, image, monthly: null };
   const cheapest = candidates.reduce((m, c) => (!m || c.price < m.price) ? c : m, null);
   try {
     const r = calcQuote({
@@ -42,20 +66,23 @@ const card = computed(() => {
       },
       fees: { feeRatePct: 5.0, svc: '웰스 Basic' },
     });
-    return { ...FEATURED, slug, image, monthly: r.monthly, price: cheapest.price };
+    return { ...f, slug, image, monthly: r.monthly };
   } catch {
-    return { ...FEATURED, slug, image, monthly: null, price: cheapest?.price };
+    return { ...f, slug, image, monthly: null };
   }
-});
+}));
+
+const current = computed(() => slides.value[activeIndex.value]);
 
 function goGuide() {
-  if (card.value.slug) location.href = `/guide.html?slug=${card.value.slug}`;
+  if (current.value.slug) location.href = `/guide.html?slug=${current.value.slug}`;
 }
 function goContact() {
+  const c = current.value;
   const params = new URLSearchParams({
-    vehicle: `${card.value.brand} ${card.value.model}`,
+    vehicle: `${c.brand} ${c.model}`,
     term: 60,
-    monthly: card.value.monthly || '',
+    monthly: c.monthly || '',
   });
   history.replaceState(null, '', '#contact?' + params.toString());
   document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
@@ -64,40 +91,63 @@ function goContact() {
 
 <template>
   <div class="hb">
-    <div class="hb__tag">
-      <i class="ph ph-fire"></i> 지금 가장 가성비 좋은 신차
-    </div>
-
-    <div class="hb__visual">
-      <img v-if="card.image" :src="card.image" :alt="card.model" class="hb__img"
-           @error="card.image = null" />
-      <i v-else class="ph ph-car-profile hb__icon"></i>
-    </div>
-
-    <div class="hb__body">
-      <div class="hb__brand">{{ card.brand }}</div>
-      <div class="hb__model">{{ card.model }}</div>
-      <div class="hb__tagline">{{ card.tagline }}</div>
-
-      <div class="hb__price">
-        <div class="hb__price-label">월 부담은</div>
-        <div class="hb__price-amount">
-          <span class="hb__price-num">{{ card.monthly ? fmt(card.monthly) : '—' }}</span>
-          <small>원~</small>
-        </div>
-        <div class="hb__price-meta">
-          60개월 · 보증금 10% · 보험·세금 포함
-        </div>
+    <div class="hb__head">
+      <div class="hb__tag">
+        <i class="ph ph-fire"></i> 지금 인기 BEST {{ slides.length }}
       </div>
-
-      <div class="hb__actions">
-        <button class="hb__btn hb__btn--primary" @click="goContact">
-          <i class="ph ph-chat-circle-dots"></i> 이 차로 상담
+      <div class="hb__nav">
+        <button class="hb__arrow" @click="prev" aria-label="이전">
+          <i class="ph ph-caret-left"></i>
         </button>
-        <button class="hb__btn hb__btn--ghost" @click="goGuide">
-          <i class="ph ph-book-open"></i> 상세보기
+        <span class="hb__counter">{{ activeIndex + 1 }} / {{ slides.length }}</span>
+        <button class="hb__arrow" @click="next" aria-label="다음">
+          <i class="ph ph-caret-right"></i>
         </button>
       </div>
+    </div>
+
+    <!-- Slide track -->
+    <div class="hb__track" :style="{ transform: `translateX(-${activeIndex * 100}%)` }">
+      <article v-for="(s, i) in slides" :key="i" class="hb__slide">
+        <div class="hb__visual">
+          <img v-if="s.image" :src="s.image" :alt="s.model" class="hb__img"
+               @error="s.image = null" />
+          <i v-else class="ph ph-car-profile hb__icon"></i>
+        </div>
+        <div class="hb__body">
+          <div class="hb__brand">{{ s.brand }}</div>
+          <div class="hb__model">{{ s.model }}</div>
+          <div class="hb__tagline">{{ s.tagline }}</div>
+        </div>
+      </article>
+    </div>
+
+    <!-- 현재 슬라이드의 가격 + CTA (트랙 밖, 한 군데 고정) -->
+    <div class="hb__price">
+      <div class="hb__price-label">월 부담은</div>
+      <div class="hb__price-amount">
+        <span class="hb__price-num">{{ current?.monthly ? fmt(current.monthly) : '—' }}</span>
+        <small>원~</small>
+      </div>
+      <div class="hb__price-meta">60개월 · 보증금 10% · 보험·세금 포함</div>
+    </div>
+
+    <div class="hb__actions">
+      <button class="hb__btn hb__btn--primary" @click="goContact">
+        <i class="ph ph-chat-circle-dots"></i> 이 차로 상담
+      </button>
+      <button class="hb__btn hb__btn--ghost" @click="goGuide">
+        <i class="ph ph-book-open"></i> 상세보기
+      </button>
+    </div>
+
+    <!-- Dot indicator -->
+    <div class="hb__dots">
+      <button v-for="(s, i) in slides" :key="i"
+              class="hb__dot"
+              :class="{ 'is-active': i === activeIndex }"
+              @click="selectSlide(i)"
+              :aria-label="`${i+1}번 슬라이드`"></button>
     </div>
   </div>
 </template>
@@ -111,28 +161,60 @@ function goContact() {
     0 20px 50px rgba(0,0,0,0.07),
     0 4px 12px rgba(0,0,0,0.05);
   border: 1px solid var(--line);
-  position: relative;
   overflow: hidden;
 }
 @media (max-width: 540px) {
   .hb { padding: 18px; border-radius: 14px; }
 }
 
+.hb__head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+}
 .hb__tag {
   display: inline-flex; align-items: center; gap: 5px;
   background: var(--brand); color: #fff;
   padding: 6px 14px; border-radius: 999px;
   font-size: 11.5px; font-weight: 800; letter-spacing: 0.2px;
-  margin-bottom: 12px;
 }
 .hb__tag i { font-size: 12px; }
+
+.hb__nav { display: flex; align-items: center; gap: 4px; }
+.hb__arrow {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--bg-soft); border: 0; color: var(--ink-2);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--t-fast);
+}
+.hb__arrow:hover { background: var(--ink-1); color: #fff; }
+.hb__arrow i { font-size: 13px; }
+.hb__counter {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; color: var(--ink-4); font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  margin: 0 4px;
+  letter-spacing: 0.3px;
+}
+
+/* === Slide track === */
+.hb__track {
+  display: flex;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  margin: 0 -22px;  /* 카드 패딩 무효화 — 끝까지 확장 */
+}
+.hb__slide {
+  flex-shrink: 0;
+  width: 100%;
+  padding: 0 22px;
+}
 
 .hb__visual {
   width: 100%; aspect-ratio: 16/9;
   background: transparent;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 .hb__img {
   width: 100%; height: 100%; object-fit: contain;
@@ -140,13 +222,13 @@ function goContact() {
 }
 .hb__icon { font-size: 64px; color: var(--ink-4); opacity: 0.4; }
 
-.hb__body { display: flex; flex-direction: column; gap: 4px; }
+.hb__body { display: flex; flex-direction: column; gap: 2px; min-height: 64px; }
 .hb__brand {
   font-size: 11.5px; color: var(--ink-4); font-weight: 700;
   letter-spacing: 0.4px;
 }
 .hb__model {
-  font-size: 22px; font-weight: 800; color: var(--ink-1);
+  font-size: 20px; font-weight: 800; color: var(--ink-1);
   letter-spacing: -0.025em; line-height: 1.2;
 }
 .hb__tagline {
@@ -155,8 +237,8 @@ function goContact() {
 }
 
 .hb__price {
-  margin: 14px 0;
-  padding: 16px 0;
+  margin: 14px 0 12px;
+  padding: 14px 0;
   border-top: 1px dashed var(--line);
   border-bottom: 1px dashed var(--line);
   text-align: center;
@@ -172,25 +254,26 @@ function goContact() {
   font-variant-numeric: tabular-nums;
 }
 .hb__price-num {
-  font-size: 38px; font-weight: 800; color: var(--brand);
+  font-size: 36px; font-weight: 800; color: var(--brand);
   letter-spacing: -0.05em; line-height: 1;
 }
 .hb__price-amount small {
-  font-size: 15px; color: var(--ink-3); font-weight: 600;
+  font-size: 14px; color: var(--ink-3); font-weight: 600;
   margin-left: 1px;
 }
 .hb__price-meta {
-  margin-top: 5px;
+  margin-top: 4px;
   font-size: 11px; color: var(--ink-4);
   font-variant-numeric: tabular-nums;
 }
 
 .hb__actions {
   display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  margin-bottom: 12px;
 }
 .hb__btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 5px;
-  height: 44px;
+  height: 42px;
   border-radius: 999px;
   font-family: inherit;
   font-size: 13px; font-weight: 700;
@@ -208,4 +291,18 @@ function goContact() {
   border: 1.5px solid var(--line-2);
 }
 .hb__btn--ghost:hover { border-color: var(--ink-1); color: var(--ink-1); }
+
+.hb__dots {
+  display: flex; gap: 6px; justify-content: center;
+}
+.hb__dot {
+  width: 22px; height: 4px; border-radius: 999px;
+  background: var(--line);
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--t-fast), width var(--t-fast);
+}
+.hb__dot:hover { background: var(--ink-4); }
+.hb__dot.is-active { background: var(--brand); width: 34px; }
 </style>
