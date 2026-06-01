@@ -6,31 +6,31 @@ import { calcQuote } from '../../lib/calc.js';
 import { fmt } from '../../lib/format.js';
 
 // 4종 picks — 인기 차종 + 블로그 스타일 추천 컬럼
-// 차량 이미지는 /public/cars/{slug}.png 에 직접 드롭 (없으면 SVG fallback)
+// 차량 이미지는 /public/cars/{slug}.jpg 에 직접 드롭 (없으면 SVG fallback)
 const PICKS = [
   {
     brand: '현대', model: '더 뉴 캐스퍼', tagline: '입문 SUV',
     blurb: '도심에서 가장 잘 어울리는 경형 SUV. 작지만 알찬 실내, 1인·2인 가구의 첫 차로 만족도 높습니다.',
     pros: ['가성비 최강', '주차 쉬움', '연비 우수'],
-    image: '/cars/casper.png',
+    image: '/cars/casper.jpg',
   },
   {
     brand: '현대', model: '디 올 뉴 팰리세이드', tagline: '대형 SUV',
     blurb: '7·9인승 풀사이즈 SUV. 가족 여행·등하원·골프까지 한 대로. 통풍·열선·어드밴스드 안전 패키지 기본.',
     pros: ['7/9인승', '풀옵션 기본', '공간 여유'],
-    image: '/cars/palisade.png',
+    image: '/cars/palisade.jpg',
   },
   {
     brand: '기아', model: '카니발', tagline: '미니밴 1위',
     blurb: '국내 미니밴 표준. 9인승 풀옵션으로 가족·임원·영업까지 만능. 슬라이딩 도어 + 통풍 시트는 보너스.',
     pros: ['9인승', '슬라이딩 도어', '하이리무진 옵션'],
-    image: '/cars/carnival.png',
+    image: '/cars/carnival.jpg',
   },
   {
     brand: '제네시스', model: '디 올 뉴 G80 RG3', tagline: '비즈니스 세단',
     blurb: '국산 럭셔리 세단의 정점. 비즈니스·임원 의전에 정형화된 디자인과 다이내믹 주행감.',
     pros: ['풀체인지 신차', '럭셔리 인테리어', '주행감 우수'],
-    image: '/cars/g80.png',
+    image: '/cars/g80.jpg',
   },
 ];
 
