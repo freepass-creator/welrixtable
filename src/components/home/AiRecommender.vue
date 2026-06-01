@@ -203,11 +203,6 @@ const scored = computed(() => {
 
 const topPick = computed(() => scored.value[0] || null);
 const podium = computed(() => scored.value.slice(0, 3));
-const PODIUM_META = [
-  { label: '1순위', medal: '금', tone: 'gold' },
-  { label: '2순위', medal: '은', tone: 'silver' },
-  { label: '3순위', medal: '동', tone: 'bronze' },
-];
 
 // === 개인화 narrative ===
 const personaTagline = computed(() => {
@@ -410,14 +405,18 @@ function goToContact(p) {
             </div>
           </div>
 
-          <!-- 1/2/3 순위 — 금/은/동 통일 카드 -->
+          <!-- AI 추천 3종 — 1번만 BEST 강조, 2-3번 평등 -->
           <div class="ai-podium">
             <article v-for="(p, i) in podium" :key="i"
                      class="ai-card"
-                     :class="[`ai-card--${PODIUM_META[i].tone}`, { 'ai-card--top': i === 0 }]">
+                     :class="{ 'ai-card--top': i === 0 }">
               <div class="ai-card__rank">
-                <span class="ai-card__medal">{{ PODIUM_META[i].medal }}</span>
-                <span class="ai-card__rank-label">{{ PODIUM_META[i].label }}</span>
+                <span v-if="i === 0" class="ai-card__badge">
+                  <i class="ph ph-star"></i> BEST
+                </span>
+                <span v-else class="ai-card__badge ai-card__badge--alt">
+                  <i class="ph ph-thumbs-up"></i> 추천
+                </span>
                 <span class="ai-card__match">매치 {{ p.matchPct }}%</span>
               </div>
               <div class="ai-card__visual">
@@ -697,12 +696,12 @@ function goToContact(p) {
   .ai-card { grid-template-columns: 1fr; }
 }
 
-/* 금/은/동 톤 — 좌측 thin border ribbon */
-.ai-card--gold   { border-color: #d4a93a; box-shadow: 0 4px 14px rgba(212, 169, 58, 0.10); }
-.ai-card--silver { border-color: #b6b8bd; }
-.ai-card--bronze { border-color: #c08a5c; }
-
-.ai-card--top { border-width: 2px; }
+/* BEST 카드만 강조 — brand 컬러 */
+.ai-card--top {
+  border-color: var(--brand);
+  border-width: 2px;
+  box-shadow: 0 6px 18px rgba(225, 20, 30, 0.10);
+}
 
 /* 상단 랭크 영역 — 카드 폭 전체 */
 .ai-card__rank {
@@ -713,25 +712,29 @@ function goToContact(p) {
   background: var(--bg-soft);
   border-bottom: 1px solid var(--line);
 }
-.ai-card--gold   .ai-card__rank { background: linear-gradient(90deg, #fff8e6 0%, #fdf4d6 100%); }
-.ai-card--silver .ai-card__rank { background: linear-gradient(90deg, #f3f4f6 0%, #e9eaee 100%); }
-.ai-card--bronze .ai-card__rank { background: linear-gradient(90deg, #fbf0e6 0%, #f5e3d2 100%); }
-
-.ai-card__medal {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 22px; height: 22px; border-radius: 50%;
-  font-family: 'Pretendard Variable', sans-serif;
-  font-size: 12px; font-weight: 800; color: #fff;
-  letter-spacing: -0.02em;
+.ai-card--top .ai-card__rank {
+  background: linear-gradient(90deg, var(--brand-50) 0%, #fff 100%);
 }
-.ai-card--gold   .ai-card__medal { background: linear-gradient(135deg, #e8b53a 0%, #b58520 100%); box-shadow: 0 2px 4px rgba(184, 134, 32, 0.3); }
-.ai-card--silver .ai-card__medal { background: linear-gradient(135deg, #b6b9be 0%, #8c8e93 100%); box-shadow: 0 2px 4px rgba(140, 142, 147, 0.3); }
-.ai-card--bronze .ai-card__medal { background: linear-gradient(135deg, #cd8b58 0%, #976138 100%); box-shadow: 0 2px 4px rgba(151, 97, 56, 0.3); }
 
-.ai-card__rank-label {
-  font-size: 12.5px; font-weight: 800; color: var(--ink-1);
-  letter-spacing: -0.02em;
+.ai-card__badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px;
+  background: var(--brand);
+  color: #fff;
+  border-radius: 999px;
+  font-family: 'Inter', 'Pretendard Variable', sans-serif;
+  font-size: 10.5px; font-weight: 800;
+  letter-spacing: 0.4px;
 }
+.ai-card__badge i { font-size: 11px; }
+.ai-card__badge--alt {
+  background: var(--bg);
+  color: var(--ink-3);
+  border: 1px solid var(--line-2);
+  letter-spacing: -0.01em;
+}
+.ai-card__badge--alt i { color: var(--ink-3); }
+
 .ai-card__match {
   margin-left: auto;
   font-size: 11px; font-weight: 600; color: var(--ink-3);
@@ -786,10 +789,9 @@ function goToContact(p) {
 }
 .ai-card__reasons i {
   font-size: 13px; flex-shrink: 0; margin-top: 1px;
+  color: var(--brand);
 }
-.ai-card--gold   .ai-card__reasons i { color: #b58520; }
-.ai-card--silver .ai-card__reasons i { color: #8c8e93; }
-.ai-card--bronze .ai-card__reasons i { color: #976138; }
+.ai-card:not(.ai-card--top) .ai-card__reasons i { color: var(--ink-4); }
 
 .ai-card__story {
   margin-top: 4px;
@@ -802,7 +804,7 @@ function goToContact(p) {
   font-size: 10.5px; font-weight: 700; color: var(--ink-2);
   margin-bottom: 4px;
 }
-.ai-card__story-label i { font-size: 11px; color: #b58520; }
+.ai-card__story-label i { font-size: 11px; color: var(--brand); }
 .ai-card__story p {
   margin: 0;
   font-size: 12px; color: var(--ink-2);
