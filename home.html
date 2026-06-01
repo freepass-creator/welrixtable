@@ -202,17 +202,20 @@
 
     /* === 좌측: CTA === */
     .hero__cta {
-      display: flex; gap: 8px; flex-wrap: wrap;
+      display: flex; gap: 6px; flex-wrap: wrap;
     }
     .hero__btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      height: 50px; padding: 0 24px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+      height: 46px; padding: 0 18px;
       border-radius: 999px;
       font-family: inherit;
-      font-size: 14px; font-weight: 700;
+      font-size: 13px; font-weight: 700;
       text-decoration: none;
       letter-spacing: -0.01em;
       transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
+    }
+    @media (max-width: 540px) {
+      .hero__btn { flex: 1 1 calc(50% - 3px); padding: 0 12px; font-size: 12.5px; }
     }
     .hero__btn:hover { transform: translateY(-1px); }
     .hero__btn i { font-size: 15px; }
@@ -984,6 +987,9 @@
         <div class="hero__cta">
           <a class="hero__btn hero__btn--primary" href="#lineup">
             <i class="ph ph-fire"></i> 인기 차종 보기
+          </a>
+          <a class="hero__btn hero__btn--ghost" href="#quote">
+            <i class="ph ph-calculator"></i> 직접 견적
           </a>
           <a class="hero__btn hero__btn--ghost" href="#ai-recommender">
             <i class="ph ph-sparkle"></i> AI 추천 받기
