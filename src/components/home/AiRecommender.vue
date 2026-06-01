@@ -729,14 +729,15 @@ function goToContact(p) {
 
 .ai-hero__visual {
   width: 100%; aspect-ratio: 16/9;
-  background: linear-gradient(135deg, #f0f1f5 0%, #e3e6ec 100%);
+  background: #fff;
+  border-bottom: 1px solid var(--line);
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
 }
 .ai-hero__img {
-  width: 94%; height: 94%;
+  width: 96%; height: 96%;
   object-fit: contain;
-  filter: drop-shadow(0 8px 14px rgba(0,0,0,0.18));
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.10));
 }
 .ai-hero__icon {
   font-size: 90px; color: var(--ink-4); opacity: 0.5;

@@ -180,16 +180,16 @@ function goToQuote(card) {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 10;
-  background:
-    linear-gradient(135deg, #f8f9fb 0%, #ebeef3 100%);
+  background: #fff;
+  border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
   margin-bottom: 4px;
 }
 .lu-card__img {
-  width: 92%; height: 92%; object-fit: contain;
-  filter: drop-shadow(0 8px 14px rgba(0,0,0,0.15));
+  width: 96%; height: 96%; object-fit: contain;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.08));
   transition: transform var(--t-fast);
 }
 .lu-card:hover .lu-card__img { transform: scale(1.04); }
