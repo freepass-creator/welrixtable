@@ -78,11 +78,9 @@ export const SLUG_META = {
 
 export const ALL_SLUGS = Object.keys(SLUG_META);
 
-// 아직 제조사 공식 KV 못 받은 차종 — fallback 아이콘만 노출 (야외 사진보다 톤 통일)
-// 사용자가 hyundai.com 에서 KV 떨궈주면 여기서 제거
-export const MISSING_IMAGES = new Set([
-  'avante', 'venue', 'tucson', 'santafe', 'palisade', 'porter',
-]);
+// 아직 제조사 공식 KV 못 받은 차종 — fallback 아이콘만 노출
+// 현재: 25종 모두 확보 (현대 og:image, 기아/제네시스 SSR)
+export const MISSING_IMAGES = new Set([]);
 
 export function imageOf(slug) {
   if (MISSING_IMAGES.has(slug)) return null;
