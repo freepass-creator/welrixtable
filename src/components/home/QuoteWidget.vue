@@ -5,6 +5,16 @@
 import { ref, computed, onMounted } from 'vue';
 import { calcQuote } from '../../lib/calc.js';
 import { fmt } from '../../lib/format.js';
+import { DELIVERY_REGIONS, TINT_PRICES } from '../../data/lookups.js';
+
+// 기본 deliveryFee = 서울 광역시 (UI 표시 X)
+const DEFAULT_DELIVERY_FEE = (DELIVERY_REGIONS['광역시']?.['서울']) || 0;
+// 기본 itemsFee = 기본 썬팅 (루마 GG, 전면 + 측후면 쿠폰)
+const DEFAULT_TINT_FEE = (() => {
+  const m = TINT_PRICES['루마 GG'];
+  if (!m) return 0;
+  return (m['front'] || 0) + (m['side_rear_with_coupon'] || 0);
+})();
 
 const TERMS = [60, 48, 36];
 const DEPOSIT_PRESETS = [0, 10, 20, 30];
@@ -24,6 +34,7 @@ const trim = ref(null);     // 직접 트림 객체 보관
 const selectedTerm = ref(60);
 const deposit = ref(10);    // 보증금 % (기본 10)
 const prepay = ref(0);      // 선납금 % (기본 0)
+const selectedOptions = ref(new Set());  // 선택한 옵션 id Set
 
 onMounted(async () => {
   try {
@@ -91,8 +102,33 @@ function selectVariant(v) {
   const ts = (v.trims || []).filter(t => t.operating !== false);
   if (ts.length === 1) selectTrim(ts[0]);
 }
-function selectTrim(t) { trim.value = t; }
+function selectTrim(t) {
+  trim.value = t;
+  selectedOptions.value = new Set();  // 트림 바뀌면 옵션 리셋
+}
 function selectTerm(t) { selectedTerm.value = t; }
+function toggleOption(id) {
+  if (selectedOptions.value.has(id)) selectedOptions.value.delete(id);
+  else selectedOptions.value.add(id);
+  selectedOptions.value = new Set(selectedOptions.value);
+}
+
+// 옵션 마스터 + 트림 가용 옵션
+const optionsMaster = computed(() => selectedVariant.value?.options_master || {});
+const trimOptions = computed(() => {
+  if (!trim.value) return [];
+  return (trim.value.available_options || [])
+    .map(id => ({ id, ...optionsMaster.value[id] }))
+    .filter(o => o.name);
+});
+const optionsPriceWon = computed(() => {
+  let total = 0;
+  selectedOptions.value.forEach(id => {
+    const o = optionsMaster.value[id];
+    if (o?.price) total += (o.price || 0) * 10000;
+  });
+  return total;
+});
 
 // 표시 정보
 const selectedBrandName = computed(() => selectedManufacturer.value?.manufacturer_name || '');
@@ -145,7 +181,13 @@ const result = computed(() => {
   try {
     const r = calcQuote({
       vehicle: row,
-      options: { optPrice: 0, discount: 0, deliveryFee: 0, itemsFee: 0, etc: 0 },
+      options: {
+        optPrice: optionsPriceWon.value,
+        discount: 0,
+        deliveryFee: DEFAULT_DELIVERY_FEE,  // 서울 기본 (UI 표시 X)
+        itemsFee: DEFAULT_TINT_FEE,         // 기본 썬팅 (UI 표시 X)
+        etc: 0,
+      },
       contract: { term: selectedTerm.value, km: '2만km', dep: +deposit.value || 0, pre: +prepay.value || 0 },
       customer: { creditGrade: '중신용' },
       insurance: {
@@ -296,6 +338,23 @@ function backToVariant() { variantId.value = ''; trim.value = null; }
               >{{ p === 0 ? '없음' : p + '%' }}</button>
             </div>
           </div>
+
+          <!-- 옵션 (선택 사항) -->
+          <div class="qw-step" v-if="trimOptions.length">
+            <div class="qw-step-label">옵션 <small class="qw-step-hint">(선택 사항 · 토글)</small></div>
+            <div class="qw-options">
+              <button
+                v-for="o in trimOptions" :key="o.id"
+                class="qw-option"
+                :class="{ 'is-active': selectedOptions.has(o.id) }"
+                @click="toggleOption(o.id)"
+                :title="o.sub || ''"
+              >
+                <span class="qw-option-name">{{ o.name }}</span>
+                <span class="qw-option-price">+{{ o.price }}만원</span>
+              </button>
+            </div>
+          </div>
         </template>
       </div>
 
@@ -323,6 +382,10 @@ function backToVariant() { variantId.value = ''; trim.value = null; }
             <div class="qw-result__row">
               <span>차량가</span>
               <b>{{ fmt(selectedTrimPriceKrw) }}원</b>
+            </div>
+            <div class="qw-result__row" v-if="optionsPriceWon > 0">
+              <span>선택 옵션 ({{ selectedOptions.size }}개)</span>
+              <b>+{{ fmt(optionsPriceWon) }}원</b>
             </div>
             <div class="qw-result__row">
               <span v-if="deposit === 0">보증금</span>
@@ -490,6 +553,38 @@ function backToVariant() { variantId.value = ''; trim.value = null; }
 }
 /* 기간은 3개 칩 */
 .qw-step:has(.qw-chip--lg) .qw-chips { grid-template-columns: repeat(3, 1fr); }
+
+/* 옵션 토글 */
+.qw-options {
+  display: flex; flex-direction: column; gap: 5px;
+  max-height: 260px; overflow-y: auto;
+}
+.qw-option {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; padding: 11px 12px;
+  background: var(--bg);
+  border: 1.5px solid var(--line-2);
+  border-radius: var(--radius-sm);
+  font-family: inherit; font-size: 13px;
+  cursor: pointer; text-align: left;
+  transition: background var(--t-fast), border-color var(--t-fast), color var(--t-fast);
+}
+.qw-option:hover { border-color: var(--ink-4); background: var(--bg-soft); }
+.qw-option.is-active {
+  background: var(--brand-50); border-color: var(--brand);
+  color: var(--brand);
+}
+.qw-option-name {
+  font-weight: 500; color: var(--ink-1);
+  letter-spacing: -0.1px; flex: 1; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.qw-option.is-active .qw-option-name { color: var(--brand); font-weight: 600; }
+.qw-option-price {
+  font-weight: 700; color: var(--brand);
+  font-variant-numeric: tabular-nums; font-size: 12px;
+  flex-shrink: 0;
+}
 
 /* === 우측: 결과 (네이비 카드) === */
 .qw-result {
