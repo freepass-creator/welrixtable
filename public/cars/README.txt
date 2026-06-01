@@ -5,7 +5,7 @@
 - 자동 매칭은 AiRecommender.vue 의 MODEL_META["image"] 경로로 연결
 - 없으면 ph-car-profile 아이콘 fallback
 
-[현재 보유 — 17/24]
+[현재 보유 — 20/24]
 
 기아 (10) — kia.com 공식 SSR 에서 자동 수집
   morning.jpg / ray.jpg / k5.jpg / k8.jpg / k9.jpg
@@ -14,13 +14,12 @@
 제네시스 (5) — genesis.com 공식 SSR 에서 자동 수집
   g70.jpg / g80.jpg / g90.jpg / gv70.jpg / gv80.jpg
 
-현대 (2 + 1) — 사용자 드롭 1종, wikimedia 2종
-  grandeur.jpg (KV — 사용자 제공)
-  avante.jpg / sonata.jpg / venue.jpg / casper.jpg / palisade.jpg (wikimedia)
+현대 (5) — KV 사용자 드롭 4종 + wikimedia 3종
+  grandeur.jpg / kona.jpg / sonata.jpg / casper.jpg (KV — 사용자 제공)
+  avante.jpg / venue.jpg / palisade.jpg (wikimedia)
 
-[추가로 떨궈주실 4종 — Hyundai SPA 라 자동 수집 불가]
+[추가로 떨궈주실 3종 — Hyundai SPA 라 자동 수집 불가]
 
-  kona.jpg     ← hyundai.com 코나 → SX2 페이지 KV
   tucson.jpg   ← hyundai.com 투싼 → NX4 페이지 KV
   santafe.jpg  ← hyundai.com 디 올 뉴 싼타페 → MX5 페이지 KV
   porter.jpg   ← hyundai.com 포터II 페이지 KV
