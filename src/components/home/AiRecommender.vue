@@ -6,6 +6,7 @@ import { ref, computed, onMounted } from 'vue';
 import { calcQuote } from '../../lib/calc.js';
 import { DELIVERY_REGIONS, TINT_PRICES } from '../../data/lookups.js';
 import { fmt } from '../../lib/format.js';
+import { MODEL_SLUG } from '../../lib/slug.js';
 
 const DEFAULT_DELIVERY_FEE = (DELIVERY_REGIONS['광역시']?.['서울']) || 0;
 const DEFAULT_TINT_FEE = (() => {
@@ -267,21 +268,14 @@ function submit() {
 }
 function reset() { submitted.value = false; }
 
-function slugify(model) {
-  return (model || '')
-    .toLowerCase()
-    .replace(/디\s+올\s+뉴\s+/g, '')
-    .replace(/더\s+뉴\s+/g, '')
-    .replace(/hybrid/i, 'hev')
-    .replace(/\s+/g, '-')
-    .replace(/[^\w가-힣-]/g, '');
-}
 function goToGuide(p) {
   if (!p) return;
-  // 차종 가이드 섹션 (앵커) — 추후 /guide/{slug} 전용 페이지로 확장 가능
-  const slug = slugify(p.row.model);
-  document.getElementById('guide-' + slug)?.scrollIntoView({ behavior: 'smooth' })
-    || document.getElementById('lineup')?.scrollIntoView({ behavior: 'smooth' });
+  const slug = MODEL_SLUG[p.row.model];
+  if (slug) {
+    location.href = `/guide.html?slug=${slug}`;
+  } else {
+    document.getElementById('lineup')?.scrollIntoView({ behavior: 'smooth' });
+  }
 }
 
 function goToContact(p) {

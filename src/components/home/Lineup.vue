@@ -4,6 +4,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { calcQuote } from '../../lib/calc.js';
 import { fmt } from '../../lib/format.js';
+import { MODEL_SLUG } from '../../lib/slug.js';
 
 // 4종 picks — 인기 차종 + 블로그 스타일 추천 컬럼
 // 차량 이미지는 /public/cars/{slug}.jpg 에 직접 드롭 (없으면 SVG fallback)
@@ -86,9 +87,13 @@ function goToContact(card) {
   document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
 }
 
-function goToQuote(card) {
-  // 추후: 견적 위젯에 사전 선택 hook 가능. 일단 quote 섹션 스크롤
-  document.getElementById('quote')?.scrollIntoView({ behavior: 'smooth' });
+function goToGuide(card) {
+  const slug = MODEL_SLUG[card.model];
+  if (slug) {
+    location.href = `/guide.html?slug=${slug}`;
+  } else {
+    document.getElementById('quote')?.scrollIntoView({ behavior: 'smooth' });
+  }
 }
 </script>
 
@@ -136,8 +141,8 @@ function goToQuote(card) {
         </div>
 
         <div class="lu-card__actions">
-          <button class="lu-card__btn lu-card__btn--ghost" @click="goToQuote(c)">
-            <i class="ph ph-calculator"></i> 견적 더 보기
+          <button class="lu-card__btn lu-card__btn--ghost" @click="goToGuide(c)">
+            <i class="ph ph-book-open"></i> 차량 가이드
           </button>
           <button class="lu-card__btn lu-card__btn--primary" @click="goToContact(c)">
             <i class="ph ph-chat-circle-dots"></i> 상담 신청

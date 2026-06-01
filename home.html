@@ -440,6 +440,30 @@
       .section__sub { font-size: 14.5px; margin-bottom: 36px; }
     }
 
+    /* === Lineup → 전체 차종 가이드 보기 CTA === */
+    .lineup-more {
+      margin-top: 36px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .lineup-more__btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 26px;
+      background: var(--ink-1); color: #fff;
+      border-radius: var(--radius-pill);
+      font-size: 14.5px; font-weight: 700;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      transition: background var(--t-fast), transform var(--t-fast);
+    }
+    .lineup-more__btn:hover { background: var(--brand); transform: translateY(-1px); }
+    .lineup-more__btn i { font-size: 16px; }
+    .lineup-more__btn i:last-child { font-size: 14px; opacity: 0.7; }
+    .lineup-more__sub {
+      margin: 0;
+      font-size: 12.5px; color: var(--ink-4);
+      letter-spacing: -0.01em;
+    }
+
     /* === Why grid === */
     .why-grid {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
@@ -762,9 +786,10 @@
         <img src="/welrix-ci.png" alt="웰릭스 모빌리티" />
       </a>
       <div class="topnav__menu">
+        <a href="/vehicles.html">차량 가이드</a>
         <a href="#lineup">인기 차종</a>
         <a href="#quote">즉시 견적</a>
-        <a href="#guide">이용 안내</a>
+        <a href="#steps">이용 안내</a>
         <a href="#contact">상담 신청</a>
       </div>
       <a class="topnav__cta" href="#contact">
@@ -925,15 +950,16 @@
       <h2 class="section__title">지금 인기 있는 차종</h2>
       <p class="section__sub">월 부담을 한눈에. 표시 가격은 표준 조건(중신용·보증금 10%·60개월) 기준입니다.</p>
       <div id="lineup-root"></div>
-    </div>
-  </section>
 
-  <!-- 전체 차종 인덱스 (Vue mounted) -->
-  <section class="section" id="guide">
-    <div class="container">
-      <h2 class="section__title">차종별 상세 가이드</h2>
-      <p class="section__sub">트림별 견적·연비·세금·리뷰까지 한 번에. 카드를 누르면 차종별 상세 페이지로 이동합니다.</p>
-      <div id="vehicle-index-root"></div>
+      <!-- 전체 차종 보기 (vehicles.html 로 이동) -->
+      <div class="lineup-more">
+        <a class="lineup-more__btn" href="/vehicles.html">
+          <i class="ph ph-list-magnifying-glass"></i>
+          전체 25종 차량 가이드 보기
+          <i class="ph ph-arrow-right"></i>
+        </a>
+        <p class="lineup-more__sub">트림별 견적, 연비·세금·보험료, 디자인 평가, 유튜브 리뷰까지 한 번에.</p>
+      </div>
     </div>
   </section>
 
@@ -1068,10 +1094,10 @@
             onclick="document.getElementById('mobile-menu').classList.remove('is-open')">
       <i class="ph ph-x"></i>
     </button>
-    <a href="#why" onclick="document.getElementById('mobile-menu').classList.remove('is-open')">전문가 플랜</a>
+    <a href="/vehicles.html">차량 가이드</a>
     <a href="#lineup" onclick="document.getElementById('mobile-menu').classList.remove('is-open')">인기 차종</a>
     <a href="#quote" onclick="document.getElementById('mobile-menu').classList.remove('is-open')">즉시 견적</a>
-    <a href="#guide" onclick="document.getElementById('mobile-menu').classList.remove('is-open')">이용 안내</a>
+    <a href="#steps" onclick="document.getElementById('mobile-menu').classList.remove('is-open')">이용 안내</a>
     <a href="#contact" onclick="document.getElementById('mobile-menu').classList.remove('is-open')">상담 신청</a>
   </div>
 

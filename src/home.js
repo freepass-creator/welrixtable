@@ -5,7 +5,6 @@ import { createApp } from 'vue';
 import QuoteWidget from './components/home/QuoteWidget.vue';
 import LeadForm from './components/home/LeadForm.vue';
 import Lineup from './components/home/Lineup.vue';
-import VehicleIndex from './components/home/VehicleIndex.vue';
 import AiRecommender from './components/home/AiRecommender.vue';
 
 function mountOne(id, Component, label) {
@@ -22,7 +21,6 @@ function mountAll() {
     return;
   }
   mountOne('lineup-root', Lineup, 'Lineup');
-  mountOne('vehicle-index-root', VehicleIndex, 'VehicleIndex');
   mountOne('ai-recommender-root', AiRecommender, 'AiRecommender');
   mountOne('quote-widget-root', QuoteWidget, 'QuoteWidget');
   mountOne('lead-form-root', LeadForm, 'LeadForm');
