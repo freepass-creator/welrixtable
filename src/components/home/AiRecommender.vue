@@ -149,12 +149,6 @@ function goToContact(rec) {
     <div class="ai-wrap">
       <!-- 왼쪽: 폼 -->
       <div class="ai-form">
-        <div class="ai-eyebrow">
-          <i class="ph ph-sparkle"></i> AI 차종 추천
-        </div>
-        <h3 class="ai-title">3가지만 알려주세요</h3>
-        <p class="ai-sub">나이대 · 가족 구성 · 월 소득 입력하면<br>당신에게 딱 맞는 차종 3대를 추천합니다.</p>
-
         <div class="ai-field">
           <label class="ai-label">나이대</label>
           <div class="ai-chips">
