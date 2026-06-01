@@ -377,16 +377,28 @@ function goToContact(p) {
         </button>
       </div>
 
-    </div>
-
-    <!-- 결과: 히어로 아래 별도 섹션으로 Teleport -->
-    <Teleport to="#ai-result-anchor">
-      <div class="ai-result-out" :class="{ 'is-shown': submitted }">
+      <!-- 결과: 폼 우측에 같이 (2분할) -->
+      <div class="ai-result-col">
         <div class="ai-result">
         <div v-if="!submitted" class="ai-result__empty">
-          <i class="ph ph-magic-wand"></i>
-          <h4>당신만의 추천 차종</h4>
-          <p>왼쪽에서 정보를 입력하고 <b>'AI 추천 받기'</b>를 누르면<br>딱 맞는 차종이 여기 표시됩니다.</p>
+          <div class="ai-result__empty-art">
+            <i class="ph ph-sparkle ai-result__empty-sparkle ai-result__empty-sparkle--1"></i>
+            <i class="ph ph-car-profile ai-result__empty-car"></i>
+            <i class="ph ph-sparkle ai-result__empty-sparkle ai-result__empty-sparkle--2"></i>
+            <i class="ph ph-sparkle ai-result__empty-sparkle ai-result__empty-sparkle--3"></i>
+          </div>
+          <h4>당신에게 어울리는 신차 <em>3대</em></h4>
+          <p>왼쪽에서 5가지를 알려주시면<br>AI가 매칭률 높은 순으로 골라드려요.</p>
+
+          <div class="ai-result__empty-steps">
+            <div class="ai-result__empty-step"><b>1</b> 나이·성별</div>
+            <div class="ai-result__empty-step"><b>2</b> 라이프스타일</div>
+            <div class="ai-result__empty-step"><b>3</b> 주된 용도</div>
+            <div class="ai-result__empty-step"><b>4</b> 월 소득</div>
+            <div class="ai-result__empty-step ai-result__empty-step--last">
+              <b><i class="ph ph-sparkle"></i></b> AI 추천 받기
+            </div>
+          </div>
         </div>
 
         <div v-else-if="!topPick" class="ai-result__empty">
@@ -475,7 +487,8 @@ function goToContact(p) {
         </template>
         </div>
       </div>
-    </Teleport>
+
+    </div>
   </div>
 </template>
 
@@ -483,20 +496,32 @@ function goToContact(p) {
 .ai { width: 100%; }
 
 .ai-wrap {
-  display: flex; flex-direction: column; gap: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 18px;
   background: var(--bg);
-  border-radius: 18px;
-  padding: 20px 22px;
+  border-radius: 20px;
+  padding: 22px;
   box-shadow:
     0 20px 50px rgba(0,0,0,0.07),
     0 4px 12px rgba(0,0,0,0.05);
   border: 1px solid var(--line);
 }
 @media (max-width: 980px) {
-  .ai-wrap { padding: 18px 18px; gap: 12px; }
+  .ai-wrap { grid-template-columns: 1fr; padding: 18px; gap: 16px; }
 }
 @media (max-width: 540px) {
-  .ai-wrap { padding: 16px 16px; border-radius: 14px; }
+  .ai-wrap { padding: 16px; border-radius: 14px; }
+}
+
+.ai-form {
+  background: var(--bg-soft);
+  border-radius: 14px;
+  padding: 20px;
+}
+.ai-result-col {
+  display: flex;
+  flex-direction: column;
 }
 
 /* 결과 — Teleport 된 히어로 아래 섹션 */
@@ -630,27 +655,96 @@ function goToContact(p) {
 
 /* === 결과 === */
 .ai-result {
-  background: var(--bg-soft);
+  background:
+    radial-gradient(circle at 50% 20%, rgba(225, 20, 30, 0.04) 0%, transparent 60%),
+    var(--bg-soft);
   border-radius: 14px;
   padding: 22px;
-  display: flex; flex-direction: column; gap: 16px;
-  min-height: 480px;
+  display: flex; flex-direction: column;
+  min-height: 100%;
+  flex: 1;
 }
 .ai-result__empty {
   flex: 1;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 60px 16px;
+  text-align: center; padding: 28px 12px;
   color: var(--ink-3);
 }
-.ai-result__empty i {
-  font-size: 52px; color: var(--brand);
-  margin-bottom: 14px; opacity: 0.85;
+.ai-result__empty-art {
+  position: relative;
+  width: 120px; height: 110px;
+  margin-bottom: 14px;
 }
+.ai-result__empty-car {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 64px; color: var(--ink-1);
+  opacity: 0.92;
+}
+.ai-result__empty-sparkle {
+  position: absolute;
+  color: var(--brand);
+  animation: ai-twinkle 2.4s ease-in-out infinite;
+}
+.ai-result__empty-sparkle--1 {
+  top: 0; left: 12px; font-size: 22px;
+  animation-delay: 0s;
+}
+.ai-result__empty-sparkle--2 {
+  top: 10px; right: 6px; font-size: 18px;
+  animation-delay: 0.6s;
+}
+.ai-result__empty-sparkle--3 {
+  bottom: 4px; right: 28px; font-size: 14px;
+  animation-delay: 1.2s;
+}
+@keyframes ai-twinkle {
+  0%, 100% { opacity: 0.4; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
 .ai-result__empty h4 {
-  margin: 0 0 8px; font-size: 18px; font-weight: 700;
-  color: var(--ink-1); letter-spacing: -0.02em;
+  margin: 0 0 6px; font-size: 20px; font-weight: 800;
+  color: var(--ink-1); letter-spacing: -0.025em;
 }
-.ai-result__empty p { margin: 0; font-size: 13px; line-height: 1.7; }
+.ai-result__empty h4 em {
+  font-style: normal; color: var(--brand);
+}
+.ai-result__empty p {
+  margin: 0 0 22px; font-size: 13px; line-height: 1.7;
+}
+
+.ai-result__empty-steps {
+  display: flex; flex-direction: column; gap: 6px;
+  width: 100%; max-width: 260px;
+}
+.ai-result__empty-step {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 12px; font-weight: 600; color: var(--ink-2);
+  text-align: left;
+  letter-spacing: -0.01em;
+}
+.ai-result__empty-step b {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px;
+  background: var(--bg-soft);
+  color: var(--ink-3);
+  border-radius: 50%;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px; font-weight: 800;
+  flex-shrink: 0;
+}
+.ai-result__empty-step--last {
+  background: var(--ink-1); color: #fff; border-color: var(--ink-1);
+}
+.ai-result__empty-step--last b {
+  background: var(--brand); color: #fff;
+}
+.ai-result__empty-step--last b i { font-size: 11px; }
 
 /* 페르소나 요약 */
 .ai-persona {
