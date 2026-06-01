@@ -1,1 +1,35 @@
-차량 이미지 폴더\n=================\n\n파일명 규칙:\n- /public/cars/casper.png\n- /public/cars/palisade.png\n- /public/cars/carnival.png\n- /public/cars/g80.png\n\n제조사 공식 PNG 다운로드 후 파일명 맞춰 저장.\n없으면 ph-car-profile 아이콘 fallback.
+차량 이미지 폴더
+=================
+
+파일명 규칙 (필수): /public/cars/{slug}.jpg
+- 자동 매칭은 AiRecommender.vue 의 MODEL_META["image"] 경로로 연결
+- 없으면 ph-car-profile 아이콘 fallback
+
+[현재 보유 — 17/24]
+
+기아 (10) — kia.com 공식 SSR 에서 자동 수집
+  morning.jpg / ray.jpg / k5.jpg / k8.jpg / k9.jpg
+  niro.jpg / seltos.jpg / sportage.jpg / sorento.jpg / carnival.jpg
+
+제네시스 (5) — genesis.com 공식 SSR 에서 자동 수집
+  g70.jpg / g80.jpg / g90.jpg / gv70.jpg / gv80.jpg
+
+현대 (2 + 1) — 사용자 드롭 1종, wikimedia 2종
+  grandeur.jpg (KV — 사용자 제공)
+  avante.jpg / sonata.jpg / venue.jpg / casper.jpg / palisade.jpg (wikimedia)
+
+[추가로 떨궈주실 4종 — Hyundai SPA 라 자동 수집 불가]
+
+  kona.jpg     ← hyundai.com 코나 → SX2 페이지 KV
+  tucson.jpg   ← hyundai.com 투싼 → NX4 페이지 KV
+  santafe.jpg  ← hyundai.com 디 올 뉴 싼타페 → MX5 페이지 KV
+  porter.jpg   ← hyundai.com 포터II 페이지 KV
+
+수집 방법: 모델 페이지 들어가서 메인 KV 이미지 우클릭 → "이미지 저장"
+포맷: AVIF / JPG / PNG 다 OK (브라우저는 다 지원)
+권장 사이즈: 가로 1000px 이상
+
+[수집 스크립트]
+scripts/fetch-car-images.py — Wikimedia 일괄 (rate-limit 주의)
+scripts/fetch-kia.py        — kia.com SSR 일괄 (10종)
+scripts/fetch-genesis.py    — genesis.com SSR 일괄 (5종)
