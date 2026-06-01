@@ -4,7 +4,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { calcQuote } from '../../lib/calc.js';
 import { fmt } from '../../lib/format.js';
-import { SLUG_META, SLUG_BASE_MODEL } from '../../lib/slug.js';
+import { SLUG_META, SLUG_BASE_MODEL, imageOf } from '../../lib/slug.js';
 import { STORIES } from './stories.js';
 import { YOUTUBE_PICKS } from './youtube.js';
 
@@ -31,8 +31,7 @@ const meta = computed(() => {
     ...m,
     slug: props.slug,
     model: SLUG_BASE_MODEL[props.slug],
-    image: `/cars/${props.slug}.png`,
-    imageFallback: `/cars/${props.slug}.jpg`,
+    image: imageOf(props.slug),
     story: STORIES[props.slug] || null,
     youtube: YOUTUBE_PICKS[props.slug] || [],
   };

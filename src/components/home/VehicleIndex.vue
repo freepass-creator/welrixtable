@@ -4,7 +4,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { calcQuote } from '../../lib/calc.js';
 import { fmt } from '../../lib/format.js';
-import { SLUG_META, SLUG_BASE_MODEL, ALL_SLUGS } from '../../lib/slug.js';
+import { SLUG_META, SLUG_BASE_MODEL, ALL_SLUGS, imageOf } from '../../lib/slug.js';
 
 const vehicles = ref([]);
 const loading = ref(true);
@@ -55,8 +55,7 @@ const items = computed(() => {
       monthly,
       price,
       trimCount,
-      image: `/cars/${slug}.png`,
-      imageFallback: `/cars/${slug}.jpg`,
+      image: imageOf(slug),
     };
   });
   return arr;
@@ -72,13 +71,8 @@ const grouped = computed(() => {
 });
 
 function onImgError(e, item) {
-  // .png 실패 시 .jpg 시도
-  if (e.target.src.endsWith('.png')) {
-    e.target.src = item.imageFallback;
-  } else {
-    e.target.style.display = 'none';
-    e.target.parentElement.classList.add('vi-card__visual--fallback');
-  }
+  e.target.style.display = 'none';
+  e.target.parentElement.classList.add('vi-card__visual--fallback');
 }
 </script>
 
@@ -93,8 +87,8 @@ function onImgError(e, item) {
         <a v-for="it in g.list" :key="it.slug"
            class="vi-card"
            :href="`/guide.html?slug=${it.slug}`">
-          <div class="vi-card__visual">
-            <img :src="it.image" :alt="it.model" class="vi-card__img"
+          <div class="vi-card__visual" :class="{ 'vi-card__visual--fallback': !it.image }">
+            <img v-if="it.image" :src="it.image" :alt="it.model" class="vi-card__img"
                  @error="(e) => onImgError(e, it)" />
             <i class="ph ph-car-profile vi-card__fallback-icon"></i>
           </div>

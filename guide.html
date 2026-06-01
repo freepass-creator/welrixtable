@@ -69,12 +69,26 @@
     }
     .gn-back:hover { background: var(--bg-soft); }
     .gn-back i { font-size: 14px; }
-    .gn-brand {
+    .gn-menu {
       margin-left: auto;
-      font-size: 12px; font-weight: 700; color: var(--ink-2);
-      letter-spacing: -0.01em;
+      display: flex; align-items: center; gap: 18px;
     }
-    .gn-brand b { color: var(--brand); }
+    .gn-menu a {
+      font-size: 13px; font-weight: 600; color: var(--ink-3);
+      transition: color var(--t-fast);
+    }
+    .gn-menu a:hover { color: var(--ink-1); }
+    .gn-menu a.is-cta {
+      padding: 6px 14px;
+      background: var(--brand); color: #fff;
+      border-radius: 999px;
+      font-size: 12px; font-weight: 700;
+    }
+    .gn-menu a.is-cta:hover { background: var(--brand-700); }
+    @media (max-width: 720px) {
+      .gn-menu { gap: 10px; }
+      .gn-menu a:not(.is-cta) { display: none; }
+    }
 
     /* === Detail mount === */
     #guide-root { padding-bottom: 48px; }
@@ -92,10 +106,16 @@
 <body>
   <nav class="gn-bar">
     <div class="gn-inner">
-      <a class="gn-back" href="/home.html#guide">
-        <i class="ph ph-arrow-left"></i> 전체 차종으로
+      <a class="gn-back" href="/vehicles.html">
+        <i class="ph ph-arrow-left"></i> 차량 가이드
       </a>
-      <div class="gn-brand"><b>웰릭스</b> 모빌리티 · 차종 가이드</div>
+      <div class="gn-menu">
+        <a href="/home.html#quote">즉시 견적</a>
+        <a href="/home.html#lineup">인기 차종</a>
+        <a href="/home.html#contact" class="is-cta">
+          <i class="ph ph-chat-circle-dots"></i> 상담 신청
+        </a>
+      </div>
     </div>
   </nav>
 
