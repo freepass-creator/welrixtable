@@ -19,8 +19,11 @@
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="apple-touch-icon" href="/welrix-icon-192.png" />
 
-  <!-- Fonts + Icons -->
-  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet" />
+  <!-- Fonts + Icons (Pretendard Variable + 영문 보조 Inter) -->
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
 
   <!-- Vehicle DB SSOT (PC/모바일/홈 공유) -->
@@ -58,10 +61,19 @@
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body {
       margin: 0; padding: 0;
-      font-family: 'Pretendard', -apple-system, 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Pretendard Variable', 'Pretendard', -apple-system, 'Apple SD Gothic Neo', sans-serif;
       color: var(--ink-1); background: var(--bg);
       font-size: 15px; line-height: 1.55;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      letter-spacing: -0.01em;
+      text-rendering: optimizeLegibility;
+    }
+    /* 숫자는 Inter 로 (영문 + 숫자 미세 차이) */
+    .tabular, .num {
+      font-family: 'Inter', 'Pretendard Variable', sans-serif;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: 'tnum' 1;
     }
     a { color: inherit; text-decoration: none; }
     button { font-family: inherit; cursor: pointer; }
@@ -215,78 +227,104 @@
     }
     .hero__pill i { font-size: 13px; color: var(--brand); }
 
-    /* 우측 견적 카드 */
-    .hero__card {
-      background: #fff; color: var(--ink-1);
-      border-radius: 20px;
-      padding: 28px 28px 24px;
-      box-shadow:
-        0 24px 60px rgba(225, 20, 30, 0.08),
-        0 8px 24px rgba(0,0,0,0.06),
-        0 2px 4px rgba(0,0,0,0.04);
-      display: flex; flex-direction: column; gap: 16px;
+    /* === 히어로 featured: 차 SVG + 스펙 블록 (CARTWO 톤) === */
+    .hero__feature {
       position: relative;
-      max-width: 420px; width: 100%; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 24px;
+      align-items: center;
+    }
+    .hero__car {
+      position: relative;
+      width: 100%; max-width: 460px;
+      padding: 20px 0 30px;
+    }
+    .hero__car::before {
+      content: '';
+      position: absolute; inset: 10% -5% 15% -5%;
+      background: radial-gradient(ellipse at center, var(--brand) 0%, transparent 70%);
+      opacity: 0.18;
+      filter: blur(20px);
+      z-index: 0;
+    }
+    .hero__car-svg, .hero__car-img {
+      position: relative; z-index: 1;
+      width: 100%; height: auto;
+      filter: drop-shadow(0 18px 30px rgba(0,0,0,0.22));
+    }
+    .hero__car-img { max-height: 280px; object-fit: contain; }
+    .hero__car-shadow {
+      position: absolute; bottom: 18px; left: 8%; right: 8%;
+      height: 16px;
+      background: radial-gradient(ellipse, rgba(0,0,0,0.25) 0%, transparent 70%);
+      filter: blur(6px);
+    }
+
+    /* 스펙 블록 */
+    .hero__spec {
+      width: 100%; max-width: 480px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 26px 26px 22px;
+      box-shadow: 0 20px 50px rgba(225, 20, 30, 0.08), 0 4px 14px rgba(0,0,0,0.05);
       border: 1px solid var(--line);
+      display: flex; flex-direction: column; gap: 16px;
     }
-    .hero__card::before {
-      content: ''; position: absolute; top: -1px; left: -1px; right: -1px; bottom: -1px;
-      background: linear-gradient(135deg, rgba(225, 20, 30, 0.25), transparent 50%);
-      border-radius: 21px; z-index: -1; pointer-events: none;
+    .hero__spec-meta {
+      display: flex; align-items: baseline; gap: 8px;
+      font-size: 12px;
     }
-    .hero__card-tag {
-      display: inline-flex; align-items: center; gap: 5px;
-      background: var(--ink-1); color: #fff;
-      padding: 4px 10px; border-radius: var(--radius-pill);
-      font-size: 10.5px; font-weight: 700; letter-spacing: 0.3px;
-      align-self: flex-start;
-    }
-    .hero__card-vehicle {
-      font-size: 11px; color: var(--ink-4); font-weight: 500;
-      letter-spacing: 0.3px;
-    }
-    .hero__card-model {
-      font-size: 22px; font-weight: 800; color: var(--ink-1);
-      letter-spacing: -0.3px;
-      margin-top: -8px;
-    }
-    .hero__card-monthly-block {
-      background: linear-gradient(135deg, var(--brand-50) 0%, #fff 100%);
-      border-radius: 12px;
-      padding: 18px 20px;
-    }
-    .hero__card-monthly-label {
-      font-size: 11.5px; color: var(--ink-3); font-weight: 500;
+    .hero__spec-brand {
+      color: var(--ink-4); font-weight: 600;
       letter-spacing: 0.2px;
     }
-    .hero__card-monthly {
-      display: flex; align-items: baseline; gap: 3px;
-      margin-top: 4px;
-      font-variant-numeric: tabular-nums;
+    .hero__spec-name {
+      color: var(--ink-1); font-weight: 800;
+      font-size: 15px; letter-spacing: -0.2px;
     }
-    .hero__card-monthly-num {
-      font-size: 38px; font-weight: 800; color: var(--ink-1);
-      letter-spacing: -0.04em; line-height: 1;
+    .hero__spec-headline {
+      margin: 0; font-size: 22px; font-weight: 800;
+      letter-spacing: -0.4px; line-height: 1.3;
+      color: var(--ink-1);
     }
-    .hero__card-monthly small {
-      font-size: 14px; color: var(--ink-3); font-weight: 500;
+    .hero__spec-blurb {
+      margin: 0; font-size: 13.5px; color: var(--ink-3); line-height: 1.65;
     }
-    .hero__card-rows {
-      display: flex; flex-direction: column; gap: 6px;
+    .hero__spec-blurb b { color: var(--ink-1); font-weight: 700; }
+
+    .hero__spec-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
     }
-    .hero__card-row {
-      display: flex; justify-content: space-between;
-      font-size: 12px; color: var(--ink-3);
-      padding: 5px 0;
-      border-bottom: 1px dashed var(--line);
+    .hero__spec-cell {
+      background: var(--bg-soft);
+      border-radius: var(--radius-sm);
+      padding: 12px 10px;
+      display: flex; flex-direction: column; gap: 4px;
     }
-    .hero__card-row:last-child { border-bottom: 0; }
-    .hero__card-row b { color: var(--ink-1); font-weight: 600; font-variant-numeric: tabular-nums; }
-    .hero__card-row .pill {
-      background: var(--brand-50); color: var(--brand);
-      padding: 1px 7px; border-radius: var(--radius-pill);
-      font-size: 10.5px; font-weight: 700;
+    .hero__spec-cell--brand {
+      background: linear-gradient(135deg, var(--brand) 0%, #ff5862 100%);
+      color: #fff;
     }
+    .hero__spec-label {
+      font-size: 10px; color: var(--ink-4); font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+    .hero__spec-cell--brand .hero__spec-label { color: rgba(255,255,255,0.85); }
+    .hero__spec-val {
+      font-size: 14.5px; font-weight: 800; color: var(--ink-1);
+      letter-spacing: -0.3px; font-variant-numeric: tabular-nums;
+    }
+    .hero__spec-cell--brand .hero__spec-val { color: #fff; }
+    .hero__spec-val small {
+      font-size: 10px; font-weight: 500; color: var(--ink-4);
+    }
+    .hero__spec-cell--brand .hero__spec-val small { color: rgba(255,255,255,0.85); }
+
+    .hero__spec-note {
+      font-size: 10.5px; color: var(--ink-4); line-height: 1.5;
+      padding: 8px 0 0;
+      border-top: 1px dashed var(--line);
+    }
+
     .hero__card-cta {
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
       background: var(--ink-1); color: #fff;
@@ -299,6 +337,9 @@
     }
     .hero__card-cta:hover { background: var(--brand); }
     .hero__card-cta i { font-size: 16px; }
+    @media (max-width: 480px) {
+      .hero__spec-grid { grid-template-columns: repeat(2, 1fr); }
+    }
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 14px 26px;
@@ -735,27 +776,70 @@
         </div>
       </div>
 
-      <!-- 우측: 견적 미리보기 카드 -->
-      <div class="hero__card">
-        <span class="hero__card-tag">★ 베스트 픽</span>
-        <div class="hero__card-vehicle">현대 · 인기 차종</div>
-        <div class="hero__card-model">더 뉴 캐스퍼</div>
-        <div class="hero__card-monthly-block">
-          <div class="hero__card-monthly-label">60개월 월 대여료부터</div>
-          <div class="hero__card-monthly">
-            <span class="hero__card-monthly-num">220,000</span>
-            <small>원/월</small>
+      <!-- 우측: 차량 비주얼 + 스펙 블록 (CARTWO 톤) -->
+      <div class="hero__feature">
+        <!-- 차량 이미지: 제조사 공식 PNG 우선, 실패 시 SVG 실루엣 fallback -->
+        <div class="hero__car">
+          <img class="hero__car-img"
+               src="https://www.hyundai.com/content/dam/hyundai/wcvi/kr/cars/lx3/highlights/lx3-hero.png"
+               alt="디 올 뉴 팰리세이드"
+               onerror="this.style.display='none'; document.getElementById('hero-car-fallback').style.display='block';" />
+          <svg id="hero-car-fallback" class="hero__car-svg" style="display:none;"
+               viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg"
+               aria-label="vehicle silhouette">
+            <defs>
+              <linearGradient id="carGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#2a2a2a" />
+                <stop offset="100%" stop-color="#0a0a0a" />
+              </linearGradient>
+            </defs>
+            <path d="M30 110 L65 105 C75 70, 95 60, 130 58 L240 58 C275 60, 295 75, 305 100 L330 108 L335 120 L325 130 L295 132 C290 142, 280 148, 268 148 C256 148, 246 142, 241 132 L119 132 C114 142, 104 148, 92 148 C80 148, 70 142, 65 132 L35 130 L25 122 Z" fill="url(#carGrad)" />
+            <path d="M75 95 L88 70 C95 65, 105 63, 120 63 L160 63 L170 95 Z" fill="rgba(255,255,255,0.15)" />
+            <path d="M180 95 L175 63 L225 63 C245 63, 260 70, 268 95 Z" fill="rgba(255,255,255,0.15)" />
+            <circle cx="92" cy="132" r="18" fill="#0a0a0a" />
+            <circle cx="92" cy="132" r="10" fill="#1a1a1a" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" />
+            <circle cx="268" cy="132" r="18" fill="#0a0a0a" />
+            <circle cx="268" cy="132" r="10" fill="#1a1a1a" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" />
+          </svg>
+          <div class="hero__car-shadow"></div>
+        </div>
+
+        <!-- 스펙 블록 (CARTWO 스타일) -->
+        <div class="hero__spec">
+          <div class="hero__spec-meta">
+            <span class="hero__spec-brand">[현대]</span>
+            <span class="hero__spec-name">디 올 뉴 팰리세이드</span>
           </div>
+          <h3 class="hero__spec-headline">가족과 함께, 어디든.</h3>
+          <p class="hero__spec-blurb">
+            7인승 풀옵션 가족 SUV. 통풍·열선 시트, 어드밴스드 안전 패키지 기본 탑재.
+            <b>여행·등하원·출퇴근 모두 만족</b>하는 대형 SUV의 표준.
+          </p>
+          <div class="hero__spec-grid">
+            <div class="hero__spec-cell">
+              <span class="hero__spec-label">추천 연령대</span>
+              <b class="hero__spec-val">30~40대</b>
+            </div>
+            <div class="hero__spec-cell">
+              <span class="hero__spec-label">약정 주행거리</span>
+              <b class="hero__spec-val">2만km<small>/년</small></b>
+            </div>
+            <div class="hero__spec-cell">
+              <span class="hero__spec-label">약정 기간</span>
+              <b class="hero__spec-val">60<small>개월</small></b>
+            </div>
+            <div class="hero__spec-cell hero__spec-cell--brand">
+              <span class="hero__spec-label">월 렌탈료</span>
+              <b class="hero__spec-val">759,000<small>원~</small></b>
+            </div>
+          </div>
+          <div class="hero__spec-note">
+            ※ 중신용 · 보증금 10% · 선납 0% 기준. 차량 옵션·계약 조건에 따라 변동.
+          </div>
+          <a class="hero__card-cta" href="#contact">
+            <i class="ph ph-chat-circle-dots"></i> 이 차로 상담 신청
+          </a>
         </div>
-        <div class="hero__card-rows">
-          <div class="hero__card-row"><span>약정 주행거리</span><b>2만km/년</b></div>
-          <div class="hero__card-row"><span>보증금</span><b>10%</b></div>
-          <div class="hero__card-row"><span>포함</span><b>보험료 · 자동차세</b></div>
-          <div class="hero__card-row"><span>심사 기준</span><span class="pill">소득 기준</span></div>
-        </div>
-        <a class="hero__card-cta" href="#quote">
-          <i class="ph ph-magnifying-glass"></i> 내 차 견적 보기
-        </a>
       </div>
     </div>
   </section>
