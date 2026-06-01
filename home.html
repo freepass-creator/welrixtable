@@ -422,105 +422,80 @@
       .why-card { padding: 24px 20px; }
     }
 
-    /* === Positioning ('왜 우리?' 다크 섹션) === */
-    .positioning {
-      display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px;
-      align-items: center;
+    /* === 약속 섹션 (라이트, 정직 톤) === */
+    .promises__head {
+      text-align: center; max-width: 720px; margin: 0 auto 56px;
     }
-    @media (max-width: 980px) {
-      .positioning { grid-template-columns: 1fr; gap: 40px; }
-    }
-    .positioning__eyebrow {
+    .promises__eyebrow {
       display: inline-block;
       font-size: 12px; font-weight: 700; color: var(--brand);
-      letter-spacing: 0.4px; margin-bottom: 14px;
-      text-transform: uppercase;
+      letter-spacing: 0.3px; text-transform: uppercase;
+      margin-bottom: 14px;
     }
-    .positioning__title {
-      font-size: 42px; font-weight: 800;
-      line-height: 1.15; letter-spacing: -0.04em;
-      color: #fff;
-      margin: 0 0 18px;
+    .promises__title {
+      font-size: 36px; font-weight: 700;
+      line-height: 1.25; letter-spacing: -0.035em;
+      color: var(--ink-1);
+      margin: 0 0 16px;
     }
-    .positioning__title em {
-      font-style: normal;
-      background: linear-gradient(120deg, var(--brand) 0%, #ff5862 100%);
-      -webkit-background-clip: text; background-clip: text;
-      -webkit-text-fill-color: transparent;
+    .promises__title em {
+      font-style: normal; color: var(--brand); font-weight: 800;
     }
-    .positioning__sub {
-      font-size: 16px; color: rgba(255,255,255,0.7);
-      line-height: 1.75; margin: 0 0 30px;
-      letter-spacing: -0.2px;
-    }
-    .positioning__sub b { color: #fff; font-weight: 700; }
-    .positioning__list {
-      display: flex; flex-direction: column; gap: 16px;
-    }
-    .positioning__item {
-      display: flex; gap: 14px; align-items: flex-start;
-      padding: 16px 18px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: var(--radius-md);
-    }
-    .positioning__item i {
-      font-size: 22px; color: var(--brand);
-      flex-shrink: 0; margin-top: 2px;
-    }
-    .positioning__item b {
-      display: block; font-size: 14px; color: #fff; font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .positioning__item span {
-      font-size: 12.5px; color: rgba(255,255,255,0.6);
-      line-height: 1.6;
+    .promises__sub {
+      font-size: 15.5px; font-weight: 400;
+      color: var(--ink-3);
+      line-height: 1.7; letter-spacing: -0.01em;
+      margin: 0;
     }
 
-    /* 비교 카드 */
-    .compare {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    .promises__grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
     }
-    .compare__col {
-      padding: 22px 20px;
-      border-radius: var(--radius-md);
+    @media (max-width: 980px) {
+      .promises__grid { grid-template-columns: repeat(2, 1fr); }
     }
-    .compare__col--ours {
-      background: #fff; color: var(--ink-1);
-      border: 2px solid var(--brand);
-      box-shadow: 0 20px 50px rgba(225, 20, 30, 0.18);
-      transform: translateY(-10px);
+    @media (max-width: 560px) {
+      .promises__grid { grid-template-columns: 1fr; }
     }
-    .compare__col--theirs {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: rgba(255,255,255,0.6);
+
+    .promise {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 28px 24px 26px;
+      position: relative;
+      transition: border-color var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
     }
-    .compare__head { margin-bottom: 18px; }
-    .compare__badge {
-      display: inline-block;
-      font-size: 10.5px; font-weight: 700;
-      padding: 4px 10px; border-radius: var(--radius-pill);
-      letter-spacing: 0.3px;
-      margin-bottom: 6px;
+    .promise:hover {
+      border-color: var(--ink-4);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.06);
     }
-    .compare__badge--ours { background: var(--brand); color: #fff; }
-    .compare__badge--theirs { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
-    .compare__title {
-      font-size: 16px; font-weight: 800; letter-spacing: -0.2px;
+    .promise__num {
+      position: absolute; top: 22px; right: 24px;
+      font-size: 12px; font-weight: 800; color: var(--ink-5);
+      letter-spacing: 0.4px;
+      font-family: 'Inter', sans-serif;
     }
-    .compare__col--ours .compare__title { color: var(--ink-1); }
-    .compare__list {
-      list-style: none; padding: 0; margin: 0;
-      display: flex; flex-direction: column; gap: 10px;
+    .promise__icon {
+      width: 44px; height: 44px;
+      background: var(--bg-soft);
+      border-radius: 12px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 22px; color: var(--brand);
+      margin-bottom: 18px;
     }
-    .compare__list li {
-      display: flex; align-items: flex-start; gap: 8px;
-      font-size: 12.5px; line-height: 1.4;
+    .promise__title {
+      margin: 0 0 8px;
+      font-size: 16px; font-weight: 700;
+      letter-spacing: -0.02em; color: var(--ink-1);
     }
-    .compare__list i { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
-    .compare__col--ours .compare__list i { color: var(--brand); }
-    .compare__col--theirs .compare__list i { color: rgba(255,255,255,0.3); }
+    .promise__desc {
+      margin: 0;
+      font-size: 13px; font-weight: 400;
+      color: var(--ink-3); line-height: 1.65;
+      letter-spacing: -0.005em;
+    }
 
     /* === 계약 절차 4단계 === */
     .steps {
@@ -820,77 +795,59 @@
     </div>
   </section>
 
-  <!-- 포지셔닝: 메이저 그룹 신뢰 + 로컬 대비 합리적 -->
-  <section class="section section--dark" id="why-us">
+  <!-- 약속 (포지셔닝) — 정직한 약속 4가지 -->
+  <section class="section section--soft" id="why-us">
     <div class="container">
-      <div class="positioning">
-        <div class="positioning__left">
-          <span class="positioning__eyebrow">왜 웰릭스 모빌리티?</span>
-          <h2 class="positioning__title">
-            메이저 그룹의 신뢰,<br>
-            <em>합리적인</em> 가격.
-          </h2>
-          <p class="positioning__sub">
-            웰릭스 모빌리티는 <b>웰컴저축은행 계열사</b>입니다.<br>
-            검증된 금융 그룹의 시스템과 서비스 품질,<br>
-            그러나 로컬 렌터카 대비 <b>합리적인 월 부담</b>.
+      <div class="promises__head">
+        <span class="promises__eyebrow">정직한 약속</span>
+        <h2 class="promises__title">
+          소득이 있다면, <em>더 합리적인 길</em>이 있습니다.
+        </h2>
+        <p class="promises__sub">
+          웰컴저축은행 계열의 검증된 시스템을 그대로.<br>
+          숨은 비용 없는 표준 약관 — 신차 장기렌터카가 처음이어도 부담 없이.
+        </p>
+      </div>
+
+      <div class="promises__grid">
+        <div class="promise">
+          <div class="promise__icon"><i class="ph ph-shield-check"></i></div>
+          <div class="promise__num">01</div>
+          <h3 class="promise__title">검증된 금융 계열</h3>
+          <p class="promise__desc">
+            웰컴저축은행 계열 시스템·표준 절차를 그대로 적용.
+            정식 등록된 상담사가 처음부터 끝까지 안내합니다.
           </p>
-          <div class="positioning__list">
-            <div class="positioning__item">
-              <i class="ph ph-shield-check"></i>
-              <div>
-                <b>웰컴저축은행 계열</b>
-                <span>제도권 금융 그룹 — 표준 약관·법적 절차 준수, 안심 결제</span>
-              </div>
-            </div>
-            <div class="positioning__item">
-              <i class="ph ph-currency-krw"></i>
-              <div>
-                <b>로컬 렌터카 대비 합리적</b>
-                <span>대형 그룹 규모로 동일 신차를 더 합리적인 월 부담으로</span>
-              </div>
-            </div>
-            <div class="positioning__item">
-              <i class="ph ph-receipt"></i>
-              <div>
-                <b>꾸준한 소득이 답입니다</b>
-                <span>신용점수보다 안정적인 월 소득 — 직장인·자영업자·프리랜서</span>
-              </div>
-            </div>
-          </div>
         </div>
 
-        <div class="positioning__right">
-          <div class="compare">
-            <div class="compare__col compare__col--ours">
-              <div class="compare__head">
-                <span class="compare__badge compare__badge--ours">웰릭스 모빌리티</span>
-                <div class="compare__title">메이저 그룹</div>
-              </div>
-              <ul class="compare__list">
-                <li><i class="ph ph-check"></i> 웰컴저축은행 계열사</li>
-                <li><i class="ph ph-check"></i> 소득 기준 심사</li>
-                <li><i class="ph ph-check"></i> 보험료·자동차세 포함</li>
-                <li><i class="ph ph-check"></i> 무보증 옵션 가능</li>
-                <li><i class="ph ph-check"></i> 표준 약관, 안심 결제</li>
-                <li><i class="ph ph-check"></i> 36/48/60개월 자유</li>
-              </ul>
-            </div>
-            <div class="compare__col compare__col--theirs">
-              <div class="compare__head">
-                <span class="compare__badge compare__badge--theirs">로컬 렌터카</span>
-                <div class="compare__title">소규모 업체</div>
-              </div>
-              <ul class="compare__list">
-                <li><i class="ph ph-x"></i> 운영 주체 불분명</li>
-                <li><i class="ph ph-x"></i> 심사 기준 모호</li>
-                <li><i class="ph ph-x"></i> 보험·세금 별도 청구</li>
-                <li><i class="ph ph-x"></i> 고액 보증금 요구</li>
-                <li><i class="ph ph-x"></i> 표준 외 계약 조항</li>
-                <li><i class="ph ph-x"></i> 단기 / 제한적 옵션</li>
-              </ul>
-            </div>
-          </div>
+        <div class="promise">
+          <div class="promise__icon"><i class="ph ph-receipt"></i></div>
+          <div class="promise__num">02</div>
+          <h3 class="promise__title">소득 기준 심사</h3>
+          <p class="promise__desc">
+            복잡한 신용 등급 대신 안정적인 월 소득으로 심사.
+            직장인·자영업자·프리랜서 모두 동일한 기준으로.
+          </p>
+        </div>
+
+        <div class="promise">
+          <div class="promise__icon"><i class="ph ph-currency-krw"></i></div>
+          <div class="promise__num">03</div>
+          <h3 class="promise__title">숨은 비용 없는 월 1회</h3>
+          <p class="promise__desc">
+            자동차 보험료·자동차세 포함된 월 1회 통합 납부.
+            출고 후 추가 청구되는 항목이 없습니다.
+          </p>
+        </div>
+
+        <div class="promise">
+          <div class="promise__icon"><i class="ph ph-lock-key"></i></div>
+          <div class="promise__num">04</div>
+          <h3 class="promise__title">법인 계좌 한정 결제</h3>
+          <p class="promise__desc">
+            모든 결제는 법인 계좌로만. 영업사원 개인 계좌 입금은 절대 금지.
+            표준 약관 외 별도 조항 없음.
+          </p>
         </div>
       </div>
     </div>
