@@ -161,68 +161,69 @@ async function onShareNative() {
 }
 
 const imgLoading = ref(false);
-async function onSaveImage() {
-  if (imgLoading.value) return;
+
+// 견적서 이미지(PNG blob) 생성 — 공통 (복사/전송이 같이 씀)
+async function buildQuoteBlob() {
   const v = quoteState.vehicle;
-  if (!v) { errorMsg.value = '차량을 먼저 선택하세요'; return; }
-  errorMsg.value = '';
-  imgLoading.value = true;
+  if (!v) { errorMsg.value = '차량을 먼저 선택하세요'; return null; }
+  const today = new Date();
+  const todayStr = today.toLocaleDateString('ko-KR');
+  const expireStr = new Date(today.getTime() + 7*86400000).toLocaleDateString('ko-KR');
+  const html = buildOfficialQuoteHtml({
+    vehicles: [{
+      ...v,
+      totalKrw: (v.total_manwon || 0) * 10000,
+      monthly: monthlyResults.value.map(r => ({ ...r, term: r.term, monthly: r.monthly, dep: r.dep, depAmt: r.depAmt, pre: r.pre, preAmt: r.preAmt, residualAmt: r.residualAmt, residualPct: r.residualPct })),
+    }],
+    customer: { name: quoteState.cust.name?.trim() || 'VIP 고객님', tel: quoteState.cust.tel },
+    staff: { ...quoteState.staff },
+    cond: { ...quoteState.cond },
+    send: [true, true, true],
+    quoteMeta: { quoteNo: today.toISOString().slice(0,10).replace(/-/g,'') + '-M' + String(Date.now()).slice(-4), todayStr, expireStr },
+    companyConfig: window.__welrix_companyConfig || {},
+    showLogo: quoteState.send_options.showLogo !== false,
+  });
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'position:fixed; left:-9999px; top:0; width:210mm;';
+  wrap.innerHTML = html;
+  document.body.appendChild(wrap);
+  const canvas = await window.html2canvas(wrap.firstElementChild, { scale: 2, backgroundColor: '#fff', useCORS: true });
+  document.body.removeChild(wrap);
+  return await new Promise(r => canvas.toBlob(r, 'image/png'));
+}
+
+// 이미지 바로 전송 — 견적서 이미지 파일을 폰 기본 공유(카톡/문자 등)로
+async function onShareImage() {
+  if (imgLoading.value) return;
+  errorMsg.value = ''; imgLoading.value = true;
   try {
-    // 견적서 HTML 생성 (PC 와 동일)
-    const today = new Date();
-    const todayStr = today.toLocaleDateString('ko-KR');
-    const expireStr = new Date(today.getTime() + 7*86400000).toLocaleDateString('ko-KR');
-    const html = buildOfficialQuoteHtml({
-      vehicles: [{
-        ...v,
-        totalKrw: (v.total_manwon || 0) * 10000,
-        monthly: monthlyResults.value.map(r => ({ ...r, term: r.term, monthly: r.monthly, dep: r.dep, depAmt: r.depAmt, pre: r.pre, preAmt: r.preAmt, residualAmt: r.residualAmt, residualPct: r.residualPct })),
-      }],
-      customer: { name: quoteState.cust.name?.trim() || 'VIP 고객님', tel: quoteState.cust.tel },
-      staff: { ...quoteState.staff },
-      cond: { ...quoteState.cond },
-      send: [true, true, true],
-      quoteMeta: { quoteNo: today.toISOString().slice(0,10).replace(/-/g,'') + '-M' + String(Date.now()).slice(-4), todayStr, expireStr },
-      companyConfig: window.__welrix_companyConfig || {},
-      showLogo: quoteState.send_options.showLogo !== false,
-    });
-
-    // 오프스크린에 렌더 후 html2canvas 캡쳐
-    const wrap = document.createElement('div');
-    wrap.style.cssText = 'position:fixed; left:-9999px; top:0; width:210mm;';
-    wrap.innerHTML = html;
-    document.body.appendChild(wrap);
-    const canvas = await window.html2canvas(wrap.firstElementChild, { scale: 2, backgroundColor: '#fff', useCORS: true });
-    document.body.removeChild(wrap);
-
-    // canvas → blob → clipboard 우선, fallback share/다운로드
-    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
-
-    // 1. clipboard 이미지 (사용자가 카톡에 직접 붙여넣기 가능)
-    if (navigator.clipboard?.write && window.ClipboardItem) {
-      try {
-        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-        alert('이미지 복사 완료 — 카톡 채팅창에 붙여넣기 하세요');
-        return;
-      } catch {}
-    }
-    // 2. 네이티브 공유 (파일 첨부)
-    const file = new File([blob], 'welrix-quote.png', { type: 'image/png' });
+    const blob = await buildQuoteBlob(); if (!blob) return;
+    const file = new File([blob], 'welrix-견적서.png', { type: 'image/png' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], title: '견적서' });
-      return;
+      try { await navigator.share({ files: [file], title: '신차 장기렌터카 견적서' }); return; }
+      catch (e) { if (e && e.name === 'AbortError') return; }
     }
-    // 3. 다운로드
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `welrix-quote-${Date.now()}.png`;
-    a.click();
-    URL.revokeObjectURL(a.href);
-  } catch (e) {
-    errorMsg.value = '이미지 생성 실패: ' + (e?.message || e);
-  } finally {
-    imgLoading.value = false;
-  }
+    // 파일 공유 미지원 → 클립보드 복사로 대체
+    if (navigator.clipboard?.write && window.ClipboardItem) {
+      try { await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]); alert('이 기기는 이미지 바로전송 미지원 — 이미지 복사됨, 카톡에 붙여넣기 하세요'); return; } catch {}
+    }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `welrix-견적서-${Date.now()}.png`; a.click(); URL.revokeObjectURL(a.href);
+  } catch (e) { errorMsg.value = '이미지 생성 실패: ' + (e?.message || e); }
+  finally { imgLoading.value = false; }
+}
+
+// 이미지 복사 — 클립보드 (카톡 채팅창 붙여넣기용)
+async function onCopyImage() {
+  if (imgLoading.value) return;
+  errorMsg.value = ''; imgLoading.value = true;
+  try {
+    const blob = await buildQuoteBlob(); if (!blob) return;
+    if (navigator.clipboard?.write && window.ClipboardItem) {
+      try { await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]); alert('이미지 복사 완료 — 카톡 채팅창에 붙여넣기 하세요'); return; } catch {}
+    }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `welrix-견적서-${Date.now()}.png`; a.click(); URL.revokeObjectURL(a.href);
+  } catch (e) { errorMsg.value = '이미지 생성 실패: ' + (e?.message || e); }
+  finally { imgLoading.value = false; }
 }
 
 function close() { emit('close'); }
@@ -284,25 +285,31 @@ function close() { emit('close'); }
       </label>
 
       <div class="ss-actions">
-        <!-- PRIMARY: 링크 공유 → 핸드폰 공유 시트 (카톡/문자/메모 등 사용자 선택) -->
+        <!-- PRIMARY: 견적서 이미지 → 핸드폰 기본 공유(카톡/문자 등)로 바로 전송 -->
         <button
           class="ss-action ss-action--primary"
-          :disabled="sending"
-          @click="onShareNative"
+          :disabled="imgLoading"
+          @click="onShareImage"
         >
-          <i class="ph" :class="sending ? 'ph-spinner' : 'ph-share-network'"></i>
-          {{ sending ? '준비 중…' : '링크 공유 (카톡·문자·메모)' }}
+          <i class="ph" :class="imgLoading ? 'ph-spinner' : 'ph-share-network'"></i>
+          {{ imgLoading ? '이미지 생성 중…' : '이미지 보내기 (카톡·문자)' }}
         </button>
 
-        <!-- 보조: 수동 붙여넣기용 -->
+        <!-- 이미지 복사 (카톡 붙여넣기) -->
+        <button class="ss-action ss-action--ghost" :disabled="imgLoading" @click="onCopyImage">
+          <i class="ph" :class="imgLoading ? 'ph-spinner' : 'ph-image'"></i>
+          {{ imgLoading ? '생성 중…' : '이미지 복사' }}
+        </button>
+
+        <!-- 보조: 링크 -->
         <div class="ss-actions-row">
+          <button class="ss-action ss-action--ghost" :disabled="sending" @click="onShareNative">
+            <i class="ph" :class="sending ? 'ph-spinner' : 'ph-share-network'"></i>
+            링크 공유
+          </button>
           <button class="ss-action ss-action--ghost" :disabled="sending" @click="onCopyLink">
             <i class="ph" :class="sending ? 'ph-spinner' : 'ph-link'"></i>
             링크 복사
-          </button>
-          <button class="ss-action ss-action--ghost" :disabled="imgLoading" @click="onSaveImage">
-            <i class="ph" :class="imgLoading ? 'ph-spinner' : 'ph-image'"></i>
-            {{ imgLoading ? '생성 중…' : '이미지 복사' }}
           </button>
         </div>
       </div>
