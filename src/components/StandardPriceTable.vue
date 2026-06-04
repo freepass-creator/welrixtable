@@ -3,8 +3,9 @@
 // 표준 조건: 중신용 / 보증금 10% / 선납 0% / 2만km / 자동차보험 1억 기본
 // 선택된 행만 PDF (브라우저 인쇄→PDF 저장) 로 출력
 import { ref, computed } from 'vue';
+import { quoteState } from '../store.js';
 import { calcQuote } from '../lib/calc.js';
-import { fmt } from '../lib/format.js';
+import { fmt, fmtTel } from '../lib/format.js';
 import { buildStandardPriceHtml, STANDARD_PRICE_CSS } from '../lib/build-standard-price-html.js';
 
 const BRANDS = ['현대', '기아', '제네시스'];
@@ -152,6 +153,13 @@ function selectBrand(b) {
   selectedModel.value = '';  // 브랜드 바꾸면 모델 리셋
 }
 
+// 담당자 연락처 — 입력 시 자동 하이픈 (store.js watch 가 localStorage 영속)
+function onStaffTel(e) {
+  const v = fmtTel(e.target.value);
+  quoteState.staff.tel = v;
+  if (e.target.value !== v) e.target.value = v;
+}
+
 // 가격표 빌더가 쓰는 CSS 변수 — index.html :root 와 동일 값 (새 탭/오프스크린용)
 const QUOTE_DOC_VARS = `
   :root {
@@ -175,6 +183,7 @@ function buildSelectedQuoteBody() {
   return buildStandardPriceHtml({
     rows,
     cond: { credit: STD.credit, km: parseInt(STD.km, 10) || 2, dep: STD.dep, pre: STD.pre, insProperty: STD.insProperty, svc: STD.svc },
+    staff: { name: quoteState.staff.name, tel: quoteState.staff.tel },
     companyConfig: cfg,
     showLogo: true,
     dateStr: todayStr(),
@@ -335,6 +344,11 @@ function openManufacturerPdf() {
             <span>현재 목록 전체선택</span>
           </label>
           <span class="spt-cond-hint__txt">※ 표준 조건: <b>중신용 · 보증금 10% · 선납 0% · 약정 2만km/년 · 보험 대물 1억 · 웰스 Basic</b></span>
+          <span class="spt-staff">
+            <i class="ph ph-user-circle"></i>
+            <input v-model="quoteState.staff.name" class="spt-staff__in spt-staff__in--name" placeholder="담당자명" />
+            <input :value="quoteState.staff.tel" @input="onStaffTel" class="spt-staff__in spt-staff__in--tel" placeholder="010-0000-0000" inputmode="tel" />
+          </span>
         </div>
 
         <div v-if="loading" class="spt-loading">차량 데이터 로드 중…</div>
@@ -497,6 +511,20 @@ function openManufacturerPdf() {
   cursor: pointer; white-space: nowrap;
 }
 .spt-selectall input { width: 14px; height: 14px; cursor: pointer; accent-color: var(--brand); }
+.spt-staff {
+  display: inline-flex; align-items: center; gap: 5px; margin-left: auto;
+  color: var(--ink-3);
+}
+.spt-staff > i { font-size: 15px; color: var(--ink-4); }
+.spt-staff__in {
+  border: 1px solid var(--line-2); background: var(--bg);
+  font-family: inherit; font-size: 11.5px; color: var(--ink-1);
+  padding: 5px 8px; border-radius: var(--radius-sm); outline: none;
+  transition: border-color var(--t-fast);
+}
+.spt-staff__in:focus { border-color: var(--brand); }
+.spt-staff__in--name { width: 72px; }
+.spt-staff__in--tel { width: 118px; font-variant-numeric: tabular-nums; }
 
 .spt-loading, .spt-error, .spt-empty {
   text-align: center; padding: 32px 16px;

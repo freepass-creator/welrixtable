@@ -2,7 +2,7 @@
 // 체크한 트림들을 "쭉 정리한" 가격표 한 장(행=트림, 열=차량가/36·48·60개월)으로 생성.
 // 손님 개별 견적서(build-multi-quote-html.js, 견적바구니용 비교표+상세카드)와는 별개.
 // 부작용 없음(pure): rows + 조건/회사설정을 받아 HTML 문자열만 반환.
-import { fmt } from './format.js';
+import { fmt, fmtTel } from './format.js';
 
 const TERMS = [36, 48, 60];
 
@@ -12,12 +12,13 @@ const TERMS = [36, 48, 60];
  * @param {object[]} args.rows  — 선택된 트림 배열. 각 항목:
  *        { brand, model, trim, price, monthlies: [m36, m48, m60] }  (monthly 는 원 단위 숫자 or null)
  * @param {object}   args.cond  — 표준 조건 표기용 { credit, km, dep, pre, insProperty, svc }
+ * @param {object}   [args.staff] — 담당자 { name, tel } (고객명은 표기 안 함)
  * @param {object}   [args.companyConfig] — { name, logo_url }
  * @param {boolean}  [args.showLogo=true]
  * @param {string}   [args.dateStr] — 기준일 표기 (미지정 시 생략)
  * @returns {string} 가격표 HTML (.spq-doc)
  */
-export function buildStandardPriceHtml({ rows, cond = {}, companyConfig = {}, showLogo = true, dateStr = '' }) {
+export function buildStandardPriceHtml({ rows, cond = {}, staff = {}, companyConfig = {}, showLogo = true, dateStr = '' }) {
   if (!rows || !rows.length) return '';
 
   // 브랜드 → 모델 순으로 그룹핑 (연속 동일 그룹 묶음). 입력 순서(vehicles.json) 유지.
@@ -54,6 +55,11 @@ export function buildStandardPriceHtml({ rows, cond = {}, companyConfig = {}, sh
   }).join('');
 
   const logoUrl = companyConfig.logo_url;
+  const staffName = (staff.name || '').trim();
+  const staffTel = (staff.tel || '').trim();
+  const staffHtml = (staffName || staffTel)
+    ? `<div class="spq-staff"><span class="spq-staff__k">담당</span>${[staffName, staffTel ? fmtTel(staffTel) : ''].filter(Boolean).join(' · ')}</div>`
+    : '';
   const condTxt = [
     cond.credit || '중신용',
     `보증금 ${cond.dep ?? 10}%`,
@@ -71,7 +77,10 @@ export function buildStandardPriceHtml({ rows, cond = {}, companyConfig = {}, sh
         <div class="spq-hero__meta">${[brandLabel, dateStr ? `${dateStr} 기준` : ''].filter(Boolean).join(' · ')}</div>
       </header>
 
-      <div class="spq-cond">표준 조건 &nbsp;<b>${condTxt}</b></div>
+      <div class="spq-bar">
+        <div class="spq-cond">표준 조건 &nbsp;<b>${condTxt}</b></div>
+        ${staffHtml}
+      </div>
 
       <table class="spq-table">
         <thead>
@@ -110,12 +119,29 @@ export const STANDARD_PRICE_CSS = `
 .spq-hero__logo { height: 26px; width: auto; object-fit: contain; margin-bottom: 10px; }
 .spq-hero__title { font-size: 19px; font-weight: 800; letter-spacing: -0.4px; color: var(--ink-1, #0a0a0a); }
 .spq-hero__meta { font-size: 12px; color: var(--ink-3, #737373); margin-top: 5px; }
+.spq-bar {
+  display: flex; align-items: stretch; gap: 8px; margin: 14px 0 12px;
+}
 .spq-cond {
+  flex: 1; min-width: 0;
   font-size: 11.5px; color: var(--ink-3, #737373);
   background: var(--bg-soft, #fafafa);
-  padding: 9px 12px; border-radius: 6px; margin: 14px 0 12px;
+  padding: 9px 12px; border-radius: 6px;
+  display: flex; align-items: center;
 }
 .spq-cond b { color: var(--ink-2, #404040); font-weight: 600; }
+.spq-staff {
+  flex-shrink: 0;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700; color: var(--ink-1, #0a0a0a);
+  background: var(--brand-50, #eef4fa);
+  border: 1px solid var(--brand-100, #cfdce7);
+  padding: 9px 14px; border-radius: 6px; white-space: nowrap;
+}
+.spq-staff__k {
+  font-size: 10px; font-weight: 600; color: var(--brand, #0D4E8B);
+  letter-spacing: 0.3px;
+}
 .spq-table { width: 100%; border-collapse: collapse; font-size: 12px; }
 .spq-table thead th {
   background: var(--ink-1, #0a0a0a); color: #fff;

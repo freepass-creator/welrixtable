@@ -12,6 +12,10 @@ function onChange() {
   quoteState.cond.discount = v;
   window.__welrix_recompute?.();
 }
+function clearDiscount() {
+  quoteState.cond.discount = 0;
+  window.__welrix_recompute?.();
+}
 function onToggle(e) { open.value = e.target.open; }
 </script>
 
@@ -35,6 +39,12 @@ function onToggle(e) { open.value = e.target.open; }
           placeholder="0"
         />
         <em>만원</em>
+        <button
+          v-if="quoteState.cond.discount > 0"
+          type="button" class="sec-discount__clear"
+          @click="clearDiscount"
+          title="할인 초기화 (0)"
+        ><i class="ph ph-x"></i></button>
       </span>
     </details>
   </section>
@@ -54,4 +64,14 @@ function onToggle(e) { open.value = e.target.open; }
   display: inline-flex; align-items: baseline;
   margin-top: 8px; width: 100%;
 }
+.sec-discount__clear {
+  align-self: center;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; margin-left: 8px;
+  border: 1px solid var(--line-2); border-radius: 50%;
+  background: var(--bg); color: var(--ink-3);
+  cursor: pointer; font-size: 11px; flex-shrink: 0;
+  transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.sec-discount__clear:hover { background: var(--bg-soft); color: var(--ink-1); border-color: var(--ink-4); }
 </style>
