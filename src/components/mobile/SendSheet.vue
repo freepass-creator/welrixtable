@@ -285,31 +285,25 @@ function close() { emit('close'); }
       </label>
 
       <div class="ss-actions">
-        <!-- PRIMARY: 견적서 이미지 → 핸드폰 기본 공유(카톡/문자 등)로 바로 전송 -->
+        <!-- PRIMARY: 견적 공유 → 견적서 이미지를 폰 기본 공유(카톡/문자)로 바로 -->
         <button
           class="ss-action ss-action--primary"
           :disabled="imgLoading"
           @click="onShareImage"
         >
           <i class="ph" :class="imgLoading ? 'ph-spinner' : 'ph-share-network'"></i>
-          {{ imgLoading ? '이미지 생성 중…' : '이미지 보내기 (카톡·문자)' }}
+          {{ imgLoading ? '견적서 생성 중…' : '견적 공유 (이미지 바로 전송)' }}
         </button>
 
-        <!-- 이미지 복사 (카톡 붙여넣기) -->
-        <button class="ss-action ss-action--ghost" :disabled="imgLoading" @click="onCopyImage">
-          <i class="ph" :class="imgLoading ? 'ph-spinner' : 'ph-image'"></i>
-          {{ imgLoading ? '생성 중…' : '이미지 복사' }}
-        </button>
-
-        <!-- 보조: 링크 -->
+        <!-- 이미지 복사 (카톡 붙여넣기) + 링크 공유 (기기 공유시트) -->
         <div class="ss-actions-row">
+          <button class="ss-action ss-action--ghost" :disabled="imgLoading" @click="onCopyImage">
+            <i class="ph" :class="imgLoading ? 'ph-spinner' : 'ph-image'"></i>
+            {{ imgLoading ? '생성 중…' : '이미지 복사' }}
+          </button>
           <button class="ss-action ss-action--ghost" :disabled="sending" @click="onShareNative">
             <i class="ph" :class="sending ? 'ph-spinner' : 'ph-share-network'"></i>
             링크 공유
-          </button>
-          <button class="ss-action ss-action--ghost" :disabled="sending" @click="onCopyLink">
-            <i class="ph" :class="sending ? 'ph-spinner' : 'ph-link'"></i>
-            링크 복사
           </button>
         </div>
       </div>
