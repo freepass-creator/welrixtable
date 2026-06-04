@@ -2,7 +2,7 @@
 import { quoteState } from '../store.js';
 import { fmtTel } from '../lib/format.js';
 
-const FEE_MIN = 0;
+const FEE_MIN = -10;   // 영업이 싸게 보이게 마이너스 수수료 허용 (기본 5%)
 const FEE_MAX = 7;
 
 function onFeeChange() {

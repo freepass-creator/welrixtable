@@ -242,11 +242,11 @@ export function buildMultiQuoteHtml({
         </div>
       </div>
 
-      <div class="qd-footer">
+      ${showLogo ? `<div class="qd-footer">
         <div class="qd-footer__bank">
           <span class="label">계약금 입금</span> <b>신한은행 140-013-750928 웰릭스모빌리티㈜</b>
         </div>
-      </div>
+      </div>` : ''}
     </div>
   `;
 }

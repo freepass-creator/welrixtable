@@ -100,7 +100,7 @@ export function buildStandardPriceHtml({ rows, cond = {}, staff = {}, companyCon
           <li>월 대여료에 <b>자동차보험 · 정비 · 검사 · 자동차세</b>가 모두 포함됩니다.</li>
           <li>상기 금액은 제조사 사정 · 조세정책 등에 따라 변경될 수 있으며, 심사결과에 따라 조건이 달라질 수 있습니다.</li>
         </ul>
-        <div class="spq-foot__bank"><span>계약금 입금</span> <b>신한은행 140-013-750928 웰릭스모빌리티㈜</b></div>
+        ${showLogo ? `<div class="spq-foot__bank"><span>계약금 입금</span> <b>신한은행 140-013-750928 웰릭스모빌리티㈜</b></div>` : ''}
       </div>
     </div>
   `;

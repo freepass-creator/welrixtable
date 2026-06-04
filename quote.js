@@ -655,12 +655,12 @@ function renderQuoteDoc(monthly, totalKrw, tintFee, deliveryFee, accessoryFee = 
         </div>
       </div>
 
-      <!-- 푸터 -->
-      <div class="qd-footer">
+      <!-- 푸터 — CI 제외 시 계좌도 숨김 -->
+      ${showLogo ? `<div class="qd-footer">
         <div class="qd-footer__bank">
           <span class="label">계약금 입금</span> <b>신한은행 140-013-750928 웰릭스모빌리티㈜</b>
         </div>
-      </div>
+      </div>` : ''}
     </div>
   `;
   $('quote-doc').innerHTML = html;

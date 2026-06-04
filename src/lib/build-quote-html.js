@@ -143,9 +143,9 @@ export function buildOfficialQuoteHtml(a) {
         <div class="ofq-hero__left">
           ${showLogoImg ? `<img class="ofq-hero__logo" src="${cfgLogoUrl}" alt="${companyConfig.name || ''}" />` : ''}
           <div class="title">신차 장기렌터카 견적서</div>
-          <span class="ofq-hero__badge">VAT 포함</span>
         </div>
         <div class="ofq-hero__right">
+          <span class="ofq-hero__badge">VAT 포함</span>
           <div><b>견적번호</b> ${quoteNo}</div>
           <div><b>견적일자</b> ${todayStr}</div>
           <div><b>유효기간</b> ${expireStr} 까지</div>
@@ -237,9 +237,9 @@ export function buildOfficialQuoteHtml(a) {
           <li>월 대여료에는 자동차 보험료, 정비서비스/차량검사비, 자동차세가 포함됩니다.</li>
           <li>중도해지 시 중도해지수수료가 발생되며, 기간별 상이합니다. (약정서 참고)</li>
         </ol>
-        <div class="ofq-footer__bank">
+        ${showLogo ? `<div class="ofq-footer__bank">
           <span>계약금 입금계좌</span> · <b>신한은행 140-013-750928 웰릭스모빌리티㈜</b>
-        </div>
+        </div>` : ''}
       </div>
 
       <div class="ofq-spacer"></div>

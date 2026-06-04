@@ -53,6 +53,9 @@ function snapshot() {
       dep: state.cond.dep, pre: state.cond.pre,
       svc: state.cond.svc, insProperty: state.cond.insProperty,
     },
+    // 복원용 — 클릭 시 그대로 재산출하기 위한 전체 스냅샷
+    vehicleFull: (() => { try { return JSON.parse(JSON.stringify(v)); } catch { return null; } })(),
+    condFull: (() => { try { return JSON.parse(JSON.stringify(state.cond)); } catch { return null; } })(),
     monthly: [60, 48, 36].map(t => {
       const m = findT(t);
       return m ? { term: t, monthly: m.monthly, dep: m.dep, pre: m.pre,
@@ -105,16 +108,25 @@ function clearAll() {
   persist();
 }
 
-// 보기 — 미리보기 모달 (quote.js 의 buildOfficialQuoteHtml 활용)
-async function openPreview(entry) {
-  if (typeof window.__welrix_previewHistoryEntry === 'function') {
-    window.__welrix_previewHistoryEntry(entry);
+// 클릭 — 그 견적을 계산기에 그대로 복원·재산출
+function restoreEntry(entry) {
+  const vf = entry.vehicleFull;
+  if (!vf || !vf.total_manwon) {
+    // 구버전 엔트리(복원 데이터 없음) — 미리보기로 폴백
+    if (typeof window.__welrix_previewHistoryEntry === 'function') { window.__welrix_previewHistoryEntry(entry); return; }
+    const v = entry.vehicle;
+    const m = entry.monthly.map(x => x ? `${x.term}M ${fmt(x.monthly)}원` : '—').join(' / ');
+    alert(`${v.brand} ${v.model} ${v.trim_name}\n${m}\n\n(이 견적은 예전 형식이라 복원할 수 없어요. 새로 산출한 견적부터 클릭 복원됩니다.)`);
     return;
   }
-  // fallback — 단순 alert
-  const v = entry.vehicle;
-  const m = entry.monthly.map(x => x ? `${x.term}M ${fmt(x.monthly)}원` : '—').join(' / ');
-  alert(`${v.brand} ${v.model} ${v.trim_name}\n${m}`);
+  // 차량 복원 (state.vehicle 교체 → SummaryPanel 등 reactive 갱신)
+  state.vehicle = JSON.parse(JSON.stringify(vf));
+  // 조건 복원 (credit/km/dep/pre/수수료/할인/색상 등) — 기존 cond 위에 덮어쓰기
+  if (entry.condFull) Object.assign(state.cond, entry.condFull);
+  // 재계산 — findVehicleMeta 가 카탈로그에서 r팩터를 끌어와 그대로 산출
+  window.__welrix_recompute?.();
+  // 복원된 견적 확인하도록 상단으로
+  try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch {}
 }
 
 function fmtTime(ts) {
@@ -126,7 +138,7 @@ function fmtTime(ts) {
 <template>
   <div class="th" v-if="entries.length">
     <div class="th-head">
-      <h3>오늘 찍어본 견적 <span class="th-count">{{ entries.length }}</span></h3>
+      <h3>오늘 산출한 견적 <span class="th-count">{{ entries.length }}</span></h3>
       <button class="th-clear" @click="clearAll" title="전체 비우기">
         <i class="ph ph-trash"></i>
       </button>
@@ -135,7 +147,8 @@ function fmtTime(ts) {
       <div
         v-for="e in entries" :key="e.id"
         class="th-item"
-        @click="openPreview(e)"
+        @click="restoreEntry(e)"
+        title="클릭하면 이 견적을 그대로 다시 산출합니다"
       >
         <div class="th-item__time">{{ fmtTime(e.ts) }}</div>
         <div class="th-item__main">
@@ -189,7 +202,7 @@ function fmtTime(ts) {
 .th-list {
   display: flex; flex-direction: column;
   border: 1px solid var(--line-2); border-radius: var(--radius-sm);
-  max-height: 280px; overflow-y: auto;
+  max-height: 60vh; overflow-y: auto;
   background: var(--bg);
 }
 .th-item {

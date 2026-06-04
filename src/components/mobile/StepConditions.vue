@@ -35,7 +35,7 @@ function onPreChange() {
   (quoteState.scenarios || []).forEach(s => { s.pre = v; });
 }
 function onFeeChange() {
-  const v = Math.max(0, Math.min(7, Math.round((+quoteState.cond.feeRatePct || 0) * 10) / 10));
+  const v = Math.max(-10, Math.min(7, Math.round((+quoteState.cond.feeRatePct || 0) * 10) / 10));
   quoteState.cond.feeRatePct = v;
 }
 </script>
@@ -107,12 +107,12 @@ function onFeeChange() {
       </div>
     </div>
 
-    <!-- 수수료 — 직접 입력 (0~7%, 0.1 단위) -->
+    <!-- 수수료 — 직접 입력 (-10~7%, 0.1 단위) — 마이너스로 싸게 표기 가능 -->
     <div class="sc-field">
       <div class="sc-label">수수료</div>
       <div class="sc-pct">
         <input
-          type="number" min="0" max="7" step="0.1" inputmode="decimal"
+          type="number" min="-10" max="7" step="0.1" inputmode="decimal"
           v-model.number="quoteState.cond.feeRatePct"
           @change="onFeeChange"
           placeholder="0"
