@@ -127,12 +127,12 @@ async function sendSignLink() {
         <div class="m-sign">
           <button class="m-act" @click="signMenuOpen = !signMenuOpen" title="조회동의 링크">
             <i class="ph" :class="signCopied ? 'ph-check-circle' : 'ph-signature'"></i>
-            <span>{{ signCopied ? '복사됨' : '동의' }}</span>
+            <span>{{ signCopied ? '복사됨' : '동의링크' }}</span>
             <i class="ph ph-caret-down" style="font-size:11px;opacity:.6;"></i>
           </button>
           <div v-if="signMenuOpen" class="m-sign-menu">
-            <button @click="copySignLink(); signMenuOpen = false"><i class="ph ph-copy"></i> 복사</button>
-            <button @click="sendSignLink(); signMenuOpen = false"><i class="ph ph-share-network"></i> 카톡 전송</button>
+            <button @click="copySignLink(); signMenuOpen = false"><i class="ph ph-copy"></i> 복사하기</button>
+            <button @click="sendSignLink(); signMenuOpen = false"><i class="ph ph-share-network"></i> 카톡 전송하기</button>
           </div>
         </div>
         <button class="m-act m-act--primary" :disabled="!vehicleState.trim" @click="openSend">
