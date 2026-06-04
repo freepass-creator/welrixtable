@@ -278,6 +278,10 @@ function selectTrim(t) {
   if (vehicleState.color == null && exteriorColors.value.length) {
     vehicleState.color = 0;
   }
+  if (!quoteState.cond.colorInt) {
+    quoteState.cond.colorInt = COLOR_INT[0].value;   // 내장 기본 = 블랙
+    quoteState.cond.colorIntPrice = COLOR_INT[0].price;
+  }
   syncVehicle();
 }
 
