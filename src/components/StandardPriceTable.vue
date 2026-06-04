@@ -2,9 +2,10 @@
 // 웰릭스 표준 가격표 — 제조사별 전 차종 × 36/48/60 월 대여료
 // 표준 조건: 중신용 / 보증금 10% / 선납 0% / 2만km / 자동차보험 1억 기본
 // 선택된 행만 PDF (브라우저 인쇄→PDF 저장) 로 출력
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { calcQuote } from '../lib/calc.js';
 import { fmt } from '../lib/format.js';
+import { buildStandardPriceHtml, STANDARD_PRICE_CSS } from '../lib/build-standard-price-html.js';
 
 const BRANDS = ['현대', '기아', '제네시스'];
 const STANDARD_TERMS = [36, 48, 60];
@@ -72,57 +73,148 @@ const filteredRows = computed(() => {
     .filter(v => !selectedModel.value || v.model === selectedModel.value);
 });
 
-// 표준 견적 계산
+// 표준 견적 계산 — STANDARD_TERMS(36/48/60) 각각 calcQuote (기존 로직 유지)
+// monthlies: 화면 표시용 숫자 배열, quoteTerms: 견적서 빌더용 상세(월대여료/만기인수/잔가율)
+function calcForRow(v) {
+  const quoteTerms = STANDARD_TERMS.map((term, idx) => {
+    try {
+      const r = calcQuote({
+        vehicle: v,
+        options: { optPrice: 0, discount: 0, deliveryFee: 0, itemsFee: 0, etc: 0 },
+        contract: { term, km: STD.km, dep: STD.dep, pre: STD.pre },
+        customer: { creditGrade: STD.credit },
+        insurance: {
+          property: STD.insProperty, extraDriver: STD.extraDriver,
+          exec: '미가입', injury: '무한', self: '1억', uninsured: '2억',
+          deductible: '30만원~', emergency: '가입',
+        },
+        fees: { feeRatePct: STD.feeRatePct, svc: STD.svc },
+      });
+      return { idx, term, dep: STD.dep, pre: STD.pre, monthly: r.monthly, residualAmt: r.residualAmt, residualPct: r.residualPct };
+    } catch {
+      return { idx, term, dep: STD.dep, pre: STD.pre, monthly: null, residualAmt: 0, residualPct: 0 };
+    }
+  });
+  return { monthlies: quoteTerms.map(t => t.monthly), quoteTerms };
+}
+
 const computedRows = computed(() => {
   return filteredRows.value.map(v => {
-    const monthlies = STANDARD_TERMS.map(term => {
-      try {
-        const r = calcQuote({
-          vehicle: v,
-          options: { optPrice: 0, discount: 0, deliveryFee: 0, itemsFee: 0, etc: 0 },
-          contract: { term, km: STD.km, dep: STD.dep, pre: STD.pre },
-          customer: { creditGrade: STD.credit },
-          insurance: {
-            property: STD.insProperty, extraDriver: STD.extraDriver,
-            exec: '미가입', injury: '무한', self: '1억', uninsured: '2억',
-            deductible: '30만원~', emergency: '가입',
-          },
-          fees: { feeRatePct: STD.feeRatePct, svc: STD.svc },
-        });
-        return r.monthly;
-      } catch { return null; }
-    });
-    return { ...v, monthlies };
+    const { monthlies, quoteTerms } = calcForRow(v);
+    return { ...v, monthlies, quoteTerms };
   });
 });
+
+// === 체크박스 다중 선택 — vehicles.json 의 idx 를 키로 사용(필터 무관 유지) ===
+const selectedIdx = ref(new Set());
+const selectedCount = computed(() => selectedIdx.value.size);
+
+function isSelected(idx) { return selectedIdx.value.has(idx); }
+function toggleRow(idx) {
+  const s = new Set(selectedIdx.value);
+  if (s.has(idx)) s.delete(idx); else s.add(idx);
+  selectedIdx.value = s;
+}
+// 현재 화면(필터된 행) 전체 선택 여부
+const allCurrentSelected = computed(() =>
+  computedRows.value.length > 0 && computedRows.value.every(r => selectedIdx.value.has(r.idx))
+);
+function toggleSelectAll() {
+  const s = new Set(selectedIdx.value);
+  if (allCurrentSelected.value) {
+    computedRows.value.forEach(r => s.delete(r.idx));
+  } else {
+    computedRows.value.forEach(r => s.add(r.idx));
+  }
+  selectedIdx.value = s;
+}
+function clearSelection() { selectedIdx.value = new Set(); }
+
+// 선택된 트림 → 가격표 행 배열 (필터와 무관하게 전체에서 수집, vehicles.json 순서 유지)
+function buildSelectedRows() {
+  const out = [];
+  vehicles.value.forEach((v, idx) => {
+    if (!selectedIdx.value.has(idx)) return;
+    const { monthlies } = calcForRow(v);
+    out.push({
+      brand: v.brand,
+      model: v.model,
+      trim: v.trim,
+      price: v.price,
+      monthlies,   // [m36, m48, m60]
+    });
+  });
+  return out;
+}
 
 function selectBrand(b) {
   selectedBrand.value = b;
   selectedModel.value = '';  // 브랜드 바꾸면 모델 리셋
 }
 
-function buildHtmlForCurrentView() {
-  const rows = computedRows.value;
-  if (!rows.length) return '';
-  const titleSuffix = selectedModel.value || '전체';
-  return buildPrintHtml(`${selectedBrand.value} — ${titleSuffix}`, rows);
+// 가격표 빌더가 쓰는 CSS 변수 — index.html :root 와 동일 값 (새 탭/오프스크린용)
+const QUOTE_DOC_VARS = `
+  :root {
+    --brand: #0D4E8B; --brand-700: #0a3d6e; --brand-100: #cfdce7; --brand-50: #eef4fa;
+    --ink-1: #0a0a0a; --ink-2: #404040; --ink-3: #737373; --ink-4: #a3a3a3;
+    --line: #f0f0f0; --line-2: #e5e5e5; --line-3: #d8d8d8;
+    --bg: #ffffff; --bg-soft: #fafafa; --bg-muted: #f5f5f5;
+  }`;
+
+// 오늘 날짜 (가격표 기준일)
+function todayStr() {
+  return new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+    .replace(/\.\s/g, '.').replace(/\.$/, '');
 }
 
-function downloadPdf() {
-  const html = buildHtmlForCurrentView();
-  if (!html) { alert('표시된 차량이 없습니다'); return; }
+// 선택된 트림으로 표준 가격표 본문 HTML 생성
+function buildSelectedQuoteBody() {
+  const rows = buildSelectedRows();
+  if (!rows.length) return '';
+  const cfg = (typeof window !== 'undefined' && window.__welrix_companyConfig) || {};
+  return buildStandardPriceHtml({
+    rows,
+    cond: { credit: STD.credit, km: parseInt(STD.km, 10) || 2, dep: STD.dep, pre: STD.pre, insProperty: STD.insProperty, svc: STD.svc },
+    companyConfig: cfg,
+    showLogo: true,
+    dateStr: todayStr(),
+  });
+}
+
+// 새 탭/인쇄용 전체 HTML 문서 (가격표 양식 + 변수 + 전용 CSS)
+async function buildQuoteDocHtml() {
+  const body = buildSelectedQuoteBody();
+  if (!body) return '';
+  return `<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>웰릭스 표준 가격표</title>
+<style>
+  ${QUOTE_DOC_VARS}
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 16px 0; background: #f4f5f7;
+         font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif; }
+  ${STANDARD_PRICE_CSS}
+  @media print { body { background: #fff; padding: 0; } }
+</style></head>
+<body>${body}</body></html>`;
+}
+
+async function downloadPdf() {
+  const html = await buildQuoteDocHtml();
+  if (!html) { alert('선택된 차종이 없습니다'); return; }
   const win = window.open('', '_blank');
   if (!win) { alert('팝업이 차단됐어요. 브라우저 팝업 차단 해제 후 다시 시도'); return; }
   win.document.open();
   win.document.write(html);
   win.document.close();
-  win.addEventListener('load', () => setTimeout(() => win.print(), 100));
+  win.addEventListener('load', () => setTimeout(() => win.print(), 150));
 }
 
-// 미리보기 — 새 탭으로 print HTML 만 표시 (자동 인쇄 안 함)
-function openPreview() {
-  const html = buildHtmlForCurrentView();
-  if (!html) { alert('표시된 차량이 없습니다'); return; }
+// 미리보기 — 새 탭으로 견적서만 표시 (자동 인쇄 안 함)
+async function openPreview() {
+  const html = await buildQuoteDocHtml();
+  if (!html) { alert('선택된 차종이 없습니다'); return; }
   const win = window.open('', '_blank');
   if (!win) { alert('팝업이 차단됐어요'); return; }
   win.document.open();
@@ -130,39 +222,43 @@ function openPreview() {
   win.document.close();
 }
 
-// 이미지 복사 — html2canvas 로 캡쳐 → clipboard
+// 이미지 복사 — 오프스크린에 견적서 렌더 → html2canvas 캡쳐 → clipboard
 const copyingImage = ref(false);
 async function copyAsImage() {
   if (copyingImage.value) return;
-  const html = buildHtmlForCurrentView();
-  if (!html) { alert('표시된 차량이 없습니다'); return; }
+  const body = buildSelectedQuoteBody();
+  if (!body) { alert('선택된 차종이 없습니다'); return; }
   if (!window.html2canvas) { alert('이미지 캡쳐 라이브러리 로드 실패'); return; }
   copyingImage.value = true;
+  let host = null;
   try {
-    // 오프스크린에 렌더 후 캡쳐
+    // 오프스크린 컨테이너 — 가격표 폭(760px) 으로 렌더 후 캡쳐
+    host = document.createElement('div');
+    host.style.cssText = 'position:fixed; left:-9999px; top:0; width:800px; background:#fff;';
+    const styleEl = document.createElement('style');
+    styleEl.textContent = QUOTE_DOC_VARS + '\n' + STANDARD_PRICE_CSS;
+    host.appendChild(styleEl);
     const wrap = document.createElement('div');
-    wrap.style.cssText = 'position:fixed; left:-9999px; top:0; width:297mm; background:#fff;';
-    wrap.innerHTML = html;
-    document.body.appendChild(wrap);
-    // 인쇄용 HTML 안의 body 컨테이너 캡쳐 (html2canvas 는 body 노드 직접 못 받음)
-    const target = wrap.querySelector('body') || wrap.firstElementChild;
+    wrap.innerHTML = body;
+    host.appendChild(wrap);
+    document.body.appendChild(host);
+    const target = host.querySelector('.spq-doc') || wrap;
     const canvas = await window.html2canvas(target, { scale: 2, backgroundColor: '#fff', useCORS: true });
-    document.body.removeChild(wrap);
     const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
     if (navigator.clipboard?.write && window.ClipboardItem) {
       await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
       alert('이미지 복사 완료 — 카톡·메일에 붙여넣기 하세요');
     } else {
-      // fallback — 다운로드
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `welrix-price-${selectedBrand.value}-${Date.now()}.png`;
+      a.download = `welrix-견적서-${Date.now()}.png`;
       a.click();
       URL.revokeObjectURL(a.href);
     }
   } catch (e) {
     alert('이미지 복사 실패: ' + (e?.message || e));
   } finally {
+    if (host) document.body.removeChild(host);
     copyingImage.value = false;
   }
 }
@@ -176,94 +272,6 @@ function openManufacturerPdf() {
   window.open(`/manufacturer-pdfs/${slug}.pdf`, '_blank');
 }
 
-function buildPrintHtml(brand, rows) {
-  const today = new Date();
-  const dateStr = today.toLocaleDateString('ko-KR');
-  const cards = rows.map(r => `
-    <article class="card">
-      <header class="card-h">
-        <div class="brand">${escape(r.brand)}</div>
-        <div class="model">${escape(r.model)}</div>
-        <div class="trim">${escape(r.trim)}</div>
-      </header>
-      <div class="price">
-        <span class="lbl">차량가</span>
-        <span class="val">${fmt(r.price)}<small>원</small></span>
-      </div>
-      <div class="terms">
-        ${r.monthlies.map((m, i) => `
-          <div class="term">
-            <div class="t-lbl">${STANDARD_TERMS[i]}개월</div>
-            <div class="t-val">${m != null ? fmt(m) : '—'}<small>원/월</small></div>
-          </div>
-        `).join('')}
-      </div>
-    </article>
-  `).join('');
-  return `<!DOCTYPE html>
-<html lang="ko"><head><meta charset="UTF-8">
-<title>웰릭스 표준 견적 — ${escape(brand)}</title>
-<style>
-  @page { size: A4; margin: 12mm; }
-  * { box-sizing: border-box; }
-  body { font-family: -apple-system, 'Pretendard', 'Apple SD Gothic Neo', sans-serif;
-         color: #0a0a0a; margin: 0; padding: 0; font-size: 11px;
-         font-variant-numeric: tabular-nums; }
-  .hdr { display: flex; justify-content: space-between; align-items: flex-end;
-         padding-bottom: 10px; border-bottom: 2px solid #0D4E8B; margin-bottom: 14px; }
-  .hdr h1 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.3px; color: #0D4E8B; }
-  .hdr .sub { font-size: 12px; color: #737373; margin-top: 4px; }
-  .hdr .meta { font-size: 10px; color: #737373; text-align: right; line-height: 1.5; }
-  .cond { font-size: 10px; color: #737373; margin-bottom: 14px; padding: 6px 10px;
-          background: #f5f5f5; border-radius: 4px; }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .card { border: 1px solid #d4d4d4; border-radius: 6px; padding: 12px 14px;
-          break-inside: avoid; page-break-inside: avoid;
-          display: flex; flex-direction: column; gap: 8px; }
-  .card-h .brand { font-size: 9.5px; color: #737373; font-weight: 500;
-                   letter-spacing: 0.4px; }
-  .card-h .model { font-size: 14px; font-weight: 700; color: #0a0a0a;
-                   letter-spacing: -0.2px; margin-top: 2px; }
-  .card-h .trim { font-size: 11px; color: #404040; margin-top: 1px; }
-  .card .price { display: flex; align-items: baseline; justify-content: space-between;
-                 padding: 6px 0; border-top: 1px dashed #e5e5e5;
-                 border-bottom: 1px dashed #e5e5e5; }
-  .card .price .lbl { font-size: 10px; color: #737373; }
-  .card .price .val { font-size: 13px; font-weight: 600; }
-  .card .price .val small { font-size: 9px; color: #737373; font-weight: 400; margin-left: 2px; }
-  .card .terms { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-  .card .term { background: #eef4fa; border-radius: 4px; padding: 7px 8px; text-align: center; }
-  .card .term .t-lbl { font-size: 9.5px; color: #737373; font-weight: 500;
-                       letter-spacing: 0.3px; }
-  .card .term .t-val { font-size: 12.5px; font-weight: 700; color: #0D4E8B;
-                       margin-top: 2px; letter-spacing: -0.3px; }
-  .card .term .t-val small { font-size: 8.5px; color: #737373; font-weight: 400;
-                             margin-left: 1px; }
-  .ftr { margin-top: 14px; font-size: 9px; color: #a3a3a3; text-align: center;
-         border-top: 1px solid #f0f0f0; padding-top: 8px; }
-</style></head>
-<body>
-  <div class="hdr">
-    <div>
-      <h1>웰릭스 표준 견적</h1>
-      <div class="sub">${escape(brand)}</div>
-    </div>
-    <div class="meta">
-      ${dateStr}<br>웰릭스 모빌리티
-    </div>
-  </div>
-  <div class="cond">
-    ※ 표준 조건: 중신용 · 보증금 10% · 선납 0% · 약정 2만km/년 · 자동차보험 대물 1억 · 정비 웰스 Basic
-  </div>
-  <div class="grid">${cards}</div>
-  <div class="ftr">전 가격은 부가세 포함, 실제 출고 시 변경 가능 · 표준 견적 자료, 손님 발송 견적과 별도</div>
-</body></html>`;
-}
-
-function escape(s) {
-  return String(s ?? '').replace(/[&<>"']/g, c =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
 </script>
 
 <template>
@@ -299,14 +307,20 @@ function escape(s) {
             <option v-for="m in modelsInBrand" :key="m" :value="m">{{ m }}</option>
           </select>
           <div class="spt-actions">
-            <span class="spt-count">{{ computedRows.length }}건</span>
-            <button class="spt-act" :disabled="!computedRows.length" @click="openPreview" title="새 탭에서 미리보기">
+            <span class="spt-count">
+              <template v-if="selectedCount">선택 <b>{{ selectedCount }}</b>건</template>
+              <template v-else>{{ computedRows.length }}건</template>
+            </span>
+            <button v-if="selectedCount" class="spt-mini" @click="clearSelection" title="선택 해제">
+              <i class="ph ph-x-circle"></i>선택 해제
+            </button>
+            <button class="spt-act" :disabled="!selectedCount" @click="openPreview" title="선택 차종 견적서 미리보기 (새 탭)">
               <i class="ph ph-eye"></i>미리보기
             </button>
-            <button class="spt-act" :disabled="!computedRows.length || copyingImage" @click="copyAsImage" title="이미지로 복사 (카톡 붙여넣기)">
+            <button class="spt-act" :disabled="!selectedCount || copyingImage" @click="copyAsImage" title="견적서 이미지로 복사 (카톡 붙여넣기)">
               <i class="ph" :class="copyingImage ? 'ph-spinner' : 'ph-clipboard'"></i>이미지 복사
             </button>
-            <button class="spt-act spt-act--primary" :disabled="!computedRows.length" @click="downloadPdf" title="PDF 다운로드 (브라우저 인쇄→PDF)">
+            <button class="spt-act spt-act--primary" :disabled="!selectedCount" @click="downloadPdf" title="견적서 PDF (브라우저 인쇄→PDF)">
               <i class="ph ph-file-pdf"></i>PDF
             </button>
             <button class="spt-act" @click="openManufacturerPdf" title="제조사 공식 가격표 PDF 열기">
@@ -316,18 +330,27 @@ function escape(s) {
         </div>
 
         <div class="spt-cond-hint">
-          ※ 표준 조건: <b>중신용 · 보증금 10% · 선납 0% · 약정 2만km/년 · 보험 대물 1억 · 웰스 Basic</b>
+          <label class="spt-selectall">
+            <input type="checkbox" :checked="allCurrentSelected" @change="toggleSelectAll" :disabled="!computedRows.length" />
+            <span>현재 목록 전체선택</span>
+          </label>
+          <span class="spt-cond-hint__txt">※ 표준 조건: <b>중신용 · 보증금 10% · 선납 0% · 약정 2만km/년 · 보험 대물 1억 · 웰스 Basic</b></span>
         </div>
 
         <div v-if="loading" class="spt-loading">차량 데이터 로드 중…</div>
         <div v-else-if="errorMsg" class="spt-error">{{ errorMsg }}</div>
         <div v-else-if="!computedRows.length" class="spt-empty">표시할 차종이 없습니다</div>
-        <!-- 세로 카드 — 견적서 형태. 각 트림 1장 -->
+        <!-- 세로 카드 — 견적서 형태. 각 트림 1장. 체크박스로 다중 선택 -->
         <div v-else class="spt-cards" ref="cardsContainer">
           <article
             v-for="r in computedRows" :key="r.idx"
             class="spt-card"
+            :class="{ 'is-selected': isSelected(r.idx) }"
+            @click="toggleRow(r.idx)"
           >
+            <label class="spt-card__check" @click.stop>
+              <input type="checkbox" :checked="isSelected(r.idx)" @change="toggleRow(r.idx)" />
+            </label>
             <header class="spt-card__head">
               <div class="spt-card__brand">{{ r.brand }}</div>
               <div class="spt-card__model">{{ r.model }}</div>
@@ -464,8 +487,16 @@ function escape(s) {
   background: var(--bg-soft);
   padding: 8px 12px; border-radius: var(--radius-sm);
   margin-bottom: 10px;
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
 }
 .spt-cond-hint b { color: var(--ink-2); font-weight: 500; }
+.spt-cond-hint__txt { flex: 1; min-width: 0; }
+.spt-selectall {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11.5px; color: var(--ink-2); font-weight: 500;
+  cursor: pointer; white-space: nowrap;
+}
+.spt-selectall input { width: 14px; height: 14px; cursor: pointer; accent-color: var(--brand); }
 
 .spt-loading, .spt-error, .spt-empty {
   text-align: center; padding: 32px 16px;
@@ -481,13 +512,28 @@ function escape(s) {
   font-variant-numeric: tabular-nums;
 }
 .spt-card {
+  position: relative;
   background: var(--bg);
   border: 1px solid var(--line-2); border-radius: var(--radius-md);
-  padding: 14px 16px;
+  padding: 14px 16px 14px 38px;
   display: flex; flex-direction: column; gap: 10px;
-  transition: border-color var(--t-fast);
+  cursor: pointer;
+  transition: border-color var(--t-fast), background var(--t-fast), box-shadow var(--t-fast);
 }
 .spt-card:hover { border-color: var(--ink-4); }
+.spt-card.is-selected {
+  border-color: var(--brand);
+  background: var(--brand-50);
+  box-shadow: inset 0 0 0 1px var(--brand);
+}
+.spt-card__check {
+  position: absolute; top: 12px; left: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.spt-card__check input {
+  width: 16px; height: 16px; cursor: pointer; accent-color: var(--brand);
+}
 
 .spt-card__head { display: flex; flex-direction: column; gap: 1px; }
 .spt-card__brand {
