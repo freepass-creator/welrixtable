@@ -15,7 +15,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 캐스퍼",
+    "trim_detail": "스마트",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "현대",
@@ -33,7 +36,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 캐스퍼",
+    "trim_detail": "디 에센셜",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "현대",
@@ -51,7 +57,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 캐스퍼",
+    "trim_detail": "인스퍼레이션",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "현대",
@@ -69,7 +78,10 @@
     "r48": 0.41,
     "r60": 0.33,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 캐스퍼",
+    "trim_detail": "스마트",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "현대",
@@ -87,7 +99,10 @@
     "r48": 0.41,
     "r60": 0.33,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 캐스퍼",
+    "trim_detail": "스마트 초이스",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "현대",
@@ -105,7 +120,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "아반떼",
+    "trim_detail": "기본",
+    "engine_label": "가솔린"
   },
   {
     "brand": "현대",
@@ -123,7 +141,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "아반떼",
+    "trim_detail": "기본",
+    "engine_label": "가솔린"
   },
   {
     "brand": "현대",
@@ -141,7 +162,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "아반떼",
+    "trim_detail": "기본",
+    "engine_label": "가솔린"
   },
   {
     "brand": "현대",
@@ -159,7 +183,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "아반떼",
+    "trim_detail": "기본",
+    "engine_label": "LPG"
   },
   {
     "brand": "현대",
@@ -177,7 +204,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "아반떼",
+    "trim_detail": "기본",
+    "engine_label": "LPG"
   },
   {
     "brand": "현대",
@@ -195,7 +225,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "아반떼",
+    "trim_detail": "기본",
+    "engine_label": "LPG"
   },
   {
     "brand": "현대",
@@ -213,7 +246,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "아반떼",
+    "trim_detail": "기본",
+    "engine_label": "LPG"
   },
   {
     "brand": "현대",
@@ -231,7 +267,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "아반떼",
+    "trim_detail": "기본",
+    "engine_label": "LPG"
   },
   {
     "brand": "현대",
@@ -249,7 +288,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "아반떼 Hybrid",
+    "trim_detail": "기본",
+    "engine_label": "Smart"
   },
   {
     "brand": "현대",
@@ -267,7 +309,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "아반떼 Hybrid",
+    "trim_detail": "기본",
+    "engine_label": "Modern Lite"
   },
   {
     "brand": "현대",
@@ -285,7 +330,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "아반떼 Hybrid",
+    "trim_detail": "기본",
+    "engine_label": "Modern"
   },
   {
     "brand": "현대",
@@ -303,7 +351,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "아반떼 Hybrid",
+    "trim_detail": "기본",
+    "engine_label": "Inspiration"
   },
   {
     "brand": "현대",
@@ -321,7 +372,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지",
+    "trim_detail": "Premium",
+    "engine_label": "가솔린 1.6T"
   },
   {
     "brand": "현대",
@@ -339,7 +393,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 1.6T"
   },
   {
     "brand": "현대",
@@ -352,12 +409,15 @@
     "tax_exempt": "과세",
     "group": "A군",
     "multi_seat": null,
-    "r24": 0.66,
+    "r24": 0.6599999999999999,
     "r36": 0.57,
-    "r48": 0.28,
-    "r60": 0.18,
+    "r48": 0.5,
+    "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지",
+    "trim_detail": "Exclusive",
+    "engine_label": "가솔린 1.6T"
   },
   {
     "brand": "현대",
@@ -375,7 +435,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 1.6T"
   },
   {
     "brand": "현대",
@@ -393,7 +456,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지",
+    "trim_detail": "Premium",
+    "engine_label": "가솔린 2.0"
   },
   {
     "brand": "현대",
@@ -411,7 +477,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 2.0"
   },
   {
     "brand": "현대",
@@ -429,7 +498,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지",
+    "trim_detail": "Exclusive",
+    "engine_label": "가솔린 2.0"
   },
   {
     "brand": "현대",
@@ -447,7 +519,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 2.0"
   },
   {
     "brand": "현대",
@@ -465,7 +540,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지",
+    "trim_detail": "Premium",
+    "engine_label": "LPG 2.0"
   },
   {
     "brand": "현대",
@@ -483,7 +561,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지",
+    "trim_detail": "Exclusive",
+    "engine_label": "LPG 2.0"
   },
   {
     "brand": "현대",
@@ -501,7 +582,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지",
+    "trim_detail": "기본",
+    "engine_label": "LPG 2.0"
   },
   {
     "brand": "현대",
@@ -519,7 +603,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지",
+    "trim_detail": "기본",
+    "engine_label": "LPG 2.0"
   },
   {
     "brand": "현대",
@@ -537,7 +624,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지",
+    "trim_detail": "기본",
+    "engine_label": "LPG 2.0"
   },
   {
     "brand": "현대",
@@ -555,7 +645,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지 Hybrid",
+    "trim_detail": "Premium",
+    "engine_label": ""
   },
   {
     "brand": "현대",
@@ -573,7 +666,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지 Hybrid",
+    "trim_detail": "기본",
+    "engine_label": "S"
   },
   {
     "brand": "현대",
@@ -591,7 +687,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지 Hybrid",
+    "trim_detail": "Exclusive",
+    "engine_label": ""
   },
   {
     "brand": "현대",
@@ -609,7 +708,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "쏘나타 디 엣지 Hybrid",
+    "trim_detail": "기본",
+    "engine_label": "Inspiration"
   },
   {
     "brand": "현대",
@@ -627,7 +729,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Premium",
+    "engine_label": "가솔린 2.5 2WD"
   },
   {
     "brand": "현대",
@@ -645,7 +750,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Exclusive",
+    "engine_label": "가솔린 2.5 2WD"
   },
   {
     "brand": "현대",
@@ -663,7 +771,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Honors",
+    "engine_label": "가솔린 2.5 2WD"
   },
   {
     "brand": "현대",
@@ -681,7 +792,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Calligraphy",
+    "engine_label": "가솔린 2.5 2WD"
   },
   {
     "brand": "현대",
@@ -699,7 +813,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Black Exterior",
+    "engine_label": "가솔린 2.5 2WD"
   },
   {
     "brand": "현대",
@@ -717,7 +834,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Black Ink",
+    "engine_label": "가솔린 2.5 2WD"
   },
   {
     "brand": "현대",
@@ -735,7 +855,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Premium",
+    "engine_label": "가솔린 3.5 2WD"
   },
   {
     "brand": "현대",
@@ -753,7 +876,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Exclusive",
+    "engine_label": "가솔린 3.5 2WD"
   },
   {
     "brand": "현대",
@@ -771,7 +897,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Honors",
+    "engine_label": "가솔린 3.5 2WD"
   },
   {
     "brand": "현대",
@@ -789,7 +918,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Calligraphy",
+    "engine_label": "가솔린 3.5 2WD"
   },
   {
     "brand": "현대",
@@ -807,7 +939,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Black Exterior",
+    "engine_label": "가솔린 3.5 2WD"
   },
   {
     "brand": "현대",
@@ -825,7 +960,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Black Ink",
+    "engine_label": "가솔린 3.5 2WD"
   },
   {
     "brand": "현대",
@@ -843,7 +981,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Premium",
+    "engine_label": "가솔린 3.5 4WD"
   },
   {
     "brand": "현대",
@@ -861,7 +1002,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Exclusive",
+    "engine_label": "가솔린 3.5 4WD"
   },
   {
     "brand": "현대",
@@ -879,7 +1023,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Honors",
+    "engine_label": "가솔린 3.5 4WD"
   },
   {
     "brand": "현대",
@@ -897,7 +1044,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Calligraphy",
+    "engine_label": "가솔린 3.5 4WD"
   },
   {
     "brand": "현대",
@@ -915,7 +1065,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Black Exterior",
+    "engine_label": "가솔린 3.5 4WD"
   },
   {
     "brand": "현대",
@@ -933,7 +1086,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Black Ink",
+    "engine_label": "가솔린 3.5 4WD"
   },
   {
     "brand": "현대",
@@ -951,7 +1107,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Premium",
+    "engine_label": "LPG 3.5 2WD"
   },
   {
     "brand": "현대",
@@ -969,7 +1128,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 그랜저",
+    "trim_detail": "Exclusive",
+    "engine_label": "LPG 3.5 2WD"
   },
   {
     "brand": "현대",
@@ -987,7 +1149,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저 Hybrid",
+    "trim_detail": "Premium",
+    "engine_label": ""
   },
   {
     "brand": "현대",
@@ -1005,7 +1170,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저 Hybrid",
+    "trim_detail": "Exclusive",
+    "engine_label": ""
   },
   {
     "brand": "현대",
@@ -1023,7 +1191,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저 Hybrid",
+    "trim_detail": "Honors",
+    "engine_label": ""
   },
   {
     "brand": "현대",
@@ -1041,7 +1212,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저 Hybrid",
+    "trim_detail": "Calligraphy",
+    "engine_label": ""
   },
   {
     "brand": "현대",
@@ -1059,7 +1233,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저 Hybrid",
+    "trim_detail": "Black Exterior",
+    "engine_label": ""
   },
   {
     "brand": "현대",
@@ -1077,61 +1254,73 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "더 뉴 그랜저 Hybrid",
+    "trim_detail": "Black Ink",
+    "engine_label": ""
   },
   {
     "brand": "현대",
     "model": "코나",
     "name": "디_올_뉴_코나",
     "trim": "1.6 가솔린 터보 2WD Modern",
-    "price": 25160000,
+    "price": 24660000,
     "disp": 1598,
     "fuel": "가솔린",
     "tax_exempt": "과세",
     "group": "A군",
     "multi_seat": null,
-    "r24": 0.66,
+    "r24": 0.6599999999999999,
     "r36": 0.57,
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "코나",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 1.6T 2WD"
   },
   {
     "brand": "현대",
     "model": "코나",
     "name": "디_올_뉴_코나",
     "trim": "1.6 가솔린 터보 2WD H-Pick",
-    "price": 25980000,
+    "price": 26880000,
     "disp": 1598,
     "fuel": "가솔린",
     "tax_exempt": "과세",
     "group": "A군",
     "multi_seat": null,
-    "r24": 0.66,
+    "r24": 0.6599999999999999,
     "r36": 0.57,
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "코나",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 1.6T 2WD"
   },
   {
     "brand": "현대",
     "model": "코나",
     "name": "디_올_뉴_코나",
     "trim": "1.6 가솔린 터보 2WD Premium",
-    "price": 28640000,
+    "price": 29190000,
     "disp": 1598,
     "fuel": "가솔린",
     "tax_exempt": "과세",
     "group": "A군",
     "multi_seat": null,
-    "r24": 0.66,
+    "r24": 0.6599999999999999,
     "r36": 0.57,
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "코나",
+    "trim_detail": "Premium",
+    "engine_label": "가솔린 1.6T 2WD"
   },
   {
     "brand": "현대",
@@ -1149,7 +1338,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "코나",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 1.6T 2WD"
   },
   {
     "brand": "현대",
@@ -1167,25 +1359,31 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "코나",
+    "trim_detail": "Black Exterior",
+    "engine_label": "가솔린 1.6T 2WD"
   },
   {
     "brand": "현대",
     "model": "코나",
     "name": "디_올_뉴_코나",
     "trim": "1.6 가솔린 터보 4WD Premium",
-    "price": 30670000,
+    "price": 31220000,
     "disp": 1598,
     "fuel": "가솔린",
     "tax_exempt": "과세",
     "group": "A군",
     "multi_seat": null,
-    "r24": 0.66,
+    "r24": 0.6599999999999999,
     "r36": 0.57,
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "코나",
+    "trim_detail": "Premium",
+    "engine_label": "가솔린 1.6T 4WD"
   },
   {
     "brand": "현대",
@@ -1203,169 +1401,136 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
-  },
-  {
-    "brand": "현대",
-    "model": "코나",
-    "name": "디_올_뉴_코나",
-    "trim": "1.6 가솔린 터보 4WD Black Exterior",
-    "price": 33780000,
-    "disp": 1598,
-    "fuel": "가솔린",
-    "tax_exempt": "과세",
-    "group": "A군",
-    "multi_seat": null,
-    "r24": 0.66,
-    "r36": 0.57,
-    "r48": 0.5,
-    "r60": 0.42,
-    "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "코나",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 1.6T 4WD"
   },
   {
     "brand": "현대",
     "model": "코나",
     "name": "디_올_뉴_코나",
     "trim": "2.0 가솔린 터보 2WD Modern",
-    "price": 24460000,
+    "price": 23960000,
     "disp": 1999,
     "fuel": "가솔린",
     "tax_exempt": "과세",
     "group": "A군",
     "multi_seat": null,
-    "r24": 0.66,
+    "r24": 0.6599999999999999,
     "r36": 0.57,
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "코나",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 2.0T 2WD"
   },
   {
     "brand": "현대",
     "model": "코나",
     "name": "디_올_뉴_코나",
     "trim": "2.0 가솔린 터보 2WD H-Pick",
-    "price": 25380000,
+    "price": 26280000,
     "disp": 1999,
     "fuel": "가솔린",
     "tax_exempt": "과세",
     "group": "A군",
     "multi_seat": null,
-    "r24": 0.66,
+    "r24": 0.6599999999999999,
     "r36": 0.57,
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
-  },
-  {
-    "brand": "현대",
-    "model": "코나",
-    "name": "디_올_뉴_코나",
-    "trim": "2.0 가솔린 터보 2WD Premium",
-    "price": 27950000,
-    "disp": 1999,
-    "fuel": "가솔린",
-    "tax_exempt": "과세",
-    "group": "A군",
-    "multi_seat": null,
-    "r24": 0.66,
-    "r36": 0.57,
-    "r48": 0.5,
-    "r60": 0.42,
-    "strategic": 0.08,
-    "buyback_apply": 0
-  },
-  {
-    "brand": "현대",
-    "model": "코나",
-    "name": "디_올_뉴_코나",
-    "trim": "2.0 가솔린 터보 2WD Inspiration",
-    "price": 30810000,
-    "disp": 1999,
-    "fuel": "가솔린",
-    "tax_exempt": "과세",
-    "group": "A군",
-    "multi_seat": null,
-    "r24": 0.66,
-    "r36": 0.57,
-    "r48": 0.5,
-    "r60": 0.42,
-    "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "코나",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 2.0T 2WD"
   },
   {
     "brand": "현대",
     "model": "코나",
     "name": "디_올_뉴_코나",
     "trim": "1.6 가솔린 터보 2WD Black Exterior",
-    "price": 31060000,
+    "price": 31850000,
     "disp": 1598,
     "fuel": "가솔린",
     "tax_exempt": "과세",
     "group": "A군",
     "multi_seat": null,
-    "r24": 0.66,
+    "r24": 0.6599999999999999,
     "r36": 0.57,
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "코나",
+    "trim_detail": "Black Exterior",
+    "engine_label": "가솔린 1.6T 2WD"
   },
   {
     "brand": "현대",
     "model": "코나 Hybrid",
     "name": "디_올_뉴_코나",
     "trim": "1.6 2WD Modern",
-    "price": 31020000,
+    "price": 30420000,
     "disp": 1580,
     "fuel": "HEV.",
     "tax_exempt": "과세",
     "group": "S군",
     "multi_seat": null,
-    "r24": 0.68,
+    "r24": 0.6799999999999999,
     "r36": 0.59,
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "코나 Hybrid",
+    "trim_detail": "기본",
+    "engine_label": "Modern"
   },
   {
     "brand": "현대",
     "model": "코나 Hybrid",
     "name": "디_올_뉴_코나",
     "trim": "1.6 2WD H-Pick",
-    "price": 31940000,
+    "price": 32240000,
     "disp": 1580,
     "fuel": "HEV.",
     "tax_exempt": "과세",
     "group": "S군",
     "multi_seat": null,
-    "r24": 0.68,
+    "r24": 0.6799999999999999,
     "r36": 0.59,
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "코나 Hybrid",
+    "trim_detail": "기본",
+    "engine_label": "H-Pick"
   },
   {
     "brand": "현대",
     "model": "코나 Hybrid",
     "name": "디_올_뉴_코나",
     "trim": "1.6 2WD Premium",
-    "price": 34060000,
+    "price": 34710000,
     "disp": 1580,
     "fuel": "HEV.",
     "tax_exempt": "과세",
     "group": "S군",
     "multi_seat": null,
-    "r24": 0.68,
+    "r24": 0.6799999999999999,
     "r36": 0.59,
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "코나 Hybrid",
+    "trim_detail": "Premium",
+    "engine_label": ""
   },
   {
     "brand": "현대",
@@ -1383,25 +1548,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
-  },
-  {
-    "brand": "현대",
-    "model": "코나 Hybrid",
-    "name": "디_올_뉴_코나",
-    "trim": "1.6 2WD Black Exterior",
-    "price": 36930000,
-    "disp": 1580,
-    "fuel": "HEV.",
-    "tax_exempt": "과세",
-    "group": "S군",
-    "multi_seat": null,
-    "r24": 0.68,
-    "r36": 0.59,
-    "r48": 0.52,
-    "r60": 0.44,
-    "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "코나 Hybrid",
+    "trim_detail": "기본",
+    "engine_label": "Inspiration"
   },
   {
     "brand": "현대",
@@ -1419,7 +1569,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼",
+    "trim_detail": "기본",
+    "engine_label": "2WD"
   },
   {
     "brand": "현대",
@@ -1437,7 +1590,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼",
+    "trim_detail": "Premium",
+    "engine_label": "2WD"
   },
   {
     "brand": "현대",
@@ -1455,7 +1611,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼",
+    "trim_detail": "기본",
+    "engine_label": "2WD"
   },
   {
     "brand": "현대",
@@ -1473,25 +1632,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
-  },
-  {
-    "brand": "현대",
-    "model": "투싼",
-    "name": "더_뉴_투싼",
-    "trim": "1.6 가솔린 터보 2WD Black Exterior",
-    "price": 35050000,
-    "disp": 1598,
-    "fuel": "가솔린",
-    "tax_exempt": "과세",
-    "group": "S군",
-    "multi_seat": null,
-    "r24": 0.68,
-    "r36": 0.59,
-    "r48": 0.52,
-    "r60": 0.44,
-    "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼",
+    "trim_detail": "기본",
+    "engine_label": "2WD"
   },
   {
     "brand": "현대",
@@ -1509,7 +1653,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼",
+    "trim_detail": "기본",
+    "engine_label": "4WD"
   },
   {
     "brand": "현대",
@@ -1527,7 +1674,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼",
+    "trim_detail": "Premium",
+    "engine_label": "4WD"
   },
   {
     "brand": "현대",
@@ -1545,7 +1695,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼",
+    "trim_detail": "기본",
+    "engine_label": "4WD"
   },
   {
     "brand": "현대",
@@ -1563,25 +1716,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
-  },
-  {
-    "brand": "현대",
-    "model": "투싼",
-    "name": "더_뉴_투싼",
-    "trim": "1.6 가솔린 터보 4WD Black Exterior",
-    "price": 37030000,
-    "disp": 1598,
-    "fuel": "가솔린",
-    "tax_exempt": "과세",
-    "group": "S군",
-    "multi_seat": null,
-    "r24": 0.68,
-    "r36": 0.59,
-    "r48": 0.52,
-    "r60": 0.44,
-    "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼",
+    "trim_detail": "기본",
+    "engine_label": "4WD"
   },
   {
     "brand": "현대",
@@ -1599,7 +1737,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼 Hybrid",
+    "trim_detail": "기본",
+    "engine_label": "2WD"
   },
   {
     "brand": "현대",
@@ -1617,7 +1758,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼 Hybrid",
+    "trim_detail": "Premium",
+    "engine_label": "2WD"
   },
   {
     "brand": "현대",
@@ -1635,7 +1779,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼 Hybrid",
+    "trim_detail": "기본",
+    "engine_label": "2WD"
   },
   {
     "brand": "현대",
@@ -1653,25 +1800,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
-  },
-  {
-    "brand": "현대",
-    "model": "투싼 Hybrid",
-    "name": "더_뉴_투싼",
-    "trim": "1.6 2WD Black Exterior",
-    "price": 40670000,
-    "disp": 1598,
-    "fuel": "HEV.",
-    "tax_exempt": "과세",
-    "group": "V군",
-    "multi_seat": null,
-    "r24": 0.7,
-    "r36": 0.61,
-    "r48": 0.54,
-    "r60": 0.46,
-    "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼 Hybrid",
+    "trim_detail": "기본",
+    "engine_label": "2WD"
   },
   {
     "brand": "현대",
@@ -1689,7 +1821,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼 Hybrid",
+    "trim_detail": "기본",
+    "engine_label": "4WD"
   },
   {
     "brand": "현대",
@@ -1707,7 +1842,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼 Hybrid",
+    "trim_detail": "Premium",
+    "engine_label": "4WD"
   },
   {
     "brand": "현대",
@@ -1725,7 +1863,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼 Hybrid",
+    "trim_detail": "기본",
+    "engine_label": "4WD"
   },
   {
     "brand": "현대",
@@ -1743,25 +1884,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
-  },
-  {
-    "brand": "현대",
-    "model": "투싼 Hybrid",
-    "name": "더_뉴_투싼",
-    "trim": "1.6 4WD Black Exterior",
-    "price": 42900000,
-    "disp": 1598,
-    "fuel": "HEV.",
-    "tax_exempt": "과세",
-    "group": "V군",
-    "multi_seat": null,
-    "r24": 0.7,
-    "r36": 0.61,
-    "r48": 0.54,
-    "r60": 0.46,
-    "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "투싼 Hybrid",
+    "trim_detail": "기본",
+    "engine_label": "4WD"
   },
   {
     "brand": "현대",
@@ -1779,7 +1905,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "베뉴",
+    "trim_detail": "기본",
+    "engine_label": "SMART"
   },
   {
     "brand": "현대",
@@ -1797,7 +1926,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "베뉴",
+    "trim_detail": "기본",
+    "engine_label": "PREMIUM"
   },
   {
     "brand": "현대",
@@ -1815,7 +1947,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "베뉴",
+    "trim_detail": "기본",
+    "engine_label": "FLUX"
   },
   {
     "brand": "현대",
@@ -1833,7 +1968,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "익스클루시브 · 5인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -1851,7 +1989,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "프레스티지 · 5인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -1869,7 +2010,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -1887,7 +2031,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "Black Exterior · 5인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -1905,7 +2052,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "캘리그래피 · 5인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -1923,7 +2073,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "Black Ink · 5인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -1941,7 +2094,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "익스클루시브 · 5인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -1959,7 +2115,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "프레스티지 · 5인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -1977,7 +2136,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -1995,7 +2157,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "Black Exterior · 5인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -2013,7 +2178,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "캘리그래피 · 5인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -2031,7 +2199,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "Black Ink · 5인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -2049,7 +2220,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "익스클루시브 · 6인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -2067,7 +2241,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "프레스티지 · 6인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -2085,7 +2262,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -2103,7 +2283,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "Black Exterior · 6인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -2121,7 +2304,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "캘리그래피 · 6인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -2139,7 +2325,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "Black Ink · 6인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -2157,7 +2346,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "익스클루시브 · 6인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -2175,7 +2367,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "프레스티지 · 6인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -2193,7 +2388,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -2211,7 +2409,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "Black Exterior · 6인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -2229,7 +2430,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "캘리그래피 · 6인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -2247,7 +2451,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "Black Ink · 6인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -2265,7 +2472,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "익스클루시브 · 7인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -2283,7 +2493,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "프레스티지 · 7인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -2301,7 +2514,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -2319,7 +2535,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "Black Exterior · 7인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -2337,7 +2556,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "캘리그래피 · 7인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -2355,7 +2577,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "Black Ink · 7인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -2373,7 +2598,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "익스클루시브 · 7인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -2391,7 +2619,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "프레스티지 · 7인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -2409,7 +2640,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -2427,7 +2661,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "Black Exterior · 7인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -2445,7 +2682,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "캘리그래피 · 7인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -2463,7 +2703,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페",
+    "trim_detail": "Black Ink · 7인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -2481,7 +2724,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "익스클루시브 · 5인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2499,7 +2745,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "프레스티지 · 5인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2517,7 +2766,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "5인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2535,7 +2787,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "Black Exterior · 5인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2553,7 +2808,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "캘리그래피 · 5인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2571,7 +2829,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "Black Ink · 5인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2589,7 +2850,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "익스클루시브 · 5인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -2607,7 +2871,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "프레스티지 · 5인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -2625,7 +2892,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "5인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -2643,7 +2913,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "Black Exterior · 5인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -2661,7 +2934,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "캘리그래피 · 5인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -2679,7 +2955,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "Black Ink · 5인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -2697,7 +2976,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "익스클루시브 · 6인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2715,7 +2997,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "프레스티지 · 6인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2733,7 +3018,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "6인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2751,7 +3039,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "Black Exterior · 6인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2769,7 +3060,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "캘리그래피 · 6인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2787,7 +3081,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "Black Ink · 6인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2805,7 +3102,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "익스클루시브 · 6인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -2823,7 +3123,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "프레스티지 · 6인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -2841,7 +3144,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "6인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -2859,7 +3165,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "Black Exterior · 6인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -2877,7 +3186,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "캘리그래피 · 6인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -2895,7 +3207,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "Black Ink · 6인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -2913,7 +3228,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "익스클루시브 · 7인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2931,7 +3249,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "프레스티지 · 7인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2949,7 +3270,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "7인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2967,7 +3291,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "Black Exterior · 7인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -2985,7 +3312,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "캘리그래피 · 7인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -3003,7 +3333,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "Black Ink · 7인승",
+    "engine_label": "1.6 2WD"
   },
   {
     "brand": "현대",
@@ -3021,7 +3354,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "익스클루시브 · 7인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -3039,7 +3375,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "프레스티지 · 7인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -3057,7 +3396,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "7인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -3075,7 +3417,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "Black Exterior · 7인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -3093,7 +3438,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "캘리그래피 · 7인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -3111,7 +3459,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "싼타페 Hybrid",
+    "trim_detail": "Black Ink · 7인승",
+    "engine_label": "1.6 4WD"
   },
   {
     "brand": "현대",
@@ -3129,7 +3480,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드",
+    "trim_detail": "Exclusive · 7인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -3147,7 +3501,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -3165,7 +3522,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드",
+    "trim_detail": "Calligraphy · 7인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -3183,7 +3543,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드",
+    "trim_detail": "Exclusive · 7인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -3201,7 +3564,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -3219,7 +3585,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드",
+    "trim_detail": "Calligraphy · 7인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -3237,7 +3606,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드",
+    "trim_detail": "Exclusive · 9인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -3255,7 +3627,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드",
+    "trim_detail": "9인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -3273,7 +3648,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드",
+    "trim_detail": "Calligraphy · 9인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -3291,7 +3669,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드",
+    "trim_detail": "Exclusive · 9인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -3309,7 +3690,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드",
+    "trim_detail": "9인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -3327,7 +3711,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드",
+    "trim_detail": "Calligraphy · 9인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -3345,7 +3732,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드 Hybrid",
+    "trim_detail": "Exclusive · 7인승",
+    "engine_label": "2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -3363,7 +3753,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드 Hybrid",
+    "trim_detail": "7인승",
+    "engine_label": "2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -3381,7 +3774,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드 Hybrid",
+    "trim_detail": "Calligraphy · 7인승",
+    "engine_label": "2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -3399,7 +3795,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드 Hybrid",
+    "trim_detail": "Exclusive · 7인승",
+    "engine_label": "2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -3417,7 +3816,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드 Hybrid",
+    "trim_detail": "7인승",
+    "engine_label": "2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -3435,7 +3837,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드 Hybrid",
+    "trim_detail": "Calligraphy · 7인승",
+    "engine_label": "2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -3453,7 +3858,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드 Hybrid",
+    "trim_detail": "Exclusive · 9인승",
+    "engine_label": "2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -3471,7 +3879,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드 Hybrid",
+    "trim_detail": "9인승",
+    "engine_label": "2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -3489,7 +3900,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드 Hybrid",
+    "trim_detail": "Calligraphy · 9인승",
+    "engine_label": "2.5T 2WD"
   },
   {
     "brand": "현대",
@@ -3507,7 +3921,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드 Hybrid",
+    "trim_detail": "Exclusive · 9인승",
+    "engine_label": "2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -3525,7 +3942,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드 Hybrid",
+    "trim_detail": "9인승",
+    "engine_label": "2.5T 4WD"
   },
   {
     "brand": "현대",
@@ -3543,14 +3963,17 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 팰리세이드 Hybrid",
+    "trim_detail": "Calligraphy · 9인승",
+    "engine_label": "2.5T 4WD"
   },
   {
     "brand": "기아",
     "model": "모닝",
     "name": "모닝",
     "trim": "모닝 해치백 1.0 가솔린 트렌디",
-    "price": 13950000,
+    "price": 14210000,
     "disp": 998,
     "fuel": "가솔린",
     "tax_exempt": "면세",
@@ -3561,14 +3984,17 @@
     "r48": 0.46,
     "r60": 0.38,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "모닝 JA",
+    "trim_detail": "트렌디",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "기아",
     "model": "모닝",
     "name": "모닝",
     "trim": "모닝 해치백 1.0 가솔린 프레스티지",
-    "price": 15750000,
+    "price": 16010000,
     "disp": 998,
     "fuel": "가솔린",
     "tax_exempt": "면세",
@@ -3579,14 +4005,17 @@
     "r48": 0.46,
     "r60": 0.38,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "모닝 JA",
+    "trim_detail": "프레스티지",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "기아",
     "model": "모닝",
     "name": "모닝",
     "trim": "모닝 해치백 1.0 가솔린 시그니처",
-    "price": 17750000,
+    "price": 18160000,
     "disp": 998,
     "fuel": "가솔린",
     "tax_exempt": "면세",
@@ -3597,43 +4026,52 @@
     "r48": 0.46,
     "r60": 0.38,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "모닝 JA",
+    "trim_detail": "시그니처",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "기아",
     "model": "모닝",
     "name": "모닝",
     "trim": "모닝 밴 1.0 가솔린 트렌디",
-    "price": 13750000,
+    "price": 13860000,
     "disp": 998,
     "fuel": "가솔린",
     "tax_exempt": "면세",
     "group": "F군",
     "multi_seat": null,
-    "r24": 0.54,
-    "r36": 0.45,
+    "r24": 0.5399999999999999,
+    "r36": 0.44999999999999996,
     "r48": 0.38,
     "r60": 0.3,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "모닝 JA",
+    "trim_detail": "트렌디",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "기아",
     "model": "모닝",
     "name": "모닝",
     "trim": "모닝 밴 1.0 가솔린 프레스티지",
-    "price": 14400000,
+    "price": 14510000,
     "disp": 998,
     "fuel": "가솔린",
     "tax_exempt": "면세",
     "group": "F군",
     "multi_seat": null,
-    "r24": 0.54,
-    "r36": 0.45,
+    "r24": 0.5399999999999999,
+    "r36": 0.44999999999999996,
     "r48": 0.38,
     "r60": 0.3,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "모닝 JA",
+    "trim_detail": "프레스티지",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "기아",
@@ -3651,7 +4089,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 레이 TAM",
+    "trim_detail": "트렌디",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "기아",
@@ -3669,7 +4110,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 레이 TAM",
+    "trim_detail": "프레스티지",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "기아",
@@ -3687,7 +4131,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 레이 TAM",
+    "trim_detail": "시그니처",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "기아",
@@ -3705,7 +4152,10 @@
     "r48": 0.41,
     "r60": 0.33,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 레이 TAM",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "기아",
@@ -3723,7 +4173,10 @@
     "r48": 0.41,
     "r60": 0.33,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 레이 TAM",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "기아",
@@ -3741,7 +4194,10 @@
     "r48": 0.41,
     "r60": 0.33,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 레이 TAM",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "기아",
@@ -3759,7 +4215,10 @@
     "r48": 0.41,
     "r60": 0.33,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 레이 TAM",
+    "trim_detail": "트렌디",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "기아",
@@ -3777,7 +4236,10 @@
     "r48": 0.41,
     "r60": 0.33,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 레이 TAM",
+    "trim_detail": "프레스티지",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "기아",
@@ -3795,7 +4257,10 @@
     "r48": 0.41,
     "r60": 0.33,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 레이 TAM",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 1.0"
   },
   {
     "brand": "기아",
@@ -3813,7 +4278,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "프레스티지",
+    "engine_label": "가솔린 1.6T"
   },
   {
     "brand": "기아",
@@ -3831,7 +4299,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "베스트 셀렉션",
+    "engine_label": "가솔린 1.6T"
   },
   {
     "brand": "기아",
@@ -3849,7 +4320,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "노블레스",
+    "engine_label": "가솔린 1.6T"
   },
   {
     "brand": "기아",
@@ -3867,7 +4341,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "시그니처",
+    "engine_label": "가솔린 1.6T"
   },
   {
     "brand": "기아",
@@ -3885,7 +4362,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "스마트 셀렉션",
+    "engine_label": "가솔린 2.0"
   },
   {
     "brand": "기아",
@@ -3903,7 +4383,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "프레스티지",
+    "engine_label": "가솔린 2.0"
   },
   {
     "brand": "기아",
@@ -3921,7 +4404,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "베스트 셀렉션",
+    "engine_label": "가솔린 2.0"
   },
   {
     "brand": "기아",
@@ -3939,7 +4425,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "노블레스",
+    "engine_label": "가솔린 2.0"
   },
   {
     "brand": "기아",
@@ -3957,7 +4446,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "시그니처",
+    "engine_label": "가솔린 2.0"
   },
   {
     "brand": "기아",
@@ -3975,7 +4467,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "프레스티지",
+    "engine_label": "하이브리드 2.0"
   },
   {
     "brand": "기아",
@@ -3993,7 +4488,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "베스트 셀렉션",
+    "engine_label": "하이브리드 2.0"
   },
   {
     "brand": "기아",
@@ -4011,7 +4509,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "노블레스",
+    "engine_label": "하이브리드 2.0"
   },
   {
     "brand": "기아",
@@ -4029,7 +4530,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "시그니처",
+    "engine_label": "하이브리드 2.0"
   },
   {
     "brand": "기아",
@@ -4047,7 +4551,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "프레스티지",
+    "engine_label": "2.0"
   },
   {
     "brand": "기아",
@@ -4065,7 +4572,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "노블레스",
+    "engine_label": "2.0"
   },
   {
     "brand": "기아",
@@ -4083,7 +4593,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "시그니처",
+    "engine_label": "2.0"
   },
   {
     "brand": "기아",
@@ -4101,7 +4614,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "렌터카 트렌디",
+    "engine_label": "2.0"
   },
   {
     "brand": "기아",
@@ -4119,7 +4635,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K5",
+    "trim_detail": "렌터카 프레스티지",
+    "engine_label": "2.0"
   },
   {
     "brand": "기아",
@@ -4137,79 +4656,94 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 2.5 2WD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 2.5 가솔린 2WD 베스트 셀렉션",
-    "price": 38720000,
+    "price": 38900000,
     "disp": 2497,
     "fuel": "가솔린",
     "tax_exempt": "과세",
     "group": "A군",
     "multi_seat": null,
-    "r24": 0.66,
+    "r24": 0.6599999999999999,
     "r36": 0.57,
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "베스트 셀렉션",
+    "engine_label": "가솔린 2.5 2WD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 2.5 가솔린 2WD 노블레스",
-    "price": 40880000,
+    "price": 41480000,
     "disp": 2497,
     "fuel": "가솔린",
     "tax_exempt": "과세",
     "group": "A군",
     "multi_seat": null,
-    "r24": 0.66,
+    "r24": 0.6599999999999999,
     "r36": 0.57,
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "노블레스",
+    "engine_label": "가솔린 2.5 2WD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 2.5 가솔린 2WD 시그니처",
-    "price": 44580000,
+    "price": 45080000,
     "disp": 2497,
     "fuel": "가솔린",
     "tax_exempt": "과세",
     "group": "A군",
     "multi_seat": null,
-    "r24": 0.66,
+    "r24": 0.6599999999999999,
     "r36": 0.57,
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "시그니처",
+    "engine_label": "가솔린 2.5 2WD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 2.5 가솔린 2WD 시그니처 블랙",
-    "price": 46160000,
+    "price": 46660000,
     "disp": 2497,
     "fuel": "가솔린",
     "tax_exempt": "과세",
     "group": "A군",
     "multi_seat": null,
-    "r24": 0.66,
+    "r24": 0.6599999999999999,
     "r36": 0.57,
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 2.5 2WD"
   },
   {
     "brand": "기아",
@@ -4227,14 +4761,17 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5 2WD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 3.5 가솔린 2WD 베스트 셀렉션",
-    "price": 41590000,
+    "price": 41770000,
     "disp": 3470,
     "fuel": "가솔린",
     "tax_exempt": "과세",
@@ -4245,14 +4782,17 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "베스트 셀렉션",
+    "engine_label": "가솔린 3.5 2WD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 3.5 가솔린 2WD 노블레스",
-    "price": 43750000,
+    "price": 44350000,
     "disp": 3470,
     "fuel": "가솔린",
     "tax_exempt": "과세",
@@ -4263,14 +4803,17 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "노블레스",
+    "engine_label": "가솔린 3.5 2WD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 3.5 가솔린 2WD 시그니처",
-    "price": 47450000,
+    "price": 47950000,
     "disp": 3470,
     "fuel": "가솔린",
     "tax_exempt": "과세",
@@ -4281,14 +4824,17 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "시그니처",
+    "engine_label": "가솔린 3.5 2WD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 3.5 가솔린 2WD 시그니처 블랙",
-    "price": 49030000,
+    "price": 49530000,
     "disp": 3470,
     "fuel": "가솔린",
     "tax_exempt": "과세",
@@ -4299,14 +4845,17 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5 2WD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 3.5 가솔린 AWD 노블레스",
-    "price": 45930000,
+    "price": 46530000,
     "disp": 3470,
     "fuel": "가솔린",
     "tax_exempt": "과세",
@@ -4317,14 +4866,17 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "노블레스",
+    "engine_label": "가솔린 3.5 AWD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 3.5 가솔린 AWD 시그니처",
-    "price": 49630000,
+    "price": 50130000,
     "disp": 3470,
     "fuel": "가솔린",
     "tax_exempt": "과세",
@@ -4335,14 +4887,17 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "시그니처",
+    "engine_label": "가솔린 3.5 AWD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 3.5 가솔린 AWD 시그니처 블랙",
-    "price": 51210000,
+    "price": 51710000,
     "disp": 3470,
     "fuel": "가솔린",
     "tax_exempt": "과세",
@@ -4353,7 +4908,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5 AWD"
   },
   {
     "brand": "기아",
@@ -4371,79 +4929,94 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "기본",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 1.6 하이브리드 2WD 베스트 셀렉션",
-    "price": 45080000,
+    "price": 45260000,
     "disp": 1598,
     "fuel": "HEV.",
     "tax_exempt": "과세",
     "group": "S군",
     "multi_seat": null,
-    "r24": 0.68,
+    "r24": 0.6799999999999999,
     "r36": 0.59,
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "베스트 셀렉션",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 1.6 하이브리드 2WD 노블레스",
-    "price": 47240000,
+    "price": 47840000,
     "disp": 1598,
     "fuel": "HEV.",
     "tax_exempt": "과세",
     "group": "S군",
     "multi_seat": null,
-    "r24": 0.68,
+    "r24": 0.6799999999999999,
     "r36": 0.59,
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "노블레스",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 1.6 하이브리드 2WD 시그니처",
-    "price": 50940000,
+    "price": 51440000,
     "disp": 1598,
     "fuel": "HEV.",
     "tax_exempt": "과세",
     "group": "S군",
     "multi_seat": null,
-    "r24": 0.68,
+    "r24": 0.6799999999999999,
     "r36": 0.59,
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "시그니처",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 1.6 하이브리드 2WD 시그니처 블랙",
-    "price": 52320000,
+    "price": 52820000,
     "disp": 1598,
     "fuel": "HEV.",
     "tax_exempt": "과세",
     "group": "S군",
     "multi_seat": null,
-    "r24": 0.68,
+    "r24": 0.6799999999999999,
     "r36": 0.59,
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "기본",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
@@ -4461,7 +5034,10 @@
     "r48": 0.46,
     "r60": 0.38,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "프레스티지",
+    "engine_label": "3.5 2WD"
   },
   {
     "brand": "기아",
@@ -4479,14 +5055,17 @@
     "r48": 0.46,
     "r60": 0.38,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "노블레스",
+    "engine_label": "3.5 2WD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 3.5 Lpi 렌터카 2WD 프레스티지",
-    "price": 35910000,
+    "price": 37820000,
     "disp": 3470,
     "fuel": "LPG",
     "tax_exempt": "과세",
@@ -4497,14 +5076,17 @@
     "r48": 0.46,
     "r60": 0.38,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "프레스티지",
+    "engine_label": "3.5 2WD"
   },
   {
     "brand": "기아",
     "model": "K8",
     "name": "K8",
     "trim": "The new K8 3.5 Lpi 렌터카 2WD 노블레스",
-    "price": 39550000,
+    "price": 41660000,
     "disp": 3470,
     "fuel": "LPG",
     "tax_exempt": "과세",
@@ -4515,14 +5097,17 @@
     "r48": 0.46,
     "r60": 0.38,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K8",
+    "trim_detail": "노블레스",
+    "engine_label": "3.5 2WD"
   },
   {
     "brand": "기아",
     "model": "K9",
     "name": "K9",
     "trim": "K9 3.3 가솔린 터보 2WD 플래티넘",
-    "price": 66170000,
+    "price": 66960000,
     "disp": 3342,
     "fuel": "가솔린",
     "tax_exempt": "과세",
@@ -4533,14 +5118,17 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K9",
+    "trim_detail": "플래티넘",
+    "engine_label": "가솔린 2WD"
   },
   {
     "brand": "기아",
     "model": "K9",
     "name": "K9",
     "trim": "K9 3.3 가솔린 터보 AWD 플래티넘",
-    "price": 68640000,
+    "price": 69430000,
     "disp": 3342,
     "fuel": "가솔린",
     "tax_exempt": "과세",
@@ -4551,14 +5139,17 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K9",
+    "trim_detail": "플래티넘",
+    "engine_label": "가솔린 AWD"
   },
   {
     "brand": "기아",
     "model": "K9",
     "name": "K9",
     "trim": "K9 3.3 가솔린 터보 AWD 플래티넘+베스트셀렉션1",
-    "price": 73650000,
+    "price": 74840000,
     "disp": 3342,
     "fuel": "가솔린",
     "tax_exempt": "과세",
@@ -4569,7 +5160,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K9",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 AWD"
   },
   {
     "brand": "기아",
@@ -4587,7 +5181,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K9",
+    "trim_detail": "마스터즈",
+    "engine_label": "가솔린 AWD"
   },
   {
     "brand": "기아",
@@ -4605,14 +5202,17 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K9",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 AWD"
   },
   {
     "brand": "기아",
     "model": "K9",
     "name": "K9",
     "trim": "K9 3.8 가솔린 터보 2WD 플래티넘",
-    "price": 59620000,
+    "price": 60410000,
     "disp": 3778,
     "fuel": "가솔린",
     "tax_exempt": "과세",
@@ -4623,14 +5223,17 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K9",
+    "trim_detail": "플래티넘",
+    "engine_label": "가솔린 2WD"
   },
   {
     "brand": "기아",
     "model": "K9",
     "name": "K9",
     "trim": "K9 3.8 가솔린 터보 AWD 플래티넘",
-    "price": 62090000,
+    "price": 62880000,
     "disp": 3778,
     "fuel": "가솔린",
     "tax_exempt": "과세",
@@ -4641,14 +5244,17 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K9",
+    "trim_detail": "플래티넘",
+    "engine_label": "가솔린 AWD"
   },
   {
     "brand": "기아",
     "model": "K9",
     "name": "K9",
     "trim": "K9 3.8 가솔린 터보 AWD 플래티넘+베스트셀렉션1",
-    "price": 67890000,
+    "price": 69080000,
     "disp": 3778,
     "fuel": "가솔린",
     "tax_exempt": "과세",
@@ -4659,14 +5265,17 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K9",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 AWD"
   },
   {
     "brand": "기아",
     "model": "K9",
     "name": "K9",
     "trim": "K9 3.8 가솔린 터보 AWD 마스터즈",
-    "price": 75219000,
+    "price": 75290000,
     "disp": 3778,
     "fuel": "가솔린",
     "tax_exempt": "과세",
@@ -4677,7 +5286,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K9",
+    "trim_detail": "마스터즈",
+    "engine_label": "가솔린 AWD"
   },
   {
     "brand": "기아",
@@ -4695,7 +5307,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "K9",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 AWD"
   },
   {
     "brand": "기아",
@@ -4713,7 +5328,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "셀토스",
+    "trim_detail": "트렌디",
+    "engine_label": "가솔린 2WD"
   },
   {
     "brand": "기아",
@@ -4731,7 +5349,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "셀토스",
+    "trim_detail": "프레스티지",
+    "engine_label": "가솔린 2WD"
   },
   {
     "brand": "기아",
@@ -4749,7 +5370,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "셀토스",
+    "trim_detail": "시그니처",
+    "engine_label": "가솔린 2WD"
   },
   {
     "brand": "기아",
@@ -4767,7 +5391,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "셀토스",
+    "trim_detail": "트렌디",
+    "engine_label": "가솔린 4WD"
   },
   {
     "brand": "기아",
@@ -4785,7 +5412,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "셀토스",
+    "trim_detail": "프레스티지",
+    "engine_label": "가솔린 4WD"
   },
   {
     "brand": "기아",
@@ -4803,7 +5433,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "셀토스",
+    "trim_detail": "시그니처",
+    "engine_label": "가솔린 4WD"
   },
   {
     "brand": "기아",
@@ -4821,7 +5454,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "셀토스",
+    "trim_detail": "트렌디",
+    "engine_label": "하이브리드 2WD"
   },
   {
     "brand": "기아",
@@ -4839,7 +5475,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "셀토스",
+    "trim_detail": "프레스티지",
+    "engine_label": "하이브리드 2WD"
   },
   {
     "brand": "기아",
@@ -4857,79 +5496,73 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "셀토스",
+    "trim_detail": "시그니처",
+    "engine_label": "하이브리드 2WD"
   },
   {
     "brand": "기아",
     "model": "니로",
     "name": "니로",
     "trim": "니로 1.6 하이브리드 2WD 트렌디",
-    "price": 29320000,
+    "price": 30310000,
     "disp": 1580,
     "fuel": "HEV.",
     "tax_exempt": "과세",
     "group": "A군",
     "multi_seat": null,
-    "r24": 0.66,
+    "r24": 0.6599999999999999,
     "r36": 0.57,
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "니로",
+    "trim_detail": "트렌디",
+    "engine_label": ""
   },
   {
     "brand": "기아",
     "model": "니로",
     "name": "니로",
     "trim": "니로 1.6 하이브리드 2WD 프레스티지",
-    "price": 32470000,
+    "price": 33460000,
     "disp": 1580,
     "fuel": "HEV.",
     "tax_exempt": "과세",
     "group": "A군",
     "multi_seat": null,
-    "r24": 0.66,
+    "r24": 0.6599999999999999,
     "r36": 0.57,
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
-  },
-  {
-    "brand": "기아",
-    "model": "니로",
-    "name": "니로",
-    "trim": "니로 1.6 하이브리드 2WD 베스트셀렉션",
-    "price": 33570000,
-    "disp": 1580,
-    "fuel": "HEV.",
-    "tax_exempt": "과세",
-    "group": "A군",
-    "multi_seat": null,
-    "r24": 0.66,
-    "r36": 0.57,
-    "r48": 0.5,
-    "r60": 0.42,
-    "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "니로",
+    "trim_detail": "프레스티지",
+    "engine_label": ""
   },
   {
     "brand": "기아",
     "model": "니로",
     "name": "니로",
     "trim": "니로 1.6 하이브리드 2WD 시그니처",
-    "price": 36530000,
+    "price": 36190000,
     "disp": 1580,
     "fuel": "HEV.",
     "tax_exempt": "과세",
     "group": "A군",
     "multi_seat": null,
-    "r24": 0.66,
+    "r24": 0.6599999999999999,
     "r36": 0.57,
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "니로",
+    "trim_detail": "시그니처",
+    "engine_label": ""
   },
   {
     "brand": "기아",
@@ -4947,7 +5580,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "프레스티지",
+    "engine_label": "가솔린 1.6T 2WD"
   },
   {
     "brand": "기아",
@@ -4965,7 +5601,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "노블레스",
+    "engine_label": "가솔린 1.6T 2WD"
   },
   {
     "brand": "기아",
@@ -4983,7 +5622,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "시그니처",
+    "engine_label": "가솔린 1.6T 2WD"
   },
   {
     "brand": "기아",
@@ -5001,7 +5643,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "프레스티지",
+    "engine_label": "가솔린 1.6T 4WD"
   },
   {
     "brand": "기아",
@@ -5019,7 +5664,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "노블레스",
+    "engine_label": "가솔린 1.6T 4WD"
   },
   {
     "brand": "기아",
@@ -5037,7 +5685,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "시그니처",
+    "engine_label": "가솔린 1.6T 4WD"
   },
   {
     "brand": "기아",
@@ -5055,7 +5706,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "프레스티지",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
@@ -5073,7 +5727,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "노블레스",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
@@ -5091,7 +5748,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "시그니처",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
@@ -5109,7 +5769,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "프레스티지",
+    "engine_label": "하이브리드 1.6 4WD"
   },
   {
     "brand": "기아",
@@ -5127,7 +5790,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "노블레스",
+    "engine_label": "하이브리드 1.6 4WD"
   },
   {
     "brand": "기아",
@@ -5145,7 +5811,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "시그니처",
+    "engine_label": "하이브리드 1.6 4WD"
   },
   {
     "brand": "기아",
@@ -5163,7 +5832,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "스포티지",
+    "trim_detail": "프레스티지",
+    "engine_label": "LPG 2.0"
   },
   {
     "brand": "기아",
@@ -5181,7 +5853,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "스포티지",
+    "trim_detail": "노블레스",
+    "engine_label": "LPG 2.0"
   },
   {
     "brand": "기아",
@@ -5199,7 +5874,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "스포티지",
+    "trim_detail": "시그니처",
+    "engine_label": "LPG 2.0"
   },
   {
     "brand": "기아",
@@ -5217,7 +5895,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 5인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "기아",
@@ -5235,7 +5916,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 5인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "기아",
@@ -5253,7 +5937,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 5인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "기아",
@@ -5271,7 +5958,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 5인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "기아",
@@ -5289,7 +5979,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 5인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "기아",
@@ -5307,7 +6000,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 5인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "기아",
@@ -5325,7 +6021,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 6인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "기아",
@@ -5343,7 +6042,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 6인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "기아",
@@ -5361,7 +6063,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 6인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "기아",
@@ -5379,7 +6084,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 6인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "기아",
@@ -5397,7 +6105,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 6인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "기아",
@@ -5415,7 +6126,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 6인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "기아",
@@ -5433,7 +6147,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 7인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "기아",
@@ -5451,7 +6168,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 7인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "기아",
@@ -5469,7 +6189,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 7인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "기아",
@@ -5487,7 +6210,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 7인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "기아",
@@ -5505,7 +6231,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 7인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "기아",
@@ -5523,7 +6252,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 7인승",
+    "engine_label": "가솔린 2.5T 4WD"
   },
   {
     "brand": "기아",
@@ -5541,7 +6273,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 5인승",
+    "engine_label": "디젤 2.2 2WD"
   },
   {
     "brand": "기아",
@@ -5559,7 +6294,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 5인승",
+    "engine_label": "디젤 2.2 2WD"
   },
   {
     "brand": "기아",
@@ -5577,7 +6315,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 5인승",
+    "engine_label": "디젤 2.2 2WD"
   },
   {
     "brand": "기아",
@@ -5595,7 +6336,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 5인승",
+    "engine_label": "디젤 2.2 4WD"
   },
   {
     "brand": "기아",
@@ -5613,7 +6357,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 5인승",
+    "engine_label": "디젤 2.2 4WD"
   },
   {
     "brand": "기아",
@@ -5631,7 +6378,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 5인승",
+    "engine_label": "디젤 2.2 4WD"
   },
   {
     "brand": "기아",
@@ -5649,7 +6399,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 6인승",
+    "engine_label": "디젤 2.2 2WD"
   },
   {
     "brand": "기아",
@@ -5667,7 +6420,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 6인승",
+    "engine_label": "디젤 2.2 2WD"
   },
   {
     "brand": "기아",
@@ -5685,7 +6441,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 6인승",
+    "engine_label": "디젤 2.2 2WD"
   },
   {
     "brand": "기아",
@@ -5703,7 +6462,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 6인승",
+    "engine_label": "디젤 2.2 4WD"
   },
   {
     "brand": "기아",
@@ -5721,7 +6483,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 6인승",
+    "engine_label": "디젤 2.2 4WD"
   },
   {
     "brand": "기아",
@@ -5739,7 +6504,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 6인승",
+    "engine_label": "디젤 2.2 4WD"
   },
   {
     "brand": "기아",
@@ -5757,7 +6525,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 7인승",
+    "engine_label": "디젤 2.2 2WD"
   },
   {
     "brand": "기아",
@@ -5775,7 +6546,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 7인승",
+    "engine_label": "디젤 2.2 2WD"
   },
   {
     "brand": "기아",
@@ -5793,7 +6567,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 7인승",
+    "engine_label": "디젤 2.2 2WD"
   },
   {
     "brand": "기아",
@@ -5811,7 +6588,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 7인승",
+    "engine_label": "디젤 2.2 4WD"
   },
   {
     "brand": "기아",
@@ -5829,7 +6609,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 7인승",
+    "engine_label": "디젤 2.2 4WD"
   },
   {
     "brand": "기아",
@@ -5847,7 +6630,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 7인승",
+    "engine_label": "디젤 2.2 4WD"
   },
   {
     "brand": "기아",
@@ -5865,7 +6651,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 5인승",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
@@ -5883,7 +6672,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 5인승",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
@@ -5901,7 +6693,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 5인승",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
@@ -5919,7 +6714,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 5인승",
+    "engine_label": "하이브리드 1.6 4WD"
   },
   {
     "brand": "기아",
@@ -5937,7 +6735,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 5인승",
+    "engine_label": "하이브리드 1.6 4WD"
   },
   {
     "brand": "기아",
@@ -5955,7 +6756,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 5인승",
+    "engine_label": "하이브리드 1.6 4WD"
   },
   {
     "brand": "기아",
@@ -5973,7 +6777,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 6인승",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
@@ -5991,7 +6798,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 6인승",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
@@ -6009,7 +6819,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 6인승",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
@@ -6027,7 +6840,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 6인승",
+    "engine_label": "하이브리드 1.6 4WD"
   },
   {
     "brand": "기아",
@@ -6045,7 +6861,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 6인승",
+    "engine_label": "하이브리드 1.6 4WD"
   },
   {
     "brand": "기아",
@@ -6063,7 +6882,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 6인승",
+    "engine_label": "하이브리드 1.6 4WD"
   },
   {
     "brand": "기아",
@@ -6081,7 +6903,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 7인승",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
@@ -6099,7 +6924,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 7인승",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
@@ -6117,7 +6945,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 7인승",
+    "engine_label": "하이브리드 1.6 2WD"
   },
   {
     "brand": "기아",
@@ -6135,7 +6966,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "프레스티지 · 7인승",
+    "engine_label": "하이브리드 1.6 4WD"
   },
   {
     "brand": "기아",
@@ -6153,7 +6987,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "노블레스 · 7인승",
+    "engine_label": "하이브리드 1.6 4WD"
   },
   {
     "brand": "기아",
@@ -6171,7 +7008,10 @@
     "r48": 0.56,
     "r60": 0.48,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "시그니처 · 7인승",
+    "engine_label": "하이브리드 1.6 4WD"
   },
   {
     "brand": "기아",
@@ -6189,7 +7029,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "노블레스 · 7인승",
+    "engine_label": "가솔린 3.5"
   },
   {
     "brand": "기아",
@@ -6207,7 +7050,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "시그니처 · 7인승",
+    "engine_label": "가솔린 3.5"
   },
   {
     "brand": "기아",
@@ -6225,7 +7071,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "프레스티지 · 9인승",
+    "engine_label": "가솔린 3.5"
   },
   {
     "brand": "기아",
@@ -6243,7 +7092,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "노블레스 · 9인승",
+    "engine_label": "가솔린 3.5"
   },
   {
     "brand": "기아",
@@ -6261,7 +7113,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "시그니처 · 9인승",
+    "engine_label": "가솔린 3.5"
   },
   {
     "brand": "기아",
@@ -6279,7 +7134,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "노블레스 · 7인승",
+    "engine_label": "하이브리드 1.6"
   },
   {
     "brand": "기아",
@@ -6297,7 +7155,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "시그니처 · 7인승",
+    "engine_label": "하이브리드 1.6"
   },
   {
     "brand": "기아",
@@ -6315,7 +7176,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "프레스티지 · 9인승",
+    "engine_label": "하이브리드 1.6"
   },
   {
     "brand": "기아",
@@ -6333,7 +7197,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "노블레스 · 9인승",
+    "engine_label": "하이브리드 1.6"
   },
   {
     "brand": "기아",
@@ -6351,7 +7218,10 @@
     "r48": 0.54,
     "r60": 0.46,
     "strategic": 0.08,
-    "buyback_apply": 0
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "시그니처 · 9인승",
+    "engine_label": "하이브리드 1.6"
   },
   {
     "brand": "제네시스",
@@ -6369,7 +7239,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G70",
+    "trim_detail": "기본 모델",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -6387,7 +7260,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G70",
+    "trim_detail": "스포츠 패키지",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -6405,7 +7281,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G70",
+    "trim_detail": "기본 모델",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6423,7 +7302,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G70",
+    "trim_detail": "스포츠 패키지",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6441,7 +7323,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G70",
+    "trim_detail": "기본 모델",
+    "engine_label": "가솔린 3.3T 2WD"
   },
   {
     "brand": "제네시스",
@@ -6459,7 +7344,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G70",
+    "trim_detail": "스포츠 패키지",
+    "engine_label": "가솔린 3.3T 2WD"
   },
   {
     "brand": "제네시스",
@@ -6477,7 +7365,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G70",
+    "trim_detail": "기본 모델",
+    "engine_label": "가솔린 3.3T AWD"
   },
   {
     "brand": "제네시스",
@@ -6495,7 +7386,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G70",
+    "trim_detail": "스포츠 패키지",
+    "engine_label": "가솔린 3.3T AWD"
   },
   {
     "brand": "제네시스",
@@ -6513,7 +7407,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 G80 RG3",
+    "trim_detail": "기본 모델",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -6531,7 +7428,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 G80 RG3",
+    "trim_detail": "스포츠 패키지",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -6549,7 +7449,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 G80 RG3",
+    "trim_detail": "기본 모델",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6567,7 +7470,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 G80 RG3",
+    "trim_detail": "스포츠 패키지",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6585,7 +7491,10 @@
     "r48": 0.46,
     "r60": 0.38,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 G80 RG3",
+    "trim_detail": "기본 모델",
+    "engine_label": "가솔린 3.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -6603,7 +7512,10 @@
     "r48": 0.46,
     "r60": 0.38,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 G80 RG3",
+    "trim_detail": "스포츠 패키지",
+    "engine_label": "가솔린 3.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -6621,7 +7533,10 @@
     "r48": 0.46,
     "r60": 0.38,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 G80 RG3",
+    "trim_detail": "기본 모델",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6639,7 +7554,10 @@
     "r48": 0.46,
     "r60": 0.38,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 G80 RG3",
+    "trim_detail": "스포츠 패키지",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6657,7 +7575,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 G80 RG3",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 2.5T"
   },
   {
     "brand": "제네시스",
@@ -6675,7 +7596,10 @@
     "r48": 0.46,
     "r60": 0.38,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "디 올 뉴 G80 RG3",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5T"
   },
   {
     "brand": "제네시스",
@@ -6693,7 +7617,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G90 RS4",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 3.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -6711,7 +7638,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G90 RS4",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6729,7 +7659,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G90 RS4",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -6747,7 +7680,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G90 RS4",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6765,7 +7701,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G90 RS4",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 3.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -6783,7 +7722,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G90 RS4",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6801,7 +7743,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G90 RS4",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -6819,7 +7764,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G90 RS4",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6837,7 +7785,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G90 RS4",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6855,7 +7806,10 @@
     "r48": 0.44,
     "r60": 0.36,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G90 RS4",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6873,7 +7827,10 @@
     "r48": 0.32,
     "r60": 0.24,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G90 RS4",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6891,7 +7848,10 @@
     "r48": 0.32,
     "r60": 0.24,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "G90 RS4",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6909,7 +7869,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV70",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -6927,7 +7890,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV70",
+    "trim_detail": "스포츠 패키지",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -6945,7 +7911,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV70",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6963,7 +7932,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV70",
+    "trim_detail": "스포츠 패키지",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -6981,7 +7953,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV70",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -6999,7 +7974,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV70",
+    "trim_detail": "스포츠 패키지",
+    "engine_label": "가솔린 3.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7017,7 +7995,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV70",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7035,7 +8016,10 @@
     "r48": 0.48,
     "r60": 0.4,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV70",
+    "trim_detail": "스포츠 패키지",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7053,7 +8037,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7071,7 +8058,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7089,7 +8079,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7107,7 +8100,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7125,7 +8121,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7143,7 +8142,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7161,7 +8163,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7179,7 +8184,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7197,7 +8205,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 2.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7215,7 +8226,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7233,7 +8247,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7251,7 +8268,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7269,7 +8289,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7287,7 +8310,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7305,7 +8331,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7323,7 +8352,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7341,7 +8373,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7359,7 +8394,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7377,7 +8415,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7395,7 +8436,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7413,7 +8457,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7431,7 +8478,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 3.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7449,7 +8499,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 3.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7467,7 +8520,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 3.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7485,7 +8541,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 3.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7503,7 +8562,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 3.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7521,7 +8583,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 3.5T 2WD"
   },
   {
     "brand": "제네시스",
@@ -7539,7 +8604,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7557,7 +8625,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7575,7 +8646,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7593,7 +8667,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7611,7 +8688,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7629,7 +8709,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7647,7 +8730,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7665,7 +8751,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7683,7 +8772,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7701,7 +8793,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7719,7 +8814,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7737,7 +8835,10 @@
     "r48": 0.52,
     "r60": 0.44,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 2.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7755,7 +8856,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7773,7 +8877,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7791,7 +8898,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7809,7 +8919,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "제네시스",
@@ -7827,7 +8940,10 @@
     "r48": 0.5,
     "r60": 0.42,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "GV80",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 3.5T AWD"
   },
   {
     "brand": "현대",
@@ -7845,7 +8961,10 @@
     "r48": 0.6,
     "r60": 0.51,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "포터 II",
+    "trim_detail": "기본",
+    "engine_label": "2.5"
   },
   {
     "brand": "현대",
@@ -7863,7 +8982,10 @@
     "r48": 0.6,
     "r60": 0.51,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "포터 II",
+    "trim_detail": "기본",
+    "engine_label": "2.5"
   },
   {
     "brand": "현대",
@@ -7881,7 +9003,10 @@
     "r48": 0.6,
     "r60": 0.51,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "포터 II",
+    "trim_detail": "기본",
+    "engine_label": "2.5"
   },
   {
     "brand": "현대",
@@ -7899,6 +9024,975 @@
     "r48": 0.6,
     "r60": 0.51,
     "strategic": 0,
-    "buyback_apply": 0.04
+    "buyback_apply": 0.04,
+    "model_name_kr": "포터 II",
+    "trim_detail": "기본",
+    "engine_label": "2.5"
+  },
+  {
+    "brand": "현대",
+    "model": "그랜저",
+    "name": "더_뉴_그랜저",
+    "trim": "더 뉴 뉴 그랜저 2.5 가솔린 2WD Premium",
+    "price": 42500000,
+    "disp": 2497,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "그랜저",
+    "trim_detail": "Premium",
+    "engine_label": "가솔린 2.5 2WD"
+  },
+  {
+    "brand": "현대",
+    "model": "그랜저",
+    "name": "더_뉴_그랜저",
+    "trim": "더 뉴 그랜저 2.5 가솔린 2WD Exclusive",
+    "price": 47000000,
+    "disp": 2497,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "그랜저",
+    "trim_detail": "Exclusive",
+    "engine_label": "가솔린 2.5 2WD"
+  },
+  {
+    "brand": "현대",
+    "model": "그랜저",
+    "name": "더_뉴_그랜저",
+    "trim": "더 뉴 그랜저 2.5 가솔린 2WD Calligraphy",
+    "price": 53170000,
+    "disp": 2497,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "그랜저",
+    "trim_detail": "Calligraphy",
+    "engine_label": "가솔린 2.5 2WD"
+  },
+  {
+    "brand": "현대",
+    "model": "그랜저",
+    "name": "더_뉴_그랜저",
+    "trim": "더 뉴 그랜저 3.5 가솔린 2WD Premium",
+    "price": 44970000,
+    "disp": 3470,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "S군",
+    "multi_seat": null,
+    "r24": 0.6799999999999999,
+    "r36": 0.59,
+    "r48": 0.52,
+    "r60": 0.44,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "그랜저",
+    "trim_detail": "Premium",
+    "engine_label": "가솔린 3.5 2WD"
+  },
+  {
+    "brand": "현대",
+    "model": "그랜저",
+    "name": "더_뉴_그랜저",
+    "trim": "더 뉴 그랜저 3.5 가솔린 2WD Exclusive",
+    "price": 49470000,
+    "disp": 3470,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "S군",
+    "multi_seat": null,
+    "r24": 0.6799999999999999,
+    "r36": 0.59,
+    "r48": 0.52,
+    "r60": 0.44,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "그랜저",
+    "trim_detail": "Exclusive",
+    "engine_label": "가솔린 3.5 2WD"
+  },
+  {
+    "brand": "현대",
+    "model": "그랜저",
+    "name": "더_뉴_그랜저",
+    "trim": "더 뉴 그랜저 3.5 가솔린 2WD Calligraphy",
+    "price": 55640000,
+    "disp": 3470,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "S군",
+    "multi_seat": null,
+    "r24": 0.6799999999999999,
+    "r36": 0.59,
+    "r48": 0.52,
+    "r60": 0.44,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "그랜저",
+    "trim_detail": "Calligraphy",
+    "engine_label": "가솔린 3.5 2WD"
+  },
+  {
+    "brand": "현대",
+    "model": "그랜저",
+    "name": "더_뉴_그랜저",
+    "trim": "더 뉴 그랜저 3.5 가솔린 4WD Premium",
+    "price": 47170000,
+    "disp": 3470,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "S군",
+    "multi_seat": null,
+    "r24": 0.6799999999999999,
+    "r36": 0.59,
+    "r48": 0.52,
+    "r60": 0.44,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "그랜저",
+    "trim_detail": "Premium",
+    "engine_label": "가솔린 3.5 4WD"
+  },
+  {
+    "brand": "현대",
+    "model": "그랜저",
+    "name": "더_뉴_그랜저",
+    "trim": "더 뉴 그랜저 3.5 가솔린 4WD Exclusive",
+    "price": 51670000,
+    "disp": 3470,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "S군",
+    "multi_seat": null,
+    "r24": 0.6799999999999999,
+    "r36": 0.59,
+    "r48": 0.52,
+    "r60": 0.44,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "그랜저",
+    "trim_detail": "Exclusive",
+    "engine_label": "가솔린 3.5 4WD"
+  },
+  {
+    "brand": "현대",
+    "model": "그랜저",
+    "name": "더_뉴_그랜저",
+    "trim": "더 뉴 그랜저 3.5 가솔린 4WD Calligraphy",
+    "price": 57840000,
+    "disp": 3470,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "S군",
+    "multi_seat": null,
+    "r24": 0.6799999999999999,
+    "r36": 0.59,
+    "r48": 0.52,
+    "r60": 0.44,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "그랜저",
+    "trim_detail": "Calligraphy",
+    "engine_label": "가솔린 3.5 4WD"
+  },
+  {
+    "brand": "현대",
+    "model": "그랜저",
+    "name": "더_뉴_그랜저",
+    "trim": "더 뉴 그랜저 3.5 LPG 2WD Premium",
+    "price": 43980000,
+    "disp": 3470,
+    "fuel": "LPG",
+    "tax_exempt": "과세",
+    "group": "A군",
+    "multi_seat": null,
+    "r24": 0.6599999999999999,
+    "r36": 0.57,
+    "r48": 0.5,
+    "r60": 0.42,
+    "strategic": 0,
+    "buyback_apply": 0.04,
+    "model_name_kr": "그랜저",
+    "trim_detail": "Premium",
+    "engine_label": "LPG 3.5 2WD"
+  },
+  {
+    "brand": "현대",
+    "model": "그랜저",
+    "name": "더_뉴_그랜저",
+    "trim": "더 뉴 그랜저 3.5 LPG 2WD Exclusive",
+    "price": 48480000,
+    "disp": 3470,
+    "fuel": "LPG",
+    "tax_exempt": "과세",
+    "group": "A군",
+    "multi_seat": null,
+    "r24": 0.6599999999999999,
+    "r36": 0.57,
+    "r48": 0.5,
+    "r60": 0.42,
+    "strategic": 0,
+    "buyback_apply": 0.04,
+    "model_name_kr": "그랜저",
+    "trim_detail": "Exclusive",
+    "engine_label": "LPG 3.5 2WD"
+  },
+  {
+    "brand": "현대",
+    "model": "그랜저",
+    "name": "더_뉴_그랜저",
+    "trim": "더 뉴 그랜저 1.6 하이브리드 2WD Premium",
+    "price": 49390000,
+    "disp": 1598,
+    "fuel": "HEV.",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "그랜저",
+    "trim_detail": "Premium",
+    "engine_label": "하이브리드 1.6 2WD"
+  },
+  {
+    "brand": "현대",
+    "model": "그랜저",
+    "name": "더_뉴_그랜저",
+    "trim": "더 뉴 그랜저 1.6 하이브리드 2WD Exclusive",
+    "price": 53890000,
+    "disp": 1598,
+    "fuel": "HEV.",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "그랜저",
+    "trim_detail": "Exclusive",
+    "engine_label": "하이브리드 1.6 2WD"
+  },
+  {
+    "brand": "현대",
+    "model": "그랜저",
+    "name": "더_뉴_그랜저",
+    "trim": "더 뉴 그랜저 1.6 하이브리드 2WD Calligraphy",
+    "price": 60060000,
+    "disp": 1598,
+    "fuel": "HEV.",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "그랜저",
+    "trim_detail": "Calligraphy",
+    "engine_label": "하이브리드 1.6 2WD"
+  },
+  {
+    "brand": "기아",
+    "model": "레이",
+    "name": "레이",
+    "trim": "레이 해치백 1.0 가솔린 X-Line",
+    "price": 20030000,
+    "disp": 998,
+    "fuel": "가솔린",
+    "tax_exempt": "면세",
+    "group": "B군",
+    "multi_seat": null,
+    "r24": 0.64,
+    "r36": 0.55,
+    "r48": 0.48,
+    "r60": 0.4,
+    "strategic": 0,
+    "buyback_apply": 0.04,
+    "model_name_kr": "더 뉴 레이 TAM",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 1.0"
+  },
+  {
+    "brand": "기아",
+    "model": "셀토스",
+    "name": "셀토스",
+    "trim": "셀토스 1.6 가솔린 2WD X-Line",
+    "price": 32670000,
+    "disp": 1598,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "V군",
+    "multi_seat": null,
+    "r24": 0.7,
+    "r36": 0.61,
+    "r48": 0.54,
+    "r60": 0.46,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "셀토스",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 2WD"
+  },
+  {
+    "brand": "기아",
+    "model": "셀토스",
+    "name": "셀토스",
+    "trim": "셀토스 1.6 가솔린 4WD X-Line",
+    "price": 34650000,
+    "disp": 1598,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "V군",
+    "multi_seat": null,
+    "r24": 0.7,
+    "r36": 0.61,
+    "r48": 0.54,
+    "r60": 0.46,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "셀토스",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 4WD"
+  },
+  {
+    "brand": "기아",
+    "model": "스포티지",
+    "name": "스포티지",
+    "trim": "스포티지 1.6 가솔린 터보 2WD X-Line",
+    "price": 35760000,
+    "disp": 1598,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "V군",
+    "multi_seat": null,
+    "r24": 0.7,
+    "r36": 0.61,
+    "r48": 0.54,
+    "r60": 0.46,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 1.6T 2WD"
+  },
+  {
+    "brand": "기아",
+    "model": "스포티지",
+    "name": "스포티지",
+    "trim": "스포티지 1.6 가솔린 터보 4WD X-Line",
+    "price": 37990000,
+    "disp": 1598,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "V군",
+    "multi_seat": null,
+    "r24": 0.7,
+    "r36": 0.61,
+    "r48": 0.54,
+    "r60": 0.46,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "기본",
+    "engine_label": "가솔린 1.6T 4WD"
+  },
+  {
+    "brand": "기아",
+    "model": "스포티지",
+    "name": "스포티지",
+    "trim": "스포티지 1.6 하이브리드 2WD X-Line",
+    "price": 41580000,
+    "disp": 1598,
+    "fuel": "HEV.",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "기본",
+    "engine_label": "하이브리드 1.6 2WD"
+  },
+  {
+    "brand": "기아",
+    "model": "스포티지",
+    "name": "스포티지",
+    "trim": "스포티지 1.6 하이브리드 4WD X-Line",
+    "price": 43810000,
+    "disp": 1598,
+    "fuel": "HEV.",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "스포티지",
+    "trim_detail": "기본",
+    "engine_label": "하이브리드 1.6 4WD"
+  },
+  {
+    "brand": "기아",
+    "model": "스포티지",
+    "name": "스포티지",
+    "trim": "스포티지 2.0 LPG X-Line",
+    "price": 36410000,
+    "disp": 1999,
+    "fuel": "LPG",
+    "tax_exempt": "과세",
+    "group": "D군",
+    "multi_seat": null,
+    "r24": 0.6,
+    "r36": 0.51,
+    "r48": 0.44,
+    "r60": 0.36,
+    "strategic": 0,
+    "buyback_apply": 0.04,
+    "model_name_kr": "스포티지",
+    "trim_detail": "기본",
+    "engine_label": "LPG 2.0"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 5인승 2.5 가솔린 터보 2WD X-Line",
+    "price": 43260000,
+    "disp": 2497,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "V군",
+    "multi_seat": null,
+    "r24": 0.7,
+    "r36": 0.61,
+    "r48": 0.54,
+    "r60": 0.46,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 2.5T 2WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 5인승 2.5 가솔린 터보 4WD X-Line",
+    "price": 45580000,
+    "disp": 2497,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "V군",
+    "multi_seat": null,
+    "r24": 0.7,
+    "r36": 0.61,
+    "r48": 0.54,
+    "r60": 0.46,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "5인승",
+    "engine_label": "가솔린 2.5T 4WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 6인승 2.5 가솔린 터보 2WD X-Line",
+    "price": 44100000,
+    "disp": 2497,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "V군",
+    "multi_seat": null,
+    "r24": 0.7,
+    "r36": 0.61,
+    "r48": 0.54,
+    "r60": 0.46,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 2.5T 2WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 6인승 2.5 가솔린 터보 4WD X-Line",
+    "price": 46420000,
+    "disp": 2497,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "V군",
+    "multi_seat": null,
+    "r24": 0.7,
+    "r36": 0.61,
+    "r48": 0.54,
+    "r60": 0.46,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "6인승",
+    "engine_label": "가솔린 2.5T 4WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 7인승 2.5 가솔린 터보 2WD X-Line",
+    "price": 43950000,
+    "disp": 2497,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "V군",
+    "multi_seat": "다인승",
+    "r24": 0.7,
+    "r36": 0.61,
+    "r48": 0.54,
+    "r60": 0.46,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 2.5T 2WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 7인승 2.5 가솔린 터보 4WD X-Line",
+    "price": 46270000,
+    "disp": 2497,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "V군",
+    "multi_seat": "다인승",
+    "r24": 0.7,
+    "r36": 0.61,
+    "r48": 0.54,
+    "r60": 0.46,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 2.5T 4WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 5인승 2.2 디젤 2WD X-Line",
+    "price": 44990000,
+    "disp": 2151,
+    "fuel": "디젤",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "5인승",
+    "engine_label": "디젤 2.2 2WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 5인승 2.2 디젤 4WD X-Line",
+    "price": 47310000,
+    "disp": 2151,
+    "fuel": "디젤",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "5인승",
+    "engine_label": "디젤 2.2 4WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 6인승 2.2 디젤 2WD X-Line",
+    "price": 45830000,
+    "disp": 2151,
+    "fuel": "디젤",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "6인승",
+    "engine_label": "디젤 2.2 2WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 6인승 2.2 디젤 4WD X-Line",
+    "price": 48150000,
+    "disp": 2151,
+    "fuel": "디젤",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "6인승",
+    "engine_label": "디젤 2.2 4WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 7인승 2.2 디젤 2WD X-Line",
+    "price": 45680000,
+    "disp": 2151,
+    "fuel": "디젤",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": "다인승",
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "7인승",
+    "engine_label": "디젤 2.2 2WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 7인승 2.2 디젤 4WD X-Line",
+    "price": 48000000,
+    "disp": 2151,
+    "fuel": "디젤",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": "다인승",
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "7인승",
+    "engine_label": "디젤 2.2 4WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 5인승 1.6 하이브리드 2WD X-Line",
+    "price": 47310000,
+    "disp": 1598,
+    "fuel": "HEV.",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "5인승",
+    "engine_label": "하이브리드 1.6 2WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 5인승 1.6 하이브리드 4WD X-Line",
+    "price": 49630000,
+    "disp": 1598,
+    "fuel": "HEV.",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "5인승",
+    "engine_label": "하이브리드 1.6 4WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 6인승 1.6 하이브리드 2WD X-Line",
+    "price": 48150000,
+    "disp": 1598,
+    "fuel": "HEV.",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "6인승",
+    "engine_label": "하이브리드 1.6 2WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 6인승 1.6 하이브리드 4WD X-Line",
+    "price": 50470000,
+    "disp": 1598,
+    "fuel": "HEV.",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": null,
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "6인승",
+    "engine_label": "하이브리드 1.6 4WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 7인승 1.6 하이브리드 2WD X-Line",
+    "price": 48000000,
+    "disp": 1598,
+    "fuel": "HEV.",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": "다인승",
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "7인승",
+    "engine_label": "하이브리드 1.6 2WD"
+  },
+  {
+    "brand": "기아",
+    "model": "쏘렌토",
+    "name": "쏘렌토",
+    "trim": "쏘렌토 7인승 1.6 하이브리드 4WD X-Line",
+    "price": 50320000,
+    "disp": 1598,
+    "fuel": "HEV.",
+    "tax_exempt": "과세",
+    "group": "V+군",
+    "multi_seat": "다인승",
+    "r24": 0.72,
+    "r36": 0.63,
+    "r48": 0.56,
+    "r60": 0.48,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "쏘렌토",
+    "trim_detail": "7인승",
+    "engine_label": "하이브리드 1.6 4WD"
+  },
+  {
+    "brand": "기아",
+    "model": "카니발",
+    "name": "카니발",
+    "trim": "카니발 7인승 3.5 가솔린 아웃도어",
+    "price": 42320000,
+    "disp": 3470,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "B군",
+    "multi_seat": "다인승",
+    "r24": 0.64,
+    "r36": 0.55,
+    "r48": 0.48,
+    "r60": 0.4,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 3.5"
+  },
+  {
+    "brand": "기아",
+    "model": "카니발",
+    "name": "카니발",
+    "trim": "카니발 7인승 3.5 가솔린 X-Line",
+    "price": 47610000,
+    "disp": 3470,
+    "fuel": "가솔린",
+    "tax_exempt": "과세",
+    "group": "B군",
+    "multi_seat": "다인승",
+    "r24": 0.64,
+    "r36": 0.55,
+    "r48": 0.48,
+    "r60": 0.4,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "7인승",
+    "engine_label": "가솔린 3.5"
+  },
+  {
+    "brand": "기아",
+    "model": "카니발",
+    "name": "카니발",
+    "trim": "카니발 9인승 3.5 가솔린 X-Line",
+    "price": 45020000,
+    "disp": 3470,
+    "fuel": "가솔린",
+    "tax_exempt": "면세",
+    "group": "A군",
+    "multi_seat": "다인승",
+    "r24": 0.6599999999999999,
+    "r36": 0.57,
+    "r48": 0.5,
+    "r60": 0.42,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "9인승",
+    "engine_label": "가솔린 3.5"
+  },
+  {
+    "brand": "기아",
+    "model": "카니발",
+    "name": "카니발",
+    "trim": "카니발 7인승 1.6 하이브리드 아웃도어",
+    "price": 46820000,
+    "disp": 1598,
+    "fuel": "HEV.",
+    "tax_exempt": "과세",
+    "group": "S군",
+    "multi_seat": "다인승",
+    "r24": 0.6799999999999999,
+    "r36": 0.59,
+    "r48": 0.52,
+    "r60": 0.44,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "7인승",
+    "engine_label": "하이브리드 1.6"
+  },
+  {
+    "brand": "기아",
+    "model": "카니발",
+    "name": "카니발",
+    "trim": "카니발 7인승 1.6 하이브리드 X-Line",
+    "price": 52110000,
+    "disp": 1598,
+    "fuel": "HEV.",
+    "tax_exempt": "과세",
+    "group": "S군",
+    "multi_seat": "다인승",
+    "r24": 0.6799999999999999,
+    "r36": 0.59,
+    "r48": 0.52,
+    "r60": 0.44,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "7인승",
+    "engine_label": "하이브리드 1.6"
+  },
+  {
+    "brand": "기아",
+    "model": "카니발",
+    "name": "카니발",
+    "trim": "카니발 9인승 1.6 하이브리드 X-Line",
+    "price": 49570000,
+    "disp": 1598,
+    "fuel": "HEV.",
+    "tax_exempt": "면세",
+    "group": "V군",
+    "multi_seat": "다인승",
+    "r24": 0.7,
+    "r36": 0.61,
+    "r48": 0.54,
+    "r60": 0.46,
+    "strategic": 0.08,
+    "buyback_apply": 0,
+    "model_name_kr": "카니발",
+    "trim_detail": "9인승",
+    "engine_label": "하이브리드 1.6"
   }
 ]
