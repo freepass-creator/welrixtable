@@ -84,17 +84,17 @@ function openSend() {
   sendOpen.value = true;
 }
 
-// 조회동의 링크 — 헤더 [동의] 버튼 → 메뉴(복사 / 카톡 전송). 회사 설정의 signature_link.
+// 조회동의 링크 — 헤더 [동의링크] 누르면 OS 시스템 공유시트(복사·카톡 등). 회사 설정의 signature_link.
 const signCopied = ref(false);
-const signMenuOpen = ref(false);
-function signUrl() {
+async function shareSignLink() {
   const url = cfg.value.signature_link;
-  if (!url) { alert('이 회사는 조회동의 링크가 설정되어 있지 않습니다.'); return null; }
-  return url;
-}
-// 복사 — 클립보드
-async function copySignLink() {
-  const url = signUrl(); if (!url) return;
+  if (!url) { alert('이 회사는 조회동의 링크가 설정되어 있지 않습니다.'); return; }
+  const text = '[웰릭스모빌리티] 조회 동의 부탁드립니다. 아래 링크에서 진행해 주세요.';
+  if (navigator.share) {
+    try { await navigator.share({ title: '조회 동의', text, url }); return; }   // OS 공유시트
+    catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  // 데스크톱 등 공유 미지원 → 클립보드 복사
   try {
     await navigator.clipboard.writeText(url);
     signCopied.value = true;
@@ -102,17 +102,6 @@ async function copySignLink() {
   } catch {
     prompt('아래 링크를 복사해 손님께 전달하세요:', url);
   }
-}
-// 바로전송 — Web Share(카톡 등 공유시트). 미지원 시 복사로 대체
-async function sendSignLink() {
-  const url = signUrl(); if (!url) return;
-  const text = '[웰릭스모빌리티] 조회 동의 부탁드립니다. 아래 링크에서 진행해 주세요.';
-  if (navigator.share) {
-    try { await navigator.share({ title: '조회 동의', text, url }); return; }
-    catch (e) { if (e && e.name === 'AbortError') return; }
-  }
-  try { await navigator.clipboard.writeText(url); alert('이 기기는 바로전송 미지원 — 링크가 복사됐어요.'); }
-  catch { prompt('아래 링크를 복사해 전달하세요:', url); }
 }
 </script>
 
@@ -124,23 +113,15 @@ async function sendSignLink() {
         <img class="m-ci" src="/welrix-ci.png" alt="웰릭스 모빌리티" />
       </div>
       <div class="m-header__actions">
-        <div class="m-sign">
-          <button class="m-act" @click="signMenuOpen = !signMenuOpen" title="조회동의 링크">
-            <i class="ph" :class="signCopied ? 'ph-check-circle' : 'ph-signature'"></i>
-            <span>{{ signCopied ? '복사됨' : '동의링크' }}</span>
-            <i class="ph ph-caret-down" style="font-size:11px;opacity:.6;"></i>
-          </button>
-          <div v-if="signMenuOpen" class="m-sign-menu">
-            <button @click="copySignLink(); signMenuOpen = false"><i class="ph ph-copy"></i> 복사하기</button>
-            <button @click="sendSignLink(); signMenuOpen = false"><i class="ph ph-share-network"></i> 카톡 전송하기</button>
-          </div>
-        </div>
+        <button class="m-act" @click="shareSignLink" title="조회동의 링크 공유">
+          <i class="ph" :class="signCopied ? 'ph-check-circle' : 'ph-share-network'"></i>
+          <span>{{ signCopied ? '복사됨' : '동의링크' }}</span>
+        </button>
         <button class="m-act m-act--primary" :disabled="!vehicleState.trim" @click="openSend">
           <i class="ph ph-paper-plane-tilt"></i>
           <span>견적발송</span>
         </button>
       </div>
-      <div v-if="signMenuOpen" class="m-sign-backdrop" @click="signMenuOpen = false"></div>
     </header>
 
     <!-- 페이지별 progress segment — 전체 페이지 수 만큼 -->
@@ -226,29 +207,6 @@ async function sendSignLink() {
   cursor: not-allowed;
 }
 .m-act:not(:disabled):active { opacity: 0.6; }
-
-/* 조회동의 드롭다운 (복사 / 카톡 전송) */
-.m-sign { position: relative; }
-.m-sign-menu {
-  position: absolute; top: calc(100% + 4px); right: 0; z-index: 40;
-  min-width: 132px;
-  background: #fff;
-  border: 1px solid var(--line, #e5e7eb);
-  border-radius: 10px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.14);
-  overflow: hidden;
-}
-.m-sign-menu button {
-  display: flex; align-items: center; gap: 7px; width: 100%;
-  padding: 11px 14px;
-  background: transparent; border: 0; cursor: pointer;
-  font-family: inherit; font-size: var(--fs-md, 14px); color: var(--ink-1, #171717);
-  white-space: nowrap; text-align: left;
-}
-.m-sign-menu button i { font-size: 16px; color: var(--brand, #2d4cff); }
-.m-sign-menu button + button { border-top: 1px solid var(--line, #f0f0f0); }
-.m-sign-menu button:active { background: var(--brand-weak, #eef1ff); }
-.m-sign-backdrop { position: fixed; inset: 0; z-index: 39; background: transparent; }
 
 .m-progress {
   display: flex; gap: 4px;
