@@ -2,7 +2,6 @@
 import { ref, computed } from 'vue';
 import { quoteState } from '../../store.js';
 import { calcQuote } from '../../lib/calc.js';
-import { saveQuote, buildQuoteUrl } from '../../firebase/quotes.js';
 import { buildOfficialQuoteHtml } from '../../lib/build-quote-html.js';
 import { fmt, fmtTel } from '../../lib/format.js';
 import * as Fees from '../../lib/compute-fees.js';
@@ -15,20 +14,11 @@ function onStaffTelInput(e) {
   quoteState.staff.tel = v;
   if (e.target.value !== v) e.target.value = v;
 }
-// 공유 텍스트 — 손님 이름 + 차종 + 링크 (카톡/공유 시 본문에 채워짐)
-function buildShareText(url) {
-  const v = quoteState.vehicle;
-  const custName = quoteState.cust.name?.trim() || 'VIP 고객님';
-  const vehicleStr = v ? `${v.brand} ${v.model} ${v.trim_name}` : '신차 장기렌터카';
-  return `[${custName}] ${vehicleStr} 견적서\n월 대여료부터 확인하세요\n${url}`;
-}
 
 // 담당자 정보 완성 여부 — 비어있으면 펼친 상태, 있으면 collapsed
 const staffFilled = computed(() => !!(quoteState.staff.name?.trim() && quoteState.staff.tel?.trim()));
 const staffEditing = ref(false);
 
-const sending = ref(false);
-const sentLink = ref('');
 const errorMsg = ref('');
 
 const optPrice = computed(() => Fees.optPrice(quoteState));
@@ -71,94 +61,6 @@ const monthlyResults = computed(() => {
     } catch { return null; }
   }).filter(Boolean);
 });
-
-async function ensureQuoteSaved() {
-  if (sentLink.value) return sentLink.value;
-  const v = quoteState.vehicle;
-  if (!v) { errorMsg.value = '차량을 먼저 선택하세요'; return null; }
-  errorMsg.value = '';
-  sending.value = true;
-  try {
-    // 손님 이름 비어있으면 기본 "VIP 고객님" — 담당자는 staff localStorage 자동 영속
-    const custCopy = { ...quoteState.cust };
-    if (!custCopy.name?.trim()) custCopy.name = 'VIP 고객님';
-    const payload = {
-      customer: custCopy,
-      staff:    { ...quoteState.staff },
-      cond:     { ...quoteState.cond },
-      vehicles: [{
-        brand: v.brand, model: v.model, variant: v.variant, trim_name: v.trim_name,
-        totalKrw: (v.total_manwon || 0) * 10000,
-        trim_price_manwon: v.trim_price_manwon, options_price_manwon: v.options_price_manwon || 0,
-        options: v.options || [], colorExt: v.colorExt, colorInt: v.colorInt,
-        fuel: v.fuel, displacement_cc: v.displacement_cc,
-        monthly: monthlyResults.value,
-      }],
-      send: [true, true, true],
-      send_options: { ...quoteState.send_options },
-      source: 'mobile',
-    };
-    const { id, url } = await saveQuote(payload);
-    quoteState._lastSentQuoteId = id;
-    sentLink.value = url;
-    return url;
-  } catch (e) {
-    errorMsg.value = '발송 실패: ' + (e?.message || e);
-    return null;
-  } finally {
-    sending.value = false;
-  }
-}
-
-function fallbackCopyText(text) {
-  const ta = document.createElement('textarea');
-  ta.value = text;
-  ta.style.cssText = 'position:fixed; left:-9999px; top:0; opacity:0;';
-  document.body.appendChild(ta);
-  ta.focus(); ta.select();
-  let ok = false;
-  try { ok = document.execCommand('copy'); } catch {}
-  document.body.removeChild(ta);
-  return ok;
-}
-
-async function onCopyLink() {
-  const url = await ensureQuoteSaved();
-  if (!url) return;
-  // 1. 시큐어 컨텍스트 + clipboard API
-  if (window.isSecureContext && navigator.clipboard?.writeText) {
-    try {
-      await navigator.clipboard.writeText(url);
-      alert('링크 복사 완료\n' + url);
-      return;
-    } catch (e) { /* fallback */ }
-  }
-  // 2. textarea + execCommand
-  if (fallbackCopyText(url)) {
-    alert('링크 복사 완료\n' + url);
-    return;
-  }
-  // 3. 최종 fallback — share API 또는 alert 표시
-  if (navigator.share) {
-    try { await navigator.share({ url, text: url }); return; } catch {}
-  }
-  // 최후 — 사용자가 직접 복사
-  prompt('아래 링크를 복사해 손님에게 보내세요', url);
-}
-
-async function onShareNative() {
-  const url = await ensureQuoteSaved();
-  if (!url) return;
-  const text = buildShareText(url);
-  if (navigator.share) {
-    try {
-      await navigator.share({ title: '신차 장기렌터카 견적서', text, url });
-    } catch {}
-  } else {
-    // share API 미지원 (PC Chrome 등) → 링크 복사로 폴백
-    onCopyLink();
-  }
-}
 
 const imgLoading = ref(false);
 
@@ -285,33 +187,23 @@ function close() { emit('close'); }
       </label>
 
       <div class="ss-actions">
-        <!-- PRIMARY: 견적 공유 → 견적서 이미지를 폰 기본 공유(카톡/문자)로 바로 -->
+        <!-- PRIMARY: 견적이미지 공유 → 견적서 이미지를 폰 기본 공유(카톡/문자)로 바로 -->
         <button
           class="ss-action ss-action--primary"
           :disabled="imgLoading"
           @click="onShareImage"
         >
           <i class="ph" :class="imgLoading ? 'ph-spinner' : 'ph-share-network'"></i>
-          {{ imgLoading ? '견적서 생성 중…' : '견적 공유 (이미지 바로 전송)' }}
+          {{ imgLoading ? '견적서 생성 중…' : '견적이미지 공유' }}
         </button>
 
-        <!-- 이미지 복사 (카톡 붙여넣기) + 링크 공유 (기기 공유시트) -->
-        <div class="ss-actions-row">
-          <button class="ss-action ss-action--ghost" :disabled="imgLoading" @click="onCopyImage">
-            <i class="ph" :class="imgLoading ? 'ph-spinner' : 'ph-image'"></i>
-            {{ imgLoading ? '생성 중…' : '이미지 복사' }}
-          </button>
-          <button class="ss-action ss-action--ghost" :disabled="sending" @click="onShareNative">
-            <i class="ph" :class="sending ? 'ph-spinner' : 'ph-share-network'"></i>
-            링크 공유
-          </button>
-        </div>
+        <!-- 견적이미지 복사 (카톡 채팅창 붙여넣기) -->
+        <button class="ss-action ss-action--ghost" :disabled="imgLoading" @click="onCopyImage">
+          <i class="ph" :class="imgLoading ? 'ph-spinner' : 'ph-image'"></i>
+          {{ imgLoading ? '생성 중…' : '견적이미지 복사' }}
+        </button>
       </div>
 
-      <div v-if="sentLink" class="ss-link">
-        <div class="ss-link__label">손님 링크</div>
-        <div class="ss-link__url">{{ sentLink }}</div>
-      </div>
       <div v-if="errorMsg" class="ss-error">{{ errorMsg }}</div>
     </div>
   </div>
