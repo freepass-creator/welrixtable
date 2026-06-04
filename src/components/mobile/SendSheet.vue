@@ -187,21 +187,18 @@ function close() { emit('close'); }
       </label>
 
       <div class="ss-actions">
-        <!-- PRIMARY: 견적이미지 공유 → 견적서 이미지를 폰 기본 공유(카톡/문자)로 바로 -->
-        <button
-          class="ss-action ss-action--primary"
-          :disabled="imgLoading"
-          @click="onShareImage"
-        >
-          <i class="ph" :class="imgLoading ? 'ph-spinner' : 'ph-share-network'"></i>
-          {{ imgLoading ? '견적서 생성 중…' : '견적이미지 공유' }}
-        </button>
-
-        <!-- 견적이미지 복사 (카톡 채팅창 붙여넣기) -->
-        <button class="ss-action ss-action--ghost" :disabled="imgLoading" @click="onCopyImage">
-          <i class="ph" :class="imgLoading ? 'ph-spinner' : 'ph-image'"></i>
-          {{ imgLoading ? '생성 중…' : '견적이미지 복사' }}
-        </button>
+        <div class="ss-actions-row">
+          <!-- 견적이미지 복사 (카톡 채팅창 붙여넣기) -->
+          <button class="ss-action ss-action--ghost" :disabled="imgLoading" @click="onCopyImage">
+            <i class="ph" :class="imgLoading ? 'ph-spinner' : 'ph-image'"></i>
+            {{ imgLoading ? '생성 중…' : '견적이미지 복사' }}
+          </button>
+          <!-- 견적이미지 공유 → 폰 기본 공유(카톡/문자)로 바로 -->
+          <button class="ss-action ss-action--primary" :disabled="imgLoading" @click="onShareImage">
+            <i class="ph" :class="imgLoading ? 'ph-spinner' : 'ph-share-network'"></i>
+            {{ imgLoading ? '생성 중…' : '견적이미지 공유' }}
+          </button>
+        </div>
       </div>
 
       <div v-if="errorMsg" class="ss-error">{{ errorMsg }}</div>
