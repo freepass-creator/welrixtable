@@ -83,6 +83,20 @@ function openSend() {
   if (!vehicleState.trim) return;
   sendOpen.value = true;
 }
+
+// 조회동의 링크 복사 — 헤더 (발송하기 좌측). 회사 설정의 signature_link
+const signCopied = ref(false);
+async function copySignLink() {
+  const url = cfg.value.signature_link;
+  if (!url) { alert('이 회사는 조회동의 링크가 설정되어 있지 않습니다.'); return; }
+  try {
+    await navigator.clipboard.writeText(url);
+    signCopied.value = true;
+    setTimeout(() => { signCopied.value = false; }, 2500);
+  } catch {
+    prompt('아래 링크를 복사해 손님께 전달하세요:', url);
+  }
+}
 </script>
 
 <template>
@@ -91,12 +105,17 @@ function openSend() {
     <header class="m-header">
       <div class="m-header__brand">
         <img class="m-ci" src="/welrix-ci.png" alt="웰릭스 모빌리티" />
-        <span class="m-title">신차장기 렌터카 견적기</span>
       </div>
-      <button class="m-act m-act--primary" :disabled="!vehicleState.trim" @click="openSend">
-        <i class="ph ph-paper-plane-tilt"></i>
-        <span>견적 발송하기</span>
-      </button>
+      <div class="m-header__actions">
+        <button class="m-act" @click="copySignLink">
+          <i class="ph" :class="signCopied ? 'ph-check-circle' : 'ph-signature'"></i>
+          <span>{{ signCopied ? '복사됨' : '동의링크' }}</span>
+        </button>
+        <button class="m-act m-act--primary" :disabled="!vehicleState.trim" @click="openSend">
+          <i class="ph ph-paper-plane-tilt"></i>
+          <span>견적 발송하기</span>
+        </button>
+      </div>
     </header>
 
     <!-- 페이지별 progress segment — 전체 페이지 수 만큼 -->
