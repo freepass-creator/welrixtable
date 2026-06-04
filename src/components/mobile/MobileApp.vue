@@ -84,11 +84,16 @@ function openSend() {
   sendOpen.value = true;
 }
 
-// 조회동의 링크 복사 — 헤더 (발송하기 좌측). 회사 설정의 signature_link
+// 조회동의 링크 — 헤더. 회사 설정의 signature_link. [복사] + [바로전송(카톡)] 2종.
 const signCopied = ref(false);
-async function copySignLink() {
+function signUrl() {
   const url = cfg.value.signature_link;
-  if (!url) { alert('이 회사는 조회동의 링크가 설정되어 있지 않습니다.'); return; }
+  if (!url) { alert('이 회사는 조회동의 링크가 설정되어 있지 않습니다.'); return null; }
+  return url;
+}
+// 복사 — 클립보드
+async function copySignLink() {
+  const url = signUrl(); if (!url) return;
   try {
     await navigator.clipboard.writeText(url);
     signCopied.value = true;
@@ -96,6 +101,17 @@ async function copySignLink() {
   } catch {
     prompt('아래 링크를 복사해 손님께 전달하세요:', url);
   }
+}
+// 바로전송 — Web Share(카톡 등 공유시트). 미지원 시 복사로 대체
+async function sendSignLink() {
+  const url = signUrl(); if (!url) return;
+  const text = '[웰릭스모빌리티] 조회 동의 부탁드립니다. 아래 링크에서 진행해 주세요.';
+  if (navigator.share) {
+    try { await navigator.share({ title: '조회 동의', text, url }); return; }
+    catch (e) { if (e && e.name === 'AbortError') return; }
+  }
+  try { await navigator.clipboard.writeText(url); alert('이 기기는 바로전송 미지원 — 링크가 복사됐어요.'); }
+  catch { prompt('아래 링크를 복사해 전달하세요:', url); }
 }
 </script>
 
@@ -107,13 +123,17 @@ async function copySignLink() {
         <img class="m-ci" src="/welrix-ci.png" alt="웰릭스 모빌리티" />
       </div>
       <div class="m-header__actions">
-        <button class="m-act" @click="copySignLink">
-          <i class="ph" :class="signCopied ? 'ph-check-circle' : 'ph-signature'"></i>
-          <span>{{ signCopied ? '복사됨' : '동의링크' }}</span>
+        <button class="m-act" @click="copySignLink" title="조회동의 링크 복사">
+          <i class="ph" :class="signCopied ? 'ph-check-circle' : 'ph-copy'"></i>
+          <span>{{ signCopied ? '복사됨' : '동의복사' }}</span>
+        </button>
+        <button class="m-act" @click="sendSignLink" title="조회동의 카톡 바로전송">
+          <i class="ph ph-share-network"></i>
+          <span>동의전송</span>
         </button>
         <button class="m-act m-act--primary" :disabled="!vehicleState.trim" @click="openSend">
           <i class="ph ph-paper-plane-tilt"></i>
-          <span>견적 발송하기</span>
+          <span>견적발송</span>
         </button>
       </div>
     </header>
