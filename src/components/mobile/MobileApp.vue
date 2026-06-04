@@ -84,8 +84,9 @@ function openSend() {
   sendOpen.value = true;
 }
 
-// 조회동의 링크 — 헤더. 회사 설정의 signature_link. [복사] + [바로전송(카톡)] 2종.
+// 조회동의 링크 — 헤더 [동의] 버튼 → 메뉴(복사 / 카톡 전송). 회사 설정의 signature_link.
 const signCopied = ref(false);
+const signMenuOpen = ref(false);
 function signUrl() {
   const url = cfg.value.signature_link;
   if (!url) { alert('이 회사는 조회동의 링크가 설정되어 있지 않습니다.'); return null; }
@@ -123,19 +124,23 @@ async function sendSignLink() {
         <img class="m-ci" src="/welrix-ci.png" alt="웰릭스 모빌리티" />
       </div>
       <div class="m-header__actions">
-        <button class="m-act" @click="copySignLink" title="조회동의 링크 복사">
-          <i class="ph" :class="signCopied ? 'ph-check-circle' : 'ph-copy'"></i>
-          <span>{{ signCopied ? '복사됨' : '동의복사' }}</span>
-        </button>
-        <button class="m-act" @click="sendSignLink" title="조회동의 카톡 바로전송">
-          <i class="ph ph-share-network"></i>
-          <span>동의전송</span>
-        </button>
+        <div class="m-sign">
+          <button class="m-act" @click="signMenuOpen = !signMenuOpen" title="조회동의 링크">
+            <i class="ph" :class="signCopied ? 'ph-check-circle' : 'ph-signature'"></i>
+            <span>{{ signCopied ? '복사됨' : '동의' }}</span>
+            <i class="ph ph-caret-down" style="font-size:11px;opacity:.6;"></i>
+          </button>
+          <div v-if="signMenuOpen" class="m-sign-menu">
+            <button @click="copySignLink(); signMenuOpen = false"><i class="ph ph-copy"></i> 복사</button>
+            <button @click="sendSignLink(); signMenuOpen = false"><i class="ph ph-share-network"></i> 카톡 전송</button>
+          </div>
+        </div>
         <button class="m-act m-act--primary" :disabled="!vehicleState.trim" @click="openSend">
           <i class="ph ph-paper-plane-tilt"></i>
           <span>견적발송</span>
         </button>
       </div>
+      <div v-if="signMenuOpen" class="m-sign-backdrop" @click="signMenuOpen = false"></div>
     </header>
 
     <!-- 페이지별 progress segment — 전체 페이지 수 만큼 -->
@@ -221,6 +226,29 @@ async function sendSignLink() {
   cursor: not-allowed;
 }
 .m-act:not(:disabled):active { opacity: 0.6; }
+
+/* 조회동의 드롭다운 (복사 / 카톡 전송) */
+.m-sign { position: relative; }
+.m-sign-menu {
+  position: absolute; top: calc(100% + 4px); right: 0; z-index: 40;
+  min-width: 132px;
+  background: #fff;
+  border: 1px solid var(--line, #e5e7eb);
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.14);
+  overflow: hidden;
+}
+.m-sign-menu button {
+  display: flex; align-items: center; gap: 7px; width: 100%;
+  padding: 11px 14px;
+  background: transparent; border: 0; cursor: pointer;
+  font-family: inherit; font-size: var(--fs-md, 14px); color: var(--ink-1, #171717);
+  white-space: nowrap; text-align: left;
+}
+.m-sign-menu button i { font-size: 16px; color: var(--brand, #2d4cff); }
+.m-sign-menu button + button { border-top: 1px solid var(--line, #f0f0f0); }
+.m-sign-menu button:active { background: var(--brand-weak, #eef1ff); }
+.m-sign-backdrop { position: fixed; inset: 0; z-index: 39; background: transparent; }
 
 .m-progress {
   display: flex; gap: 4px;
