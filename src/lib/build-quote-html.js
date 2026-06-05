@@ -106,7 +106,7 @@ export function buildOfficialQuoteHtml(a) {
           </div>
         </div>
 
-        <div class="ofq-section__title" style="margin-top:14px;"><i class="ph ph-calendar-blank"></i>계약 정보 (월 대여료)</div>
+        <div class="ofq-section__title" style="margin-top:14px;"><i class="ph ph-calendar-blank"></i>계약 정보 (월 대여료) <span class="ofq-vat-badge">VAT 포함</span></div>
         <div class="ofq-table-wrap">
           <table class="ofq-table ofq-terms-table">
             <thead>
@@ -145,7 +145,6 @@ export function buildOfficialQuoteHtml(a) {
           <div class="title">신차 장기렌터카 견적서</div>
         </div>
         <div class="ofq-hero__right">
-          <span class="ofq-hero__badge">VAT 포함</span>
           <div><b>견적번호</b> ${quoteNo}</div>
           <div><b>견적일자</b> ${todayStr}</div>
           <div><b>유효기간</b> ${expireStr} 까지</div>
