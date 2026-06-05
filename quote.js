@@ -47,7 +47,7 @@ async function loadCompanyConfig() {
   const params = new URLSearchParams(location.search);
   const id = params.get('c') || 'welrix';
   try {
-    const r = await fetch(`./data/company-config/${id}.json`);
+    const r = await fetch(`./data/company-config/${id}.json?t=${Date.now()}`, { cache: 'no-store' });
     if (r.ok) {
       const cfg = await r.json();
       setCompanyConfig(cfg);
