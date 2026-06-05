@@ -148,16 +148,13 @@ function autoTax(disp) {
   return disp * perCC * 1.3;
 }
 
-// 보증금 계산 (F13) — C20 × 보증금률에 따른 슬라이딩 (50만 단위 올림)
+// 보증금 계산 (F13) — Excel: MEDIAN(500000, 10000000, ROUND(C20*dep, -5))
+// 10만원 단위 반올림 + [500k, 10M] 클램프
 function depositAmount(C20, depositRate) {
   const v = C20 * depositRate;
   if (v === 0) return 0;
-  const step = CFG.deposit_buckets_step;
-  const max = CFG.deposit_buckets_max;
-  for (let b = step; b <= max; b += step) {
-    if (v < b + step / 2) return b;
-  }
-  return max;
+  const rounded = Math.round(v / 100000) * 100000;
+  return Math.max(500000, Math.min(10000000, rounded));
 }
 
 // 약정주행거리 → 잔가율 보정 (회사 config)
