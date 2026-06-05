@@ -2524,6 +2524,8 @@ window.VEHICLE_DB = {
           const SELTOS_GAS_OPTIONS = {
             electric_4wd: { name: "전자식 4WD", sub: "터레인 모드(스노우/머드/샌드)+후륜 멀티링크 (트렌디는 스타일 패키지 적용 필요)", price: 198 },
             style_pkg: { name: "스타일 패키지", sub: "프로젝션 LED 헤드램프+LED 턴시그널+다이내믹 웰컴+프리미엄 DRL+포그램프+18\"휠 (트렌디 109만/프레스티지·시그니처 89만 - 235/45 R19, X-Line 기본)", price: 89 },
+            panoramic_sunroof: { name: "파노라마 선루프", sub: "+ 니트 헤드라이닝 (투톤 루프와 동시 선택 불가)", price: 109 },
+            two_tone_roof: { name: "투톤 루프", sub: "(시그니처/X-Line 전용, 파노라마 선루프와 동시 선택 불가)", price: 30 },
             convenience: { name: "컨비니언스", sub: "프리미엄 바이오 인조가죽시트+1열 통풍+시트백 포켓+하이패스 (트렌디 옵션, 그 외 기본)", price: 64 },
             navi_12_3: { name: "12.3\" 내비게이션", sub: "파노라믹 와이드 디스플레이+NSCC+HDA+컬럼타입 변속+무선충전+레인센서+풀오토 에어컨+공기청정+AI 어시스턴트 (트렌디 옵션, 그 외 기본)", price: 109 },
             builtin_cam_2_plus: { name: "빌트인 캠 2 플러스", sub: "빌트인캠 2 플러스+증강현실 내비 (트렌디는 12.3\"내비 필요)", price: 45,
