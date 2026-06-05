@@ -51,7 +51,7 @@ const DEFAULT_CFG = {
     registration_fee: 200000,
     acquisition_tax_rate: 0.04,
     acquisition_tax_rate_porter: 0.05,
-    delivery_first: 300000,
+    delivery_first: 500000,
     repair_rate_annual: 0.02,
   },
   fees: {
@@ -87,7 +87,7 @@ const DEFAULT_CFG = {
   insurance: {
     base_normal: 820750,
     base_multi_seat: 732880,
-    base_porter: 1400000,
+    base_porter: 2000000,  // v5.5: 1,400,000 → 2,000,000
     property_extra: { '1억': 0, '2억': 10000, '3억': 20000, '5억': 30000 },
   },
   extra_driver: { '없음': 0, '1명': 50000, '2명': 100000, '3명': 150000 },
