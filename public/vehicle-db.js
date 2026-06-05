@@ -2542,10 +2542,10 @@ window.VEHICLE_DB = {
               requires_in_trim: { prestige: ["cluster_12_3"] } },
             harman_kardon: { name: "하만카돈 프리미엄 사운드", sub: "8스피커+외장앰프+바이브로 사운드 시트 (프레스티지는 12.3\"클러스터 필요, 컴포트와 동시 선택 불가)", price: 89,
               requires_in_trim: { prestige: ["cluster_12_3"] } },
-            panoramic_sunroof: { name: "파노라마 선루프", sub: "+ 니트 헤드라이닝 (시그니처/X-Line 109만, 투톤 루프와 동시 선택 불가)", price: 109 },
+            panoramic_sunroof: { name: "파노라마 선루프", sub: "+ 니트 헤드라이닝 (투톤 루프와 동시 선택 불가)", price: 109 },
             two_tone_roof: { name: "투톤 루프", sub: "(시그니처/X-Line 전용, 파노라마 선루프와 동시 선택 불가)", price: 30 }
           };
-          
+
           // 셀토스 HEV 옵션 (4WD 제외 + 실내 V2L 추가)
           const SELTOS_HEV_OPTIONS = {
             style_pkg: { name: "스타일 패키지", sub: "프로젝션 LED 헤드램프+LED 턴시그널+다이내믹 웰컴+프리미엄 DRL+포그램프+18\"휠 (트렌디 109만/프레스티지·시그니처 89만, X-Line 기본)", price: 89 },
@@ -2609,11 +2609,11 @@ window.VEHICLE_DB = {
                   { trim_id: "trendy", name: "트렌디", seats: 5, base_price_5: 2515, base_price_3_5: 2477, engine: "G1.6 T-GDI (193hp)",
                     fuel_economy: { combined: 12.5, urban: 11.1, highway: 14.6, co2: 132 },
                     standard_features: SELTOS_GAS_TRENDY_F,
-                    available_options: ["electric_4wd", "style_pkg", "convenience", "navi_12_3", "builtin_cam_2_plus", "cluster_12_3"] },
+                    available_options: ["electric_4wd", "style_pkg", "convenience", "navi_12_3", "builtin_cam_2_plus", "cluster_12_3", "panoramic_sunroof"] },
                   { trim_id: "prestige", name: "프레스티지", seats: 5, base_price_5: 2884, base_price_3_5: 2840, engine: "G1.6 T-GDI",
                     fuel_economy: { combined: 12.0, urban: 10.7, highway: 14.0, co2: 138 },
                     standard_features: SELTOS_GAS_PRES_F,
-                    available_options: ["electric_4wd", "style_pkg", "builtin_cam_2_plus", "cluster_12_3", "smart_connect", "drive_wise", "monitoring", "comfort", "harman_kardon", "hud"] },
+                    available_options: ["electric_4wd", "style_pkg", "builtin_cam_2_plus", "cluster_12_3", "smart_connect", "drive_wise", "monitoring", "comfort", "harman_kardon", "hud", "panoramic_sunroof"] },
                   { trim_id: "signature", name: "시그니처", seats: 5, base_price_5: 3149, base_price_3_5: 3101, engine: "G1.6 T-GDI",
                     fuel_economy: { combined: 11.6, urban: 10.3, highway: 13.6, co2: 143 },
                     standard_features: SELTOS_GAS_SIG_F,
@@ -2638,11 +2638,11 @@ window.VEHICLE_DB = {
                   { trim_id: "trendy", name: "트렌디", seats: 5, base_price_5: 3044, base_price_3_5: 2996, engine: "G1.6 HEV + 32kW",
                     fuel_economy: { combined: 19.5, urban: 20.6, highway: 18.3, co2: 79 },
                     standard_features: SELTOS_HEV_TRENDY_F,
-                    available_options: ["style_pkg", "convenience", "navi_12_3", "builtin_cam_2_plus", "cluster_12_3"] },
+                    available_options: ["style_pkg", "convenience", "navi_12_3", "builtin_cam_2_plus", "cluster_12_3", "panoramic_sunroof"] },
                   { trim_id: "prestige", name: "프레스티지", seats: 5, base_price_5: 3359, base_price_3_5: 3306, engine: "G1.6 HEV",
                     fuel_economy: { combined: 18.6, urban: 19.7, highway: 17.4, co2: 84 },
                     standard_features: ["+NSCC+HDA", "215/55 R18 전면가공", "블랙하이그로시+루프랙", "ECM 룸미러", "소프트 재질 크래시패드", "1열/2열 도어 암레스트 인조가죽", "프리미엄 바이오 인조가죽시트", "운전석 파워+허리지지대", "1열 통풍시트", "시트백 포켓", "하이패스", "스마트폰 무선충전", "레인센서", "운전석 세이프티 파워윈도우", "12.3\" 내비게이션", "AI 어시스턴트"],
-                    available_options: ["style_pkg", "builtin_cam_2_plus", "cluster_12_3", "smart_connect", "drive_wise", "monitoring", "comfort", "harman_kardon", "v2l_indoor", "hud"] },
+                    available_options: ["style_pkg", "builtin_cam_2_plus", "cluster_12_3", "smart_connect", "drive_wise", "monitoring", "comfort", "harman_kardon", "v2l_indoor", "hud", "panoramic_sunroof"] },
                   { trim_id: "signature", name: "시그니처", seats: 5, base_price_5: 3624, base_price_3_5: 3567, engine: "G1.6 HEV",
                     fuel_economy: { combined: 17.8, urban: 18.5, highway: 17.0, co2: 88 },
                     standard_features: ["+후측방 충돌방지+RCCA+안전하차", "전자식 차일드락", "후진 가이드", "오토 플러시 도어핸들", "그레이/브라운 인테리어 선택", "12.3\"클러스터", "프리미엄 스티어링", "스퀘어 패턴 엠보 시트", "동승석 파워+허리지지대", "1열 릴렉션 컴포트+워크인", "디지털 키 2", "스마트 파워테일게이트", "메모리+이지억세스", "100W USB"],
