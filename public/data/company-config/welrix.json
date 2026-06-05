@@ -49,7 +49,7 @@
     "credit_lookup": {
       "신용":   { "interest": 0.064, "profit": 0.019, "deposit": 0.05 },
       "고신용": { "interest": 0.064, "profit": 0.019, "deposit": 0.05 },
-      "중신용": { "interest": 0.064, "profit": 0.035, "deposit": 0.20 },
+      "중신용": { "interest": 0.064, "profit": 0.041, "deposit": 0.20 },
       "저신용": { "interest": 0.064, "profit": 0.084, "deposit": 0.30 },
       "무신용": { "interest": 0.064, "profit": 0.084, "deposit": 0.30 }
     },
@@ -57,7 +57,7 @@
       "registration_fee": 200000,
       "acquisition_tax_rate": 0.04,
       "acquisition_tax_rate_porter": 0.05,
-      "delivery_first": 300000,
+      "delivery_first": 500000,
       "repair_rate_annual": 0.02
     },
     "fees": {
@@ -121,7 +121,7 @@
     "insurance": {
       "base_normal": 820750,
       "base_multi_seat": 732880,
-      "base_porter": 1400000,
+      "base_porter": 2000000,
       "property_extra": {
         "1억": 0,
         "2억": 10000,
