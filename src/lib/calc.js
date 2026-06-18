@@ -73,12 +73,15 @@ const DEFAULT_CFG = {
   residuals: {
     km_adjustment: { '1만km': 0.02, '2만km': 0, '3만km': -0.04, '4만km': -0.10 },
     term_surcharge: {
-      exclude: { brands: ['제네시스'], models: ['K9', '하이리무진'] },
+      // Excel I22 제외조건은 AW10/AW11 cell ref 오류로 사실상 항상 false → 모든 차에 기간가산.
+      // welrix.json(런타임 SSOT)과 동일하게 exclude 비움. (제네시스/K9/하이리무진은 brand_adjustment 로 별도 반영)
+      exclude: { brands: [], models: [] },
       by_term_code: { 3: 0.05, 4: -0.005, 5: -0.03 },
     },
     brand_adjustment: { '제네시스': -0.20, 'K9': -0.15, '하이리무진': -0.15 },
     buyback_rate_add: {
-      by_credit: { '신용': 0, '고신용': 0, '중신용': 0.02, '저신용': 0.04, '무신용': 0.04 },
+      // Excel I6: IF(고신용,0%, IF(중신용,2%, 4%)) — 신용/저신용/무신용은 cascade default 4%
+      by_credit: { '신용': 0.04, '고신용': 0, '중신용': 0.02, '저신용': 0.04, '무신용': 0.04 },
       by_brand: { '제네시스': 0.25 },
       by_model: { 'K9': 0.20, '하이리무진': 0.20 },
     },
@@ -97,6 +100,9 @@ const DEFAULT_CFG = {
 
 // 모듈 레벨 활성 정책 (setCompanyConfig 로 교체 가능)
 let CFG = DEFAULT_CFG;
+// 동기화 검사 도구(scripts/check-sync.mjs)용 — 기본정책/활성정책 조회
+export function getDefaultConfig() { return DEFAULT_CFG; }
+export function getActiveConfig() { return CFG; }
 export function setCompanyConfig(cfg) {
   // 회사 config 를 DEFAULT 와 deep merge (누락 필드는 default 유지)
   if (!cfg || !cfg.financial) { CFG = DEFAULT_CFG; return; }

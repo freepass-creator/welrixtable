@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { quoteState } from '../../store.js';
 import { calcQuote } from '../../lib/calc.js';
+import { buildCalcInput } from '../../lib/build-calc-input.js';
 import { buildOfficialQuoteHtml } from '../../lib/build-quote-html.js';
 import { fmt, fmtTel } from '../../lib/format.js';
 import * as Fees from '../../lib/compute-fees.js';
@@ -27,34 +28,11 @@ const itemsFee = computed(() => Fees.itemsFee(quoteState));
 
 const monthlyResults = computed(() => {
   const v = quoteState.vehicle;
-  if (!v || !v._src) return [];
-  const t = v._src;
+  if (!v || !v.total_manwon) return [];
   return (quoteState.scenarios || []).map((s, idx) => {
     try {
-      const r = calcQuote({
-        vehicle: {
-          brand: t.brand, model: t.model, trim: t.trim, price: t.price,
-          disp: t.disp, fuel: t.fuel, tax_exempt: t.tax_exempt, group: t.group,
-          multi_seat: t.multi_seat,
-          r24: t.r24, r36: t.r36, r48: t.r48, r60: t.r60,
-          strategic: t.strategic, buyback_apply: t.buyback_apply,
-        },
-        options:  {
-          optPrice: optPrice.value,
-          discount: (quoteState.cond.discount || 0) * 10000,
-          deliveryFee: deliveryFee.value,
-          itemsFee: itemsFee.value, etc: 0,
-        },
-        contract: { term: s.term, km: (quoteState.cond.km || 2) + '만km', dep: s.dep ?? 10, pre: s.pre ?? 0 },
-        customer: { creditGrade: quoteState.cond.credit || '중신용' },
-        insurance: {
-          property: quoteState.cond.insProperty || '1억',
-          extraDriver: quoteState.cond.extraDriver || '없음',
-          exec: '미가입', injury: '무한', self: '1억', uninsured: '2억',
-          deductible: '30만원~', emergency: '가입',
-        },
-        fees: { feeRatePct: quoteState.cond.feeRatePct ?? 5.0, svc: quoteState.cond.svc || '웰스 Basic' },
-      });
+      // 웹 ERP(quote.js)와 100% 동일한 입력 조립 — 공용 SSOT 사용
+      const r = calcQuote(buildCalcInput(quoteState, s, window.__welrix_vehicles));
       return { idx, term: s.term, dep: s.dep ?? 10, pre: s.pre ?? 0,
         monthly: r.monthly, depAmt: r.depAmt, preAmt: r.preAmt,
         residualAmt: r.residualAmt, residualPct: r.residualPct };

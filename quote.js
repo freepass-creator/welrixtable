@@ -318,6 +318,8 @@ function recompute() {
     multi_seat: meta.multi_seat,
     r24: meta.r24 ?? 0.65, r36: meta.r36 ?? 0.55, r48: meta.r48 ?? 0.48, r60: meta.r60 ?? 0.40,
     buyback_apply: meta.buyback_apply ?? 0,
+    // strategic(전략차종 잔가가산) 전달 — 엑셀 v5.5 차량DB col O. 신용등급에만 반영 (과거 누락 교정).
+    strategic: meta.strategic ?? 0,
   };
 
   // 엑셀 C14 식 = ROUND((BC15+BC17)/1.1, 0) — 썬팅 + 블박만 산출에 반영.

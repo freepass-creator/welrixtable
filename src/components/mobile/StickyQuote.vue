@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { quoteState, vehicleState } from '../../store.js';
 import { calcQuote } from '../../lib/calc.js';
+import { buildCalcInput } from '../../lib/build-calc-input.js';
 import { fmt } from '../../lib/format.js';
 import * as Fees from '../../lib/compute-fees.js';
 
@@ -80,34 +81,10 @@ const cards = computed(() => {
       monthly: null, residualAmt: null, residualPct: null,
       depAmt: null, preAmt: null,
     };
-    if (!v || !v._src) return base;
-    const t = v._src;
+    if (!v || !v.total_manwon) return base;
     try {
-      const result = calcQuote({
-        vehicle: {
-          brand: t.brand, model: t.model, trim: t.trim, price: t.price,
-          disp: t.disp, fuel: t.fuel, tax_exempt: t.tax_exempt, group: t.group,
-          multi_seat: t.multi_seat,
-          r24: t.r24, r36: t.r36, r48: t.r48, r60: t.r60,
-          strategic: t.strategic, buyback_apply: t.buyback_apply,
-        },
-        options: {
-          optPrice: optPrice.value,
-          discount: (quoteState.cond.discount || 0) * 10000,
-          deliveryFee: deliveryFee.value,
-          itemsFee: itemsFee.value,
-          etc: 0,
-        },
-        contract: { term: sc.term, km: (quoteState.cond.km || 2) + '만km', dep: sc.dep ?? 10, pre: sc.pre ?? 0 },
-        customer: { creditGrade: quoteState.cond.credit || '중신용' },
-        insurance: {
-          property: quoteState.cond.insProperty || '1억',
-          extraDriver: quoteState.cond.extraDriver || '없음',
-          exec: '미가입', injury: '무한', self: '1억', uninsured: '2억',
-          deductible: '30만원~', emergency: '가입',
-        },
-        fees: { feeRatePct: quoteState.cond.feeRatePct ?? 5.0, svc: quoteState.cond.svc || '웰스 Basic' },
-      });
+      // 웹 ERP(quote.js)와 100% 동일한 입력 조립 — 공용 SSOT 사용
+      const result = calcQuote(buildCalcInput(quoteState, sc, window.__welrix_vehicles));
       return {
         ...base,
         monthly: result.monthly,

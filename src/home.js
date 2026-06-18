@@ -2,11 +2,23 @@
 // 견적 엔진(lib/calc.js)·차량 DB(vehicles.json) 는 ERP 와 100% 공유.
 // 단, UI 셸은 마케팅 톤에 맞춰 별도. 어느 한쪽 calc 개선하면 양쪽 다 반영됨.
 import { createApp } from 'vue';
+import { setCompanyConfig } from './lib/calc.js';
 import QuoteWidget from './components/home/QuoteWidget.vue';
 import LeadForm from './components/home/LeadForm.vue';
 import Lineup from './components/home/Lineup.vue';
 import HeroBest from './components/home/HeroBest.vue';
 import AiRecommender from './components/home/AiRecommender.vue';
+
+// 회사 config(welrix.json = 엑셀 v5.5 SSOT) 주입 — 웹 ERP/모바일과 동일 엔진 설정.
+// (과거 home 은 이 주입을 안 해서 calc.js 기본값으로 계산 → 포터보험·중신용 수익률 등이 어긋났음)
+let __configReady = (async () => {
+  try {
+    const res = await fetch('/data/company-config/welrix.json');
+    setCompanyConfig(await res.json());
+  } catch (e) {
+    console.warn('[home] company config 로드 실패:', e);
+  }
+})();
 
 function mountOne(id, Component, label) {
   const target = document.getElementById(id);
@@ -15,8 +27,9 @@ function mountOne(id, Component, label) {
   console.log(`[home] ${label} mounted`);
 }
 
-function mountAll() {
-  // window.VEHICLE_DB 가 로드될 때까지 잠시 대기 (vehicle-db.js sync script)
+async function mountAll() {
+  // config(welrix.json) 주입 완료 + window.VEHICLE_DB 로드까지 대기 후 mount
+  await __configReady;
   if (!window.VEHICLE_DB) {
     setTimeout(mountAll, 50);
     return;
