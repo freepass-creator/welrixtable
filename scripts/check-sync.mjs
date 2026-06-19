@@ -88,10 +88,8 @@ const k5 = calcQuote({
   vehicle:{ brand:'기아',model:'K5',trim:'K5 2.0 하이브리드 베스트 셀렉션',price:35020000,disp:1999,fuel:'HEV.',tax_exempt:'과세',group:'A군',multi_seat:null,r24:0.66,r36:0.57,r48:0.5,r60:0.42,strategic:0,buyback_apply:0.04 },
   options:{ optPrice:0,discount:0,deliveryFee:0,itemsFee:280000,etc:0 }, contract:{ term:60,km:'2만km',dep:0,pre:0 }, customer:{ creditGrade:'중신용' }, ...base,
 }).monthly;
-const k5diff = Math.abs(k5 - 735000);
-const k5ok = k5diff <= 2000;
-console.log(`  ${k5ok ? G+'✓' : R+'✗'} K5 60M/보증0/중신용  우리 ${k5.toLocaleString()} / 엑셀 735,000  diff ${(k5-735000).toLocaleString()}${X}`
-  + (k5diff > 1000 && k5diff <= 2000 ? `  ${D}(floor1k 누적 한계 내)${X}` : ''));
+const k5ok = k5 === 735000; // H34 기간가산=H27 기준 교정 후 정확 일치
+console.log(`  ${k5ok ? G+'✓' : R+'✗'} K5 60M/보증0/중신용  우리 ${k5.toLocaleString()} / 엑셀 735,000  diff ${(k5-735000).toLocaleString()}${X}`);
 if (!k5ok) problems++;
 
 // 포터 — base_porter(v4.5 1.4M ↔ v5.5 2.0M) 가 결과를 가르는 설정-버전 탐지 케이스
