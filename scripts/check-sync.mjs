@@ -17,6 +17,8 @@
 // ============================================================================
 import { readFileSync, writeFileSync } from 'node:fs';
 import { calcQuote, setCompanyConfig, getDefaultConfig, getActiveConfig } from '../src/lib/calc.js';
+import { buildCalcInput } from '../src/lib/build-calc-input.js';
+import { FLAT_DELIVERY, TINT_PRICES } from '../src/data/lookups.js';
 
 const FIX = process.argv.includes('--fix');
 const R='\x1b[31m',G='\x1b[32m',Y='\x1b[33m',C='\x1b[36m',B='\x1b[1m',D='\x1b[2m',X='\x1b[0m';
@@ -91,6 +93,33 @@ const k5 = calcQuote({
 const k5ok = k5 === 735000; // H34 기간가산=H27 기준 교정 후 정확 일치
 console.log(`  ${k5ok ? G+'✓' : R+'✗'} K5 60M/보증0/중신용  우리 ${k5.toLocaleString()} / 엑셀 735,000  diff ${(k5-735000).toLocaleString()}${X}`);
 if (!k5ok) problems++;
+
+// 탁송·썬팅 가드 — 엑셀 수식대로 들어가는지 + 웹=모바일 동일 + 내비/하이패스 제외
+{
+  const tF = (TINT_PRICES['버텍스 300'].front || 0) + (TINT_PRICES['버텍스 300'].side_rear_with_coupon || 0); // 썬팅
+  const bF = 175000; // 블박
+  const dF = FLAT_DELIVERY['부산']; // 탁송
+  const state = {
+    vehicle: { brand:'기아', model:'K5', variant:'하이브리드', trim_name:'베스트 셀렉션',
+      total_manwon: 3502, trim_price_manwon: 3502, options_price_manwon: 0 },
+    cond: { credit:'중신용', km:2, dep:0, pre:0, feeRatePct:5, deliveryCity:'부산',
+      svc:'웰스 Basic', insProperty:'1억', extraDriver:'없음', colorIntPrice:0, discount:0 },
+    tint: { product:'버텍스 300', areas: new Set(['front','side_rear_with_coupon']) },
+    extras: { blackbox:'DF7 (딥플라이)', navi:'RG-i8 (아이나비)', hipass:'SET-550 (엠피온)' }, // 내비/하이패스 = calc 제외 대상
+  };
+  const inp = buildCalcInput(state, { term:60, dep:0, pre:0 }, vehicles);
+  const r = calcQuote(inp);
+  const wantItems = tF + bF;                       // 내비/하이패스 빠진 값
+  const wantC14 = Math.round(wantItems / 1.1);     // 엑셀 C14
+  const wantC32 = Math.round(dF / 1.1);            // 엑셀 C32
+  const okItems = inp.options.itemsFee === wantItems;
+  const okC14 = r._debug.C14 === wantC14;
+  const okC32 = r._debug.C32 === wantC32;
+  const allOk = okItems && okC14 && okC32;
+  console.log(`  ${allOk ? G+'✓' : R+'✗'} 탁송·썬팅 처리 (엑셀 수식)${X}`);
+  console.log(`      썬팅+블박=${wantItems.toLocaleString()} (내비/하이패스 제외 ${okItems?'✓':R+'✗ 포함됨'+X}) · C14=${r._debug.C14.toLocaleString()}${okC14?'':R+'≠'+wantC14+X} · C32=${r._debug.C32.toLocaleString()}${okC32?'':R+'≠'+wantC32+X}`);
+  if (!allOk) problems++;
+}
 
 // 포터 — base_porter(v4.5 1.4M ↔ v5.5 2.0M) 가 결과를 가르는 설정-버전 탐지 케이스
 const p = vehicles.find(v => /포터/.test(v.model) || /포터/.test(v.trim||''));
