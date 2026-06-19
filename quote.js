@@ -1,5 +1,6 @@
 // wel2 견적 모듈 — wel 의 데이터/로직 활용 + estimator_4 톤
 import { calcQuote, setCompanyConfig } from './src/lib/calc.js';
+import { buildCalcInput } from './src/lib/build-calc-input.js';
 // 룩업 데이터 SSOT — Vue 컴포넌트와 공유 (이전에는 quote.js 에 박혀있고 window.__welrix_data 로 노출,
 // 모듈 로드 순서로 컴포넌트가 빈 옵션 보던 문제 → 직접 import 으로 해결)
 import {
@@ -91,69 +92,7 @@ async function loadVehicles() {
     VEHICLES = await r.json();
   } catch {}
 }
-function findVehicleMeta(brand, model, trim_name, variant, trim_price_won) {
-  if (!VEHICLES?.length) return {};
-  // HEV variant 인 경우 vehicles.json 의 "{model} Hybrid" 접미사 우선 시도
-  // (vehicle-db.js 는 model_name 에 Hybrid 접미사 없이 노출하지만 vehicles.json/Excel SSOT 는 접미사 사용)
-  const isHEV = /하이브리드|HEV/i.test(variant || '');
-  const modelCandidates = isHEV ? [`${model} Hybrid`, model] : [model];
-
-  // 0) ⭐ 가격 정확 매칭 (Excel 차량DB 가격과 1대1) — 최우선
-  if (trim_price_won) {
-    for (const m of modelCandidates) {
-      const exact = VEHICLES.filter(v =>
-        v.brand === brand && v.model === m && v.price === trim_price_won
-      );
-      if (exact.length === 1) return exact[0];
-      if (exact.length > 1) {
-        // 가격 중복(예: GV80 2.5T vs 3.5T 같은 가격) — variant + trim_name 토큰 둘 다 합쳐서 가장 많이 일치하는 거 선택
-        const tokens = [...(variant || '').split(/[\s·,()/]+/), ...(trim_name || '').split(/[\s·,()/]+/)]
-          .filter(t => t && t.length >= 1)
-          .map(t => t.toLowerCase());
-        if (tokens.length) {
-          const scored = exact.map(mm => ({
-            m: mm,
-            score: tokens.reduce((s, t) => s + ((mm.trim || '').toLowerCase().includes(t) ? 1 : 0), 0),
-          }));
-          scored.sort((a, b) => b.score - a.score);
-          if (scored[0].score > 0 && scored[0].score > (scored[1]?.score ?? 0)) return scored[0].m;
-          // 동률이면 trim_name 정확 포함하는 거 우선
-          if (trim_name) {
-            const tn = exact.find(v => (v.trim || '').includes(trim_name));
-            if (tn) return tn;
-          }
-        }
-        return exact[0];
-      }
-    }
-  }
-  // 1) 텍스트 매칭 — brand + model + variant + trim_name (가격 없거나 미매치 시)
-  if (trim_name) {
-    const variantTokens = (variant || '').split(/[\s·,()]+/).filter(t => t.length > 1);
-    for (const m of modelCandidates) {
-      const matches = VEHICLES.filter(v =>
-        v.brand === brand &&
-        (v.model === m || (v.trim || '').includes(m)) &&
-        (v.trim || '').includes(trim_name)
-      );
-      if (matches.length === 1) return matches[0];
-      if (matches.length > 1 && variantTokens.length) {
-        const scored = matches.map(mm => ({
-          m: mm, score: variantTokens.reduce((s, t) => s + ((mm.trim || '').includes(t) ? 1 : 0), 0)
-        }));
-        scored.sort((a, b) => b.score - a.score);
-        if (scored[0].score > 0) return scored[0].m;
-      }
-      if (matches.length) return matches[0];
-    }
-  }
-  // 2) 폴백 — brand + model 만 (modelCandidates 순서대로)
-  for (const m of modelCandidates) {
-    const f = VEHICLES.find(v => v.brand === brand && v.model === m);
-    if (f) return f;
-  }
-  return {};
-}
+// findVehicleMeta 는 src/lib/build-calc-input.js 로 이동(공용 SSOT). 호출 시 VEHICLES 배열을 넘김.
 
 // ============ UI 초기화 — Vue가 대부분 처리. 아직 남은 vanilla 만 ============
 function initDropdowns() {
@@ -293,51 +232,19 @@ function recompute() {
     return;
   }
   const v = state.vehicle;
-  const meta = findVehicleMeta(v.brand, v.model, v.trim_name, v.variant, (v.trim_price_manwon || 0) * 10000);
-  // 회사 옵션가 (선팅) — wel calc.js 에 itemsFee 로 전달
+  // 표시용 비용 (견적서 렌더링) — calc 입력 조립은 buildCalcInput(SSOT) 가 담당
   const tintPrice = TINT_PRICES[state.tint.product] || {};
   const tintFee = [...state.tint.areas].reduce((s, k) => s + (tintPrice[k] || 0), 0);
   const deliveryFee = FLAT_DELIVERY[state.cond.deliveryCity] || 0;
-  // 용품 합계 (블박/내비/하이패스)
   const blackboxFee = ACCESSORIES.blackbox[state.extras.blackbox] || 0;
   const naviFee = ACCESSORIES.navi[state.extras.navi] || 0;
   const hipassFee = ACCESSORIES.hipass[state.extras.hipass] || 0;
-  const itemsFee = tintFee + blackboxFee + naviFee + hipassFee;
-
+  const itemsFee = tintFee + blackboxFee + naviFee + hipassFee;  // 견적서 표시용(내비/하이패스 포함)
   const totalKrw = v.total_manwon * 10000 + state.cond.colorIntPrice;
 
-  const vehicleRow = {
-    brand: meta.brand || v.brand,
-    model: meta.model || v.model,
-    trim: meta.trim || `${v.brand} ${v.model} ${v.trim_name}`,
-    price: totalKrw,
-    disp: meta.disp || 2000,
-    fuel: meta.fuel || '가솔린',
-    tax_exempt: v.tax_rate === '5%' ? '과세' : (meta.tax_exempt || '과세'),
-    group: meta.group || 'A군',
-    multi_seat: meta.multi_seat,
-    r24: meta.r24 ?? 0.65, r36: meta.r36 ?? 0.55, r48: meta.r48 ?? 0.48, r60: meta.r60 ?? 0.40,
-    buyback_apply: meta.buyback_apply ?? 0,
-    // strategic(전략차종 잔가가산) 전달 — 엑셀 v5.5 차량DB col O. 신용등급에만 반영 (과거 누락 교정).
-    strategic: meta.strategic ?? 0,
-  };
-
-  // 엑셀 C14 식 = ROUND((BC15+BC17)/1.1, 0) — 썬팅 + 블박만 산출에 반영.
-  // 내비/하이패스는 엑셀 BC18(기타비용)에 입력하더라도 어디에도 참조 안 됨 (영업 별도 안내 정책).
-  // 우리도 엑셀과 동일하게 — 견적서 표시는 유지하되 calc 에는 썬팅+블박만 전달.
-  const itemsFeeForCalc = tintFee + blackboxFee;  // 엑셀과 일치
-  const itemsFeeDisplay = tintFee + blackboxFee + naviFee + hipassFee;  // 견적서 표시용
-
   function runScenario(sc) {
-    const r = calcQuote({
-      vehicle: vehicleRow,
-      options: { optPrice: 0, discount: (state.cond.discount || 0) * 10000, deliveryFee, itemsFee: itemsFeeForCalc, etc: 0 },
-      contract: { term: sc.term, km: state.cond.km + '만km', dep: +sc.dep || 0, pre: +sc.pre || 0 },
-      customer: { creditGrade: state.cond.credit },
-      insurance: { property: state.cond.insProperty, extraDriver: state.cond.extraDriver, exec: '미가입',
-                   injury: '무한', self: '1억', uninsured: '2억', deductible: '30만원~', emergency: '가입' },
-      fees: { feeRatePct: state.cond.feeRatePct ?? 5.0, svc: state.cond.svc },
-    });
+    // 모바일·홈과 100% 동일한 입력 조립 (strategic 전달, 내비/하이패스 calc 제외 등 전부 SSOT 일원화)
+    const r = calcQuote(buildCalcInput(state, sc, VEHICLES));
     return { term: sc.term, dep: sc.dep, pre: sc.pre,
              monthly: r.monthly, residualAmt: r.residualAmt, residualPct: r.residualPct,
              depAmt: r.depositAmt, preAmt: r.prePayAmt };
@@ -1181,29 +1088,9 @@ ${url}
     const monthly = [];  // 텍스트만 위한 재계산은 생략 (기존 결과 활용)
     // 단순화 — recompute() 결과 활용 위해 quote-doc 의 데이터 추출 또는 재호출
     // 빠른 fix — 텍스트 다시 계산
-    const meta = findVehicleMeta(v.brand, v.model, v.trim_name, v.variant, (v.trim_price_manwon || 0) * 10000);
-    const tintPrice = TINT_PRICES[state.tint.product] || {};
-    const tintFee = [...state.tint.areas].reduce((s, k) => s + (tintPrice[k] || 0), 0);
-    const deliveryFee = FLAT_DELIVERY[state.cond.deliveryCity] || 0;
-    const vehicleRow = {
-      brand: meta.brand || v.brand, model: meta.model || v.model,
-      trim: meta.trim || v.trim_name, price: totalKrw,
-      disp: meta.disp || 2000, fuel: meta.fuel || '가솔린',
-      tax_exempt: 'tax_exempt' in meta ? meta.tax_exempt : '과세',
-      group: meta.group || 'A군', multi_seat: meta.multi_seat,
-      r24: meta.r24 ?? 0.65, r36: meta.r36 ?? 0.55, r48: meta.r48 ?? 0.48, r60: meta.r60 ?? 0.40,
-      buyback_apply: meta.buyback_apply ?? 0,
-    };
     state.scenarios.forEach((sc, idx) => {
-      const r = calcQuote({
-        vehicle: vehicleRow,
-        options: { optPrice: 0, discount: (state.cond.discount || 0) * 10000, deliveryFee, itemsFee: tintFee, etc: 0 },
-        contract: { term: sc.term, km: state.cond.km + '만km', dep: +sc.dep || 0, pre: +sc.pre || 0 },
-        customer: { creditGrade: state.cond.credit },
-        insurance: { property: state.cond.insProperty, extraDriver: state.cond.extraDriver, exec: '미가입',
-                     injury: '무한', self: '1억', uninsured: '2억', deductible: '30만원~', emergency: '가입' },
-        fees: { feeRatePct: state.cond.feeRatePct ?? 5.0, svc: state.cond.svc },
-      });
+      // 화면 견적(recompute)과 동일 로직 — 과거엔 itemsFee=tintFee(블박/strategic 누락)라 텍스트가 화면과 달랐음(버그 교정)
+      const r = calcQuote(buildCalcInput(state, sc, VEHICLES));
       monthly.push({ idx, term: sc.term, dep: sc.dep, pre: sc.pre, monthly: r.monthly, residualAmt: r.residualAmt });
     });
     const text = buildPlainText(monthly, totalKrw);

@@ -13,10 +13,22 @@
 
 import { FLAT_DELIVERY, TINT_PRICES, ACCESSORIES } from '../data/lookups.js';
 
-// === 차량 메타 정확 매칭 (quote.js findVehicleMeta 1:1 포팅) ===
+// === 차량 메타 정확 매칭 ===
 // 가격(trim_price_won) 정확 매칭 최우선 → 텍스트 매칭 → brand+model 폴백
+// 효율화: 같은 vehicles 배열·같은 쿼리는 캐시 (시나리오 3~6회 반복 호출 시 476배열 재탐색 방지)
+const _metaCache = new WeakMap(); // vehicles[] → Map<queryKey, meta>
 export function findVehicleMeta(vehicles, brand, model, trim_name, variant, trim_price_won) {
   if (!vehicles?.length) return {};
+  let byKey = _metaCache.get(vehicles);
+  if (!byKey) { byKey = new Map(); _metaCache.set(vehicles, byKey); }
+  const key = `${brand}|${model}|${trim_name}|${variant}|${trim_price_won}`;
+  if (byKey.has(key)) return byKey.get(key);
+  const result = resolveVehicleMeta(vehicles, brand, model, trim_name, variant, trim_price_won);
+  byKey.set(key, result);
+  return result;
+}
+
+function resolveVehicleMeta(vehicles, brand, model, trim_name, variant, trim_price_won) {
   const isHEV = /하이브리드|HEV/i.test(variant || '');
   const modelCandidates = isHEV ? [`${model} Hybrid`, model] : [model];
 

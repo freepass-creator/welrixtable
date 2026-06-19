@@ -18,7 +18,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { calcQuote, setCompanyConfig, getDefaultConfig, getActiveConfig } from '../src/lib/calc.js';
 import { buildCalcInput } from '../src/lib/build-calc-input.js';
-import { FLAT_DELIVERY, TINT_PRICES } from '../src/data/lookups.js';
+import { ENGINE_CASES, ASSEMBLY_CASES } from './excel-cases.mjs';
 
 const FIX = process.argv.includes('--fix');
 const R='\x1b[31m',G='\x1b[32m',Y='\x1b[33m',C='\x1b[36m',B='\x1b[1m',D='\x1b[2m',X='\x1b[0m';
@@ -81,44 +81,30 @@ else if (FIX) {
 }
 
 // ── [2] 회귀 (엑셀 기대값) — 런타임 실효 설정(public)으로 계산 ─────────────────
+// 기준 케이스는 scripts/excel-cases.mjs(SSOT)에서 가져옴. 여긴 러너만.
 console.log(`\n${B}${C}[2] 회귀 검사 (public welrix.json 설정으로 → 엑셀 기대값)${X}`);
 setCompanyConfig(pub);
 const base = { insurance:{property:'1억',extraDriver:'없음',exec:'미가입',injury:'무한',self:'1억',uninsured:'2억',deductible:'30만원~',emergency:'가입'}, fees:{feeRatePct:5.0,svc:'웰스 Basic'} };
 
-// K5 — 엑셀 견적1!H34 = 735,000 (floor1k 누적으로 ±2,000 알려진 한계)
-const k5 = calcQuote({
-  vehicle:{ brand:'기아',model:'K5',trim:'K5 2.0 하이브리드 베스트 셀렉션',price:35020000,disp:1999,fuel:'HEV.',tax_exempt:'과세',group:'A군',multi_seat:null,r24:0.66,r36:0.57,r48:0.5,r60:0.42,strategic:0,buyback_apply:0.04 },
-  options:{ optPrice:0,discount:0,deliveryFee:0,itemsFee:280000,etc:0 }, contract:{ term:60,km:'2만km',dep:0,pre:0 }, customer:{ creditGrade:'중신용' }, ...base,
-}).monthly;
-const k5ok = k5 === 735000; // H34 기간가산=H27 기준 교정 후 정확 일치
-console.log(`  ${k5ok ? G+'✓' : R+'✗'} K5 60M/보증0/중신용  우리 ${k5.toLocaleString()} / 엑셀 735,000  diff ${(k5-735000).toLocaleString()}${X}`);
-if (!k5ok) problems++;
+// (A) 엔진 직접 검증
+for (const t of ENGINE_CASES) {
+  const m = calcQuote(t.input).monthly;
+  const ok = m === t.expectMonthly;
+  console.log(`  ${ok ? G+'✓' : R+'✗'} ${t.label}  우리 ${m.toLocaleString()} / 엑셀 ${t.expectMonthly.toLocaleString()}  diff ${(m-t.expectMonthly).toLocaleString()}  (${t.cell})${X}`);
+  if (!ok) problems++;
+}
 
-// 탁송·썬팅 가드 — 엑셀 수식대로 들어가는지 + 웹=모바일 동일 + 내비/하이패스 제외
-{
-  const tF = (TINT_PRICES['버텍스 300'].front || 0) + (TINT_PRICES['버텍스 300'].side_rear_with_coupon || 0); // 썬팅
-  const bF = 175000; // 블박
-  const dF = FLAT_DELIVERY['부산']; // 탁송
-  const state = {
-    vehicle: { brand:'기아', model:'K5', variant:'하이브리드', trim_name:'베스트 셀렉션',
-      total_manwon: 3502, trim_price_manwon: 3502, options_price_manwon: 0 },
-    cond: { credit:'중신용', km:2, dep:0, pre:0, feeRatePct:5, deliveryCity:'부산',
-      svc:'웰스 Basic', insProperty:'1억', extraDriver:'없음', colorIntPrice:0, discount:0 },
-    tint: { product:'버텍스 300', areas: new Set(['front','side_rear_with_coupon']) },
-    extras: { blackbox:'DF7 (딥플라이)', navi:'RG-i8 (아이나비)', hipass:'SET-550 (엠피온)' }, // 내비/하이패스 = calc 제외 대상
-  };
-  const inp = buildCalcInput(state, { term:60, dep:0, pre:0 }, vehicles);
+// (B) 입력조립(buildCalcInput) 검증 — 탁송/썬팅 셀 수식 + 내비/하이패스 제외
+for (const t of ASSEMBLY_CASES) {
+  const inp = buildCalcInput(t.state, t.scenario, vehicles);
   const r = calcQuote(inp);
-  const wantItems = tF + bF;                       // 내비/하이패스 빠진 값
-  const wantC14 = Math.round(wantItems / 1.1);     // 엑셀 C14
-  const wantC32 = Math.round(dF / 1.1);            // 엑셀 C32
-  const okItems = inp.options.itemsFee === wantItems;
-  const okC14 = r._debug.C14 === wantC14;
-  const okC32 = r._debug.C32 === wantC32;
-  const allOk = okItems && okC14 && okC32;
-  console.log(`  ${allOk ? G+'✓' : R+'✗'} 탁송·썬팅 처리 (엑셀 수식)${X}`);
-  console.log(`      썬팅+블박=${wantItems.toLocaleString()} (내비/하이패스 제외 ${okItems?'✓':R+'✗ 포함됨'+X}) · C14=${r._debug.C14.toLocaleString()}${okC14?'':R+'≠'+wantC14+X} · C32=${r._debug.C32.toLocaleString()}${okC32?'':R+'≠'+wantC32+X}`);
-  if (!allOk) problems++;
+  const got = { itemsFee: inp.options.itemsFee, C14: r._debug.C14, C32: r._debug.C32 };
+  const fails = Object.keys(t.expect).filter(k => got[k] !== t.expect[k]);
+  const ok = fails.length === 0;
+  console.log(`  ${ok ? G+'✓' : R+'✗'} ${t.label}${X}`);
+  console.log(`      itemsFee=${got.itemsFee.toLocaleString()} · C14=${got.C14.toLocaleString()} · C32=${got.C32.toLocaleString()}`
+    + (ok ? '' : `  ${R}불일치: ${fails.map(k=>`${k} 기대 ${t.expect[k].toLocaleString()}`).join(', ')}${X}`));
+  if (!ok) problems++;
 }
 
 // 포터 — base_porter(v4.5 1.4M ↔ v5.5 2.0M) 가 결과를 가르는 설정-버전 탐지 케이스
