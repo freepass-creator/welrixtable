@@ -18,7 +18,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { calcQuote, setCompanyConfig, getDefaultConfig, getActiveConfig } from '../src/lib/calc.js';
 import { buildCalcInput } from '../src/lib/build-calc-input.js';
-import { ENGINE_CASES, ASSEMBLY_CASES } from './excel-cases.mjs';
+import { ENGINE_CASES, ASSEMBLY_CASES, DEPOSIT_CASES } from './excel-cases.mjs';
 
 const FIX = process.argv.includes('--fix');
 const R='\x1b[31m',G='\x1b[32m',Y='\x1b[33m',C='\x1b[36m',B='\x1b[1m',D='\x1b[2m',X='\x1b[0m';
@@ -104,6 +104,18 @@ for (const t of ASSEMBLY_CASES) {
   console.log(`  ${ok ? G+'✓' : R+'✗'} ${t.label}${X}`);
   console.log(`      itemsFee=${got.itemsFee.toLocaleString()} · C14=${got.C14.toLocaleString()} · C32=${got.C32.toLocaleString()}`
     + (ok ? '' : `  ${R}불일치: ${fails.map(k=>`${k} 기대 ${t.expect[k].toLocaleString()}`).join(', ')}${X}`));
+  if (!ok) problems++;
+}
+
+// (C) 보증금 v6 — 무신용 올림(CEILING 50만)/그외 반올림(ROUND 10만)/클램프
+for (const t of DEPOSIT_CASES) {
+  const got = calcQuote({
+    vehicle: { brand: '·', model: '·', trim: '·', price: t.price, disp: 1600, fuel: '가솔린', tax_exempt: '과세', group: 'A군', multi_seat: null, r24: 0.65, r36: 0.55, r48: 0.48, r60: 0.4, strategic: 0, buyback_apply: 0 },
+    options: { optPrice: 0, discount: 0, deliveryFee: 0, itemsFee: 0, etc: 0 },
+    contract: { term: 60, km: '2만km', dep: t.dep, pre: 0 }, customer: { creditGrade: t.credit }, ...base,
+  }).depositAmt;
+  const ok = got === t.expect;
+  console.log(`  ${ok ? G+'✓' : R+'✗'} 보증금 ${t.credit} ${t.dep}% (${t.price.toLocaleString()})  ${got.toLocaleString()} / 기대 ${t.expect.toLocaleString()}  ${D}${t.note}${X}`);
   if (!ok) problems++;
 }
 

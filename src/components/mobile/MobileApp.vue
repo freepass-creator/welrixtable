@@ -75,6 +75,14 @@ function prev() {
   if (stepIdx.value > 0) stepIdx.value--;
 }
 
+// 상단 CI 클릭 → 처음 화면(차량 선택 1단계)으로. 선택 데이터는 유지(비파괴 이동).
+function goHome() {
+  sendOpen.value = false;
+  stepIdx.value = 0;
+  vehicleState.subStep = 'brand';
+  if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 const vehicles = ref(window.__welrix_vehicles || []);
 
 // 발송 sheet
@@ -110,7 +118,7 @@ async function shareSignLink() {
     <!-- 헤더 — 좌측: CI + 페이지 타이틀, 우측: 발송 -->
     <header class="m-header">
       <div class="m-header__brand">
-        <img class="m-ci" src="/welrix-ci.png" alt="웰릭스 모빌리티" />
+        <img class="m-ci" src="/welrix-ci.png" alt="웰릭스 모빌리티 · 처음으로" @click="goHome" role="button" tabindex="0" style="cursor: pointer;" />
       </div>
       <div class="m-header__actions">
         <button class="m-act" @click="shareSignLink" title="조회동의 링크 공유">

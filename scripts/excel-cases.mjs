@@ -25,6 +25,14 @@ export const ENGINE_CASES = [
   },
 ];
 
+// (C) 보증금 v6 — 무신용=CEILING(50만 올림), 그 외=ROUND(10만 반올림), [500k,10M] 클램프
+//     calcQuote(depositAmt) = 엑셀 F13. price=소비자가(C20), dep=%, credit=신용등급.
+export const DEPOSIT_CASES = [
+  { price: 25150000, dep: 10, credit: '중신용', expect: 2500000, note: 'ROUND 10만 (raw 2,515,000→2,500,000)' },
+  { price: 25150000, dep: 10, credit: '무신용', expect: 3000000, note: 'CEILING 50만 올림 (raw→3,000,000)' },
+  { price: 30000000, dep: 1,  credit: '중신용', expect: 500000,  note: '하한 클램프 (raw 300,000→500,000)' },
+];
+
 // (B) 입력조립 검증 — buildCalcInput(state) 경로. 탁송/썬팅 엑셀 수식 + 내비/하이패스 제외 가드.
 const _tint = (TINT_PRICES['버텍스 300'].front || 0) + (TINT_PRICES['버텍스 300'].side_rear_with_coupon || 0);
 const _blackbox = 175000;

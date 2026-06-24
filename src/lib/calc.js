@@ -154,13 +154,16 @@ function autoTax(disp) {
   return disp * perCC * 1.3;
 }
 
-// 보증금 계산 (F13) — Excel: MEDIAN(500000, 10000000, ROUND(C20*dep, -5))
-// 10만원 단위 반올림 + [500k, 10M] 클램프
-function depositAmount(C20, depositRate) {
+// 보증금 계산 (F13) — Excel v6:
+//   MEDIAN(500000, 10000000, IF(무신용, CEILING(C20*dep, 500000), ROUND(C20*dep, -5)))
+//   · 무신용 = 50만원 단위 '올림'(CEILING)  · 그 외 = 10만원 단위 반올림(ROUND)  · [500k,10M] 클램프
+function depositAmount(C20, depositRate, creditGrade) {
   const v = C20 * depositRate;
   if (v === 0) return 0;
-  const rounded = Math.round(v / 100000) * 100000;
-  return Math.max(500000, Math.min(10000000, rounded));
+  const inner = creditGrade === '무신용'
+    ? Math.ceil(v / 500000) * 500000      // CEILING(v, 500000) — 무신용은 올림(높은 쪽)
+    : Math.round(v / 100000) * 100000;     // ROUND(v, -5)
+  return Math.max(500000, Math.min(10000000, inner));
 }
 
 // 약정주행거리 → 잔가율 보정 (회사 config)
@@ -319,8 +322,8 @@ export function calcQuote(input) {
   // I22: 기간 가산
   const I22 = termSurcharge(termCode, v.brand, v.model);
 
-  // F13: 보증금
-  const F13 = depositAmount(C20, c.dep / 100);
+  // F13: 보증금 (신용등급별 — 무신용 올림)
+  const F13 = depositAmount(C20, c.dep / 100, cu.creditGrade);
   const F14 = c.pre / 100;                                  // 선납금률
 
   // 가산원가 항목들 (5년 누적 또는 1회성)
@@ -375,7 +378,7 @@ export function calcQuote(input) {
     netPrice: netPriceCar,                 // 개소세제외 차량가격 (수수료 기준)
     residualPct,                           // 잔가율 (I4+I5+I6)
     residualAmt: C23,                      // 만기인수금액
-    depositAmt: round(C20 * c.dep / 100),  // 보증금 액수
+    depositAmt: F13,                       // 보증금 액수 (= 엑셀 F13, 반올림·올림·클램프 반영)
     prePayAmt: round(C20 * c.pre / 100),   // 선납금 액수
     feeAmount: round(netPriceCar * feeRate), // 지급 수수료 = (총가-개소세) × 수수료율
     // 디버그

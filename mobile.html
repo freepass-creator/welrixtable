@@ -91,6 +91,8 @@
       letter-spacing: -0.2px;
       -webkit-text-size-adjust: 100%;
       overflow-x: hidden;
+      /* 화면을 당겼다 놓을 때 브라우저 '당겨서 새로고침'으로 견적 데이터가 날아가는 것 방지 */
+      overscroll-behavior-y: contain;
     }
     /* 1024px 초과 (PC) 진입 시 데스크탑으로 리다이렉트 — 모바일 페이지인데 PC 로 들어오면 어색 */
     @media (min-width: 1025px) {
