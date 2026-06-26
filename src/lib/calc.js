@@ -43,7 +43,7 @@ const DEFAULT_CFG = {
   credit_lookup: {
     '신용':   { interest: 0.064, profit: 0.019, deposit: 0.05 },
     '고신용': { interest: 0.064, profit: 0.019, deposit: 0.05 },
-    '중신용': { interest: 0.064, profit: 0.041, deposit: 0.20 },
+    '중신용': { interest: 0.064, profit: 0.043, deposit: 0.20 },
     '저신용': { interest: 0.064, profit: 0.084, deposit: 0.30 },
     '무신용': { interest: 0.064, profit: 0.084, deposit: 0.30 },
   },

@@ -30,7 +30,7 @@ const d = r._debug;
 console.log('========== K5 2.0 HEV 베스트 셀렉션 (calc.js vs 엑셀 v5.5) ==========');
 console.log('월 대여료 결과:');
 console.log('  calc.js:', r.monthly?.toLocaleString());
-console.log('  엑셀 v5.5: 735,000');
+console.log('  엑셀 v6: 740,000');
 console.log('');
 console.log('셀별 비교:');
 const rows = [
@@ -59,7 +59,7 @@ const rows = [
   ['F27 산출대여료',    Math.round(d.F27), null],
   ['H27 신용가산',     Math.round(d.H27), null],
   ['H33 절사후청구',   d.H33, null],
-  ['H34 최종월',       d.H34, 735000],
+  ['H34 최종월',       d.H34, 740000],   // v6 (중신용 profit 0.043) — v5.5=735,000
 ];
 for (const [label, ours, excel] of rows) {
   const o = typeof ours === 'number' ? ours.toLocaleString() : ours;

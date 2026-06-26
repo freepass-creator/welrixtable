@@ -24,20 +24,6 @@ function toggleTerm(t) {
   }
 }
 
-function onDepChange() {
-  const v = Math.max(0, Math.min(30, +quoteState.cond.dep || 0));
-  quoteState.cond.dep = v;
-  (quoteState.scenarios || []).forEach(s => { s.dep = v; });
-}
-function onPreChange() {
-  const v = Math.max(0, Math.min(30, +quoteState.cond.pre || 0));
-  quoteState.cond.pre = v;
-  (quoteState.scenarios || []).forEach(s => { s.pre = v; });
-}
-function onFeeChange() {
-  const v = Math.max(-10, Math.min(7, Math.round((+quoteState.cond.feeRatePct || 0) * 10) / 10));
-  quoteState.cond.feeRatePct = v;
-}
 </script>
 
 <template>
@@ -79,47 +65,11 @@ function onFeeChange() {
       </div>
     </div>
 
-    <!-- 보증금 — 직접 입력 (0~30%) -->
-    <div class="sc-field">
-      <div class="sc-label">보증금</div>
-      <div class="sc-pct">
-        <input
-          type="number" min="0" max="30" step="1" inputmode="numeric"
-          v-model.number="quoteState.cond.dep"
-          @change="onDepChange"
-          placeholder="0"
-        />
-        <em>%</em>
-      </div>
-    </div>
-
-    <!-- 선납금 — 직접 입력 (0~30%) -->
-    <div class="sc-field">
-      <div class="sc-label">선납금</div>
-      <div class="sc-pct">
-        <input
-          type="number" min="0" max="30" step="1" inputmode="numeric"
-          v-model.number="quoteState.cond.pre"
-          @change="onPreChange"
-          placeholder="0"
-        />
-        <em>%</em>
-      </div>
-    </div>
-
-    <!-- 수수료 — 직접 입력 (-10~7%, 0.1 단위) — 마이너스로 싸게 표기 가능 -->
-    <div class="sc-field">
-      <div class="sc-label">수수료</div>
-      <div class="sc-pct">
-        <input
-          type="number" min="-10" max="7" step="0.1" inputmode="decimal"
-          v-model.number="quoteState.cond.feeRatePct"
-          @change="onFeeChange"
-          placeholder="0"
-        />
-        <em>%</em>
-      </div>
-    </div>
+    <!-- 보증금·선납금·수수료는 시작(제조사) 화면에서 입력 — 단일 입력처로 통일 -->
+    <p class="sc-note">
+      보증금·선납금·수수료는 <b>시작 화면</b>에서 설정합니다.
+      <span class="sc-note__cur">현재 수수료 {{ quoteState.cond.feeRatePct }}% · 보증금 {{ quoteState.cond.dep }}% · 선납금 {{ quoteState.cond.pre }}%</span>
+    </p>
   </div>
 </template>
 
@@ -140,6 +90,17 @@ function onFeeChange() {
 }
 .sc-chips {
   display: flex; flex-wrap: wrap; gap: 6px;
+}
+.sc-note {
+  margin: 4px 0 0; padding: 12px 14px;
+  background: var(--bg-soft); border-radius: var(--r-chip);
+  font-size: var(--fs-sm); color: var(--ink-3); line-height: 1.5;
+  letter-spacing: -0.2px;
+}
+.sc-note b { color: var(--ink-2); font-weight: var(--fw-semi); }
+.sc-note__cur {
+  display: block; margin-top: 4px;
+  font-variant-numeric: tabular-nums; color: var(--ink-2);
 }
 .sc-chip {
   padding: 10px 14px;

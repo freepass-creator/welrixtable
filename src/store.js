@@ -62,8 +62,8 @@ function persistMyContracts(arr) {
 function loadFeeRate() {
   try {
     const v = parseFloat(localStorage.getItem(FEE_KEY));
-    return isFinite(v) ? v : 5.0;
-  } catch { return 5.0; }
+    return isFinite(v) ? v : 7.0;
+  } catch { return 7.0; }
 }
 function persistFeeRate(v) {
   try { localStorage.setItem(FEE_KEY, String(v)); } catch {}

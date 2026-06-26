@@ -286,6 +286,22 @@ function selectTrim(t) {
 }
 
 function goBack(target) { subStep.value = target; }
+
+// 시작 조건 — 제조사 화면에서 수수료/보증금/선납금 선입력 (StepConditions 와 동일 SSOT·클램프)
+function onDepChange() {
+  const v = Math.max(0, Math.min(30, +quoteState.cond.dep || 0));
+  quoteState.cond.dep = v;
+  (quoteState.scenarios || []).forEach(s => { s.dep = v; });
+}
+function onPreChange() {
+  const v = Math.max(0, Math.min(30, +quoteState.cond.pre || 0));
+  quoteState.cond.pre = v;
+  (quoteState.scenarios || []).forEach(s => { s.pre = v; });
+}
+function onFeeChange() {
+  const v = Math.max(-10, Math.min(7, Math.round((+quoteState.cond.feeRatePct || 0) * 10) / 10));
+  quoteState.cond.feeRatePct = v;
+}
 </script>
 
 <template>
@@ -304,6 +320,35 @@ function goBack(target) { subStep.value = target; }
     <!-- 1) 제조사 -->
     <div v-if="subStep === 'brand'" class="sv-section">
       <h2 class="sv-title">어떤 제조사를<br>선택할까요?</h2>
+
+      <!-- 시작 조건 — 수수료·보증금·선납금 선입력 (제조사 탭하면 바로 모델로 넘어가므로 위에 둠) -->
+      <div class="sv-precond">
+        <label class="sv-pc">
+          <span class="sv-pc__lab">수수료</span>
+          <span class="sv-pc__in">
+            <input type="number" min="-10" max="7" step="0.1" inputmode="decimal"
+                   v-model.number="quoteState.cond.feeRatePct" @change="onFeeChange" placeholder="0" />
+            <em>%</em>
+          </span>
+        </label>
+        <label class="sv-pc">
+          <span class="sv-pc__lab">보증금</span>
+          <span class="sv-pc__in">
+            <input type="number" min="0" max="30" step="1" inputmode="numeric"
+                   v-model.number="quoteState.cond.dep" @change="onDepChange" placeholder="0" />
+            <em>%</em>
+          </span>
+        </label>
+        <label class="sv-pc">
+          <span class="sv-pc__lab">선납금</span>
+          <span class="sv-pc__in">
+            <input type="number" min="0" max="30" step="1" inputmode="numeric"
+                   v-model.number="quoteState.cond.pre" @change="onPreChange" placeholder="0" />
+            <em>%</em>
+          </span>
+        </label>
+      </div>
+
       <div v-if="!db" class="sv-debug">
         차량 DB 로드 중... (window.VEHICLE_DB: {{ typeof globalDB }})
       </div>
@@ -566,6 +611,42 @@ function goBack(target) { subStep.value = target; }
 }
 .sv-crumb img { width: 14px; height: 14px; }
 .sv-crumb:active { color: var(--brand); }
+
+/* 시작 조건 — 수수료·보증금·선납금 3-up */
+.sv-precond {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  margin-bottom: 20px;
+}
+.sv-pc { display: flex; flex-direction: column; gap: 6px; }
+.sv-pc__lab {
+  font-size: var(--fs-sm); font-weight: var(--fw-semi); color: var(--ink-2);
+  letter-spacing: -0.2px;
+}
+.sv-pc__in {
+  display: flex; align-items: baseline; gap: 3px;
+  height: var(--h-input);
+  padding: 0 10px;
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-chip);
+  transition: border-color .12s;
+}
+.sv-pc__in:focus-within { border-color: var(--brand); }
+.sv-pc__in input {
+  flex: 1; min-width: 0; height: 100%;
+  border: 0; background: transparent;
+  font-family: inherit; font-size: var(--fs-lg);
+  color: var(--ink-1); outline: none;
+  font-variant-numeric: tabular-nums;
+  text-align: right; padding: 0;
+  -moz-appearance: textfield;
+}
+.sv-pc__in input::-webkit-outer-spin-button,
+.sv-pc__in input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.sv-pc__in em {
+  font-style: normal; font-size: var(--fs-md);
+  color: var(--ink-4); flex-shrink: 0;
+}
 
 /* 제조사 카드 */
 .sv-brand-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
