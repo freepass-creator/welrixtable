@@ -119,6 +119,7 @@ async function shareSignLink() {
     <header class="m-header">
       <div class="m-header__brand">
         <img class="m-ci" src="/welrix-ci.png" alt="웰릭스 모빌리티 · 처음으로" @click="goHome" role="button" tabindex="0" style="cursor: pointer;" />
+        <span v-if="cfg.excel_version" class="m-ver" title="견적 계산에 적용된 엑셀 견적기 버전">엑셀 {{ cfg.excel_version }}</span>
       </div>
       <div class="m-header__actions">
         <button class="m-act" @click="shareSignLink" title="조회동의 링크 공유">
@@ -190,6 +191,14 @@ async function shareSignLink() {
   height: 20px; width: auto;
   object-fit: contain;
   flex-shrink: 0;
+}
+.m-ver {
+  flex-shrink: 0;
+  font-size: 10.5px; font-weight: var(--fw-semi);
+  color: var(--ink-4); letter-spacing: -0.2px;
+  padding: 2px 6px; border-radius: 5px;
+  background: var(--bg-soft);
+  font-variant-numeric: tabular-nums;
 }
 .m-title {
   font-size: 12.5px; font-weight: 600; color: var(--ink-1);

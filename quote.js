@@ -54,10 +54,21 @@ async function loadCompanyConfig() {
       setCompanyConfig(cfg);
       window.__welrix_companyConfig = cfg;
       applyCompanyTheme(cfg);
+      applyExcelVersion(cfg);
       return cfg;
     }
   } catch {}
   return null;
+}
+
+// 상단바에 적용된 엑셀 견적기 버전 표시 (welrix.json 의 excel_version 이 SSOT)
+function applyExcelVersion(cfg) {
+  const el = document.getElementById('excel-ver-top');
+  if (!el) return;
+  const ver = cfg?.excel_version;
+  if (!ver) { el.hidden = true; return; }
+  el.textContent = '엑셀 ' + ver;
+  el.hidden = false;
 }
 
 // 회사별 브랜드 색을 CSS 변수로 주입 — :root 의 --brand/--brand-700/--brand-100/--brand-50 덮어씀

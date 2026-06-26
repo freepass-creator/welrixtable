@@ -164,6 +164,11 @@
     height: 22px; width: auto; display: block;
   }
   .global-topbar__hint { font-size: 12px; color: var(--ink-4); padding-left: 12px; }
+  .global-topbar__ver {
+    font-size: 11px; font-weight: 600; color: var(--ink-4);
+    margin-left: 10px; padding: 2px 7px; border-radius: 5px;
+    background: var(--brand-50); font-variant-numeric: tabular-nums;
+  }
   .global-topbar .spacer { flex: 1; }
   .global-topbar__actions { display: flex; gap: 2px; }
   /* 톱바 버튼 — 박스 없이 텍스트 + 아이콘 (hover시 옅은 회색 bg만) */
@@ -681,6 +686,7 @@
 <div class="global-topbar">
   <div class="global-topbar__brand"><img class="ci" src="/welrix-ci.png" alt="welrix" /><span class="hidden-brand-name" id="brand-name-top" hidden>웰릭스 모빌리티</span></div>
   <span class="global-topbar__hint">신차 장기렌터카 견적기</span>
+  <span class="global-topbar__ver" id="excel-ver-top" title="견적 계산에 적용된 엑셀 견적기 버전" hidden></span>
   <span class="spacer"></span>
   <div class="global-topbar__actions">
     <!-- 견적 그룹 — 견적/견적바구니 일관 라벨 -->

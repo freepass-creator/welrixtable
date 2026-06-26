@@ -26,6 +26,9 @@
     "deposit_buckets_max": "보증금 상한 (750만원)"
   },
 
+  "excel_version": "v6",
+  "excel_version_date": "2026-06-15",
+
   "company_id": "welrix",
   "name": "웰릭스 모빌리티",
   "logo_url": "/welrix-logo.png",
