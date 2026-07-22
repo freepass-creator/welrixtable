@@ -131,7 +131,7 @@ const PERSONA_ICONS = {
   <div v-if="!props.slug || !meta" class="gd-empty">
     <i class="ph ph-warning-circle"></i>
     <h2>차종을 찾을 수 없습니다</h2>
-    <p>URL을 확인하시거나 <a href="/home.html#guide">전체 차종</a>으로 이동해주세요.</p>
+    <p>URL을 확인하시거나 <a href="/vehicles.html">전체 차종</a>으로 이동해주세요.</p>
   </div>
 
   <template v-else>
@@ -141,7 +141,7 @@ const PERSONA_ICONS = {
         <div class="gd-hero__inner">
           <div class="gd-hero__left">
             <div class="gd-hero__crumbs">
-              <a href="/home.html#guide">전체 차종</a>
+              <a href="/vehicles.html">전체 차종</a>
               <i class="ph ph-caret-right"></i>
               <span>{{ meta.brand }}</span>
               <i class="ph ph-caret-right"></i>
