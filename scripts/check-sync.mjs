@@ -1,26 +1,25 @@
 // ============================================================================
-//  웰릭스 견적 ERP 동기화 닥터   —   node scripts/check-sync.mjs [--fix]
+//  웰릭스 견적 ERP 동기화 닥터   —   node scripts/check-sync.mjs  (= npm run check)
 // ----------------------------------------------------------------------------
-//  새 엑셀(v5.6/v6.0…)이 오거나 견적이 의심될 때 "어느 변수를 어디서 고쳐야 하는지"
-//  한 번에 점검하고, 파일 사본 드리프트는 --fix 로 동기화한다.
+//  새 엑셀이 오거나 견적이 의심될 때 "어느 변수를 어디서 고쳐야 하는지"
+//  한 번에 점검한다.
 //
 //  ⚠️ 가장 자주 터지는 사고: calc.js 기본값만 고치고 welrix.json 을 안 고침.
 //     런타임(웹 ERP·모바일·홈)은 public/data/company-config/welrix.json 을
 //     setCompanyConfig 로 로드하므로, 이 파일이 안 바뀌면 견적이 안 변한다.
 //
 //  설정 우선순위(런타임 실효값):
-//     public/…/welrix.json  >  calc.js DEFAULT_CFG(fallback)
-//     ※ src/…/welrix.json 은 런타임 미사용. 단 개발자가 착각하는 함정이라 일치 강제.
+//     public/…/welrix.json(런타임 SSOT)  >  calc.js DEFAULT_CFG(fallback)
+//     ※ 런타임(웹/모바일/홈)은 fetch('/data/company-config/welrix.json')=public 만 사용.
 //
-//  검사: [1] 변수 일치(3소스 대조)  [2] 회귀(엑셀 기대값)  [3] 차량DB  [4] 체크리스트
+//  검사: [1] 변수 일치(2소스 대조)  [2] 회귀(엑셀 기대값)  [3] 차량DB  [4] 체크리스트
 //  종료코드: 불일치/회귀실패 1, 깨끗 0
 // ============================================================================
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { calcQuote, setCompanyConfig, getDefaultConfig, getActiveConfig } from '../src/lib/calc.js';
 import { buildCalcInput } from '../src/lib/build-calc-input.js';
 import { ENGINE_CASES, ASSEMBLY_CASES, DEPOSIT_CASES } from './excel-cases.mjs';
 
-const FIX = process.argv.includes('--fix');
 const R='\x1b[31m',G='\x1b[32m',Y='\x1b[33m',C='\x1b[36m',B='\x1b[1m',D='\x1b[2m',X='\x1b[0m';
 const url = (p) => new URL(p, import.meta.url);
 // 값 표시: 정수는 천단위, 소수(이자율 등)는 그대로 — 반올림 금지(0.041→0 사고 방지)
@@ -29,9 +28,7 @@ const show = (n) => n == null ? String(n)
 let problems = 0;
 
 const PUB = '../public/data/company-config/welrix.json';
-const SRC = '../src/data/company-config/welrix.json';
 const pub = JSON.parse(readFileSync(url(PUB), 'utf-8'));
-const src = JSON.parse(readFileSync(url(SRC), 'utf-8'));
 const vehicles = JSON.parse(readFileSync(url('../public/data/vehicles.json'), 'utf-8'));
 
 // 의미 없는 키(주석/메타) — 드리프트 비교에서 제외
@@ -48,7 +45,7 @@ function diff(a, b, path, out) {
 }
 
 // ── [1] 변수 일치 ────────────────────────────────────────────────────────────
-console.log(`\n${B}${C}[1] 변수 일치 검사 (3소스 대조)${X}`);
+console.log(`\n${B}${C}[1] 변수 일치 검사 (2소스 대조)${X}`);
 
 // 1a) 런타임 실효값(public welrix.json 주입 후) ↔ calc.js 기본값(fallback)
 //     ※ setCompanyConfig 가 payback_table 등을 정규화하므로 "실효 설정"끼리 비교(형식차 거짓양성 방지)
@@ -64,20 +61,6 @@ else {
     console.log(`        ${Y}${p}${X}  기본값 ${show(dv)}  ${D}≠${X}  welrix ${B}${show(pv)}${X}`);
     problems++;
   }
-}
-
-// 1b) public ↔ src 사본 (런타임 미사용이지만 함정) → --fix 로 동기화
-const d2 = []; diff(src.financial, pub.financial, '', d2);
-console.log(`\n  ${B}1b. src/welrix.json(유령 사본)  ⟷  public/welrix.json${X}`);
-if (!d2.length) console.log(`     ${G}✓ 일치${X}`);
-else if (FIX) {
-  writeFileSync(url(SRC), JSON.stringify(pub, null, 2) + '\n', 'utf-8');
-  console.log(`     ${G}✓ --fix: src 사본을 public 기준으로 동기화함 (${d2.length}개 항목)${X}`);
-} else {
-  console.log(`     ${Y}⚠ ${d2.length}개 불일치 — 유령 사본. ${B}--fix${X}${Y} 로 자동 동기화 가능:${X}`);
-  for (const [p, sv, pv] of d2.slice(0, 8))
-    console.log(`        ${Y}${p}${X}  src ${show(sv)}  ${D}≠${X}  public ${show(pv)}`);
-  problems++;
 }
 
 // ── [2] 회귀 (엑셀 기대값) — 런타임 실효 설정(public)으로 계산 ─────────────────
@@ -141,7 +124,7 @@ console.log(`  1. _source/견적기/ 에 신버전 .xlsx 드롭`);
 console.log(`  2. python scripts/compare-excel-versions.py [old] [new]   ${D}← 바뀐 셀 추출${X}`);
 console.log(`  3. ${B}public/…/welrix.json${X} 의 financial 값 수정  ${D}(런타임 실효 SSOT)${X}`);
 console.log(`  4. ${B}calc.js DEFAULT_CFG${X} 도 동일하게 수정  ${D}(fallback — [1a]가 불일치 잡아줌)${X}`);
-console.log(`  5. ${B}node scripts/check-sync.mjs --fix${X}  ${D}← src 사본 자동동기화 + 회귀검증${X}`);
+console.log(`  5. ${B}npm run check${X}  ${D}(= node scripts/check-sync.mjs) — 회귀검증${X}`);
 console.log(`  6. 가격/잔가율 바뀌면 → python scripts/sync-vehicles-from-excel.py`);
 console.log(`  7. git push (Vercel 자동) → Ctrl+Shift+R`);
 
