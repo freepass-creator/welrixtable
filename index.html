@@ -41,6 +41,9 @@
   (function () {
     var params = new URLSearchParams(location.search);
     if (params.get('force') === 'desktop') return;
+    // 손님 견적 링크(?q)·관리자(?admin)는 index.html 이 직접 처리(customer-view/admin-view, 모바일 레이아웃 포함)
+    // → mobile.html 로 튕기면 ?q 미처리로 빈 견적 빌더가 뜨므로 리다이렉트 제외
+    if (params.get('q') || params.get('admin')) return;
     if (window.innerWidth <= 768) {
       var target = location.pathname.replace(/index\.html$/, 'mobile.html');
       if (target === location.pathname) target = target.replace(/\/$/, '') + '/mobile.html';

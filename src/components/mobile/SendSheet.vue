@@ -53,7 +53,7 @@ async function buildQuoteBlob() {
     customer: { name: quoteState.cust.name?.trim() || 'VIP 고객님', tel: quoteState.cust.tel },
     staff: { ...quoteState.staff },
     cond: { ...quoteState.cond },
-    send: [true, true, true],
+    send: [...quoteState.send],
     quoteMeta: { quoteNo: today.toISOString().slice(0,10).replace(/-/g,'') + '-M' + String(Date.now()).slice(-4), todayStr, expireStr },
     companyConfig: window.__welrix_companyConfig || {},
     showLogo: quoteState.send_options.showLogo !== false,
