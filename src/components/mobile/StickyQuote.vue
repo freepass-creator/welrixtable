@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { quoteState, vehicleState } from '../../store.js';
+import { quoteState } from '../../store.js';
 import { calcQuote } from '../../lib/calc.js';
 import { buildCalcInput } from '../../lib/build-calc-input.js';
 import { fmt } from '../../lib/format.js';

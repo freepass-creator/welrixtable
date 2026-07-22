@@ -1,5 +1,5 @@
 // ============================================================================
-//  엑셀 v6 검증 기준값 (SSOT)  —  check-sync.mjs 가 읽어서 회귀 검사
+//  엑셀 v6.1 검증 기준값 (SSOT)  —  check-sync.mjs 가 읽어서 회귀 검사
 // ----------------------------------------------------------------------------
 //  새 엑셀이 오면 ⟶ 여기 expect 값(과 cell 참조)만 갱신하면 됨.
 //  검사 실행 로직(러너)은 check-sync.mjs 에, 기준 데이터는 여기에 분리.
@@ -11,7 +11,7 @@ export const ENGINE_CASES = [
   {
     label: 'K5 2.0 HEV 베스트셀렉션 / 60M / 보증0 / 중신용 / 블박+썬팅',
     cell: '견적1!H34',
-    expectMonthly: 740000,        // 엑셀 v6 최종 월대여료 (중신용 profit 0.041→0.043 반영, v5.5=735,000)
+    expectMonthly: 746000,        // 엑셀 v6.1 최종 월대여료 (개소세 3.5%→5% + H34 기간가산 H33기준 반영; v6=740,000)
     input: {
       vehicle: { brand: '기아', model: 'K5', trim: 'K5 2.0 하이브리드 베스트 셀렉션', price: 35020000,
         disp: 1999, fuel: 'HEV.', tax_exempt: '과세', group: 'A군', multi_seat: null,
@@ -25,11 +25,12 @@ export const ENGINE_CASES = [
   },
 ];
 
-// (C) 보증금 v6 — 무신용=CEILING(50만 올림), 그 외=ROUND(10만 반올림), [500k,10M] 클램프
-//     calcQuote(depositAmt) = 엑셀 F13. price=소비자가(C20), dep=%, credit=신용등급.
+// (C) 보증금 v6.1 — 저신용=CEILING(50만 올림), 그 외(무신용 포함)=ROUND(10만 반올림), [500k,10M] 클램프
+//     calcQuote(depositAmt) = 엑셀 F13 IF(BC6="저신용",CEILING,ROUND). price=소비자가(C20), dep=%, credit=신용등급.
 export const DEPOSIT_CASES = [
   { price: 25150000, dep: 10, credit: '중신용', expect: 2500000, note: 'ROUND 10만 (raw 2,515,000→2,500,000)' },
-  { price: 25150000, dep: 10, credit: '무신용', expect: 3000000, note: 'CEILING 50만 올림 (raw→3,000,000)' },
+  { price: 25150000, dep: 10, credit: '저신용', expect: 3000000, note: 'v6.1 CEILING 50만 올림 (raw 2,515,000→3,000,000)' },
+  { price: 25150000, dep: 10, credit: '무신용', expect: 2500000, note: 'v6.1 무신용=ROUND (raw 2,515,000→2,500,000; v6=CEILING 3,000,000)' },
   { price: 30000000, dep: 1,  credit: '중신용', expect: 500000,  note: '하한 클램프 (raw 300,000→500,000)' },
 ];
 

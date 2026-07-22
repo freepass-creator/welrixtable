@@ -9,7 +9,7 @@ import Lineup from './components/home/Lineup.vue';
 import HeroBest from './components/home/HeroBest.vue';
 import AiRecommender from './components/home/AiRecommender.vue';
 
-// 회사 config(welrix.json = 엑셀 v5.5 SSOT) 주입 — 웹 ERP/모바일과 동일 엔진 설정.
+// 회사 config(welrix.json = 엑셀 견적기 정책 SSOT) 주입 — 웹 ERP/모바일과 동일 엔진 설정.
 // (과거 home 은 이 주입을 안 해서 calc.js 기본값으로 계산 → 포터보험·중신용 수익률 등이 어긋났음)
 let __configReady = (async () => {
   try {

@@ -78,11 +78,11 @@ const DEFAULT_CFG = {
       exclude: { brands: [], models: [] },
       by_term_code: { 3: 0.05, 4: -0.005, 5: -0.03 },
     },
-    brand_adjustment: { '제네시스': -0.20, 'K9': -0.15, '하이리무진': -0.15 },
+    brand_adjustment: { '제네시스': -0.18, 'K9': -0.15, '하이리무진': -0.15 },  // v6.1: 제네시스 -20% → -18%
     buyback_rate_add: {
       // Excel I6: IF(고신용,0%, IF(중신용,2%, 4%)) — 신용/저신용/무신용은 cascade default 4%
       by_credit: { '신용': 0.04, '고신용': 0, '중신용': 0.02, '저신용': 0.04, '무신용': 0.04 },
-      by_brand: { '제네시스': 0.25 },
+      by_brand: { '제네시스': 0.23 },  // v6.1: 제네시스 인수가율 가산 25% → 23%
       by_model: { 'K9': 0.20, '하이리무진': 0.20 },
     },
     credit_premium: { '신용': 0, '고신용': 0, '중신용': 0.03, '저신용': 0.05, '무신용': 0 },
@@ -95,7 +95,7 @@ const DEFAULT_CFG = {
   },
   extra_driver: { '없음': 0, '1명': 50000, '2명': 100000, '3명': 150000 },
   deposit_buckets_step: 500000,
-  deposit_buckets_max: 7500000,
+  deposit_buckets_max: 10000000,  // v6.1: 보증금 클램프 상한 750만 → 1,000만
 };
 
 // 모듈 레벨 활성 정책 (setCompanyConfig 로 교체 가능)
@@ -125,8 +125,10 @@ export function setCompanyConfig(cfg) {
   };
 }
 
-// 후방 호환용 별칭 (기존 코드 참조)
-const CREDIT_LOOKUP = new Proxy({}, { get: (_, k) => CFG.credit_lookup[k] });
+// 포터 차종 판별 (보험료/취득세율 분기 공용)
+function isPorterVehicle(v) {
+  return /포터/.test(v.trim || '') || /포터/.test(v.model || '');
+}
 
 // 정기검사 (3~8년차 동일 / 1~2년차 면제, 신차 2년까지 유예)
 // 엑셀 F11(termCode): 2=24M=0회, 3=36M=1회, 4=48M=2회, 5=60M=3회
@@ -154,14 +156,14 @@ function autoTax(disp) {
   return disp * perCC * 1.3;
 }
 
-// 보증금 계산 (F13) — Excel v6:
-//   MEDIAN(500000, 10000000, IF(무신용, CEILING(C20*dep, 500000), ROUND(C20*dep, -5)))
-//   · 무신용 = 50만원 단위 '올림'(CEILING)  · 그 외 = 10만원 단위 반올림(ROUND)  · [500k,10M] 클램프
+// 보증금 계산 (F13) — Excel v6.1:
+//   MEDIAN(500000, 10000000, IF(BC6="저신용", CEILING(C20*dep, 500000), ROUND(C20*dep, -5)))
+//   · 저신용 = 50만원 단위 '올림'(CEILING)  · 그 외 = 10만원 단위 반올림(ROUND)  · [500k,10M] 클램프
 function depositAmount(C20, depositRate, creditGrade) {
   const v = C20 * depositRate;
   if (v === 0) return 0;
-  const inner = creditGrade === '무신용'
-    ? Math.ceil(v / 500000) * 500000      // CEILING(v, 500000) — 무신용은 올림(높은 쪽)
+  const inner = creditGrade === '저신용'
+    ? Math.ceil(v / 500000) * 500000      // CEILING(v, 500000) — 저신용은 올림(높은 쪽)
     : Math.round(v / 100000) * 100000;     // ROUND(v, -5)
   return Math.max(500000, Math.min(10000000, inner));
 }
@@ -198,7 +200,7 @@ function residualBrandAdj(brand, model) {
 // 자동차보험 기본 (I10)
 function baseInsurance(vehicle, insuranceProperty) {
   const ins = CFG.insurance;
-  if (/포터/.test(vehicle.trim || '') || /포터/.test(vehicle.model || '')) return ins.base_porter;
+  if (isPorterVehicle(vehicle)) return ins.base_porter;
   const isMulti = vehicle.multi_seat === '다인승';
   const base = isMulti ? ins.base_multi_seat : ins.base_normal;
   return base + (ins.property_extra[insuranceProperty] ?? 0);
@@ -212,7 +214,7 @@ function extraDriverFee(extra) {
 // ============ 메인 견적 계산 ============
 /**
  * @param {object} input
- * @param {object} input.vehicle  — { brand, model, trim, price, disp, fuel, tax_exempt, group, r24, r36, r48, r60, buyback_apply, multi_seat }
+ * @param {object} input.vehicle  — { brand, model, trim, price, disp, fuel, tax_exempt, group, r24, r36, r48, r60, strategic, multi_seat }
  * @param {object} input.options  — { optPrice, discount, deliveryFee, tintFee, blackboxFee, etc }
  * @param {object} input.contract — { term: 24|36|48|60, km: '1만km'|'2만km'|'3만km'|'4만km', dep: %, pre: % }
  * @param {object} input.customer — { creditGrade: '신용'|'중신용'|'저신용'|'무신용' }
@@ -230,8 +232,8 @@ export function calcQuote(input) {
 
   const termCode = c.term / 12;       // F11
   const term = c.term;                // 개월수
-  const M8 = 1.141041;                // 개소세 3.5% 기준 총액 계수
-  const credit = CREDIT_LOOKUP[cu.creditGrade] || CREDIT_LOOKUP['중신용'];
+  const M8 = 1.141041;                // 총액 계수 (엑셀 v6.1도 이 값 유지 — 개소세율만 5%로 상향, M8은 미변경)
+  const credit = CFG.credit_lookup[cu.creditGrade] || CFG.credit_lookup['중신용'];
 
   // ====== 1. 차량 가격 ======
   const C5 = v.price || 0;
@@ -243,9 +245,9 @@ export function calcQuote(input) {
   // ====== 2. 공장도가/과세표준/개소세/부가세 ======
   const C8 = isExempt ? round(C7 / 1.1) : round(C7 / M8);   // 공급가액
   const F8 = round(C8 * 0.82);                              // 과세표준
-  const C9 = isExempt ? 0 : round(F8 * 0.035 + F8 * 0.035 * 0.3);  // 개소세+교육세
+  const C9 = isExempt ? 0 : round(F8 * 0.05 + F8 * 0.05 * 0.3);  // 개소세(v6.1: 5%)+교육세(30%)
   const C10 = isExempt ? round(C8 * 0.1) : (C8 + C9) * 0.1; // 부가세
-  const isPorter = /포터/.test(v.trim || '') || /포터/.test(v.model || '');
+  const isPorter = isPorterVehicle(v);
 
   // ====== 3. 취득가/취득원가 ======
   const C11 = C8 + C9;                                      // 취득가액
@@ -322,7 +324,7 @@ export function calcQuote(input) {
   // I22: 기간 가산
   const I22 = termSurcharge(termCode, v.brand, v.model);
 
-  // F13: 보증금 (신용등급별 — 무신용 올림)
+  // F13: 보증금 (신용등급별 — 저신용 올림)
   const F13 = depositAmount(C20, c.dep / 100, cu.creditGrade);
   const F14 = c.pre / 100;                                  // 선납금률
 
@@ -349,7 +351,6 @@ export function calcQuote(input) {
   const F26 = F23 / (termCode * 12);                        // 가산원가 환산
   const F27 = F25 + F26;                                    // 산출대여료
   const H27 = F27 + F27 * I21;                              // 신용가산 산출대여료
-  const F28 = F27 * 0.1;
   const H28 = H27 * 0.1;
 
   // 선납차감
@@ -364,8 +365,9 @@ export function calcQuote(input) {
   const H33 = floor1k(H27 + H28 - H32) + H31;
 
   // H34: 최종 월 대여료 (기간가산 적용)
-  // ⭐ 기간가산 절사는 산출대여료 H27 기준 (엑셀 H열 계보). H33 기준이면 엑셀과 ±2,000 어긋남.
-  const H34 = H33 + floor1k(H27 * I22);
+  // 엑셀 v6.1: H34 = H33 + ROUNDDOWN(H33*I22,-3) — 기간가산 기준 = 청구액(VAT포함·절사) H33.
+  // (엑셀 캐시값 정밀 대조 확인: 아반떼 샘플 H33 기준=477,000 = 엑셀 일치 / 과거 H27 기준=478,000 오차)
+  const H34 = H33 + floor1k(H33 * I22);
 
   // ====== 7. 최종 출력 ======
   // 개소세제외 차량가격 = 총가 - 개소세교육세 (면세시 = 총가)

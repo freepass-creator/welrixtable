@@ -39,7 +39,6 @@ window.__welrix_data = {
 import { quoteState as state, cartStore, addToCart, removeFromCart, clearCart, findCartItem } from './src/store.js';
 import { saveQuote, buildQuoteUrl } from './src/firebase/quotes.js';
 import { buildOfficialQuoteHtml } from './src/lib/build-quote-html.js';
-import { buildMultiQuoteHtml } from './src/lib/build-multi-quote-html.js';
 import { logQuoteSent } from './src/firebase/chat.js';
 let VEHICLES = [];
 
@@ -179,61 +178,6 @@ window.__welrix_onPriceChange = (data) => {
 // 빈 함수로 유지 — 기존 호출처(recompute, renderQuoteDoc, renderEmpty)는 그대로 호출하지만 no-op
 function renderSummary() { /* Vue가 처리 */ }
 
-// === 이하 옛 DOM 조작 코드 (남겨두지만 호출 안됨) ===
-function _legacy_renderSummary() {
-  const mini = $('qp-summary-mini');
-  if (!mini) return;
-  const v = state.vehicle;
-  const vEl = $('qp-vehicle');
-  // 차량 정보가 부분이라도 있으면 표시
-  const titleParts = v ? [v.brand, v.model, v.variant, v.trim_name].filter(Boolean) : [];
-  if (titleParts.length) {
-    const logo = v && BRAND_LOGOS_BY_KR[v.brand];
-    const logoHtml = logo ? `<img class="qp-brand-logo" src="${logo}" alt="" />` : '';
-    vEl.innerHTML = `${logoHtml}<span>${titleParts.join(' ')}</span>`;
-    vEl.classList.remove('empty');
-  } else {
-    vEl.textContent = '차량 미선택';
-    vEl.classList.add('empty');
-  }
-  // 가격 공식: 트림 X만 + 옵션 Y만 = 총 Z만원
-  const trimManwon = v?.trim_price_manwon || 0;
-  const optsManwon = v?.options_price_manwon || 0;
-  const totalKrw = v && v.total_manwon ? v.total_manwon * 10000 + (state.cond.colorIntPrice || 0) : 0;
-  const totalManwon = Math.round(totalKrw / 10000);
-  const formulaEl = $('qp-formula');
-  if (formulaEl) {
-    if (trimManwon) {
-      let html = `트림 <b>${fmt(trimManwon)}만</b>`;
-      if (optsManwon) html += ` + 옵션 <b>${fmt(optsManwon)}만</b>`;
-      html += ` = 총 <b class="total">${fmt(totalManwon)}만원</b>`;
-      formulaEl.innerHTML = html;
-    } else {
-      formulaEl.textContent = '';
-    }
-  }
-  // 개소세 라벨
-  const taxLabel = $('qp-tax-label');
-  if (taxLabel && v && v.tax_rate) {
-    taxLabel.textContent = v.tax_rate === '3_5' ? '3.5%' : '5%';
-  }
-  // 옵션 — 뱃지로 노출 (라벨 없이 chips만)
-  const opts = (v && v.options) || [];
-  $('qp-summary-opts').innerHTML = opts.length
-    ? `<div class="qp-opt-chips">${opts.map((n) => `<span class="badge badge--brand">${n}</span>`).join('')}</div>`
-    : '';
-  // 색상
-  const colorBits = [];
-  if (v && v.colorExt) {
-    const hex = guessColor(v.colorExt);
-    colorBits.push(`<span class="color-item"><span class="swatch" style="background:${hex}"></span>외장 ${v.colorExt}</span>`);
-  }
-  if (state.cond.colorInt) {
-    const hex = guessColor(state.cond.colorInt);
-    colorBits.push(`<span class="color-item"><span class="swatch" style="background:${hex}"></span>내장 ${state.cond.colorInt}</span>`);
-  }
-  $('qp-summary-colors').innerHTML = colorBits.join('');
-}
 
 function recompute() {
   // 부분 선택이어도 요약은 즉시 반영
@@ -343,92 +287,12 @@ function renderEmpty() {
   state.referenceMonthly = [];
   $('quote-doc').innerHTML = '<div class="quote-doc__empty">차량과 트림을 선택하면 견적서가 생성됩니다.</div>';
   return;
-  // 이하 옛 DOM 코드 (실행 안 됨, Vue가 대체)
-  const grid = $('terms-grid');
-  if (grid) {
-    grid.innerHTML = state.scenarios.map((sc, idx) => `
-      <div class="term-card term-card--empty" data-idx="${idx}">
-        <div class="term-card__head">
-          <select class="term-card__term-dd" disabled><option>${sc.term}개월</option></select>
-          <label class="term-card__check"><input type="checkbox" checked disabled/></label>
-        </div>
-        <div class="term-card__monthly">—<em>원</em></div>
-        <div class="term-card__cond">
-          <label><span>보증금</span><span class="pct-cell pct-cell--static">${sc.dep}%</span></label>
-          <label><span>선납금</span><span class="pct-cell pct-cell--static">${sc.pre}%</span></label>
-        </div>
-        <div class="term-card__row"><span>만기인수</span><b>—</b></div>
-        <div class="term-card__row"><span>보증금</span><b>—</b></div>
-        <div class="term-card__row"><span>선납금</span><b>—</b></div>
-      </div>
-    `).join('');
-  }
-  // 요약은 renderSummary가 별도로 처리 (recompute에서 호출됨, 또는 직접 호출)
-  $('quote-doc').innerHTML = '<div class="quote-doc__empty">차량과 트림을 선택하면 견적서가 생성됩니다.</div>';
 }
 // 페이지 로드 시 즉시 빈 상태 그리기
 renderEmpty();
 // renderSummary는 renderEmpty와 별도로 항상 노출 (초기 차량 미선택 텍스트 표시)
 if (typeof renderSummary === 'function') renderSummary();
 
-const TERM_OPTIONS = [12, 24, 36, 48, 60];
-function renderTerms(monthly) {
-  const grid = $('terms-grid');
-  grid.innerHTML = monthly.map((m) => {
-    const sent = state.send[m.idx] !== false;
-    return `
-      <div class="term-card ${sent ? '' : 'unchecked'}" data-idx="${m.idx}">
-        <div class="term-card__head">
-          <select class="term-card__term-dd" data-idx="${m.idx}">
-            ${TERM_OPTIONS.map((t) => `<option value="${t}" ${t === m.term ? 'selected' : ''}>${t}개월</option>`).join('')}
-          </select>
-          <label class="term-card__check"><input type="checkbox" data-idx="${m.idx}" ${sent ? 'checked' : ''}/></label>
-        </div>
-        <div class="term-card__monthly">${fmt(m.monthly)}<em>원</em></div>
-        <div class="term-card__cond">
-          <label>
-            <span>보증금</span>
-            <span class="pct-cell"><input type="number" class="term-card__dep" data-idx="${m.idx}" value="${m.dep}" min="0" max="100" />%</span>
-          </label>
-          <label>
-            <span>선납금</span>
-            <span class="pct-cell"><input type="number" class="term-card__pre" data-idx="${m.idx}" value="${m.pre}" min="0" max="100" />%</span>
-          </label>
-        </div>
-        <div class="term-card__row"><span>만기인수</span><b>${fmt(m.residualAmt)}</b></div>
-        <div class="term-card__row"><span>보증금</span><b>${fmt(m.depAmt)}</b></div>
-        <div class="term-card__row"><span>선납금</span><b>${fmt(m.preAmt)}</b></div>
-      </div>
-    `;
-  }).join('');
-  // term dropdown 변경
-  grid.querySelectorAll('.term-card__term-dd').forEach((el) => {
-    el.addEventListener('change', (e) => {
-      state.scenarios[+e.target.dataset.idx].term = +e.target.value;
-      recompute();
-    });
-  });
-  // 보증금/선납금 입력
-  grid.querySelectorAll('.term-card__dep').forEach((el) => {
-    el.addEventListener('change', (e) => {
-      state.scenarios[+e.target.dataset.idx].dep = +e.target.value || 0;
-      recompute();
-    });
-  });
-  grid.querySelectorAll('.term-card__pre').forEach((el) => {
-    el.addEventListener('change', (e) => {
-      state.scenarios[+e.target.dataset.idx].pre = +e.target.value || 0;
-      recompute();
-    });
-  });
-  // 발송 체크
-  grid.querySelectorAll('input[type=checkbox]').forEach((el) => {
-    el.addEventListener('change', (e) => {
-      state.send[+e.target.dataset.idx] = e.target.checked;
-      recompute();
-    });
-  });
-}
 
 // ============ 견적서 HTML v2 — 모바일 세로형 카드 레이아웃 (카톡 이미지용) ============
 function renderQuoteDoc(monthly, totalKrw, tintFee, deliveryFee, accessoryFee = 0) {
@@ -445,8 +309,8 @@ function renderQuoteDoc(monthly, totalKrw, tintFee, deliveryFee, accessoryFee = 
   // 옵션 칩
   const opts = (v.options && v.options.length) ? v.options : [];
   // 색상 hex (외장)
-  const extColorHex = v.colorExt ? guessColor(v.colorExt) : '#e5e5e5';
-  const intColorHex = state.cond.colorInt ? guessColor(state.cond.colorInt) : '#e5e5e5';
+  const extColorHex = guessColor(v.colorExt);
+  const intColorHex = guessColor(state.cond.colorInt);
 
   const cfg = window.__welrix_companyConfig || {};
   const logoUrl = cfg.logo_url;
@@ -613,36 +477,6 @@ function renderOfficialQuoteDoc(vehicles) {
   });
 }
 
-// ============ 다중 차종 견적서 — 모바일 카드형 (손님 페이지 전용 / 백업) ============
-// 헤더(고객·담당자) 1회 + 차종 카드 N개 + 공통 보험/정비/노트/푸터
-function renderMultiQuoteDoc(vehicles) {
-  // 견적서 HTML 은 공유 빌더(build-multi-quote-html.js)가 생성 — 표준견적과 양식 일치
-  const html = buildMultiQuoteHtml({
-    vehicles,
-    customer: { name: state.cust.name, tel: state.cust.tel },
-    staff:    { name: state.staff.name, tel: state.staff.tel },
-    cond:     state.cond,
-    send:     state.send,
-    companyConfig: window.__welrix_companyConfig || {},
-    showLogo: state.send_options?.showLogo !== false,
-    removable: true,  // 견적바구니 — 각 카드 제외 버튼
-  });
-  $('quote-modal-body').innerHTML = html;
-
-  // 차종 제외 버튼 위임
-  $('quote-modal-body').querySelectorAll('[data-cart-id]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const id = btn.dataset.cartId;
-      removeFromCart(id);
-      // 다시 그리기 (남은 차량 / 비었으면 닫기)
-      if (cartStore.vehicles.length === 0) {
-        $('quote-modal-bd').classList.remove('open');
-      } else {
-        renderMultiQuoteDoc(cartStore.vehicles);
-      }
-    });
-  });
-}
 
 // 텍스트 형식 (카톡 전송용)
 function buildPlainText(monthly, totalKrw) {

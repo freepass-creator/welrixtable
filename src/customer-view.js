@@ -129,8 +129,8 @@ async function render(id) {
     const vehicleCards = vehicles.map((veh, vIdx) => {
       const sent = (veh.monthly || []).filter((m) => sendArr[m.idx] !== false);
       const bestIdx = sent.length > 1 ? sent.reduce((b, m) => m.monthly < b.monthly ? m : b, sent[0]).idx : -1;
-      const extColorHex = veh.colorExt ? guessColor(veh.colorExt) : '#e5e5e5';
-      const intColorHex = veh.colorInt ? guessColor(veh.colorInt) : '#e5e5e5';
+      const extColorHex = guessColor(veh.colorExt);
+      const intColorHex = guessColor(veh.colorInt);
       const opts = veh.options || [];
       // 차량별 부가 (작게 하단에)
       const tintFee = veh.snapshot?.tintFee || 0;

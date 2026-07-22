@@ -10,9 +10,8 @@ import {
   setPersistence,
   browserLocalPersistence,
 } from 'firebase/auth';
-import { ref, get, onValue, push, set, update } from 'firebase/database';
+import { ref, get } from 'firebase/database';
 import { listContracts, loadContract, addReview } from './firebase/contracts.js';
-import { loadQuote } from './firebase/quotes.js';
 import { fetchAllChannels, sendChatMessage, watchChatMessages } from './firebase/chat.js';
 
 const params = new URLSearchParams(location.search);

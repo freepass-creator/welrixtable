@@ -35,7 +35,7 @@ const src = JSON.parse(readFileSync(url(SRC), 'utf-8'));
 const vehicles = JSON.parse(readFileSync(url('../public/data/vehicles.json'), 'utf-8'));
 
 // 의미 없는 키(주석/메타) — 드리프트 비교에서 제외
-const IGNORE = (k) => k.startsWith('_') || k === 'medium_credit_uses_rate';
+const IGNORE = (k) => k.startsWith('_');
 function diff(a, b, path, out) {
   if (typeof a !== 'object' || a === null || typeof b !== 'object' || b === null) {
     if (JSON.stringify(a) !== JSON.stringify(b)) out.push([path, a, b]);
@@ -74,7 +74,7 @@ else if (FIX) {
   writeFileSync(url(SRC), JSON.stringify(pub, null, 2) + '\n', 'utf-8');
   console.log(`     ${G}✓ --fix: src 사본을 public 기준으로 동기화함 (${d2.length}개 항목)${X}`);
 } else {
-  console.log(`     ${Y}⚠ ${d2.length}개 불일치 — 유령 v4.5 사본. ${B}--fix${X}${Y} 로 자동 동기화 가능:${X}`);
+  console.log(`     ${Y}⚠ ${d2.length}개 불일치 — 유령 사본. ${B}--fix${X}${Y} 로 자동 동기화 가능:${X}`);
   for (const [p, sv, pv] of d2.slice(0, 8))
     console.log(`        ${Y}${p}${X}  src ${show(sv)}  ${D}≠${X}  public ${show(pv)}`);
   problems++;
@@ -107,7 +107,7 @@ for (const t of ASSEMBLY_CASES) {
   if (!ok) problems++;
 }
 
-// (C) 보증금 v6 — 무신용 올림(CEILING 50만)/그외 반올림(ROUND 10만)/클램프
+// (C) 보증금 v6.1 — 저신용 올림(CEILING 50만)/그외(무신용 포함) 반올림(ROUND 10만)/클램프
 for (const t of DEPOSIT_CASES) {
   const got = calcQuote({
     vehicle: { brand: '·', model: '·', trim: '·', price: t.price, disp: 1600, fuel: '가솔린', tax_exempt: '과세', group: 'A군', multi_seat: null, r24: 0.65, r36: 0.55, r48: 0.48, r60: 0.4, strategic: 0, buyback_apply: 0 },
@@ -138,11 +138,11 @@ if (badPrice || badResid) problems++;
 // ── [4] 체크리스트 ───────────────────────────────────────────────────────────
 console.log(`\n${B}${C}[4] 새 엑셀이 오면 — 변수 동기화 절차${X}`);
 console.log(`  1. _source/견적기/ 에 신버전 .xlsx 드롭`);
-console.log(`  2. node scripts/compare-excel-versions.py [old] [new]   ${D}← 바뀐 셀 추출${X}`);
+console.log(`  2. python scripts/compare-excel-versions.py [old] [new]   ${D}← 바뀐 셀 추출${X}`);
 console.log(`  3. ${B}public/…/welrix.json${X} 의 financial 값 수정  ${D}(런타임 실효 SSOT)${X}`);
 console.log(`  4. ${B}calc.js DEFAULT_CFG${X} 도 동일하게 수정  ${D}(fallback — [1a]가 불일치 잡아줌)${X}`);
 console.log(`  5. ${B}node scripts/check-sync.mjs --fix${X}  ${D}← src 사본 자동동기화 + 회귀검증${X}`);
-console.log(`  6. 가격/잔가율 바뀌면 → node scripts/sync-vehicles-from-excel.py`);
+console.log(`  6. 가격/잔가율 바뀌면 → python scripts/sync-vehicles-from-excel.py`);
 console.log(`  7. git push (Vercel 자동) → Ctrl+Shift+R`);
 
 console.log(`\n${B}${problems ? R+`✗ 문제 ${problems}건` : G+'✓ 전부 동기화됨'}${X}\n`);

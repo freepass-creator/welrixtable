@@ -23,10 +23,10 @@
     "insurance": "자동차보험 기본료 (일반/다인승/포터/대물 추가)",
     "extra_driver": "추가운전자 비용",
     "deposit_buckets_step": "보증금 단위 (50만원)",
-    "deposit_buckets_max": "보증금 상한 (750만원)"
+    "deposit_buckets_max": "보증금 상한 (1,000만원)"
   },
-  "excel_version": "v6",
-  "excel_version_date": "2026-06-15",
+  "excel_version": "v6.1",
+  "excel_version_date": "2026-06-30",
   "company_id": "welrix",
   "name": "웰릭스 모빌리티",
   "logo_url": "/welrix-logo.png",
@@ -129,8 +129,7 @@
         }
       ],
       "commission": {
-        "low_credit_cap": 3000000,
-        "medium_credit_uses_rate": true
+        "low_credit_cap": 3000000
       }
     },
     "services": {
@@ -159,7 +158,7 @@
         }
       },
       "brand_adjustment": {
-        "제네시스": -0.2,
+        "제네시스": -0.18,
         "K9": -0.15,
         "하이리무진": -0.15
       },
@@ -173,7 +172,7 @@
           "무신용": 0.04
         },
         "by_brand": {
-          "제네시스": 0.25
+          "제네시스": 0.23
         },
         "by_model": {
           "K9": 0.2,
@@ -206,6 +205,6 @@
       "3명": 150000
     },
     "deposit_buckets_step": 500000,
-    "deposit_buckets_max": 7500000
+    "deposit_buckets_max": 10000000
   }
 }

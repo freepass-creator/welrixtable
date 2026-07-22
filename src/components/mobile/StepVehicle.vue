@@ -166,30 +166,6 @@ const totalManwon = computed(() => {
   return trimPrice(selectedTrim.value, taxRate) + optionsPriceManwon.value;
 });
 
-// 현대차 재고 데이터에서 현재 트림 매칭 — col 14 (할인1) 평균값 자동 적용
-function findStockDiscount() {
-  if (!selectedBrand.value || !selectedModel.value || !selectedVariant.value || !selectedTrim.value) return 0;
-  if (selectedBrand.value.manufacturer_name !== '현대') return 0;  // 재고 데이터는 현대만
-  const stock = window.__welrix_stock || [];
-  if (!stock.length) return 0;
-  // 매칭 키워드 — model_name 의 base (변형 prefix 제거)
-  const modelBase = selectedModel.value.model_name.replace(/^(더 뉴 |디 올 뉴 |디 )/, '').replace(/ Hybrid$/, '');
-  const fuel = selectedVariant.value.fuel;
-  const trimName = (selectedTrim.value.name || '').toLowerCase();
-  const matches = stock.filter(r => {
-    const m = (r[0] || '').replace(/﻿/g, '').trim();
-    if (!m.includes(modelBase) && !modelBase.includes(m)) return false;
-    if (fuel && !(r[1] || '').includes(fuel.replace(/\(.+\)/,''))) return false;
-    // 트림명 단어 일부라도 매칭 (Premium / Exclusive 등)
-    const detail = (r[2] || '').toLowerCase();
-    return trimName && detail.includes(trimName);
-  });
-  if (!matches.length) return 0;
-  // 할인 1 (col 14) 의 평균 (만원 단위)
-  const discounts = matches.map(r => +String(r[14] || '0').replace(/,/g,'')).filter(n => n > 0);
-  if (!discounts.length) return 0;
-  return Math.round(discounts.reduce((a, b) => a + b, 0) / discounts.length);
-}
 
 function syncVehicle() {
   if (!selectedTrim.value) return;

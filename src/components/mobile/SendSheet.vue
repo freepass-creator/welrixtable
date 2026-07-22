@@ -5,7 +5,6 @@ import { calcQuote } from '../../lib/calc.js';
 import { buildCalcInput } from '../../lib/build-calc-input.js';
 import { buildOfficialQuoteHtml } from '../../lib/build-quote-html.js';
 import { fmt, fmtTel } from '../../lib/format.js';
-import * as Fees from '../../lib/compute-fees.js';
 
 defineProps({ open: Boolean });
 const emit = defineEmits(['close']);
@@ -21,10 +20,6 @@ const staffFilled = computed(() => !!(quoteState.staff.name?.trim() && quoteStat
 const staffEditing = ref(false);
 
 const errorMsg = ref('');
-
-const optPrice = computed(() => Fees.optPrice(quoteState));
-const deliveryFee = computed(() => Fees.deliveryFee(quoteState));
-const itemsFee = computed(() => Fees.itemsFee(quoteState));
 
 const monthlyResults = computed(() => {
   const v = quoteState.vehicle;
@@ -53,7 +48,7 @@ async function buildQuoteBlob() {
     vehicles: [{
       ...v,
       totalKrw: (v.total_manwon || 0) * 10000,
-      monthly: monthlyResults.value.map(r => ({ ...r, term: r.term, monthly: r.monthly, dep: r.dep, depAmt: r.depAmt, pre: r.pre, preAmt: r.preAmt, residualAmt: r.residualAmt, residualPct: r.residualPct })),
+      monthly: monthlyResults.value.map(r => ({ ...r })),
     }],
     customer: { name: quoteState.cust.name?.trim() || 'VIP 고객님', tel: quoteState.cust.tel },
     staff: { ...quoteState.staff },
