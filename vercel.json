@@ -7,7 +7,7 @@
       "_comment": "ERP4 임베드 허용 — 견적기 페이지를 freepasserp4 가 iframe 으로 공유. 프로덕션 커스텀 도메인은 여기에 추가.",
       "source": "/(.*)",
       "headers": [
-        { "key": "Content-Security-Policy", "value": "frame-ancestors 'self' http://localhost:4004 https://freepasserp4.vercel.app" }
+        { "key": "Content-Security-Policy", "value": "frame-ancestors 'self' http://localhost:4004 https://*.vercel.app" }
       ]
     },
     {
