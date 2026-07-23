@@ -146,10 +146,9 @@
     -webkit-text-size-adjust: 100%;
     margin: 0;
     display: grid;
-    /* 3패널 ratio 고정 — 좌(차량):중(견적):우(채팅) = 28:52:20.
-       viewport 폭에 비례해 동시에 축소·확대. discrete breakpoint 없음. */
-    grid-template-columns: minmax(0, 28fr) minmax(0, 52fr) minmax(0, 20fr);
-    grid-template-rows: 44px 1fr;
+    /* 좌(차량) 400px 고정 — 손오공 견적기와 좌패널 폭 통일. 중(견적):우(채팅) = 52:20 잔여배분 */
+    grid-template-columns: 400px minmax(0, 52fr) minmax(0, 20fr);
+    grid-template-rows: 48px 1fr;
     gap: 0;
     height: 100vh;
     overflow: hidden;
@@ -159,7 +158,7 @@
     grid-column: 1 / -1;
     position: sticky; top: 0; z-index: 50;
     display: flex; align-items: center; gap: 16px;
-    padding: 0 20px; height: 44px;
+    padding: 0 20px; height: 48px;
     background: var(--bg);
     border-bottom: 1px solid var(--line);
   }
@@ -170,7 +169,7 @@
   }
   .global-topbar__brand .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-1); }
   .global-topbar__brand .ci {
-    height: 22px; width: auto; display: block;
+    height: 24px; width: auto; display: block;
   }
   .global-topbar__hint { font-size: 12px; color: var(--ink-4); padding-left: 12px; }
   .global-topbar__ver {
@@ -183,9 +182,9 @@
   /* 톱바 버튼 — 박스 없이 텍스트 + 아이콘 (hover시 옅은 회색 bg만) */
   /* === 상단바 버튼 통일 규격 === */
   .gt-btn {
-    height: 30px; padding: 0 11px;
+    height: 32px; padding: 0 11px;
     border: 0; border-radius: var(--radius);
-    font-size: 12px; font-weight: 400;
+    font-size: 12.5px; font-weight: 500;
     line-height: 1; letter-spacing: -0.2px;
     cursor: pointer; font-family: inherit;
     display: inline-flex; align-items: center; gap: 6px;
@@ -194,7 +193,7 @@
     transition: background var(--t-fast), color var(--t-fast);
   }
   .gt-btn i {
-    font-size: 14px; line-height: 1;
+    font-size: 15px; line-height: 1;
     flex-shrink: 0;
   }
   .gt-btn:hover { background: var(--accent-soft); color: var(--ink-1); }
@@ -202,7 +201,7 @@
   .gt-btn.outline { color: var(--ink-2); }
   /* primary = 메인 강조 (빨강, 견적바구니 1개만) */
   .gt-btn.primary {
-    color: var(--brand); font-weight: 500;
+    color: var(--brand); font-weight: 600;
     background: var(--brand-50);
   }
   .gt-btn.primary:hover { background: var(--brand-100); }
