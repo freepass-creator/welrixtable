@@ -40,7 +40,11 @@ import { quoteState as state, cartStore, addToCart, removeFromCart, clearCart, f
 import { saveQuote, buildQuoteUrl } from './src/firebase/quotes.js';
 import { buildOfficialQuoteHtml } from './src/lib/build-quote-html.js';
 import { logQuoteSent } from './src/firebase/chat.js';
+import { initEmbedBridge } from './src/lib/embed-bridge.js';
 let VEHICLES = [];
+// ERP4 임베드 브리지 핸들 (스탠드얼론이면 no-op) + 임베드 프리필 딜코드
+let __embed = { embedded: false, emitQuote() {} };
+let __embedDealCode = null;
 
 // ============ 초기 로드 ============
 async function loadCompanyConfig() {
@@ -827,6 +831,8 @@ img { display: block; width: ${imgW}mm; height: ${imgH}mm; margin: 0 auto; }
       // 채팅에 시스템 메시지 자동 push — "📤 견적 발송 — ..."
       const summary = vehicles.map(v => `${v.model} ${v.trim_name}`).join(', ');
       logQuoteSent(id, summary).catch(() => {});
+      // ERP4 임베드 시 결과 전달 (id/url/dealCode/summary) — 스탠드얼론이면 no-op
+      __embed.emitQuote({ id, url, dealCode: __embedDealCode, summary });
       // 카톡 메시지 본문 — 손님이 받는 텍스트
       const custName = state.cust.name || 'VIP 고객';
       const vNames = vehicles.map(v => `· ${v.model} ${v.trim_name}`).join('\n');
@@ -950,6 +956,16 @@ ${url}
 
 // ============ Init ============
 (async function init() {
+  // ERP4 임베드 시 프리필 수신 (스탠드얼론이면 no-op). 차량 프리필은 후속(캐스케이드 구동) 예정.
+  __embed = initEmbedBridge({
+    onPrefill: (p) => {
+      if (p.custName != null) state.cust.name = p.custName;
+      if (p.custTel != null) state.cust.tel = p.custTel;
+      if (p.staffName != null) state.staff.name = p.staffName;
+      if (p.staffTel != null) state.staff.tel = p.staffTel;
+      if (p.dealCode != null) __embedDealCode = p.dealCode;
+    },
+  });
   await loadCompanyConfig();
   await loadVehicles();
   initDropdowns();
