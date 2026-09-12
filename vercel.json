@@ -1,5 +1,12 @@
 {
   "rewrites": [
+    { "source": "/s", "destination": "/home.html" },
+    { "source": "/s/", "destination": "/home.html" },
+    { "source": "/v", "destination": "/vehicles.html" },
+    { "source": "/v/", "destination": "/vehicles.html" },
+    { "source": "/p", "destination": "/privacy.html" },
+    { "source": "/p/", "destination": "/privacy.html" },
+    { "source": "/g/:slug", "destination": "/guide.html" },
     { "source": "/guide/:slug", "destination": "/guide.html?slug=:slug" }
   ],
   "headers": [

@@ -15,10 +15,38 @@ function injectGatePins() {
   };
 }
 
+// 문자 광고·손님 페이지 짧은 경로. vercel.json rewrites 와 동일 매핑 (dev/preview).
+function shortPublicRoutes() {
+  const exact = {
+    '/s': '/home.html',
+    '/s/': '/home.html',
+    '/v': '/vehicles.html',
+    '/v/': '/vehicles.html',
+    '/p': '/privacy.html',
+    '/p/': '/privacy.html',
+  };
+  function mapUrl(raw) {
+    const [path, qs] = String(raw || '').split('?');
+    const dest = exact[path] || (/^\/g\/[a-z0-9-]+\/?$/i.test(path) ? '/guide.html' : null);
+    if (!dest) return null;
+    return dest + (qs ? `?${qs}` : '');
+  }
+  const middleware = (req, _res, next) => {
+    const mapped = mapUrl(req.url);
+    if (mapped) req.url = mapped;
+    next();
+  };
+  return {
+    name: 'short-public-routes',
+    configureServer(server) { server.middlewares.use(middleware); },
+    configurePreviewServer(server) { server.middlewares.use(middleware); },
+  };
+}
+
 export default defineConfig({
   root: '.',
   publicDir: 'public',
-  plugins: [vue(), injectGatePins()],
+  plugins: [vue(), injectGatePins(), shortPublicRoutes()],
   server: {
     port: 5173,
     open: '/index.html',
@@ -38,6 +66,7 @@ export default defineConfig({
         home: resolve(__dirname, 'home.html'),
         vehicles: resolve(__dirname, 'vehicles.html'),
         guide: resolve(__dirname, 'guide.html'),
+        privacy: resolve(__dirname, 'privacy.html'),
       },
     },
   },
