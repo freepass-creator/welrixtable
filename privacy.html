@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
+  <title>개인정보처리방침 · 웰릭스 모빌리티</title>
+  <meta name="description" content="웰릭스 모빌리티 상담 신청 시 개인정보 수집·이용 안내." />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/png" href="/welrix-ci.png" />
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet" />
+  <style>
+    :root { --ink-1:#0a0a0a; --ink-2:#404040; --ink-3:#737373; --line:#f0f0f0; --brand:#e1141e; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif;
+      color: var(--ink-1); background: #fff;
+      font-size: 15px; line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 28px 20px 64px; }
+    a.back { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); text-decoration: none; font-size: 13px; font-weight: 600; }
+    a.back:hover { color: var(--brand); }
+    h1 { font-size: 24px; letter-spacing: -0.03em; margin: 22px 0 8px; }
+    .meta { color: var(--ink-3); font-size: 13px; margin: 0 0 28px; }
+    h2 { font-size: 16px; margin: 28px 0 8px; }
+    p, li { color: var(--ink-2); }
+    ul { padding-left: 1.2em; }
+    a { color: var(--brand); }
+    .foot { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12px; color: var(--ink-3); }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <a class="back" href="/s">← 상담 페이지로</a>
+    <h1>개인정보처리방침</h1>
+    <p class="meta">웰릭스 모빌리티 · 시행일 2026-09-01</p>
+
+    <h2>1. 수집 항목</h2>
+    <p>상담 신청 시 이름, 연락처, 관심 차종, 문의 내용을 수집합니다.</p>
+
+    <h2>2. 이용 목적</h2>
+    <p>신차 장기렌터카 상담·견적 안내, 유선·문자 연락에만 사용합니다. 동의 없는 마케팅 발송은 하지 않습니다.</p>
+
+    <h2>3. 보유 기간</h2>
+    <p>상담 목적 달성 후 30일 이내 파기합니다. 이용자가 삭제를 요청하면 지체 없이 파기합니다.</p>
+
+    <h2>4. 제3자 제공</h2>
+    <p>계약 진행이 필요한 경우, 계약 체결·이행에 필요한 범위의 정보만 제공되며 그 외 제3자에게 제공하지 않습니다.</p>
+
+    <h2>5. 동의 거부</h2>
+    <p>동의를 거부할 수 있습니다. 거부 시 상담 신청을 처리할 수 없습니다.</p>
+
+    <h2>6. 문의</h2>
+    <p id="privacy-company">
+      웰릭스 모빌리티 주식회사<br>
+      전화 <a id="privacy-tel" href="tel:1544-0000">1544-0000</a> · 이메일 <a id="privacy-email" href="mailto:contact@welrix.co.kr">contact@welrix.co.kr</a>
+    </p>
+
+    <p class="foot">본 방침은 상담 신청 페이지에만 적용됩니다.</p>
+  </main>
+
+  <!-- company-config/welrix.json 을 SSOT 로 사용 — home.html 푸터와 동일한 연락처를 표시 -->
+  <script>
+    fetch('/data/company-config/welrix.json').then(r => r.json()).then(cfg => {
+      const ci = cfg?.company_info || {};
+      const nameEl = document.querySelector('#privacy-company');
+      if (ci.full_name && nameEl) nameEl.firstChild.textContent = ci.full_name;
+      const telEl = document.getElementById('privacy-tel');
+      if (telEl && ci.phone) { telEl.textContent = ci.phone; telEl.href = 'tel:' + ci.phone.replace(/[^0-9]/g, ''); }
+      const emailEl = document.getElementById('privacy-email');
+      if (emailEl && ci.email) { emailEl.textContent = ci.email; emailEl.href = 'mailto:' + ci.email; }
+    }).catch(() => {});
+  </script>
+</body>
+</html>

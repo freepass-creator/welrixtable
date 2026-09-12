@@ -11,14 +11,33 @@ import AiRecommender from './components/home/AiRecommender.vue';
 
 // 회사 config(welrix.json = 엑셀 견적기 정책 SSOT) 주입 — 웹 ERP/모바일과 동일 엔진 설정.
 // (과거 home 은 이 주입을 안 해서 calc.js 기본값으로 계산 → 포터보험·중신용 수익률 등이 어긋났음)
+// company_info(상호/대표/사업자번호/주소/연락처)도 여기서 같이 읽어 푸터에 채움 — 손님 노출 화면은
+// 항상 이 SSOT(웰릭스 모빌리티) 기준이며, 별도 문구를 하드코딩하지 않는다.
 let __configReady = (async () => {
   try {
     const res = await fetch('/data/company-config/welrix.json');
-    setCompanyConfig(await res.json());
+    const cfg = await res.json();
+    setCompanyConfig(cfg);
+    fillFooterFromConfig(cfg);
   } catch (e) {
     console.warn('[home] company config 로드 실패:', e);
   }
 })();
+
+function fillFooterFromConfig(cfg) {
+  const ci = cfg?.company_info || {};
+  const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
+  set('footer-biz-name', ci.full_name);
+  set('footer-biz-ceo', ci.ceo);
+  set('footer-biz-no', ci.biz_no);
+  set('footer-biz-addr', ci.address);
+  const telEl = document.getElementById('footer-tel');
+  if (telEl && ci.phone) { telEl.textContent = ci.phone; telEl.href = 'tel:' + ci.phone.replace(/[^0-9]/g, ''); }
+  const emailEl = document.getElementById('footer-email');
+  if (emailEl && ci.email) { emailEl.textContent = ci.email; emailEl.href = 'mailto:' + ci.email; }
+  const mctaTelEl = document.getElementById('mcta-tel');
+  if (mctaTelEl && ci.phone) mctaTelEl.href = 'tel:' + ci.phone.replace(/[^0-9]/g, '');
+}
 
 function mountOne(id, Component, label) {
   const target = document.getElementById(id);

@@ -9,12 +9,16 @@
   <title>웰릭스 모빌리티 · 소득만으로 심사하는 신차 장기렌터카</title>
   <meta name="description" content="신용점수 보지 않습니다. 월 소득만 확인하고 출고하는 신차 장기렌터카. 36/48/60개월 자유 선택 · 무보증." />
   <meta name="theme-color" content="#0D4E8B" />
-  <!-- Open Graph -->
+  <!-- Open Graph — 문자/카톡 미리보기. 손님 노출용 = 웰릭스 모빌리티 (프리패스 세일즈는 내부 사업자명, 손님에게는 노출 안 함) -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="웰릭스 모빌리티 · 소득만으로 심사하는 신차 장기렌터카" />
   <meta property="og:description" content="신용점수 보지 않습니다. 월 소득만 확인하고 출고합니다." />
   <meta property="og:image" content="/og-image.png" />
   <meta property="og:site_name" content="웰릭스 모빌리티" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="웰릭스 모빌리티 · 소득만으로 심사하는 신차 장기렌터카" />
+  <meta name="twitter:description" content="신용점수 보지 않습니다. 월 소득만 확인하고 출고합니다." />
+  <meta name="twitter:image" content="/og-image.png" />
   <link rel="icon" type="image/png" href="/welrix-ci.png" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="apple-touch-icon" href="/welrix-icon-192.png" />
@@ -107,15 +111,9 @@
       font-size: 14.5px; font-weight: 700; letter-spacing: -0.02em;
     }
     .topnav__brand img { height: 22px; width: auto; }
-    .topnav__partner {
-      display: inline-flex; align-items: center;
-      padding: 4px 11px;
-      background: var(--ink-1); color: #fff;
-      border-radius: 5px;
-      font-size: 12px; font-weight: 700; letter-spacing: 0.02em;
-    }
-    .topnav__x {
-      color: var(--ink-4); font-weight: 300; font-size: 14px;
+    .topnav__name {
+      font-weight: 700; letter-spacing: -0.02em;
+      white-space: nowrap;
     }
     .topnav__menu {
       display: flex; align-items: center; gap: 28px;
@@ -137,6 +135,9 @@
     .topnav__cta:hover { background: var(--brand); }
     @media (max-width: 768px) {
       .topnav__menu { display: none; }
+      .topnav__partner { font-size: 11px; padding: 3px 8px; }
+      .topnav__brand { gap: 6px; }
+      .topnav__brand img { height: 18px; }
     }
 
     /* === Hero === 모노톤 + 빨강은 포인트만 === */
@@ -968,6 +969,8 @@
       margin-top: 4px;
     }
     .footer__info b { color: #e5e5e5; font-weight: 500; margin-right: 4px; }
+    .footer__info a { color: inherit; }
+    .footer__info a:hover { color: #e5e5e5; }
     .footer__bottom {
       padding-top: 20px;
       border-top: 1px solid rgba(255,255,255,0.08);
@@ -975,6 +978,7 @@
       display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
     }
     .footer__links a { color: var(--ink-4); margin-left: 14px; }
+    .footer__links a:first-child { margin-left: 0; }
     .footer__links a:hover { color: #e5e5e5; }
   </style>
 </head>
@@ -982,14 +986,13 @@
   <!-- Top Nav -->
   <nav class="topnav">
     <div class="container topnav__wrap">
-      <a class="topnav__brand" href="/home.html">
-        <span class="topnav__partner">브랜드명</span>
-        <span class="topnav__x">×</span>
+      <a class="topnav__brand" href="/s">
         <img src="/welrix-ci.png" alt="웰릭스 모빌리티" />
+        <span class="topnav__name">웰릭스 모빌리티</span>
       </a>
       <div class="topnav__menu">
         <a href="#lineup">인기 차종</a>
-        <a href="/vehicles.html">차량 가이드</a>
+        <a href="/v">차량 가이드</a>
         <a href="#quote">즉시 견적</a>
         <a href="#steps">이용 안내</a>
         <a href="#contact">상담 신청</a>
@@ -1157,7 +1160,7 @@
 
       <!-- 전체 차종 보기 (vehicles.html 로 이동) -->
       <div class="lineup-more">
-        <a class="lineup-more__btn" href="/vehicles.html">
+        <a class="lineup-more__btn" href="/v">
           <i class="ph ph-list-magnifying-glass"></i>
           전체 25종 차량 가이드 보기
           <i class="ph ph-arrow-right"></i>
@@ -1248,30 +1251,30 @@
     <div class="container">
       <div class="footer__group">
         <div class="footer__brand-block">
-          <div class="footer__brand">[브랜드명]</div>
-          <div class="footer__brand-tagline">신차 장기렌터카 전문 상담 · 웰릭스 모빌리티 협력사</div>
+          <div class="footer__brand">웰릭스 모빌리티</div>
+          <div class="footer__brand-tagline">신차 장기렌터카 전문 상담</div>
         </div>
         <div class="footer__partners">
           <span class="footer__partners-label">금융·렌탈 파트너</span>
           <a href="https://www.welrix.com/" target="_blank" rel="noopener">웰릭스 모빌리티</a>
           <a href="https://welcomesb.co.kr/" target="_blank" rel="noopener">웰컴저축은행</a>
-          <a href="#" target="_blank" rel="noopener">웰컴금융그룹</a>
         </div>
       </div>
 
+      <!-- 사업자 정보 · 연락처 = company-config/welrix.json 의 company_info 를 SSOT 로 사용 (home.js 가 채움) -->
       <div class="footer__info">
         <div class="footer__info-col">
           <div class="footer__info-title">사업자 정보</div>
-          <div><b>상호</b>—</div>
-          <div><b>대표</b>—</div>
-          <div><b>사업자번호</b>—</div>
-          <div><b>주소</b>—</div>
+          <div><b>상호</b><span id="footer-biz-name">웰릭스 모빌리티 주식회사</span></div>
+          <div><b>대표</b><span id="footer-biz-ceo">—</span></div>
+          <div><b>사업자번호</b><span id="footer-biz-no">—</span></div>
+          <div><b>주소</b><span id="footer-biz-addr">—</span></div>
         </div>
         <div class="footer__info-col">
           <div class="footer__info-title">고객 상담</div>
-          <div><b>대표전화</b>1544-0000</div>
+          <div><b>대표전화</b><a id="footer-tel" href="tel:1544-0000">1544-0000</a></div>
+          <div><b>이메일</b><a id="footer-email" href="mailto:contact@welrix.co.kr">contact@welrix.co.kr</a></div>
           <div><b>운영시간</b>평일 09:00 – 18:00</div>
-          <div><b>점심시간</b>12:00 – 13:00 제외</div>
           <div><b>휴일</b>주말 · 공휴일 휴무</div>
         </div>
         <div class="footer__info-col">
@@ -1282,11 +1285,9 @@
       </div>
 
       <div class="footer__bottom">
-        <span>© 2026 [브랜드명]. All rights reserved.</span>
+        <span>© 2026 웰릭스 모빌리티. All rights reserved.</span>
         <span class="footer__links">
-          <a href="#">이용약관</a>
-          <a href="#">개인정보처리방침</a>
-          <a href="#">상담사 등록 정보</a>
+          <a href="/p">개인정보처리방침</a>
         </span>
       </div>
     </div>
@@ -1299,7 +1300,7 @@
       <i class="ph ph-x"></i>
     </button>
     <a href="#lineup" onclick="document.getElementById('mobile-menu').classList.remove('is-open')">인기 차종</a>
-    <a href="/vehicles.html">차량 가이드</a>
+    <a href="/v">차량 가이드</a>
     <a href="#quote" onclick="document.getElementById('mobile-menu').classList.remove('is-open')">즉시 견적</a>
     <a href="#steps" onclick="document.getElementById('mobile-menu').classList.remove('is-open')">이용 안내</a>
     <a href="#contact" onclick="document.getElementById('mobile-menu').classList.remove('is-open')">상담 신청</a>
@@ -1308,7 +1309,7 @@
   <!-- 모바일 하단 고정 CTA — 전화 / 카톡 / 견적 -->
   <div class="mcta">
     <div class="mcta__inner">
-      <a href="tel:1544-0000" class="mcta__btn">
+      <a href="tel:1544-0000" class="mcta__btn" id="mcta-tel">
         <i class="ph ph-phone"></i> 전화
       </a>
       <a href="#" class="mcta__btn" onclick="alert('카카오톡 채널 연결 예정'); return false;">
