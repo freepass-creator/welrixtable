@@ -26,6 +26,10 @@ function toggleTerm(t) {
     list.push({ term: t, dep: quoteState.cond.dep || 10, pre: quoteState.cond.pre || 0 });
     list.sort((a, b) => b.term - a.term);
   }
+  /* 발송 체크도 현재 시나리오 개수와 같은 길이를 유지한다. */
+  if (!Array.isArray(quoteState.send)) quoteState.send = [];
+  while (quoteState.send.length < list.length) quoteState.send.push(true);
+  if (quoteState.send.length > list.length) quoteState.send.splice(list.length);
 }
 
 </script>
