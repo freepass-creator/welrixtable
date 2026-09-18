@@ -128,7 +128,7 @@ function toggleTerm(t) {
 .sc-chip:active { background: var(--brand-50); }
 .sc-chip.is-selected {
   background: var(--brand);
-  border-color: var(--brand);
+  border-color: transparent;
   color: #fff;
 }
 
