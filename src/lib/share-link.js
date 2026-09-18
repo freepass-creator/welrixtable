@@ -61,7 +61,12 @@ export function 풀기(vehicleState, quoteState, 주소 = location.search) {
       const 모델 = window.VEHICLE_DB?.manufacturers?.find((b) => b.manufacturer_id === vehicleState.manufacturer)
         ?.models?.find((m) => m.model_id === vehicleState.model);
       const 갈래 = 모델?.variants?.find((v) => v.trims.some((t) => t.trim_id === vehicleState.trim));
-      if (갈래) vehicleState.variant = 갈래.variant_id;
+      if (갈래) {
+        vehicleState.variant = 갈래.variant_id;
+        /* 인승·구동 묶음도 트림에서 거꾸로 채운다 — 안 그러면 뒤로가기로 트림 화면에 돌아왔을 때 다 보인다 */
+        const 트림 = 갈래.trims.find((t) => t.trim_id === vehicleState.trim);
+        vehicleState.trimGroup = 트림?.group || null;
+      }
     } catch { /* 못 찾으면 링크 값 그대로 */ }
   }
   const o = p.get('o');

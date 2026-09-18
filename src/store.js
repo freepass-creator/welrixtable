@@ -17,6 +17,7 @@ export const vehicleState = reactive({
   manufacturer: null,
   model: null,
   variant: null,
+  trimGroup: null,   // 파워트레인 안에서 인승·구동이 갈릴 때 고른 묶음 (예: 「5인승 4WD」) — 안 갈리면 null
   trim: null,
   options: new Set(),
   color: null,
