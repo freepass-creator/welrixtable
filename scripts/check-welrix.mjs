@@ -112,3 +112,24 @@ if (탈락) {
   console.log('  ② 웰릭스가 가격·정책을 바꿨다 → 견적기 화면에서 다시 실측하고 이 표를 고친다');
   process.exitCode = 1;
 }
+
+/* ── 트림별 옵션이 웰릭스 원본과 «똑같은가» ─────────────────────────────────
+ * ★2026-09-18 — 위 0원 검사는 «옵션 없이» 돌아서 못 잡은 버그가 있었다.
+ *   옵션 id 를 이름 앞 16자로 만들어 「17인치 알로이 휠 패키지 60만」이 「… & 타이어 55만」으로 덮였다(443 중 282 트림).
+ *   손님이 옵션을 고르면 웰릭스에 틀린 옵션 금액이 갔다. 그래서 트림마다 옵션 이름·값을 원본과 맞댄다. */
+{
+  const 원본 = JSON.parse(readFileSync(resolve(뿌리, '_audit/welrix-netlify-20260917/catalog.json'), 'utf8')).optionsByModel || {};
+  const 판 = { window: {} }; vm.createContext(판);
+  vm.runInContext(readFileSync(resolve(뿌리, 'public/welrix-db.js'), 'utf8'), 판);
+  const DB = 판.window.VEHICLE_DB;
+  const 구동옵션 = (n) => /^(전자식\s*)?(AWD|4WD)$/i.test(String(n).replace(/\s+/g, ' ').trim()) || /^HTRAC\s*\(?4WD\)?$/i.test(String(n).trim());
+  let 트림 = 0; const 틀린 = [];
+  for (const b of DB.manufacturers) for (const m of b.models) for (const v of m.variants) for (const t of v.trims) {
+    트림++;
+    const 원 = (원본[t.trim_id] || []).filter((o) => o.price > 0 && !구동옵션(o.name)).map((o) => `${o.name}:${Math.round(o.price / 10000)}`).sort().join('|');
+    const 우 = (t.available_options || []).map((id) => `${v.options_master[id]?.name}:${v.options_master[id]?.price}`).sort().join('|');
+    if (원 !== 우) 틀린.push(t.trim_id);
+  }
+  console.log(`${틀린.length ? R : G}트림 ${트림} 중 옵션이 원본과 다른 트림 ${틀린.length}${X}`);
+  if (틀린.length) { 틀린.slice(0, 5).forEach((x) => console.log('   ', x)); process.exitCode = 1; }
+}

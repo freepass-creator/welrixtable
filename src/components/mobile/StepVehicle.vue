@@ -89,9 +89,10 @@ const selectedVariant = computed(() => {
 const trims = computed(() => {
   if (!selectedVariant.value) return [];
   const taxRate = vehicleState.tax_rate || '5';
+  /* 소제목(인승·구동·용도) 차례를 먼저, 그 안에서 값 차례 — welrix-db 가 _groupOrder 를 심어 둔다 */
   return [...(selectedVariant.value.trims || [])]
     .filter(t => t.operating !== false)
-    .sort((a, b) => trimPrice(a, taxRate) - trimPrice(b, taxRate));
+    .sort((a, b) => (a._groupOrder ?? 0) - (b._groupOrder ?? 0) || trimPrice(a, taxRate) - trimPrice(b, taxRate));
 });
 
 const selectedTrim = computed(() => {
@@ -223,7 +224,8 @@ function syncVehicle() {
     brand: brandName,
     model: modelName,
     variant: selectedVariant.value?.variant_name || '',
-    trim_name: t.name,
+    /* ★소제목(인승·구동·용도)을 트림 이름 앞에 붙인다 — 「익스클루시브」만으론 5인승인지 7인승인지 모른다 */
+    trim_name: [t.group, t.name].filter(Boolean).join(' '),
     total_manwon: totalManwon.value,
     trim_price_manwon: trimPriceManwon,
     options_price_manwon: optionsPriceManwon.value,
@@ -248,12 +250,10 @@ function selectModel(m) {
   vehicleState.variant = null; vehicleState.trim = null;
   vehicleState.options.clear(); vehicleState.color = null;
   quoteState.vehicle = null;
-  if ((m.variants || []).length === 1) {
-    vehicleState.variant = m.variants[0].variant_id;
-    subStep.value = 'trim';
-  } else {
-    subStep.value = 'variant';
-  }
+  /* ★파워트레인이 하나뿐이어도 그 걸음을 건너뛰지 않는다 — 제조사 → 모델 → 파워트레인 → 세부트림 (대표 2026-09-18).
+     하나면 미리 골라 둔 채로 보여 주고, 손님은 「다음」만 누르면 된다. */
+  if ((m.variants || []).length === 1) vehicleState.variant = m.variants[0].variant_id;
+  subStep.value = 'variant';
 }
 function selectVariant(v) {
   vehicleState.variant = v.variant_id;
@@ -306,7 +306,7 @@ function onFeeChange() {
       </button>
       <button v-if="selectedModel" class="sv-crumb" @click="goBack('model')">{{ selectedModel.model_name }}</button>
       <button v-if="selectedVariant" class="sv-crumb" @click="goBack('variant')">{{ selectedVariant.variant_name }}</button>
-      <button v-if="selectedTrim" class="sv-crumb" @click="goBack('trim')">{{ selectedTrim.name }}</button>
+      <button v-if="selectedTrim" class="sv-crumb" @click="goBack('trim')">{{ [selectedTrim.group, selectedTrim.name].filter(Boolean).join(' ') }}</button>
     </div>
 
     <!-- 1) 제조사 -->
@@ -382,7 +382,7 @@ function onFeeChange() {
 
     <!-- 3) 세부모델 -->
     <div v-else-if="subStep === 'variant'" class="sv-section">
-      <h2 class="sv-title">{{ selectedModel.model_name }}<br>세부 모델을 골라주세요</h2>
+      <h2 class="sv-title">{{ selectedModel.model_name }}<br>파워트레인을 골라주세요</h2>
       <div class="sv-list">
         <button
           v-for="v in variants" :key="v.variant_id"
@@ -398,10 +398,12 @@ function onFeeChange() {
 
     <!-- 4) 트림 -->
     <div v-else-if="subStep === 'trim'" class="sv-section">
-      <h2 class="sv-title">{{ selectedVariant?.variant_name }}<br>트림을 골라주세요</h2>
+      <h2 class="sv-title">{{ selectedVariant?.variant_name }}<br>세부 트림을 골라주세요</h2>
       <div class="sv-list">
+        <template v-for="(t, i) in trims" :key="t.trim_id">
+        <!-- 소제목 — 같은 엔진 안에서 갈리는 인승·구동·용도 (예: 5인승 2WD · 밴 · 렌터카) -->
+        <div v-if="t.group && t.group !== trims[i - 1]?.group" class="sv-group">{{ t.group }}</div>
         <button
-          v-for="t in trims" :key="t.trim_id"
           class="sv-trim-card"
           :class="{ 'is-selected': vehicleState.trim === t.trim_id }"
           @click="selectTrim(t)"
@@ -412,6 +414,7 @@ function onFeeChange() {
           </div>
           <div class="sv-trim-card__price">{{ fmt(trimPrice(t, vehicleState.tax_rate || '5') * 10000) }}원</div>
         </button>
+        </template>
       </div>
 
       <!-- 트림 선택 후 — 할인 (접힘, 클릭하면 열림) -->
@@ -706,6 +709,12 @@ function onFeeChange() {
 }
 .sv-trim-card:active { background: var(--brand-50); }
 .sv-trim-card.is-selected { background: var(--brand-50); }
+/* 트림 소제목 — 인승·구동·용도 (예: 5인승 2WD) */
+.sv-group {
+  margin: 14px 2px 2px; font-size: 13px; font-weight: 700;
+  color: var(--ink-3); letter-spacing: -0.2px;
+}
+.sv-group:first-child { margin-top: 0; }
 
 /* 옵션·색상 sub-step */
 .sv-block { margin-bottom: 22px; }

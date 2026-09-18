@@ -54,6 +54,16 @@ export function 풀기(vehicleState, quoteState, 주소 = location.search) {
     const v = p.get(짧);
     if (v) vehicleState[긴] = v;
   }
+  /* ★파워트레인 id 는 차 목록을 다시 만들면 바뀔 수 있다(2026-09-18 인승·구동을 트림 쪽으로 내리며 바뀌었다).
+     트림(=웰릭스 model 키)은 안 바뀌므로, 트림으로 파워트레인을 거꾸로 찾아 맞춘다 — 옛 링크도 열린다. */
+  if (vehicleState.trim) {
+    try {
+      const 모델 = window.VEHICLE_DB?.manufacturers?.find((b) => b.manufacturer_id === vehicleState.manufacturer)
+        ?.models?.find((m) => m.model_id === vehicleState.model);
+      const 갈래 = 모델?.variants?.find((v) => v.trims.some((t) => t.trim_id === vehicleState.trim));
+      if (갈래) vehicleState.variant = 갈래.variant_id;
+    } catch { /* 못 찾으면 링크 값 그대로 */ }
+  }
   const o = p.get('o');
   vehicleState.options = new Set(o ? o.split('.').filter(Boolean) : []);
   const c = p.get('c');

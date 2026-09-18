@@ -23,6 +23,7 @@
 //  ★옵션 «관계»(설명·배타그룹·선행·포함)는 옛 마스터에서 가져온다.
 //    가격은 낡아도 관계는 안 낡는다. 웰릭스 카탈로그엔 {name, price} 뿐이다.
 // ============================================================================
+import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
@@ -91,8 +92,10 @@ const 구동옵션 = (이름) => /^(전자식\s*)?(AWD|4WD)$/i.test(String(이�
   || /^HTRAC\s*\(?4WD\)?$/i.test(String(이름).trim());
 
 /* 옵션 이름 → 안정된 id */
-const 옵ID = (이름) => 'o_' + Buffer.from(String(이름)).toString('base64')
-  .replace(/[^A-Za-z0-9]/g, '').slice(0, 16);
+/* ★옵션 id 는 «이름 + 값» 전체에서 만든다 (2026-09-18 고침).
+   예전엔 이름 base64 의 앞 16자만 따서 「인포테인먼트 내비 플러스 I」과 「… II」가 같은 id 로 겹쳤고,
+   같은 이름이라도 트림마다 값이 다르면(컴포트Ⅰ 61만 / 64만) 먼저 들어온 값으로 덮였다 → 견적 금액이 틀렸다. */
+const 옵ID = (이름, 값) => 'o_' + createHash('sha1').update(String(이름) + '|' + String(값)).digest('hex').slice(0, 12);
 
 /* ── 파워트레인 ────────────────────────────────────────────────────────────
  *  ★대표 2026-09-18 「모델은 그랜저·캐스퍼·싼타페 이런 거고,
@@ -136,15 +139,16 @@ function 파워트레인(웰릭스모델, 차종, 연료) {
   const 용도 = /밴/.test(앞) || /\s밴\s|^밴/.test(뒤) ? '밴'
     : /렌터카|Business|비즈니스/i.test(뒤) ? '렌터카'
     : /택시/.test(뒤) ? '택시'
+    : /COUPE|쿠페/i.test(뒤) ? '쿠페'          // GV80 쿠페 — 인승이 없어 따로 떨어지던 것
+    : /해치백/.test(뒤) ? '해치백'              // 모닝·레이 — 밴과 가르는 몸체
     : /선구매/.test(웰릭스모델) ? '선구매'
     : '';
 
-  const 엔진 = [연료라벨(진짜연료(웰릭스모델, 연료)), 배기량].filter(Boolean).join(' ') + (터보 ? ' 터보' : '')
-    + (용도 ? ` (${용도})` : '');
-  /* ★인승·구동은 «이 엔진 안에서 갈릴 때만» 이름에 붙인다 (아래에서 정한다).
-     그랜저는 4WD 가 3.5 에만 있는데 전부 「· 2WD」가 붙으면 군더더기다 —
-     제조사 「내 차 만들기」도 갈릴 때만 묻는다. */
-  return { 엔진, 인승, 구동 };
+  /* ★파워트레인 = 연료 · 배기량 (· 터보) «만» — 대표 2026-09-18
+       「제조사 → 모델 → 파워트레인(연료 배기량) → 세부트림 이렇게 선택되어야」
+     인승·구동·용도(밴·렌터카·선구매)는 «세부트림» 쪽 소제목으로 내린다(아래 트림묶음). */
+  const 엔진 = [연료라벨(진짜연료(웰릭스모델, 연료)), 배기량].filter(Boolean).join(' ') + (터보 ? ' 터보' : '');
+  return { 엔진, 인승, 구동, 용도 };
 }
 
 /* 트림 이름에서 «앞에서 이미 고른 것»을 지운다 — 엔진·인승·구동을 두 번 보일 필요가 없다.
@@ -152,16 +156,21 @@ function 파워트레인(웰릭스모델, 차종, 연료) {
 function 트림이름정리(짧은, pt, 연료) {
   let s = 짧은;
   if (pt.인승) s = s.replace(pt.인승, '');
-  if (pt.구동) s = s.replace(new RegExp(pt.구동, 'i'), '');
+  if (pt.구동) s = s.replace(/\b(2WD|4WD|AWD|HTRAC)\b/ig, '');   // 구동은 소제목·파워트레인 쪽에서 보인다
   const 배기량 = (pt.이름.match(/\d\.\d/) || [])[0];
   if (배기량) s = s.replace(배기량, '');
   /* 세대 꼬리도 턴다 — 「쏘나타 디 엣지 …」 처럼 차종 뒤에 세대말이 붙는 차가 있다 */
   for (const 꼬리 of ['디 엣지', '디 올 뉴', '더 뉴', 'The new', 'New'])
     s = s.replace(new RegExp('^' + 꼬리, 'i'), '').trim();
-  for (const 낱말 of [연료라벨(연료), 연료, '가솔린', 'LPG', 'Lpi', '하이브리드', '터보', '밴', '렌터카'])
+  for (const 낱말 of [연료라벨(연료), 연료, '가솔린', 'LPG', 'Lpi', '하이브리드', '터보', '밴', '렌터카',
+    ...(pt.용도 === '해치백' ? ['해치백'] : []), ...(pt.용도 === '쿠페' ? ['COUPE', '쿠페'] : [])])
     if (낱말) s = s.replace(new RegExp(낱말, 'ig'), '');
+  s = s.replace(/\(?선구매\)?/g, '').replace(/\(\s*\)/g, '');   // 소제목으로 간 말과 비어 버린 괄호
   s = s.replace(/\s{2,}/g, ' ').trim();
-  return s || 짧은;
+  /* 다 걷어 내면 빈칸인 트림(G90 기본)은 「기본형」, 「+ 패키지」로 시작하면 「기본형 + 패키지」 */
+  if (!s) return '기본형';
+  if (s.startsWith('+')) return '기본형 ' + s;
+  return s;
 }
 
 /* 트림 표시 이름 — 「<세대> <차종>」을 떼고 남은 것 */
@@ -190,34 +199,40 @@ for (const [브랜드, mid] of Object.entries(브랜드ID)) {
       e.인승들.add(pt.인승); e.구동들.add(pt.구동);
       e.차들.push({ w, pt });
     }
+    /* ★파워트레인은 엔진 하나당 한 갈래. 그 안에서 갈리는 인승·구동·용도는 트림 소제목(group)이 된다.
+       예) 싼타페 가솔린 2.5 터보 → 「5인승 2WD」「5인승 4WD」… 아래에 익스클루시브·캘리그래피
+       갈리지 않는 것은 소제목에 넣지 않는다(그랜저 2.5 는 전부 2WD 라 소제목이 없다). */
     const 묶음표 = new Map();
     for (const [엔진, e] of 엔진표) {
-      const 인승갈림 = e.인승들.size > 1;
-      const 구동갈림 = e.구동들.size > 1;
-      for (const { w, pt } of e.차들) {
-        const 몸 = [인승갈림 ? pt.인승 : '', 구동갈림 ? pt.구동 : ''].filter(Boolean).join(' ');
-        const 이름 = 엔진 + (몸 ? ` · ${몸}` : '');
-        const id = ('pt_' + 이름).replace(/[^\w가-힣]/g, '_');
-        if (!묶음표.has(id)) 묶음표.set(id, {
-          id, 이름, 연료: w.fuel, 차들: [],
-          /* ★인승·구동은 트림 이름에서 «언제나» 지운다.
-             갈리면 파워트레인 이름에 이미 있고, 안 갈리면 모든 트림에 똑같이 붙는 군더더기다. */
-          인승: pt.인승, 구동: pt.구동,
-        });
-        묶음표.get(id).차들.push(w);
-      }
+      const 용도들 = new Set(e.차들.map(({ pt }) => pt.용도));
+      const 갈림 = { 용도: 용도들.size > 1, 인승: e.인승들.size > 1, 구동: e.구동들.size > 1 };
+      const id = ('pt_' + 엔진).replace(/[^\w가-힣]/g, '_');
+      묶음표.set(id, { id, 이름: 엔진, 연료: e.차들[0].w.fuel, 차들: e.차들.map(({ w }) => w), 갈림, pts: new Map(e.차들.map(({ w, pt }) => [w.model, pt])) });
     }
     const variants = [];
     for (const pt of 묶음표.values()) {
       const 연료 = pt.연료;
-      const 목록 = pt.차들.sort((a, b) => a.price - b.price);
+      /* 트림 소제목과 그 차례 — 용도(일반 먼저) → 인승(적은 것 먼저) → 구동(2WD 먼저) */
+      const 용도차례 = { '': 0, 해치백: 0, 쿠페: 1, 선구매: 2, 렌터카: 3, 밴: 4, 택시: 5 };
+      const 소제목 = (w) => {
+        const q = pt.pts.get(w.model);
+        const 뒤쪽 = [pt.갈림.인승 ? q.인승 : '', pt.갈림.구동 ? q.구동 : ''].filter(Boolean);
+        /* 용도가 없는(일반) 트림은 인승·구동 소제목이 있으면 「일반」을 붙이지 않는다 — 「5인승 2WD」 로 충분 */
+        const 앞쪽 = pt.갈림.용도 ? (q.용도 || (뒤쪽.length ? '' : '일반')) : '';
+        return [앞쪽, ...뒤쪽].filter(Boolean).join(' ');
+      };
+      const 차례 = (w) => {
+        const q = pt.pts.get(w.model);
+        return (용도차례[q.용도] ?? 9) * 10000 + (parseInt(q.인승) || 0) * 10 + (q.구동 === '4WD' ? 2 : q.구동 === '2WD' ? 1 : 0);
+      };
+      const 목록 = pt.차들.sort((a, b) => 차례(a) - 차례(b) || a.price - b.price);
       const options_master = {};
       const trims = 목록.map((w) => {
         const 옵 = (카탈.optionsByModel?.[w.model] || [])
           .filter((o) => o.price > 0 && !구동옵션(o.name));
         const ids = [];
         for (const o of 옵) {
-          const id = 옵ID(o.name); ids.push(id);
+          const id = 옵ID(o.name, o.price); ids.push(id);
           if (!options_master[id]) {
             const k = 관계.정(o.name);
             const r = 통?.옵.get(k);
@@ -231,7 +246,9 @@ for (const [브랜드, mid] of Object.entries(브랜드ID)) {
         }
         return {
           trim_id: w.model,                                 // ★API 의 model 키
-          name: 트림이름정리(짧은이름(w.model, 차종), pt, 연료),
+          name: 트림이름정리(짧은이름(w.model, 차종), { ...pt, ...pt.pts.get(w.model) }, 연료),
+          group: 소제목(w) || undefined,                    // 트림 화면 소제목 (인승·구동·용도 중 갈리는 것)
+          _groupOrder: 차례(w),
           base_price_5: Math.round(w.price / 10000),
           base_price_3_5: Math.round(w.price / 10000),      // 웰릭스는 한 벌만 준다 — 그게 견적 기준이다
           _welrixModel: w.model,
@@ -240,19 +257,26 @@ for (const [브랜드, mid] of Object.entries(브랜드ID)) {
           available_options: ids,
         };
       });
-      /* 이름으로 잡아 둔 선행·배타·포함을 id 로 바꿔 심는다 */
-      const 이름찾기 = {};
-      for (const [id, o] of Object.entries(options_master)) 이름찾기[관계.정(o.name)] = id;
-      for (const o of Object.values(options_master)) {
-        if (o._requiresNames) {
-          o.requires = o._requiresNames.map((n) => 이름찾기[관계.정(n)]).filter(Boolean);
-          if (!o.requires.length) delete o.requires;
-          delete o._requiresNames;
+      /* 이름으로 잡아 둔 선행·배타·포함을 id 로 바꿔 심는다.
+         ★한 이름에 id 가 여럿일 수 있다(트림마다 값이 다르면). 그래서
+           선행(requires)은 «트림별로» 그 트림에 실제 있는 id 로 잇고(requires_in_trim),
+           배타·포함은 그 이름의 id 전부에 건다. */
+      const 이름찾기 = {};   // 이름 → [id…]
+      for (const [id, o] of Object.entries(options_master)) (이름찾기[관계.정(o.name)] ||= []).push(id);
+      const 모든id = (n) => 이름찾기[관계.정(n)] || [];
+      for (const t of trims) {
+        const 있는 = new Set(t.available_options);
+        for (const id of t.available_options) {
+          const o = options_master[id];
+          if (!o._requiresNames) continue;
+          const 선행 = o._requiresNames.map((n) => 모든id(n).find((x) => 있는.has(x))).filter(Boolean);
+          if (선행.length) ((o.requires_in_trim ||= {})[t.trim_id] = 선행);
         }
       }
+      for (const o of Object.values(options_master)) delete o._requiresNames;
       const 묶음 = {};
       for (const [id, o] of Object.entries(options_master)) {
-        const label = 통?.묶.get(관계.정(o.name));
+        const label = 통?.묶.get(관계.정(o.name));   // 같은 이름의 id 들은 모두 같은 묶음에 든다
         if (label) (묶음[label] ||= []).push(id);
       }
       const exclusive_groups = Object.entries(묶음)
@@ -262,7 +286,7 @@ for (const [브랜드, mid] of Object.entries(브랜드ID)) {
       for (const [id, o] of Object.entries(options_master)) {
         const 든 = 통?.품.get(관계.정(o.name));
         if (!든) continue;
-        const 들 = 든.map((n) => 이름찾기[관계.정(n)]).filter(Boolean);
+        const 들 = 든.flatMap((n) => 모든id(n));
         if (들.length) option_excludes[id] = 들;
       }
       variants.push({

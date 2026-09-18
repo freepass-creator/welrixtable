@@ -359,7 +359,13 @@ async function shareSignLink() {
 .m-main {
   flex: 1;
   padding: calc(var(--safe-top) + 80px) 20px calc(var(--safe-bottom) + 220px);
-  overflow-y: auto;
+  /* ★여기서 overflow-y:auto 를 «쓰지 않는다» — 2026-09-18.
+     #m-app 은 min-height 만 있고 max-height 가 없어 콘텐츠만큼 늘어난다.
+     즉 .m-main 이 실제로 넘쳐서 «따로» 스크롤되는 일은 없고(항상 clientHeight===scrollHeight),
+     페이지(html/body)가 스크롤한다. 그런데도 여기에 overflow-y:auto 를 켜 두면
+     아이폰 사파리에서 «넘치지 않는 스크롤 영역» 이 손가락 스크롤 제스처를 가로채
+     바깥 페이지로 못 넘기는 경우가 있다(안드로이드·데스크톱 크롬에서는 안 보이는 버그라 놓치기 쉽다).
+     대표 「스크롤 되게 해주고」 — 트림이 많은 차(싼타페 36개 등)에서 이 증상이 났을 것이다. */
 }
 
 .m-footer {

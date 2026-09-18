@@ -5,13 +5,32 @@
  *   숫자는 하단 금액바와 «같은 곳»(견적상태 = 웰릭스 계산)에서 읽는다 — 따로 계산하지 않는다.
  */
 import { computed } from 'vue';
-import { quoteState } from '../../store.js';
+import { quoteState, vehicleState } from '../../store.js';
 import { 견적상태 } from '../../lib/quote/index.js';
 import { 담당자인가 } from '../../lib/role.js';
 import { fmt } from '../../lib/format.js';
 
 const 담당자 = 담당자인가();
-const v = computed(() => quoteState.vehicle || {});
+
+/* 고른 차 요약 — 보통은 차 고르는 화면이 만들어 둔 quoteState.vehicle 을 쓴다.
+   ★공유 링크로 곧장 이 페이지에 오면 그 화면을 안 거쳐 비어 있다 → 차 목록에서 직접 찾아 채운다. */
+function 목록에서() {
+  try {
+    const b = window.VEHICLE_DB?.manufacturers?.find((x) => x.manufacturer_id === vehicleState.manufacturer);
+    const m = b?.models?.find((x) => x.model_id === vehicleState.model);
+    const pt = m?.variants?.find((x) => x.trims.some((t) => t.trim_id === vehicleState.trim));
+    const t = pt?.trims.find((x) => x.trim_id === vehicleState.trim);
+    if (!t) return {};
+    const 옵 = [...(vehicleState.options || [])].map((id) => pt.options_master?.[id]?.name).filter(Boolean);
+    const 색 = vehicleState.color != null ? m.exterior_colors?.[vehicleState.color]?.name : null;
+    return {
+      brand: b.manufacturer_name, model: m.model_name, variant: pt.variant_name,
+      trim_name: [t.group, t.name].filter(Boolean).join(' '),
+      options: 옵, colorExt: 색, colorInt: quoteState.cond?.colorInt || null,
+    };
+  } catch { return {}; }
+}
+const v = computed(() => (quoteState.vehicle?.trim_name ? quoteState.vehicle : 목록에서()));
 const c = computed(() => quoteState.cond || {});
 
 const 계산중 = computed(() => 견적상태.상태 === 'pending');
