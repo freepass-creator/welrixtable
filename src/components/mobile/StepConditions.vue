@@ -1,11 +1,15 @@
 <script setup>
 import { computed } from 'vue';
 import { quoteState } from '../../store.js';
+import { 담당자인가 } from '../../lib/role.js';
 
+const 담당자 = 담당자인가();
 const TERMS = [36, 48, 60];  // 24개월 운영 안 함
 const KMS = [1, 2, 3, 4];
+/* ★웰릭스 계산 서버는 신용을 «고신용·중신용·저신용» 셋만 받는다.
+   예전 첫 칸 '신용' 은 서버가 「허용되지 않은 값: credit」으로 돌려보내 계산이 멈췄다. */
 const CREDITS = [
-  { value: '신용',   label: '신용' },
+  { value: '고신용', label: '고신용' },
   { value: '중신용', label: '중신용' },
   { value: '저신용', label: '저신용' },
 ];
@@ -54,7 +58,9 @@ function toggleTerm(t) {
       </div>
     </div>
 
-    <div class="sc-field">
+    <!-- 신용은 «담당자만» 고른다. 손님이 「저신용」을 고르면 값이 확 뛴다 —
+         손님 화면은 중신용 고정이고 아래 고지로 알린다. -->
+    <div class="sc-field" v-if="담당자">
       <div class="sc-label">신용</div>
       <div class="sc-chips">
         <button
@@ -65,8 +71,15 @@ function toggleTerm(t) {
       </div>
     </div>
 
-    <!-- 보증금·선납금·수수료는 시작(제조사) 화면에서 입력 — 단일 입력처로 통일 -->
-    <p class="sc-note">
+    <!-- ★손님에게는 등급 이름을 보이지 않는다 — 「신용점수 무관」 (대표 2026-09-18).
+         계산은 여전히 중신용으로 한다(웰릭스는 고·중·저만 받는다). -->
+    <p v-if="!담당자" class="sc-note">
+      <b>신용점수 무관</b> 기준입니다. 심사 결과에 따라 달라질 수 있습니다.
+    </p>
+
+    <!-- 보증금·선납금·수수료는 시작(제조사) 화면에서 입력 — 단일 입력처로 통일.
+         ★손님에게는 그 칸 자체가 없으므로 이 안내도 안 보인다. -->
+    <p v-if="담당자" class="sc-note">
       보증금·선납금·수수료는 <b>시작 화면</b>에서 설정합니다.
       <span class="sc-note__cur">현재 수수료 {{ quoteState.cond.feeRatePct }}% · 보증금 {{ quoteState.cond.dep }}% · 선납금 {{ quoteState.cond.pre }}%</span>
     </p>

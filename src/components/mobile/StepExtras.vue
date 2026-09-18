@@ -1,6 +1,8 @@
 <script setup>
 import { computed } from 'vue';
 import { quoteState } from '../../store.js';
+import { 담당자인가 } from '../../lib/role.js';
+import { 썬팅들, 블박들, 탁송, 탁송권역, 탁송표시, 썬팅값, 블박값 } from '../../lib/welrix-rates.js';
 import { DELIVERY_REGIONS, ACCESSORIES, TINT_AREAS, TINT_PRICES } from '../../data/lookups.js';
 import { fmt } from '../../lib/format.js';
 import * as Fees from '../../lib/compute-fees.js';
@@ -23,17 +25,17 @@ const EXTRA = [
   { value: '3명', label: '3명' },
 ];
 
+const 담당자 = 담당자인가();   // 손님이면 탁송 권역을 안 묻는다 (기본 서울)
+
 // 탁송 지역/도시 — native select
-const regions = Object.keys(DELIVERY_REGIONS);
-const cities = computed(() => {
-  const r = quoteState.cond.deliveryRegion;
-  return r && DELIVERY_REGIONS[r] ? Object.keys(DELIVERY_REGIONS[r]) : [];
-});
-const deliveryFee = computed(() => Fees.deliveryFee(quoteState));
+/* ★웰릭스 10권역 — 우리 시군 표(200여 개)는 안 쓴다.
+   표가 다르면 «같은 조건»이 안 되고, 그러면 값이 0 으로 안 맞는다. */
+const regions = 탁송권역;
+const deliveryFee = computed(() => 탁송[quoteState.cond.deliveryRegion] || 0);
 function onRegionChange(e) {
   const r = e.target.value;
   quoteState.cond.deliveryRegion = r;
-  quoteState.cond.deliveryCity = Object.keys(DELIVERY_REGIONS[r] || {})[0] || '';
+  quoteState.cond.deliveryCity = r;      // 권역 하나로 쓴다
 }
 
 // 선팅 제품 — native select
@@ -55,7 +57,7 @@ function toggleTintArea(key) {
     if (ex && set.has(ex)) set.delete(ex);
   }
 }
-const tintFee = computed(() => Fees.tintFee(quoteState));
+const tintFee = computed(() => 썬팅값(quoteState.tint?.product));
 
 // 용품 — native select 옵션 빌드
 function buildOpts(map) {
@@ -113,67 +115,50 @@ const hipassOpts = buildOpts(ACCESSORIES.hipass);
     <div class="se-divider"></div>
 
     <!-- 탁송 지역/도시 — drop-down -->
-    <div class="se-field">
+    <!-- 손님에게는 안 묻는다. store.js 기본값이 이미 「광역시 · 서울」이라
+         서울 기준으로 계산된다. 지역이 다르면 상담에서 맞춘다. -->
+    <div class="se-field" v-if="담당자">
       <div class="se-label">
         탁송 지역
         <span v-if="deliveryFee" class="se-label__val">+{{ fmt(deliveryFee) }}원</span>
       </div>
-      <div class="se-row">
-        <select class="se-select" :value="quoteState.cond.deliveryRegion" @change="onRegionChange">
-          <option v-for="r in regions" :key="r" :value="r">{{ r }}</option>
-        </select>
-        <select class="se-select" v-model="quoteState.cond.deliveryCity" :disabled="!cities.length">
-          <option v-for="c in cities" :key="c" :value="c">{{ c }}</option>
-        </select>
-      </div>
+      <select class="se-select" :value="quoteState.cond.deliveryRegion" @change="onRegionChange">
+        <option v-for="r in regions" :key="r" :value="r">{{ r }} · {{ 탁송표시(r) }}</option>
+      </select>
     </div>
 
-    <!-- 선팅 -->
+    <!-- 선팅 — ★웰릭스와 똑같이 3택. 기본은 「루마 일반」 -->
     <div class="se-field">
       <div class="se-label">
-        선팅 제품
+        선팅
         <span v-if="tintFee" class="se-label__val">+{{ fmt(tintFee) }}원</span>
       </div>
-      <select class="se-select" v-model="quoteState.tint.product">
-        <option value="">선팅 안 함</option>
-        <option v-for="p in tintProducts" :key="p" :value="p">{{ p }}</option>
-      </select>
-      <div v-if="quoteState.tint.product" class="se-tint-areas">
+      <div class="se-chips">
         <button
-          v-for="a in TINT_AREAS" :key="a.key"
-          class="se-tint-area"
-          :class="{ 'is-selected': quoteState.tint.areas?.has(a.key) }"
-          @click="toggleTintArea(a.key)"
-        >
-          <span class="se-tint-area__label">{{ a.label }}</span>
-          <span class="se-tint-area__price">
-            {{ TINT_PRICES[quoteState.tint.product]?.[a.key] ? '+' + fmt(TINT_PRICES[quoteState.tint.product][a.key]) + '원' : '무료' }}
-          </span>
-        </button>
+          v-for="t in 썬팅들" :key="t.name"
+          class="se-chip" :class="{ 'is-selected': quoteState.tint.product === t.name }"
+          @click="quoteState.tint.product = t.name"
+        >{{ t.name }}<small v-if="t.price"> +{{ fmt(t.price) }}</small></button>
       </div>
     </div>
 
-    <!-- 용품 — 각각 drop-down -->
+    <!-- 블랙박스 — ★웰릭스와 똑같이 2택. 기본은 「파인뷰 SF500」 -->
     <div class="se-field">
-      <div class="se-label">블박</div>
-      <select class="se-select" v-model="quoteState.extras.blackbox">
-        <option v-for="o in blackboxOpts" :key="o.value" :value="o.value">{{ o.label }}</option>
-      </select>
+      <div class="se-label">
+        블랙박스
+        <span v-if="블박값(quoteState.extras.blackbox)" class="se-label__val">
+          +{{ fmt(블박값(quoteState.extras.blackbox)) }}원</span>
+      </div>
+      <div class="se-chips">
+        <button
+          v-for="b in 블박들" :key="b.name"
+          class="se-chip" :class="{ 'is-selected': quoteState.extras.blackbox === b.name }"
+          @click="quoteState.extras.blackbox = b.name"
+        >{{ b.name }}<small v-if="b.price"> +{{ fmt(b.price) }}</small></button>
+      </div>
     </div>
 
-    <div class="se-field">
-      <div class="se-label">내비</div>
-      <select class="se-select" v-model="quoteState.extras.navi">
-        <option v-for="o in naviOpts" :key="o.value" :value="o.value">{{ o.label }}</option>
-      </select>
-    </div>
-
-    <div class="se-field">
-      <div class="se-label">하이패스</div>
-      <select class="se-select" v-model="quoteState.extras.hipass">
-        <option v-for="o in hipassOpts" :key="o.value" :value="o.value">{{ o.label }}</option>
-      </select>
-    </div>
+    <!-- ★내비·하이패스 칸은 뺐다 — 웰릭스 견적기에 없는 항목이라 «같은 조건»이 깨진다 -->
   </div>
 </template>
 
@@ -212,7 +197,7 @@ const hipassOpts = buildOpts(ACCESSORIES.hipass);
 .se-card__label { font-size: 15px; font-weight: 600; color: var(--ink-1); }
 .se-card__sub { font-size: 12px; color: var(--ink-3); }
 .se-card:active { background: var(--brand-50); }
-.se-card.is-selected { border-color: var(--brand); background: var(--brand-50); }
+.se-card.is-selected { background: var(--brand-50); }
 .se-card.is-selected .se-card__label { color: var(--brand); }
 
 /* chip (보험/운전자) */
@@ -299,7 +284,7 @@ const hipassOpts = buildOpts(ACCESSORIES.hipass);
 }
 .se-tint-area:active { background: var(--brand-50); }
 .se-tint-area.is-selected {
-  border-color: var(--brand); background: var(--brand-50);
+  background: var(--brand-50);
 }
 .se-tint-area.is-selected .se-tint-area__label { color: var(--brand); }
 </style>

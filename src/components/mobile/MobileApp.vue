@@ -1,9 +1,13 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { quoteState, vehicleState } from '../../store.js';
+import { 담당자인가, 손님링크 } from '../../lib/role.js';
+import { 지금주소 } from '../../lib/share-link.js';
 import StepVehicle from './StepVehicle.vue';
 import StepConditions from './StepConditions.vue';
 import StepExtras from './StepExtras.vue';
+import StepResult from './StepResult.vue';
+import { 다시계산 } from '../../lib/quote/index.js';
 import StickyQuote from './StickyQuote.vue';
 import SendSheet from './SendSheet.vue';
 
@@ -14,12 +18,84 @@ const STEPS = [
   { key: 'vehicle',    label: '차량',     comp: StepVehicle    },
   { key: 'conditions', label: '계약 조건', comp: StepConditions },
   { key: 'extras',     label: '용품·서비스', comp: StepExtras   },
+  /* ★견적은 별도 페이지로 (대표 2026-09-18) */
+  { key: 'result',     label: '견적',     comp: StepResult     },
 ];
 
-const stepIdx = ref(0);
+const 담당자 = 담당자인가();
+const 공유됨 = ref(false);
+
+/* ── 조건이 바뀌면 웰릭스에 다시 묻는다 ────────────────────────────────
+ *  읽는 값이 하나라도 바뀌면 watch 가 걸린다. 연속 입력은 견적 뼈대가 묶는다. */
+watch(
+  () => [
+    vehicleState.trim,
+    [...(vehicleState.options || [])].join('.'),
+    vehicleState.color,
+    JSON.stringify(quoteState.scenarios),
+    quoteState.cond.credit, quoteState.cond.km, quoteState.cond.svc,
+    quoteState.cond.insProperty, quoteState.cond.extraDriver,
+    quoteState.cond.deliveryCity, quoteState.cond.feeRatePct,
+    quoteState.cond.discount, quoteState.cond.colorIntPrice,
+    JSON.stringify(quoteState.tint?.areas ? [...quoteState.tint.areas] : []),
+    quoteState.tint?.product, JSON.stringify(quoteState.extras),
+  ].join('|'),
+  () => 다시계산(),
+  { immediate: true },
+);
+
+/* ── 하단 금액바는 «옵션 단계부터» ─────────────────────────────────────
+ * ★대표 2026-09-18 「옵션 고르기 전까지는 하단에 견적 보여주지 말고」
+ *   제조사·모델·파워트레인·트림을 고르는 동안은 숨긴다. 옵션을 넣을 때부터 값이 바뀌는 게 보이고,
+ *   마지막 견적 페이지에서는 그 페이지가 견적이므로 다시 숨긴다. */
+const 금액바보임 = computed(() => {
+  if (!vehicleState.trim) return false;
+  const key = STEPS[stepIdx.value]?.key;
+  if (key === 'vehicle') return (vehicleState.subStep || 'brand') === 'options';
+  return key !== 'result';
+});
+
+/* ── 공유 ──────────────────────────────────────────────────────────────
+ * ★대표 2026-09-17 「공유는 좀 있었으면 좋겠어 — 내가 친구한테 할 수도 있고
+ *   손님한테 할 수도 있으니까」
+ * ★나가는 주소에서 `staff` 를 «반드시» 떼어 낸다(손님링크). 붙여 보내면
+ *   받은 사람이 수수료 칸을 보게 된다. */
+async function 공유하기() {
+  /* ★고른 차·트림·옵션·색상을 주소에 담고, staff 표시는 떼어 낸다 */
+  const 주소 = 손님링크(지금주소(vehicleState, quoteState));
+  const 글 = vehicleState.trim
+    ? `${vehicleState.model || ''} ${vehicleState.trim || ''} 견적`
+    : '신차 장기렌터카 견적';
+  try {
+    if (navigator.share) { await navigator.share({ title: '웰릭스모빌리티 견적', text: 글, url: 주소 }); return; }
+  } catch { /* 취소는 잘못이 아니다 */ return; }
+  try {
+    await navigator.clipboard.writeText(주소);
+    공유됨.value = true;
+    setTimeout(() => { 공유됨.value = false; }, 1600);
+  } catch { window.prompt('이 주소를 복사하세요', 주소); }
+}
+
+/* 공유 링크로 들어왔으면 견적 페이지에서 시작한다 (share-link.js 풀기가 표시해 둔다) */
+const stepIdx = ref(vehicleState.견적부터 ? STEPS.length - 1 : 0);
+
+/* ── 「견적 보기」 — 트림만 고르면 어느 걸음에서든 곧장 견적 페이지로 ─────
+ * ★대표 2026-09-18 「세부 트림만 누르고도 견적 보기가 가능해야 되고,
+ *   다음 넘기면 옵션·색상 고르고」
+ *   「다음」은 한 걸음씩, 「견적 보기」는 건너뛴다. 건너뛴 자리는 기억해 두고
+ *   견적 페이지의 「이전」이 그리로 돌려보낸다. */
+const 돌아갈곳 = ref(vehicleState.견적부터 ? { stepIdx: 0, subStep: 'options' } : null);
+function 견적보기() {
+  if (!vehicleState.trim) return;
+  돌아갈곳.value = { stepIdx: stepIdx.value, subStep: vehicleState.subStep };
+  stepIdx.value = STEPS.length - 1;
+  if (typeof window !== 'undefined') window.scrollTo({ top: 0 });
+}
 const currentStep = computed(() => STEPS[stepIdx.value]);
 
-const VEHICLE_SUB_STEPS = ['brand', 'model', 'variant', 'trim', 'options', 'colors'];
+/* ★순서는 제조사 «내 차 만들기»와 같게 — 트림 → 색상(외장·내장) → 옵션 (대표 2026-09-18 확인).
+     현대 hyundai.com/kr/ko/e/vehicles/estimation: 01 모델(엔진·구동·트림) → 02 색상 → 옵션 → 완료. */
+const VEHICLE_SUB_STEPS = ['brand', 'model', 'variant', 'trim', 'colors', 'options'];
 
 // 전체 페이지 (sub-step 포함) — progress bar 세그먼트 수
 const TOTAL_PAGES = VEHICLE_SUB_STEPS.length + (STEPS.length - 1);  // 6 + 2 = 8
@@ -38,6 +114,17 @@ const canGoBack = computed(() => {
     if (VEHICLE_SUB_STEPS.indexOf(sub) > 0) return true;
   }
   return stepIdx.value > 0;
+});
+
+const 견적보기보임 = computed(() => {
+  if (!vehicleState.trim) return false;
+  const key = currentStep.value.key;
+  if (key === 'result') return false;
+  if (STEPS[stepIdx.value + 1]?.key === 'result') return false;   // 그 걸음의 「다음」이 이미 「견적 보기」다
+  if (key === 'vehicle') {
+    return VEHICLE_SUB_STEPS.indexOf(vehicleState.subStep || 'brand') >= VEHICLE_SUB_STEPS.indexOf('trim');
+  }
+  return true;
 });
 
 const canProceed = computed(() => {
@@ -64,6 +151,12 @@ function next() {
 }
 
 function prev() {
+  if (currentStep.value.key === 'result' && 돌아갈곳.value) {
+    stepIdx.value = 돌아갈곳.value.stepIdx;
+    vehicleState.subStep = 돌아갈곳.value.subStep;
+    돌아갈곳.value = null;
+    return;
+  }
   if (currentStep.value.key === 'vehicle') {
     const sub = vehicleState.subStep || 'brand';
     const i = VEHICLE_SUB_STEPS.indexOf(sub);
@@ -117,16 +210,20 @@ async function shareSignLink() {
   <div class="m-shell">
     <!-- 헤더 — 좌측: CI + 페이지 타이틀, 우측: 발송 -->
     <header class="m-header">
+      <!-- ★상단은 «웰컴저축은행 × 웰릭스모빌리티» 한 줄만 (대표 2026-09-17).
+           welrix 로고·엑셀 버전 배지·조회동의 링크는 뺐다 — 손님이 볼 것이 아니다. -->
       <div class="m-header__brand">
-        <img class="m-ci" src="/welrix-ci.png" alt="웰릭스 모빌리티 · 처음으로" @click="goHome" role="button" tabindex="0" style="cursor: pointer;" />
-        <span v-if="cfg.excel_version" class="m-ver" title="견적 계산에 적용된 엑셀 견적기 버전">엑셀 {{ cfg.excel_version }}</span>
+        <button type="button" class="m-brand" @click="goHome" title="처음으로">
+          웰컴저축은행 <span class="m-brand__x">×</span> 웰릭스모빌리티
+        </button>
       </div>
       <div class="m-header__actions">
-        <button class="m-act" @click="shareSignLink" title="조회동의 링크 공유">
-          <i class="ph" :class="signCopied ? 'ph-check-circle' : 'ph-share-network'"></i>
-          <span>{{ signCopied ? '복사됨' : '동의링크' }}</span>
+        <button class="m-act" @click="공유하기" title="이 견적 링크 공유">
+          <i class="ph" :class="공유됨 ? 'ph-check-circle' : 'ph-share-network'"></i>
+          <span>{{ 공유됨 ? '복사됨' : '공유' }}</span>
         </button>
-        <button class="m-act m-act--primary" :disabled="!vehicleState.trim" @click="openSend">
+        <!-- 견적 발송은 담당자만 — 손님에게는 공유가 그 자리다 -->
+        <button v-if="담당자" class="m-act m-act--primary" :disabled="!vehicleState.trim" @click="openSend">
           <i class="ph ph-paper-plane-tilt"></i>
           <span>견적발송</span>
         </button>
@@ -144,24 +241,33 @@ async function shareSignLink() {
       <component :is="currentStep.comp" :vehicles="vehicles" />
     </main>
 
-    <StickyQuote v-if="vehicleState.trim" />
+    <StickyQuote v-if="금액바보임" />
 
     <footer class="m-footer">
-      <button v-if="canGoBack" class="m-btn m-btn--ghost" @click="prev">
-        <i class="ph ph-arrow-left"></i>이전
+      <button v-if="canGoBack" class="m-btn m-btn--ghost" :class="{ 'm-btn--icon': 견적보기보임 }"
+              @click="prev" aria-label="이전">
+        <i class="ph ph-arrow-left"></i><span v-if="!견적보기보임">이전</span>
       </button>
+      <button v-if="견적보기보임" class="m-btn m-btn--soft" @click="견적보기">견적 보기</button>
       <button
         v-if="stepIdx < STEPS.length - 1"
         class="m-btn m-btn--primary"
         :disabled="!canProceed"
         @click="next"
-      >다음<i class="ph ph-arrow-right"></i></button>
+      >{{ STEPS[stepIdx + 1]?.key === 'result' ? '견적 보기' : '다음' }}<i class="ph ph-arrow-right"></i></button>
       <button
-        v-else
+        v-else-if="담당자"
         class="m-btn m-btn--primary"
         :disabled="!vehicleState.trim"
         @click="openSend"
       ><i class="ph ph-paper-plane-tilt"></i>견적 발송</button>
+      <!-- 손님은 마지막에 «공유»가 마무리다 -->
+      <button
+        v-else
+        class="m-btn m-btn--primary"
+        :disabled="!vehicleState.trim"
+        @click="공유하기"
+      ><i class="ph ph-share-network"></i>{{ 공유됨 ? '주소를 복사했습니다' : '이 견적 공유하기' }}</button>
     </footer>
 
     <SendSheet :open="sendOpen" @close="sendOpen = false" />
@@ -169,6 +275,14 @@ async function shareSignLink() {
 </template>
 
 <style scoped>
+/* 상단 브랜드 한 줄 — 로고 대신 글자로 (대표 2026-09-17) */
+.m-brand {
+  border: 0; background: none; padding: 0; cursor: pointer;
+  font: inherit; font-size: 13px; font-weight: 700; letter-spacing: -0.3px;
+  color: var(--brand); white-space: nowrap;
+}
+.m-brand__x { opacity: .55; margin: 0 1px; font-weight: 600; }
+
 .m-shell {
   display: flex; flex-direction: column;
   min-height: 100vh;
@@ -277,5 +391,13 @@ async function shareSignLink() {
   font-size: 16px;
 }
 .m-btn--primary:not(:disabled):active { background: var(--brand-700); }
+/* 「견적 보기」 — 다음 옆에 나란히. 테두리 없이 옅은 바탕 */
+.m-btn--soft {
+  flex: 1;
+  background: var(--brand-50); color: var(--brand);
+  font-size: 16px;
+}
+.m-btn--soft:active { background: var(--line-2); }
+.m-btn--icon { flex: 0 0 52px; }
 .m-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 </style>

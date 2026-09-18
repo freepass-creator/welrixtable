@@ -1,8 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { quoteState } from '../../store.js';
-import { calcQuote } from '../../lib/calc.js';
-import { buildCalcInput } from '../../lib/build-calc-input.js';
+import { 견적상태 } from '../../lib/quote/index.js';
 import { buildOfficialQuoteHtml } from '../../lib/build-quote-html.js';
 import { fmt, fmtTel } from '../../lib/format.js';
 
@@ -21,17 +20,24 @@ const staffEditing = ref(false);
 
 const errorMsg = ref('');
 
+/* ★보내는 견적서도 «화면과 똑같은 숫자»여야 한다 — 웰릭스가 준 값을 그대로 쓴다.
+   전에는 여기서 우리 엔진(calcQuote)으로 다시 계산했다. 화면은 웰릭스 값, 보내는 건 우리 값이라
+   손님에게 «다른 금액»이 나갈 수 있었다.
+   대표 2026-09-18 「차량 선택하는 방법만 우리 방법으로 하고,
+   그 차량 금액에 따른 대여료 산출은 웰릭스 API를 써야지」 */
 const monthlyResults = computed(() => {
-  const v = quoteState.vehicle;
-  if (!v || !v.total_manwon) return [];
+  const r = 견적상태.결과 || [];
   return (quoteState.scenarios || []).map((s, idx) => {
-    try {
-      // 웹 ERP(quote.js)와 100% 동일한 입력 조립 — 공용 SSOT 사용
-      const r = calcQuote(buildCalcInput(quoteState, s, window.__welrix_vehicles));
-      return { idx, term: s.term, dep: s.dep ?? 10, pre: s.pre ?? 0,
-        monthly: r.monthly, depAmt: r.depAmt, preAmt: r.preAmt,
-        residualAmt: r.residualAmt, residualPct: r.residualPct };
-    } catch { return null; }
+    const g = r[idx];
+    if (!g || g.월대여료 == null) return null;
+    return {
+      idx, term: s.term, dep: s.dep ?? 10, pre: s.pre ?? 0,
+      monthly: g.월대여료,
+      depAmt: g.보증금 ?? 0,
+      preAmt: g.선납금 ?? 0,
+      residualAmt: g.인수가 ?? 0,
+      residualPct: (g.인수가 && g.총차량가) ? g.인수가 / g.총차량가 : 0,
+    };
   }).filter(Boolean);
 });
 
@@ -41,6 +47,13 @@ const imgLoading = ref(false);
 async function buildQuoteBlob() {
   const v = quoteState.vehicle;
   if (!v) { errorMsg.value = '차량을 먼저 선택하세요'; return null; }
+  /* ★값이 없으면 «빈 견적서»가 나가지 않게 막는다 — 웰릭스 계산이 아직/못 온 것이다 */
+  if (!monthlyResults.value.length) {
+    errorMsg.value = 견적상태.상태 === 'pending'
+      ? '대여료를 계산하는 중입니다. 잠시 뒤에 다시 눌러 주세요'
+      : (견적상태.오류 || '대여료를 계산하지 못했습니다');
+    return null;
+  }
   const today = new Date();
   const todayStr = today.toLocaleDateString('ko-KR');
   const expireStr = new Date(today.getTime() + 7*86400000).toLocaleDateString('ko-KR');

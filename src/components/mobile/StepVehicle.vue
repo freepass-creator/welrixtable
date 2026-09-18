@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue';
 import { vehicleState, quoteState } from '../../store.js';
+import { 담당자인가 } from '../../lib/role.js';
 import { POPULAR_BRAND, POPULAR_MODELS, sortByRank } from '../../data/popular-rankings.js';
 import { fmt, guessColor } from '../../lib/format.js';
 
@@ -15,7 +16,14 @@ const BRAND_LOGOS = {
 };
 
 // 내장 색상 — lookups.js 와 동일 (PC 와 일치) + swatch 자동 계산
-const COLOR_INT = [
+/* ★내장 색상 — «웰릭스 표»를 쓴다(차종별 이름 목록, 값은 0).
+   우리 옛 표에는 「투톤 +50만」이 있었는데 웰릭스 견적기는 내장색에 값을 매기지 않는다
+   (그쪽 commonInput 의 colorFee 는 «외장»만 본다). 값이 붙으면 조건이 어긋난다. */
+const 내장색들 = computed(() => (selectedModel.value?._interior || []).map((n) => ({
+  value: n, label: n, price: 0, swatch: guessColor(n),
+})));
+
+const COLOR_INT_OLD = [
   { value: '블랙',   price: 0,      label: '블랙' },
   { value: '그레이', price: 0,      label: '그레이' },
   { value: '베이지', price: 0,      label: '베이지' },
@@ -26,7 +34,13 @@ const COLOR_INT = [
 // SSOT — window.VEHICLE_DB (mobile.js 의 boot 가 wait 후 mount 하므로 set 되어있음)
 const globalDB = computed(() => window.VEHICLE_DB);
 const db = ref(window.VEHICLE_DB || null);
-onMounted(() => { if (!db.value) db.value = window.VEHICLE_DB; });
+onMounted(() => {
+  if (!db.value) db.value = window.VEHICLE_DB;
+  /* ★공유 링크로 들어온 경우 — 트림은 이미 정해져 있는데 «트림을 고를 때 도는 뒷일»
+     (syncVehicle)이 안 돌아서 월 대여료가 «—» 로 남는다. 여기서 한 번 돌려 준다.
+     손으로 고른 경우엔 selectTrim 이 이미 돌렸으므로 다시 돌아도 값이 같다. */
+  if (vehicleState.trim) syncVehicle();
+});
 
 // sub-step — vehicleState.subStep 에 저장 (MobileApp next() 와 통합)
 const subStep = computed({
@@ -251,17 +265,19 @@ function selectVariant(v) {
 function selectTrim(t) {
   vehicleState.trim = t.trim_id;
   vehicleState.options.clear();
-  if (vehicleState.color == null && exteriorColors.value.length) {
-    vehicleState.color = 0;
-  }
-  if (!quoteState.cond.colorInt) {
-    quoteState.cond.colorInt = COLOR_INT[0].value;   // 내장 기본 = 블랙
-    quoteState.cond.colorIntPrice = COLOR_INT[0].price;
-  }
+  /* ★색은 «안 고른 채»로 둔다 — 웰릭스 견적기 기본이 「선택 안 함」이다.
+     대표 2026-09-18 「아 우리도 외장색 기본으로 해」
+     자동으로 골라 두면 그 색이 유료일 때(그랜저 세레니티 화이트 펄 +10만) 값이 벌어진다.
+     고르고 싶은 사람은 색상 걸음에서 고르면 되고, 안 골라도 다음으로 넘어간다. */
+  vehicleState.color = null;
+  quoteState.cond.colorInt = '';
+  quoteState.cond.colorIntPrice = 0;
   syncVehicle();
 }
 
 function goBack(target) { subStep.value = target; }
+
+const 담당자 = 담당자인가();   // ★손님이면 수수료 칸을 아예 안 그린다
 
 // 시작 조건 — 제조사 화면에서 수수료/보증금/선납금 선입력 (StepConditions 와 동일 SSOT·클램프)
 function onDepChange() {
@@ -297,9 +313,13 @@ function onFeeChange() {
     <div v-if="subStep === 'brand'" class="sv-section">
       <h2 class="sv-title">어떤 제조사를<br>선택할까요?</h2>
 
-      <!-- 시작 조건 — 수수료·보증금·선납금 선입력 (제조사 탭하면 바로 모델로 넘어가므로 위에 둠) -->
-      <div class="sv-precond">
-        <label class="sv-pc">
+      <!-- ★시작 조건(수수료·보증금·선납금) — «담당자만» 본다.
+           대표 2026-09-17 「보증금 선납금도 그냥 없어. 제조사에 대해 그 어설픈 거 빼.
+           그냥 누르고 누르고 누르고 하면 월 대여료가 얼마 나온다인 거야.
+           보증금은 어차피 심사받아서 그거 해야 되니까」
+           → 손님 화면은 첫 화면부터 «차만 고른다». 보증금 0 · 선납 0 · 수수료 7% 로 계산된다. -->
+      <div class="sv-precond" v-if="담당자">
+        <label class="sv-pc" v-if="담당자">
           <span class="sv-pc__lab">수수료</span>
           <span class="sv-pc__in">
             <input type="number" min="-10" max="7" step="0.1" inputmode="decimal"
@@ -395,7 +415,8 @@ function onFeeChange() {
       </div>
 
       <!-- 트림 선택 후 — 할인 (접힘, 클릭하면 열림) -->
-      <details v-if="selectedTrim" class="sv-disclosure" :open="(quoteState.cond.discount || 0) > 0">
+      <!-- ★할인은 «담당자만» — 손님이 금액을 적어 월 렌트료를 낮출 수 있었다 (대표 2026-09-18) -->
+      <details v-if="selectedTrim && 담당자" class="sv-disclosure" :open="(quoteState.cond.discount || 0) > 0">
         <summary class="sv-disclosure__summary">
           <span class="sv-disclosure__label">추가 할인</span>
           <span v-if="quoteState.cond.discount" class="sv-disclosure__val">−{{ fmt(quoteState.cond.discount) }}만원</span>
@@ -509,7 +530,7 @@ function onFeeChange() {
         </div>
         <div class="sv-color-grid">
           <button
-            v-for="c in COLOR_INT" :key="c.value"
+            v-for="c in 내장색들" :key="c.value"
             class="sv-color-card"
             :class="{ 'is-selected': quoteState.cond.colorInt === c.value }"
             @click="pickIntColor(c)"
@@ -523,7 +544,7 @@ function onFeeChange() {
       </div>
 
       <!-- 추가 할인 — 접힘 (재고차/특별조건) -->
-      <details class="sv-disclosure" :open="(quoteState.cond.discount || 0) > 0">
+      <details v-if="담당자" class="sv-disclosure" :open="(quoteState.cond.discount || 0) > 0">
         <summary class="sv-disclosure__summary">
           <span class="sv-disclosure__label">추가 할인</span>
           <span v-if="quoteState.cond.discount" class="sv-disclosure__val">−{{ fmt(quoteState.cond.discount) }}만원</span>
@@ -639,7 +660,7 @@ function onFeeChange() {
 .sv-brand-card img[src*="genesis"] { width: auto; height: 18px; max-width: 70px; }
 .sv-brand-card__name { font-size: 13.5px; font-weight: 600; color: var(--ink-1); }
 .sv-brand-card:active { transform: scale(0.97); }
-.sv-brand-card.is-selected { border-color: var(--brand); background: var(--brand-50); }
+.sv-brand-card.is-selected { background: var(--brand-50); }
 
 .sv-debug {
   padding: 12px 14px;
@@ -664,7 +685,7 @@ function onFeeChange() {
 .sv-row__label { font-size: 16px; font-weight: 500; color: var(--ink-1); letter-spacing: -0.3px; }
 .sv-row__chev { font-size: 18px; color: var(--ink-4); }
 .sv-row:active { background: var(--brand-50); }
-.sv-row.is-selected { border-color: var(--brand); background: var(--brand-50); }
+.sv-row.is-selected { background: var(--brand-50); }
 
 /* 트림 카드 */
 .sv-trim-card {
@@ -684,7 +705,7 @@ function onFeeChange() {
   font-variant-numeric: tabular-nums;
 }
 .sv-trim-card:active { background: var(--brand-50); }
-.sv-trim-card.is-selected { border-color: var(--brand); background: var(--brand-50); }
+.sv-trim-card.is-selected { background: var(--brand-50); }
 
 /* 옵션·색상 sub-step */
 .sv-block { margin-bottom: 22px; }
@@ -718,9 +739,6 @@ function onFeeChange() {
   border: 1px solid rgba(0,0,0,0.12);
   box-shadow: inset 0 0 0 2px #fff;
 }
-.sv-color-card.is-selected .sv-color-swatch {
-  box-shadow: inset 0 0 0 2px #fff, 0 0 0 2px var(--brand);
-}
 .sv-color-name {
   font-size: 11.5px; color: var(--ink-2); text-align: center;
   line-height: 1.2; word-break: keep-all;
@@ -730,7 +748,7 @@ function onFeeChange() {
   font-size: 10px; color: var(--ink-4);
   font-variant-numeric: tabular-nums;
 }
-.sv-color-card.is-selected { border-color: var(--brand); background: var(--brand-50); }
+.sv-color-card.is-selected { background: var(--brand-50); }
 .sv-color-check {
   position: absolute; top: 6px; right: 8px;
   font-size: 14px; color: var(--brand); font-weight: 700;
@@ -831,7 +849,7 @@ function onFeeChange() {
 }
 .sv-opt:active { background: var(--brand-50); }
 .sv-opt.is-selected {
-  border-color: var(--brand); background: var(--brand-50);
+  background: var(--brand-50);
 }
 .sv-opt.is-disabled {
   opacity: 0.55; cursor: not-allowed;

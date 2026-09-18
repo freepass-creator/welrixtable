@@ -1,11 +1,15 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { 담당자인가 } from '../../lib/role.js';
 import { quoteState } from '../../store.js';
-import { calcQuote } from '../../lib/calc.js';
-import { buildCalcInput } from '../../lib/build-calc-input.js';
+/* ★계산은 웰릭스가 한다. calc.js 는 검산용으로만 남긴다(scripts/check-promo.mjs).
+     대표 2026-09-18 「몇천 원 차이가 나면 안 돼 … 내부는 똑같은 로직이어야 되는 거야」 */
+import { 견적상태 } from '../../lib/quote/index.js';
+import { vehicleState } from '../../store.js';
 import { fmt } from '../../lib/format.js';
 import * as Fees from '../../lib/compute-fees.js';
 
+const 담당자 = 담당자인가();   // 손님은 보증금·선납금을 만지지 않는다
 const expanded = ref(false);
 function toggle() { expanded.value = !expanded.value; }
 
@@ -71,29 +75,26 @@ function onSendToggle(idx) {
   quoteState.send[idx] = !quoteState.send[idx];
 }
 
-// 각 시나리오 슬롯(0/1/2)에 대해 계산
+/* 조건이 바뀌면 다시 묻는 watch 는 MobileApp 에 있다 — 이 금액바는 옵션 단계 전엔 안 뜨지만
+   계산은 늘 돌아야 해서(마지막 견적 페이지도 같은 값을 읽는다). */
+
+const 계산중 = computed(() => 견적상태.상태 === 'pending');
+const 계산못함 = computed(() => 견적상태.상태 === 'error');
+
+// 각 시나리오 슬롯(0/1/2) — 숫자는 «웰릭스가 준 것»을 그대로 쓴다
 const cards = computed(() => {
-  const v = quoteState.vehicle;
+  const r = 견적상태.결과 || [];
   return quoteState.scenarios.map((sc, idx) => {
-    const base = {
+    const g = r[idx];
+    return {
       idx, term: sc.term, dep: sc.dep ?? 10, pre: sc.pre ?? 0,
       sent: quoteState.send[idx] !== false,
-      monthly: null, residualAmt: null, residualPct: null,
-      depAmt: null, preAmt: null,
+      monthly: g?.월대여료 ?? null,
+      residualAmt: g?.인수가 ?? null,
+      residualPct: (g?.인수가 && g?.총차량가) ? g.인수가 / g.총차량가 : null,
+      depAmt: g?.보증금 ?? null,
+      preAmt: g?.선납금 ?? null,
     };
-    if (!v || !v.total_manwon) return base;
-    try {
-      // 웹 ERP(quote.js)와 100% 동일한 입력 조립 — 공용 SSOT 사용
-      const result = calcQuote(buildCalcInput(quoteState, sc, window.__welrix_vehicles));
-      return {
-        ...base,
-        monthly: result.monthly,
-        residualAmt: result.residualAmt, residualPct: result.residualPct,
-        depAmt: result.depAmt, preAmt: result.preAmt,
-      };
-    } catch (e) {
-      return base;
-    }
   });
 });
 </script>
@@ -195,7 +196,9 @@ const cards = computed(() => {
             <th class="sq-table__rowlabel">정비서비스</th>
             <td v-for="c in cards" :key="c.idx">{{ quoteState.cond.svc || '웰스 Basic' }}</td>
           </tr>
-          <tr>
+          <!-- ★보증금·선납금은 «담당자만» 만진다. 손님에게는 심사 뒤에 정해지는 값이라
+               여기서 묻지 않는다(대표 2026-09-17). -->
+          <tr v-if="담당자">
             <th class="sq-table__rowlabel">보증금</th>
             <td v-for="c in cards" :key="c.idx">
               <span class="sq-pct-cell">
@@ -213,7 +216,7 @@ const cards = computed(() => {
               <small v-if="c.depAmt">{{ fmt(c.depAmt) }}원</small>
             </td>
           </tr>
-          <tr>
+          <tr v-if="담당자">
             <th class="sq-table__rowlabel">선납금</th>
             <td v-for="c in cards" :key="c.idx">
               <span class="sq-pct-cell">
@@ -241,7 +244,8 @@ const cards = computed(() => {
         </div>
         <div class="sq-meta__row">
           <span class="sq-meta__key">신용</span>
-          <span class="sq-meta__val">{{ quoteState.cond.credit || '중신용' }}</span>
+          <!-- 손님에게는 등급 이름 대신 「신용점수 무관」 (대표 2026-09-18) -->
+          <span class="sq-meta__val">{{ 담당자 ? (quoteState.cond.credit || '중신용') : '신용점수 무관' }}</span>
         </div>
       </div>
     </div>
@@ -304,7 +308,6 @@ const cards = computed(() => {
   transition: background .12s, border-color .12s;
 }
 .sq-term-card.is-checked {
-  border-color: var(--brand);
   background: var(--brand-50);
 }
 .sq-term-card__check-btn {

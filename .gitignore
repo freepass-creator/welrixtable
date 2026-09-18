@@ -54,3 +54,4 @@ pricepdf/
 
 # 견적기/가격표 원본 소스 (반영용, 배포·웹노출 제외)
 _source/
+.vercel

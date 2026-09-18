@@ -1,5 +1,14 @@
 // 공용 reactive store — Vue 컴포넌트와 기존 vanilla JS 모두 같은 참조 사용
 // 기존 state 객체 구조 유지, Vue의 reactive() 로 감싸서 양방향 자동 동기화
+import { 담당자인가 } from './lib/role.js';
+import { 웰릭스기본 } from './lib/welrix-rates.js';
+
+/* ★기본값은 «웰릭스 견적기를 새로 열었을 때»와 똑같이 둔다.
+   대표 2026-09-18 「다 완전히 똑같이 맞추라고. 웰릭스도 기본값 있잖아, 그 기본값에 맞추자고」
+   → 보증금 10% · 썬팅 루마 일반 · 블박 파인뷰 SF500 · 탁송 서울 · 2만km · 웰스 Basic · 대물 1억
+   ⚠ 수수료율만 7% 다 — 그건 «우리가 받는 몫»이라 웰릭스 화면 기본값(5%)과 무관하다
+     (대표 2026-09-17 「7% 수수료 7% 기준으로」). */
+const 기본보증금 = 웰릭스기본.dep;
 import { reactive } from 'vue';
 
 // === 차량 선택 (cascade) 상태 ===
@@ -60,10 +69,12 @@ function persistMyContracts(arr) {
   try { localStorage.setItem(MY_CONTRACTS_KEY, JSON.stringify(arr)); } catch {}
 }
 function loadFeeRate() {
+  /* ★기본 수수료율은 welrix-rates.js 한 곳에서 정한다(지금 5% · 확인되면 7%).
+     담당자가 화면에서 바꾼 값은 localStorage 에 남아 그게 이긴다. */
   try {
     const v = parseFloat(localStorage.getItem(FEE_KEY));
-    return isFinite(v) ? v : 7.0;
-  } catch { return 7.0; }
+    return isFinite(v) ? v : 웰릭스기본.feeRatePct;
+  } catch { return 웰릭스기본.feeRatePct; }
 }
 function persistFeeRate(v) {
   try { localStorage.setItem(FEE_KEY, String(v)); } catch {}
@@ -72,25 +83,35 @@ function persistFeeRate(v) {
 export const quoteState = reactive({
   vehicle: null,            // {brand, model, variant, trim_name, total_manwon, ...}
   cond: {
-    credit: '중신용', km: 2, dep: 10, pre: 0,
+    /* ★보증금·선납금 기본 — 손님은 0, 담당자는 10/0.
+       손님에게 «보증금 10%» 로 계산해 보여 주면 실제(무보증)보다 싸게 보인다.
+       0 에서 시작해야 손님이 본 값보다 실제가 싸지, 비싸지지 않는다. */
+    credit: 웰릭스기본.credit, km: 웰릭스기본.km,
+    dep: 기본보증금,
+    pre: 웰릭스기본.pre,
     feeRatePct: loadFeeRate(),
-    deliveryRegion: '광역시', deliveryCity: '서울',
-    svc: '웰스 Basic', insProperty: '1억', extraDriver: '없음',
+    deliveryRegion: 웰릭스기본.deliveryRegion, deliveryCity: 웰릭스기본.deliveryRegion,   // 웰릭스는 10권역 — 권역 하나로 쓴다
+    svc: 웰릭스기본.svc, insProperty: 웰릭스기본.insProperty, extraDriver: 웰릭스기본.extraDriver,
     colorInt: '', colorIntPrice: 0,
     discount: 0,
   },
   _lastSentQuoteId: null,
   myContracts: loadMyContracts(),  // 내가 제출한 계약 심사 요청 id 들
-  tint: { product: '루마 GG', areas: new Set(['front', 'side_rear_with_coupon']) },
-  extras: { blackbox: '', navi: '', hipass: '' },
+  /* ★웰릭스 표로 바꿨다 — 썬팅 3택 · 블박 2택. 우리 옛 표(루마 6종 × 부위 5개)는 안 쓴다.
+     표가 다르면 «같은 조건»을 만들 수 없고, 그러면 값이 0 으로 안 맞는다. */
+  tint: { product: 웰릭스기본.tint },
+  extras: { blackbox: 웰릭스기본.blackbox },
   cust:  { name: '', tel: '' },
   staff: loadStaff(),  // ← 영업 본인 정보 자동 로드
   send: [true, true, true],
   send_options: loadSendOpts(),  // { showLogo: bool }
+  /* 3년·4년·5년 세 칸 — 대표 2026-09-17 「마지막에 그냥 견적이 3년 4년 5년 이렇게 딱 나와 주는 거지」
+     ★보증금은 손님 0 / 담당자 10. 손님에게는 «보증금 없이» 얼마인지가 기준이다 —
+       보증금은 어차피 심사 뒤에 정해진다. */
   scenarios: [
-    { term: 60, dep: 10, pre: 0 },
-    { term: 48, dep: 10, pre: 0 },
-    { term: 36, dep: 10, pre: 0 },
+    { term: 60, dep: 기본보증금, pre: 0 },
+    { term: 48, dep: 기본보증금, pre: 0 },
+    { term: 36, dep: 기본보증금, pre: 0 },
   ],  // 24개월 운영 안 함
   // 계산된 월대여료 결과 (recompute가 채움) — TermsGrid 컴포넌트가 reactive 읽음
   monthly: [],
