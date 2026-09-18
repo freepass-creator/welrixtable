@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - feat/mobile-ux-qa-unify
+      - qa/capture-web-mobile-20260918
   workflow_dispatch:
 
 jobs:
