@@ -7,7 +7,7 @@ import StepVehicle from './StepVehicle.vue';
 import StepConditions from './StepConditions.vue';
 import StepExtras from './StepExtras.vue';
 import StepResult from './StepResult.vue';
-import { 다시계산 } from '../../lib/quote/index.js';
+import { 다시계산, 견적상태 } from '../../lib/quote/index.js';
 import StickyQuote from './StickyQuote.vue';
 import SendSheet from './SendSheet.vue';
 
@@ -24,6 +24,7 @@ const STEPS = [
 
 const 담당자 = 담당자인가();
 const 공유됨 = ref(false);
+const 공유견적 = computed(() => !!quoteState.sharedSnapshot);
 
 /* ── 조건이 바뀌면 웰릭스에 다시 묻는다 ────────────────────────────────
  *  읽는 값이 하나라도 바뀌면 watch 가 걸린다. 연속 입력은 견적 뼈대가 묶는다. */
@@ -40,7 +41,7 @@ watch(
     JSON.stringify(quoteState.tint?.areas ? [...quoteState.tint.areas] : []),
     quoteState.tint?.product, JSON.stringify(quoteState.extras),
   ].join('|'),
-  () => 다시계산(),
+  () => { if (!quoteState.sharedSnapshot) 다시계산(); },
   { immediate: true },
 );
 
@@ -62,7 +63,7 @@ const 금액바보임 = computed(() => {
  *   받은 사람이 수수료 칸을 보게 된다. */
 async function 공유하기() {
   /* ★고른 차·트림·옵션·색상을 주소에 담고, staff 표시는 떼어 낸다 */
-  const 주소 = 손님링크(지금주소(vehicleState, quoteState));
+  const 주소 = 손님링크(지금주소(vehicleState, quoteState, 견적상태));
   const 글 = vehicleState.trim
     ? `${vehicleState.model || ''} ${vehicleState.trim || ''} 견적`
     : '신차 장기렌터카 견적';
@@ -85,6 +86,15 @@ const stepIdx = ref(vehicleState.견적부터 ? STEPS.length - 1 : 0);
  *   「다음」은 한 걸음씩, 「견적 보기」는 건너뛴다. 건너뛴 자리는 기억해 두고
  *   견적 페이지의 「이전」이 그리로 돌려보낸다. */
 const 돌아갈곳 = ref(vehicleState.견적부터 ? { stepIdx: 0, subStep: 'options' } : null);
+function 수정하기() {
+  /* 공유받은 견적은 여기까지 «보낸 당시 값»이다. 수정부터는 새 견적이므로 실시간 계산으로 전환한다. */
+  quoteState.sharedSnapshot = null;
+  stepIdx.value = 0;
+  vehicleState.subStep = 'options';
+  돌아갈곳.value = null;
+  다시계산();
+  if (typeof window !== 'undefined') window.scrollTo({ top: 0 });
+}
 function 견적보기() {
   if (!vehicleState.trim) return;
   돌아갈곳.value = { stepIdx: stepIdx.value, subStep: vehicleState.subStep };
@@ -125,6 +135,7 @@ const currentPageIdx = computed(() => {
 });
 
 const canGoBack = computed(() => {
+  if (공유견적.value && currentStep.value.key === 'result') return false;
   if (currentStep.value.key === 'vehicle') {
     const sub = vehicleState.subStep || 'brand';
     if (VEHICLE_SUB_STEPS.value.indexOf(sub) > 0) return true;
@@ -190,8 +201,11 @@ function prev() {
 // 상단 CI 클릭 → 처음 화면(차량 선택 1단계)으로. 선택 데이터는 유지(비파괴 이동).
 function goHome() {
   sendOpen.value = false;
+  const 공유였음 = !!quoteState.sharedSnapshot;
+  quoteState.sharedSnapshot = null;
   stepIdx.value = 0;
   vehicleState.subStep = 'brand';
+  if (공유였음) 다시계산();
   if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -263,30 +277,40 @@ async function shareSignLink() {
     <StickyQuote v-if="금액바보임" />
 
     <footer class="m-footer">
-      <button v-if="canGoBack" class="m-btn m-btn--ghost" :class="{ 'm-btn--icon': 견적보기보임 }"
-              @click="prev" aria-label="이전">
-        <i class="ph ph-arrow-left"></i><span v-if="!견적보기보임">이전</span>
-      </button>
-      <button v-if="견적보기보임" class="m-btn m-btn--soft" @click="견적보기">견적 보기</button>
-      <button
-        v-if="stepIdx < STEPS.length - 1"
-        class="m-btn m-btn--primary"
-        :disabled="!canProceed"
-        @click="next"
-      >{{ STEPS[stepIdx + 1]?.key === 'result' ? '견적 보기' : '다음' }}<i class="ph ph-arrow-right"></i></button>
-      <button
-        v-else-if="담당자"
-        class="m-btn m-btn--primary"
-        :disabled="!vehicleState.trim"
-        @click="openSend"
-      ><i class="ph ph-paper-plane-tilt"></i>견적 발송</button>
-      <!-- 손님은 마지막에 «공유»가 마무리다 -->
-      <button
-        v-else
-        class="m-btn m-btn--primary"
-        :disabled="!vehicleState.trim"
-        @click="공유하기"
-      ><i class="ph ph-share-network"></i>{{ 공유됨 ? '주소를 복사했습니다' : '이 견적 공유하기' }}</button>
+      <!-- 공유받은 확정견적은 먼저 «그대로» 보여 준다. 수정 버튼을 눌러야 새 계산이 시작된다. -->
+      <template v-if="공유견적 && currentStep.key === 'result'">
+        <button class="m-btn m-btn--soft" @click="수정하기">
+          <i class="ph ph-pencil-simple"></i>조건 변경
+        </button>
+        <button class="m-btn m-btn--primary" @click="공유하기">
+          <i class="ph ph-share-network"></i>{{ 공유됨 ? '복사됨' : '이 견적 공유' }}
+        </button>
+      </template>
+      <template v-else>
+        <button v-if="canGoBack" class="m-btn m-btn--ghost" :class="{ 'm-btn--icon': 견적보기보임 }"
+                @click="prev" aria-label="이전">
+          <i class="ph ph-arrow-left"></i><span v-if="!견적보기보임">이전</span>
+        </button>
+        <button v-if="견적보기보임" class="m-btn m-btn--soft" @click="견적보기">견적 보기</button>
+        <button
+          v-if="stepIdx < STEPS.length - 1"
+          class="m-btn m-btn--primary"
+          :disabled="!canProceed"
+          @click="next"
+        >{{ STEPS[stepIdx + 1]?.key === 'result' ? '견적 보기' : '다음' }}<i class="ph ph-arrow-right"></i></button>
+        <button
+          v-else-if="담당자"
+          class="m-btn m-btn--primary"
+          :disabled="!vehicleState.trim"
+          @click="openSend"
+        ><i class="ph ph-paper-plane-tilt"></i>견적 발송</button>
+        <button
+          v-else
+          class="m-btn m-btn--primary"
+          :disabled="!vehicleState.trim"
+          @click="공유하기"
+        ><i class="ph ph-share-network"></i>{{ 공유됨 ? '주소를 복사했습니다' : '이 견적 공유하기' }}</button>
+      </template>
     </footer>
 
     <SendSheet :open="sendOpen" @close="sendOpen = false" />
