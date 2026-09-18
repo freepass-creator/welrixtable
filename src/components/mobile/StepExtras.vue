@@ -164,7 +164,7 @@ const hipassOpts = buildOpts(ACCESSORIES.hipass);
 
 <style scoped>
 .se-title {
-  font-size: 22px; font-weight: 700;
+  font-size: var(--fs-2xl); font-weight: var(--fw-bold);
   color: var(--ink-1); margin: 0 0 24px;
   line-height: 1.35; letter-spacing: -0.5px;
 }
@@ -175,11 +175,11 @@ const hipassOpts = buildOpts(ACCESSORIES.hipass);
 .se-field { margin-bottom: 22px; }
 .se-label {
   display: flex; align-items: baseline; justify-content: space-between;
-  font-size: 13px; font-weight: 600; color: var(--ink-2);
+  font-size: var(--fs-md); font-weight: var(--fw-semi); color: var(--ink-2);
   margin-bottom: 10px; letter-spacing: -0.2px;
 }
 .se-label__val {
-  font-size: 13px; color: var(--brand); font-weight: 700;
+  font-size: var(--fs-md); color: var(--brand); font-weight: var(--fw-bold);
   font-variant-numeric: tabular-nums;
 }
 
@@ -190,12 +190,12 @@ const hipassOpts = buildOpts(ACCESSORIES.hipass);
   padding: 14px;
   background: var(--bg-soft);
   border: 1.5px solid transparent;
-  border-radius: 12px;
+  border-radius: var(--r-card);
   text-align: left;
   font-family: inherit; cursor: pointer;
 }
-.se-card__label { font-size: 15px; font-weight: 600; color: var(--ink-1); }
-.se-card__sub { font-size: 12px; color: var(--ink-3); }
+.se-card__label { font-size: var(--fs-lg); font-weight: var(--fw-semi); color: var(--ink-1); }
+.se-card__sub { font-size: var(--fs-sm); color: var(--ink-3); }
 .se-card:active { background: var(--brand-50); }
 .se-card.is-selected { background: var(--brand-50); }
 .se-card.is-selected .se-card__label { color: var(--brand); }
@@ -206,8 +206,8 @@ const hipassOpts = buildOpts(ACCESSORIES.hipass);
   padding: 10px 14px;
   background: var(--bg-soft);
   border: 1.5px solid transparent;
-  border-radius: 10px;
-  font-family: inherit; font-size: 14px; font-weight: 500;
+  border-radius: var(--r-chip);
+  font-family: inherit; font-size: var(--fs-base); font-weight: var(--fw-medium);
   color: var(--ink-2); cursor: pointer;
 }
 .se-chip:active { background: var(--brand-50); }
@@ -220,12 +220,12 @@ const hipassOpts = buildOpts(ACCESSORIES.hipass);
 .se-row .se-select { flex: 1; }
 .se-select {
   width: 100%;
-  height: 46px;
+  height: var(--h-input);
   padding: 0 32px 0 14px;
   background: var(--bg);
   border: 1.5px solid var(--line);
-  border-radius: 10px;
-  font-family: inherit; font-size: 15px;
+  border-radius: var(--r-chip);
+  font-family: inherit; font-size: var(--fs-lg);
   color: var(--ink-1);
   cursor: pointer;
   appearance: none; -webkit-appearance: none;
@@ -240,7 +240,7 @@ const hipassOpts = buildOpts(ACCESSORIES.hipass);
 /* 추가 할인 input */
 .se-discount {
   display: flex; align-items: center; gap: 6px;
-  height: 46px;
+  height: var(--h-input);
   padding: 0 14px;
   background: var(--bg);
   border: 1.5px solid var(--line);
@@ -251,7 +251,7 @@ const hipassOpts = buildOpts(ACCESSORIES.hipass);
   flex: 1; min-width: 0;
   height: 100%;
   border: 0; background: transparent;
-  font-family: inherit; font-size: 15px;
+  font-family: inherit; font-size: var(--fs-lg);
   color: var(--ink-1);
   outline: none;
   font-variant-numeric: tabular-nums;
@@ -261,7 +261,7 @@ const hipassOpts = buildOpts(ACCESSORIES.hipass);
 .se-discount__input::-webkit-outer-spin-button,
 .se-discount__input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .se-discount__unit {
-  font-size: 13px; color: var(--ink-4); font-weight: 500;
+  font-size: var(--fs-md); color: var(--ink-4); font-weight: var(--fw-medium);
 }
 
 /* 선팅 부위 grid */
@@ -274,12 +274,12 @@ const hipassOpts = buildOpts(ACCESSORIES.hipass);
   padding: 10px 12px;
   background: var(--bg-soft);
   border: 1.5px solid transparent;
-  border-radius: 10px;
+  border-radius: var(--r-chip);
   font-family: inherit; cursor: pointer;
 }
-.se-tint-area__label { font-size: 13px; font-weight: 500; color: var(--ink-1); }
+.se-tint-area__label { font-size: var(--fs-md); font-weight: var(--fw-medium); color: var(--ink-1); }
 .se-tint-area__price {
-  font-size: 11px; color: var(--ink-4);
+  font-size: var(--fs-xs); color: var(--ink-4);
   font-variant-numeric: tabular-nums;
 }
 .se-tint-area:active { background: var(--brand-50); }
