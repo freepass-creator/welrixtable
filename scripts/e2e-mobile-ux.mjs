@@ -155,6 +155,10 @@ try {
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.waitForTimeout(100);
 
+  await page.waitForFunction(() => {
+    const b = document.querySelector('.m-header .m-act');
+    return b && !b.disabled;
+  }, null, { timeout: 5000 });
   const shareReady = !(await page.locator('.m-header .m-act').first().isDisabled());
   ok(shareReady, '계산 완료 후 공유 버튼이 활성화되지 않음');
   await noHorizontalOverflow(page, '견적결과');
