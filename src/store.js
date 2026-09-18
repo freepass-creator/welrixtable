@@ -83,6 +83,9 @@ function persistFeeRate(v) {
 
 export const quoteState = reactive({
   vehicle: null,            // {brand, model, variant, trim_name, total_manwon, ...}
+  /* 공유받은 «확정 견적» Snapshot. 값이 있으면 받은 금액을 그대로 보여 주고 자동 재계산하지 않는다.
+     사용자가 조건 변경을 시작할 때 null 로 바꾸고 다시 웰릭스 API 계산으로 돌아간다. */
+  sharedSnapshot: null,
   cond: {
     /* ★보증금·선납금 기본 — 손님은 0, 담당자는 10/0.
        손님에게 «보증금 10%» 로 계산해 보여 주면 실제(무보증)보다 싸게 보인다.
