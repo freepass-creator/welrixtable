@@ -26,12 +26,24 @@ const errorMsg = ref('');
    대표 2026-09-18 「차량 선택하는 방법만 우리 방법으로 하고,
    그 차량 금액에 따른 대여료 산출은 웰릭스 API를 써야지」 */
 const monthlyResults = computed(() => {
+  /* 공유받은 견적은 «보낸 당시 Snapshot»이 정본이다. 직원이 그 링크를 다시 열어 발송해도 같은 금액을 쓴다. */
+  if (quoteState.sharedSnapshot?.terms?.length) {
+    return quoteState.sharedSnapshot.terms.map((t, idx) => ({
+      idx, term: t.term, dep: t.depPct ?? 0, pre: t.prePct ?? 0,
+      monthly: t.monthly,
+      depAmt: t.deposit ?? 0,
+      preAmt: t.prepay ?? 0,
+      residualAmt: t.acquire ?? 0,
+      residualPct: (t.acquire && t.totalCarPrice) ? t.acquire / t.totalCarPrice : 0,
+    })).filter((x) => x.monthly != null);
+  }
+  if (견적상태.상태 !== 'ok') return [];
   const r = 견적상태.결과 || [];
   return (quoteState.scenarios || []).map((s, idx) => {
     const g = r[idx];
     if (!g || g.월대여료 == null) return null;
     return {
-      idx, term: s.term, dep: s.dep ?? 10, pre: s.pre ?? 0,
+      idx, term: s.term, dep: s.dep ?? 0, pre: s.pre ?? 0,
       monthly: g.월대여료,
       depAmt: g.보증금 ?? 0,
       preAmt: g.선납금 ?? 0,
@@ -209,6 +221,8 @@ function close() { emit('close'); }
   padding: 0 20px calc(var(--safe-bottom) + 20px);
   max-height: 85vh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   animation: ssSlideUp .25s ease-out;
 }
 @keyframes ssSlideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }

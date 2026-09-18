@@ -32,14 +32,21 @@
 
   /* ── 라운드 (공유·동일) ───────────────────────────────────── */
   --r-sm: 4px;  --r: 6px;  --r-md: 8px;  --r-lg: 12px;  --r-pill: 999px;
+  /* 터치 UI 표준 역할 */
+  --r-chip: 10px;  --r-card: 12px;  --r-sheet: 16px;
 
   /* ── 간격 (공유·동일) ─────────────────────────────────────── */
   --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px;  --sp-4: 16px;  --sp-5: 20px;  --sp-6: 24px;  --sp-8: 32px;
 
-  /* ── 타이포 (공유·동일) ───────────────────────────────────── */
+  /* ── 타이포 — 역할 기준 위계 ────────────────────────────────
+     caption 11 < meta 12.5 < label 13 < body/chip 14 < emphasis 15 < section 17 < page 22 */
   --font: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
-  --fs-xs: 10px;  --fs-sm: 11.5px;  --fs-base: 12.5px;  --fs-md: 13.5px;
-  --fs-lg: 16px;  --fs-xl: 20px;  --fs-2xl: 24px;
+  --fs-xs: 11px;  --fs-sm: 12.5px;  --fs-md: 13px;  --fs-base: 14px;
+  --fs-lg: 15px;  --fs-xl: 17px;  --fs-2xl: 22px;
+
+  /* ── 터치 높이 + 굵기 ─────────────────────────────────────── */
+  --h-chip: 36px; --h-input: 46px; --h-cta: 54px;
+  --fw-regular: 400; --fw-medium: 500; --fw-semi: 600; --fw-bold: 700;
 
   /* ── 레거시 별칭 (웰릭스 기존 CSS 무손실 이관용 — 새 코드는 위 정본 사용) ── */
   --font-family:   var(--font);

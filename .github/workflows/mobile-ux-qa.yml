@@ -1,0 +1,57 @@
+name: Mobile UX QA
+
+on:
+  push:
+    branches:
+      - main
+      - feat/mobile-ux-qa-unify
+  workflow_dispatch:
+
+jobs:
+  mobile-ux:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install app
+        run: npm ci
+
+      - name: Production build
+        run: npm run build
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright@1.63.0
+          npx playwright install --with-deps chromium
+
+      - name: Start Vite
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/welrix-vite.log 2>&1 &
+          echo $! > /tmp/welrix-vite.pid
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:5173/mobile.html?force=mobile >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/welrix-vite.log
+          exit 1
+
+      - name: Run mobile UX simulation
+        run: node scripts/e2e-mobile-ux.mjs
+
+      - name: Show Vite log on failure
+        if: failure()
+        run: cat /tmp/welrix-vite.log || true
+
+      - name: Upload QA screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-ux-qa
+          path: artifacts/mobile-ux
+          if-no-files-found: ignore
