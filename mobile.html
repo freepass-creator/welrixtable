@@ -86,7 +86,16 @@
       html #m-app, html .m-header, html .m-progress, html .m-footer, html .sq {
         max-width: 480px; margin-left: auto; margin-right: auto;
       }
-      html #m-app { background: var(--bg); }
+      html #m-app {
+        background: var(--bg);
+        box-shadow: 0 0 0 1px rgba(0,0,0,.035), 0 12px 40px rgba(0,0,0,.035);
+      }
+    }
+    @media (min-width: 900px) {
+      /* PC에서 손님 링크를 열어도 모바일 흐름은 유지하되, 폰보다 조금 넓게 읽힌다. */
+      html #m-app, html .m-header, html .m-progress, html .m-footer, html .sq {
+        max-width: 540px;
+      }
     }
 
     /* 진입 게이트 */

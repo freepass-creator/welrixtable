@@ -147,10 +147,11 @@ const 공유시각 = computed(() => {
       <p v-if="계산못함" class="sr-error">지금 계산할 수 없습니다. 잠시 뒤 다시 열거나 상담으로 문의해 주세요.</p>
     </section>
 
-    <!-- 조건 -->
+    <!-- 조건 — 결과의 보조정보이므로 2열 요약으로 압축 -->
+    <div class="sr-cond__title">이용 조건</div>
     <section class="sr-cond">
       <div v-for="[k, val] in 조건들" :key="k" class="sr-cond__row">
-        <span>{{ k }}</span><span>{{ val }}</span>
+        <span>{{ k }}</span><b>{{ val }}</b>
       </div>
     </section>
 
@@ -216,14 +217,34 @@ const 공유시각 = computed(() => {
 .sr-muted { color: var(--ink-4); }
 .sr-error { margin: 4px 0 0; font-size: var(--fs-md); color: #c62828; }
 
-.sr-cond { padding: 4px 16px; background: var(--bg-soft); border-radius: 12px; }
-.sr-cond__row {
-  display: flex; justify-content: space-between; gap: 12px;
-  padding: 10px 0; font-size: var(--fs-md);
+.sr-cond__title {
+  margin: 16px 2px 8px;
+  font-size: var(--fs-sm); font-weight: var(--fw-semi); color: var(--ink-3);
 }
-.sr-cond__row + .sr-cond__row { border-top: 1px solid var(--line); }
-.sr-cond__row span:first-child { color: var(--ink-3); }
-.sr-cond__row span:last-child { color: var(--ink-1); font-weight: 600; text-align: right; }
+.sr-cond {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  padding: 1px;
+  background: var(--line);
+  border-radius: var(--r-card);
+  overflow: hidden;
+}
+.sr-cond__row {
+  min-width: 0;
+  display: flex; flex-direction: column; gap: 3px;
+  padding: 11px 12px;
+  background: var(--bg-soft);
+  font-size: var(--fs-md);
+}
+.sr-cond__row span { color: var(--ink-3); font-size: var(--fs-sm); }
+.sr-cond__row b {
+  min-width: 0;
+  color: var(--ink-1); font-weight: var(--fw-semi);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+@media (max-width: 340px) {
+  .sr-cond { grid-template-columns: 1fr; }
+}
 
 .sr-note { margin: 12px 2px 0; font-size: var(--fs-sm); color: var(--ink-4); line-height: 1.55; }
 </style>

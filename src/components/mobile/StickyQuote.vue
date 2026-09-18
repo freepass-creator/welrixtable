@@ -40,19 +40,11 @@ const itemsFee = computed(() => Fees.itemsFee(quoteState));
 // 운영 기간 — 36/48/60 만 사용 (PC TermsGrid 와 동일)
 const TERM_OPTIONS = [36, 48, 60];
 
-// state.scenarios 가 3슬롯 미만이면 60/48/36 순서로 채워서 항상 3개 유지
-const DEFAULT_TERMS = [60, 48, 36];
-while (quoteState.scenarios.length < 3) {
-  const idx = quoteState.scenarios.length;
-  quoteState.scenarios.push({
-    term: DEFAULT_TERMS[idx] ?? 36,
-    dep: quoteState.cond.dep ?? 10,
-    pre: quoteState.cond.pre ?? 0,
-  });
-}
-if (!Array.isArray(quoteState.send) || quoteState.send.length < quoteState.scenarios.length) {
-  quoteState.send = quoteState.scenarios.map(() => true);
-}
+/* 금액바는 «표시»만 한다. 사용자가 계약조건에서 줄인 기간을 다시 만들어내지 않는다.
+   quoteState.send 길이만 현재 시나리오 수와 맞춘다. */
+if (!Array.isArray(quoteState.send)) quoteState.send = [];
+while (quoteState.send.length < quoteState.scenarios.length) quoteState.send.push(true);
+if (quoteState.send.length > quoteState.scenarios.length) quoteState.send.splice(quoteState.scenarios.length);
 
 function onTermChange(idx, e) {
   quoteState.scenarios[idx].term = +e.target.value;
@@ -266,7 +258,8 @@ const cards = computed(() => {
   overflow: hidden;
 }
 .sq--expanded {
-  max-height: 75vh; overflow-y: auto;
+  max-height: 75vh;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
