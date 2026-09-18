@@ -10,8 +10,8 @@ const props = defineProps({
 });
 
 const BRAND_LOGOS = {
-  hyundai:  'https://cdn.simpleicons.org/hyundai/002C5F',
-  kia:      'https://cdn.simpleicons.org/kia/05141F',
+  hyundai:  '/hyundai.svg',
+  kia:      '/kia.svg',
   genesis:  '/genesis.svg',
 };
 
