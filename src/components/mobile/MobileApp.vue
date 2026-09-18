@@ -24,6 +24,7 @@ const STEPS = [
 
 const 담당자 = 담당자인가();
 const 공유됨 = ref(false);
+const 공유중 = ref(false);
 const 공유견적 = computed(() => !!quoteState.sharedSnapshot);
 
 /* ── 조건이 바뀌면 웰릭스에 다시 묻는다 ────────────────────────────────
@@ -62,19 +63,43 @@ const 금액바보임 = computed(() => {
  * ★나가는 주소에서 `staff` 를 «반드시» 떼어 낸다(손님링크). 붙여 보내면
  *   받은 사람이 수수료 칸을 보게 된다. */
 async function 공유하기() {
-  /* ★고른 차·트림·옵션·색상을 주소에 담고, staff 표시는 떼어 낸다 */
-  const 주소 = 손님링크(지금주소(vehicleState, quoteState, 견적상태));
-  const 글 = vehicleState.trim
-    ? `${vehicleState.model || ''} ${vehicleState.trim || ''} 견적`
-    : '신차 장기렌터카 견적';
+  if (!vehicleState.trim || 공유중.value) return;
+  /* 새 견적은 웰릭스 계산이 끝난 뒤에만 공유한다.
+     계산 중/오류 상태에서 URL만 보내면 받은 사람에게 Snapshot 없는 다른 금액이 보일 수 있다. */
+  if (!quoteState.sharedSnapshot && 견적상태.상태 !== 'ok') {
+    if (견적상태.상태 === 'pending') alert('대여료를 계산하는 중입니다. 잠시 뒤 다시 공유해 주세요.');
+    else alert(견적상태.오류 || '견적 계산을 완료한 뒤 공유할 수 있습니다.');
+    return;
+  }
+
+  공유중.value = true;
   try {
-    if (navigator.share) { await navigator.share({ title: '웰릭스모빌리티 견적', text: 글, url: 주소 }); return; }
-  } catch { /* 취소는 잘못이 아니다 */ return; }
-  try {
-    await navigator.clipboard.writeText(주소);
-    공유됨.value = true;
-    setTimeout(() => { 공유됨.value = false; }, 1600);
-  } catch { window.prompt('이 주소를 복사하세요', 주소); }
+    const 주소 = 손님링크(지금주소(vehicleState, quoteState, 견적상태));
+    const v = quoteState.sharedSnapshot?.vehicle || quoteState.vehicle || {};
+    const 글 = [v.brand, v.model, v.trim_name].filter(Boolean).join(' ') || '신차 장기렌터카 견적';
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: '웰릭스모빌리티 견적', text: 글, url: 주소 });
+        공유됨.value = true;
+        setTimeout(() => { 공유됨.value = false; }, 1600);
+        return;
+      } catch (e) {
+        if (e?.name === 'AbortError') return;
+        /* 공유시트 자체 오류면 아래 복사 fallback 으로 간다. */
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(주소);
+      공유됨.value = true;
+      setTimeout(() => { 공유됨.value = false; }, 1600);
+    } catch {
+      window.prompt('이 주소를 복사하세요', 주소);
+    }
+  } finally {
+    공유중.value = false;
+  }
 }
 
 /* 공유 링크로 들어왔으면 견적 페이지에서 시작한다 (share-link.js 풀기가 표시해 둔다) */
@@ -256,7 +281,7 @@ async function shareSignLink() {
           <span>{{ 공유됨 ? '복사됨' : '공유' }}</span>
         </button>
         <!-- 견적 발송은 담당자만 — 손님에게는 공유가 그 자리다 -->
-        <button v-if="담당자" class="m-act m-act--primary" :disabled="!vehicleState.trim" @click="openSend">
+        <button v-if="담당자" class="m-act m-act--primary" :disabled="!vehicleState.trim || 견적상태.상태 !== 'ok'" @click="openSend">
           <i class="ph ph-paper-plane-tilt"></i>
           <span>견적발송</span>
         </button>
@@ -282,8 +307,8 @@ async function shareSignLink() {
         <button class="m-btn m-btn--soft" @click="수정하기">
           <i class="ph ph-pencil-simple"></i>조건 변경
         </button>
-        <button class="m-btn m-btn--primary" @click="공유하기">
-          <i class="ph ph-share-network"></i>{{ 공유됨 ? '복사됨' : '이 견적 공유' }}
+        <button class="m-btn m-btn--primary" :disabled="공유중" @click="공유하기">
+          <i class="ph ph-share-network"></i>{{ 공유중 ? '공유 준비 중…' : (공유됨 ? '공유됨' : '이 견적 공유') }}
         </button>
       </template>
       <template v-else>
@@ -301,15 +326,15 @@ async function shareSignLink() {
         <button
           v-else-if="담당자"
           class="m-btn m-btn--primary"
-          :disabled="!vehicleState.trim"
+          :disabled="!vehicleState.trim || 견적상태.상태 !== 'ok'"
           @click="openSend"
         ><i class="ph ph-paper-plane-tilt"></i>견적 발송</button>
         <button
           v-else
           class="m-btn m-btn--primary"
-          :disabled="!vehicleState.trim"
+          :disabled="!vehicleState.trim || 공유중 || 견적상태.상태 !== 'ok'"
           @click="공유하기"
-        ><i class="ph ph-share-network"></i>{{ 공유됨 ? '주소를 복사했습니다' : '이 견적 공유하기' }}</button>
+        ><i class="ph ph-share-network"></i>{{ 공유중 ? '공유 준비 중…' : (공유됨 ? '공유됨' : '이 견적 공유하기') }}</button>
       </template>
     </footer>
 
