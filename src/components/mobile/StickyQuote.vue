@@ -83,7 +83,7 @@ const 계산못함 = computed(() => 견적상태.상태 === 'error');
 
 // 각 시나리오 슬롯(0/1/2) — 숫자는 «웰릭스가 준 것»을 그대로 쓴다
 const cards = computed(() => {
-  const r = 견적상태.결과 || [];
+  const r = 견적상태.상태 === 'ok' ? (견적상태.결과 || []) : [];
   return quoteState.scenarios.map((sc, idx) => {
     const g = r[idx];
     return {
@@ -267,6 +267,8 @@ const cards = computed(() => {
 }
 .sq--expanded {
   max-height: 75vh; overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .sq-summary {
@@ -287,9 +289,9 @@ const cards = computed(() => {
 }
 .sq-summary__label {
   display: flex; align-items: baseline; gap: 6px;
-  font-size: 11.5px; color: var(--ink-3); font-weight: 500;
+  font-size: var(--fs-sm); color: var(--ink-3); font-weight: 500;
 }
-.sq-summary__hint { font-size: 10px; color: var(--ink-4); }
+.sq-summary__hint { font-size: var(--fs-xs); color: var(--ink-4); }
 .sq-summary__caret { font-size: 16px; color: var(--ink-3); }
 
 /* 기간 카드 grid — 항상 표시 */
@@ -320,7 +322,7 @@ const cards = computed(() => {
 }
 .sq-term-card.is-checked .sq-term-card__check-btn { color: var(--brand); }
 .sq-term-card__term {
-  font-size: 11px; color: var(--ink-3); font-weight: 500;
+  font-size: var(--fs-xs); color: var(--ink-3); font-weight: 500;
 }
 .sq-term-card.is-checked .sq-term-card__term { color: var(--brand); }
 /* 펼침 표 헤더 — 기간 변경 select */
@@ -328,7 +330,7 @@ const cards = computed(() => {
   appearance: none; -webkit-appearance: none;
   background: transparent; border: 0;
   font-family: inherit;
-  font-size: 11.5px; font-weight: 600; color: var(--ink-1);
+  font-size: var(--fs-sm); font-weight: 600; color: var(--ink-1);
   text-align: center; text-align-last: center;
   padding: 0 2px;
   cursor: pointer;
@@ -338,12 +340,12 @@ const cards = computed(() => {
 .sq-table__term-select:focus { color: var(--brand); }
 .sq-table thead th.is-dim .sq-table__term-select { color: var(--ink-4); }
 .sq-term-card__monthly {
-  font-size: 15px; font-weight: 700; color: var(--ink-1);
+  font-size: var(--fs-lg); font-weight: 700; color: var(--ink-1);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.4px;
 }
 .sq-term-card__monthly em {
-  font-style: normal; font-size: 10px; color: var(--ink-3);
+  font-style: normal; font-size: var(--fs-xs); color: var(--ink-3);
   font-weight: 500;
   margin-left: 1px;
 }
