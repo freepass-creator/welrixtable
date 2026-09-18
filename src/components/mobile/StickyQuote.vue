@@ -40,19 +40,13 @@ const itemsFee = computed(() => Fees.itemsFee(quoteState));
 // 운영 기간 — 36/48/60 만 사용 (PC TermsGrid 와 동일)
 const TERM_OPTIONS = [36, 48, 60];
 
-// state.scenarios 가 3슬롯 미만이면 60/48/36 순서로 채워서 항상 3개 유지
-const DEFAULT_TERMS = [60, 48, 36];
-while (quoteState.scenarios.length < 3) {
-  const idx = quoteState.scenarios.length;
-  quoteState.scenarios.push({
-    term: DEFAULT_TERMS[idx] ?? 36,
-    dep: quoteState.cond.dep ?? 10,
-    pre: quoteState.cond.pre ?? 0,
-  });
-}
-if (!Array.isArray(quoteState.send) || quoteState.send.length < quoteState.scenarios.length) {
-  quoteState.send = quoteState.scenarios.map(() => true);
-}
+/* 시나리오 개수는 사용자가 계약조건에서 고른 그대로 둔다.
+   예전 코드는 금액바가 mount 될 때 3개 미만이면 60/48/36을 다시 채워 넣어서,
+   「36개월만 보기」처럼 기간을 줄여도 옵션 단계에 오는 순간 선택이 되살아났다.
+   금액바는 표시 컴포넌트일 뿐, 사용자의 견적 상태를 바꾸지 않는다. */
+if (!Array.isArray(quoteState.send)) quoteState.send = [];
+while (quoteState.send.length < quoteState.scenarios.length) quoteState.send.push(true);
+if (quoteState.send.length > quoteState.scenarios.length) quoteState.send.splice(quoteState.scenarios.length);
 
 function onTermChange(idx, e) {
   quoteState.scenarios[idx].term = +e.target.value;
