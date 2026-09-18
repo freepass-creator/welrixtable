@@ -260,7 +260,10 @@ const cards = computed(() => {
   overflow: hidden;
 }
 .sq--expanded {
-  max-height: 75vh; overflow-y: auto;
+  max-height: 75vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .sq-summary {
