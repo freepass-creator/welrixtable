@@ -360,7 +360,7 @@ const cards = computed(() => {
   border: 1px solid var(--line-2); border-radius: var(--radius-sm);
   background: var(--bg);
   font-family: inherit;
-  font-size: 11px; color: var(--ink-1); font-weight: 600;
+  font-size: var(--fs-xs); color: var(--ink-1); font-weight: 600;
   text-align: center;
   font-variant-numeric: tabular-nums;
   outline: none;
@@ -375,7 +375,7 @@ const cards = computed(() => {
 .sq-empty {
   padding: 20px 16px;
   text-align: center;
-  color: var(--ink-4); font-size: 13px;
+  color: var(--ink-4); font-size: var(--fs-md);
 }
 
 /* 펼침 표 — PC 견적표 형태 */
@@ -385,7 +385,7 @@ const cards = computed(() => {
 }
 .sq-table {
   width: 100%; border-collapse: collapse;
-  font-size: 11.5px;
+  font-size: var(--fs-sm);
   font-variant-numeric: tabular-nums;
   margin-bottom: 12px;
 }
@@ -411,7 +411,7 @@ const cards = computed(() => {
   padding-left: 8px !important;
 }
 .sq-table small {
-  font-size: 10px; color: var(--ink-3); font-weight: 400;
+  font-size: var(--fs-xs); color: var(--ink-3); font-weight: 400;
 }
 .sq-table tbody tr:last-child th,
 .sq-table tbody tr:last-child td {
@@ -441,7 +441,7 @@ const cards = computed(() => {
 .sq-meta__row {
   display: flex; justify-content: space-between;
   padding: 5px 0;
-  font-size: 12.5px;
+  font-size: var(--fs-sm);
 }
 .sq-meta__key { color: var(--ink-3); }
 .sq-meta__val {
