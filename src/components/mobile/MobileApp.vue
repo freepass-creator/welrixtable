@@ -25,6 +25,7 @@ const STEPS = [
 const 담당자 = 담당자인가();
 const 공유됨 = ref(false);
 const 공유견적 = computed(() => !!quoteState.sharedSnapshot);
+const 견적준비됨 = computed(() => !!vehicleState.trim && (공유견적.value || 견적상태.상태 === 'ok'));
 
 /* ── 조건이 바뀌면 웰릭스에 다시 묻는다 ────────────────────────────────
  *  읽는 값이 하나라도 바뀌면 watch 가 걸린다. 연속 입력은 견적 뼈대가 묶는다. */
@@ -62,7 +63,8 @@ const 금액바보임 = computed(() => {
  * ★나가는 주소에서 `staff` 를 «반드시» 떼어 낸다(손님링크). 붙여 보내면
  *   받은 사람이 수수료 칸을 보게 된다. */
 async function 공유하기() {
-  /* ★고른 차·트림·옵션·색상을 주소에 담고, staff 표시는 떼어 낸다 */
+  if (!견적준비됨.value) return;
+  /* ★고른 차·트림·옵션·색상과 확정 계산값을 주소에 담고, staff 표시는 떼어 낸다 */
   const 주소 = 손님링크(지금주소(vehicleState, quoteState, 견적상태));
   const 글 = vehicleState.trim
     ? `${vehicleState.model || ''} ${vehicleState.trim || ''} 견적`
@@ -214,7 +216,7 @@ const vehicles = ref(window.__welrix_vehicles || []);
 // 발송 sheet
 const sendOpen = ref(false);
 function openSend() {
-  if (!vehicleState.trim) return;
+  if (!견적준비됨.value) return;
   sendOpen.value = true;
 }
 
@@ -251,12 +253,13 @@ async function shareSignLink() {
         </button>
       </div>
       <div class="m-header__actions">
-        <button class="m-act" @click="공유하기" title="이 견적 링크 공유">
+        <button class="m-act" :disabled="!견적준비됨" @click="공유하기"
+                :title="견적준비됨 ? '이 견적 링크 공유' : '견적 계산이 끝나면 공유할 수 있습니다'">
           <i class="ph" :class="공유됨 ? 'ph-check-circle' : 'ph-share-network'"></i>
           <span>{{ 공유됨 ? '복사됨' : '공유' }}</span>
         </button>
         <!-- 견적 발송은 담당자만 — 손님에게는 공유가 그 자리다 -->
-        <button v-if="담당자" class="m-act m-act--primary" :disabled="!vehicleState.trim" @click="openSend">
+        <button v-if="담당자" class="m-act m-act--primary" :disabled="!견적준비됨" @click="openSend">
           <i class="ph ph-paper-plane-tilt"></i>
           <span>견적발송</span>
         </button>
@@ -321,7 +324,7 @@ async function shareSignLink() {
 /* 상단 브랜드 한 줄 — 로고 대신 글자로 (대표 2026-09-17) */
 .m-brand {
   border: 0; background: none; padding: 0; cursor: pointer;
-  font: inherit; font-size: 13px; font-weight: 700; letter-spacing: -0.3px;
+  font: inherit; font-size: var(--fs-md); font-weight: 700; letter-spacing: -0.3px;
   color: var(--brand); white-space: nowrap;
 }
 .m-brand__x { opacity: .55; margin: 0 1px; font-weight: 600; }
@@ -351,14 +354,14 @@ async function shareSignLink() {
 }
 .m-ver {
   flex-shrink: 0;
-  font-size: 10.5px; font-weight: var(--fw-semi);
+  font-size: var(--fs-xs); font-weight: var(--fw-semi);
   color: var(--ink-4); letter-spacing: -0.2px;
   padding: 2px 6px; border-radius: 5px;
   background: var(--bg-soft);
   font-variant-numeric: tabular-nums;
 }
 .m-title {
-  font-size: 12.5px; font-weight: 600; color: var(--ink-1);
+  font-size: var(--fs-sm); font-weight: 600; color: var(--ink-1);
   letter-spacing: -0.3px; white-space: nowrap;
   overflow: hidden; text-overflow: ellipsis;
 }
@@ -375,7 +378,7 @@ async function shareSignLink() {
   cursor: pointer; transition: opacity .12s;
   letter-spacing: -0.2px;
 }
-.m-act i { font-size: 16px; }
+.m-act i { font-size: var(--fs-lg); }
 .m-act:disabled {
   color: var(--ink-4);
   cursor: not-allowed;
@@ -431,20 +434,20 @@ async function shareSignLink() {
   flex: 0 0 96px;
   background: var(--bg-soft);
   color: var(--ink-2);
-  font-size: 14px;
+  font-size: var(--fs-base);
 }
 .m-btn--ghost:active { background: var(--line-2); }
 .m-btn--primary {
   flex: 1;
   background: var(--brand); color: #fff;
-  font-size: 16px;
+  font-size: var(--fs-lg);
 }
 .m-btn--primary:not(:disabled):active { background: var(--brand-700); }
 /* 「견적 보기」 — 다음 옆에 나란히. 테두리 없이 옅은 바탕 */
 .m-btn--soft {
   flex: 1;
   background: var(--brand-50); color: var(--brand);
-  font-size: 16px;
+  font-size: var(--fs-lg);
 }
 .m-btn--soft:active { background: var(--line-2); }
 .m-btn--icon { flex: 0 0 52px; }
