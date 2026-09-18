@@ -66,8 +66,9 @@ async function 공유하기() {
   if (!견적준비됨.value) return;
   /* ★고른 차·트림·옵션·색상과 확정 계산값을 주소에 담고, staff 표시는 떼어 낸다 */
   const 주소 = 손님링크(지금주소(vehicleState, quoteState, 견적상태));
+  const 표시차 = quoteState.sharedSnapshot?.vehicle || quoteState.vehicle || {};
   const 글 = vehicleState.trim
-    ? `${vehicleState.model || ''} ${vehicleState.trim || ''} 견적`
+    ? [표시차.brand, 표시차.model, 표시차.trim_name, '견적'].filter(Boolean).join(' ')
     : '신차 장기렌터카 견적';
   try {
     if (navigator.share) { await navigator.share({ title: '웰릭스모빌리티 견적', text: 글, url: 주소 }); return; }
