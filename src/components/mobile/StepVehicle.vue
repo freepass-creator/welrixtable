@@ -814,7 +814,7 @@ function onFeeChange() {
   padding: 18px; text-align: center;
   background: var(--bg-soft);
   border-radius: 10px;
-  color: var(--ink-4); font-size: 13px;
+  color: var(--ink-4); font-size: var(--fs-md);
 }
 
 /* 할인 — 접힘 disclosure */
