@@ -46,10 +46,11 @@
   <link rel="stylesheet" href="/quote-doc.css" />
   <style>
     :root {
+      /* 모바일 UI 규격 SSOT — 컴포넌트에서 px를 새로 만들지 않고 이 토큰을 쓴다. */
       --brand: #e1141e;
       --brand-700: #b30f18;
       --brand-100: #f6c4c7;
-      --brand-50:  #fdecee;
+      --brand-50: #fdecee;
       --ink-1: #0a0a0a;
       --ink-2: #404040;
       --ink-3: #737373;
@@ -58,28 +59,54 @@
       --bg-soft: #fafafa;
       --line: #e5e5e5;
       --line-2: #d4d4d4;
-      /* 라운드 토큰 — 모바일 통일 규격 */
-      --r-chip: 10px;       /* chip, input, 옵션 항목 */
-      --r-card: 12px;       /* 카드, 액션 버튼 (대부분 통일) */
-      --r-sheet: 16px;      /* bottom sheet, sticky 상단 모서리 */
-      --r-pill: 999px;      /* 알약 (필요 시) */
-      /* 높이 토큰 */
-      --h-chip: 36px;       /* 헤더 알약 */
-      --h-input: 46px;      /* input, select */
-      --h-cta: 54px;        /* 큰 CTA 버튼 (footer + sheet action) */
-      /* 폰트 사이즈 토큰 */
-      --fs-xs:  11px;       /* caption, hint */
-      --fs-sm:  12.5px;     /* meta, sub-label */
-      --fs-md:  13px;       /* label, badge */
-      --fs-base: 14px;      /* 본문, chip */
-      --fs-lg:  15px;       /* 버튼, input, 강조 본문 */
-      --fs-xl:  17px;       /* section 제목 */
-      --fs-2xl: 22px;       /* hero 제목 (step 타이틀) */
-      /* 굵기 */
+
+      --r-sm: 4px;
+      --r: 6px;
+      --r-md: 8px;
+      --r-chip: 10px;
+      --r-card: 12px;
+      --r-sheet: 16px;
+      --r-pill: 999px;
+
+      --sp-1: 4px;
+      --sp-2: 8px;
+      --sp-3: 12px;
+      --sp-4: 16px;
+      --sp-5: 20px;
+      --sp-6: 24px;
+      --sp-8: 32px;
+
+      --h-chip: 36px;
+      --h-input: 46px;
+      --h-cta: 54px;
+
+      --fs-xs: 11px;
+      --fs-sm: 12.5px;
+      --fs-md: 13px;
+      --fs-base: 14px;
+      --fs-lg: 15px;
+      --fs-xl: 17px;
+      --fs-2xl: 22px;
+
       --fw-regular: 400;
-      --fw-medium:  500;
-      --fw-semi:    600;
-      --fw-bold:    700;
+      --fw-medium: 500;
+      --fw-semi: 600;
+      --fw-bold: 700;
+
+      /* 레거시 컴포넌트 별칭 — 값은 위 모바일 규격으로 한 곳에서 결정한다. */
+      --radius-sm: var(--r-sm);
+      --radius: var(--r);
+      --radius-md: var(--r-md);
+      --radius-lg: var(--r-card);
+      --radius-pill: var(--r-pill);
+      --space-1: var(--sp-1);
+      --space-2: var(--sp-2);
+      --space-3: var(--sp-3);
+      --space-4: var(--sp-4);
+      --space-5: var(--sp-5);
+      --space-6: var(--sp-6);
+      --space-8: var(--sp-8);
+
       --safe-top: env(safe-area-inset-top, 0);
       --safe-bottom: env(safe-area-inset-bottom, 0);
     }
