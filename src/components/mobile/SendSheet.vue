@@ -209,6 +209,8 @@ function close() { emit('close'); }
   padding: 0 20px calc(var(--safe-bottom) + 20px);
   max-height: 85vh;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   animation: ssSlideUp .25s ease-out;
 }
 @keyframes ssSlideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
