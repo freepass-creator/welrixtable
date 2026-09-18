@@ -295,7 +295,7 @@ async function shareSignLink() {
            :class="{ 'is-done': (i - 1) <= currentPageIdx }"></div>
     </div>
 
-    <main class="m-main">
+    <main class="m-main" :class="{ 'm-main--quote': 금액바보임 }">
       <component :is="currentStep.comp" :vehicles="vehicles" />
     </main>
 
@@ -426,7 +426,7 @@ async function shareSignLink() {
 
 .m-main {
   flex: 1;
-  padding: calc(var(--safe-top) + 80px) 20px calc(var(--safe-bottom) + 220px);
+  padding: calc(var(--safe-top) + 80px) var(--sp-5) calc(var(--safe-bottom) + 92px);
   /* ★여기서 overflow-y:auto 를 «쓰지 않는다» — 2026-09-18.
      #m-app 은 min-height 만 있고 max-height 가 없어 콘텐츠만큼 늘어난다.
      즉 .m-main 이 실제로 넘쳐서 «따로» 스크롤되는 일은 없고(항상 clientHeight===scrollHeight),
@@ -434,6 +434,11 @@ async function shareSignLink() {
      아이폰 사파리에서 «넘치지 않는 스크롤 영역» 이 손가락 스크롤 제스처를 가로채
      바깥 페이지로 못 넘기는 경우가 있다(안드로이드·데스크톱 크롬에서는 안 보이는 버그라 놓치기 쉽다).
      대표 「스크롤 되게 해주고」 — 트림이 많은 차(싼타페 36개 등)에서 이 증상이 났을 것이다. */
+}
+.m-main--quote {
+  /* 금액바(접힘)가 footer 위에 떠 있을 때만 그 높이만큼 여유를 더 준다.
+     평소 화면에 220px 빈 공간을 강제로 두던 것을 제거해 스크롤 길이와 위계를 정상화한다. */
+  padding-bottom: calc(var(--safe-bottom) + 210px);
 }
 
 .m-footer {
