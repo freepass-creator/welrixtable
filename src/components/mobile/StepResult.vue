@@ -214,7 +214,7 @@ const 공유시각 = computed(() => {
   letter-spacing: -0.5px; font-variant-numeric: tabular-nums;
 }
 .sr-muted { color: var(--ink-4); }
-.sr-error { margin: 4px 0 0; font-size: 13px; color: #c62828; }
+.sr-error { margin: 4px 0 0; font-size: var(--fs-md); color: #c62828; }
 
 .sr-cond { padding: 4px 16px; background: var(--bg-soft); border-radius: 12px; }
 .sr-cond__row {
