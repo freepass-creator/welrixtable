@@ -44,6 +44,8 @@ const 기간들 = computed(() => {
       term: t.term,
       monthly: t.monthly ?? null,
       인수가: t.acquire ?? null,
+      depPct: t.depPct ?? 0,
+      prePct: t.prePct ?? 0,
     }));
   }
   const r = 견적상태.결과 || [];
@@ -51,6 +53,8 @@ const 기간들 = computed(() => {
     term: sc.term,
     monthly: r[i]?.월대여료 ?? null,
     인수가: r[i]?.인수가 ?? null,
+    depPct: sc.dep ?? 0,
+    prePct: sc.pre ?? 0,
   }));
 });
 
@@ -62,7 +66,6 @@ const 총차량가 = computed(() => {
 });
 
 const 신용글 = computed(() => (담당자 && !공유견적.value ? (c.value.credit || '중신용') : '신용점수 무관'));
-const 첫공유기간 = computed(() => snapshot.value?.terms?.[0] || null);
 const 조건들 = computed(() => {
   const sc = snapshot.value?.conditions || {};
   const km = 공유견적.value ? sc.km : c.value.km;
@@ -82,10 +85,7 @@ const 조건들 = computed(() => {
     ['탁송', delivery || '서울'],
     ['썬팅', tint || '없음'],
     ['블랙박스', blackbox || '미설치'],
-    ...(공유견적.value ? [
-      ['보증금', `${첫공유기간.value?.depPct ?? 0}%`],
-      ['선납금', `${첫공유기간.value?.prePct ?? 0}%`],
-    ] : 담당자 ? [
+    ...(공유견적.value ? [] : 담당자 ? [
       ['보증금', `${c.value.dep ?? 0}%`],
       ['선납금', `${c.value.pre ?? 0}%`],
       ['수수료', `${c.value.feeRatePct ?? 0}%`],
@@ -134,7 +134,10 @@ const 공유시각 = computed(() => {
       <div v-for="t in 기간들" :key="t.term" class="sr-term">
         <div class="sr-term__left">
           <div class="sr-term__label">{{ t.term }}개월</div>
-          <div v-if="t.인수가" class="sr-term__sub">만기 인수가 {{ fmt(t.인수가) }}원</div>
+          <div v-if="공유견적 || t.인수가" class="sr-term__sub">
+            <template v-if="공유견적">보증금 {{ t.depPct }}% · 선납 {{ t.prePct }}%</template>
+            <template v-if="t.인수가">{{ 공유견적 ? ' · ' : '' }}만기 인수가 {{ fmt(t.인수가) }}원</template>
+          </div>
         </div>
         <div class="sr-term__monthly">
           <template v-if="t.monthly">월 <b>{{ fmt(t.monthly) }}</b>원</template>
