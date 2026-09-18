@@ -189,6 +189,20 @@ try {
   ok(headerFits, '320px에서 헤더 액션이 넘침');
   await narrow.screenshot({ path: `${out}/03-brand-320.png`, fullPage: true });
 
+  // 현재 데스크톱 견적기 화면 — 앱 동작은 건드리지 않고 시각 산출물만 남긴다.
+  const desktop = await context.newPage();
+  await desktop.setViewportSize({ width: 1440, height: 1000 });
+  await desktop.goto('http://127.0.0.1:5173/index.html', { waitUntil: 'networkidle' });
+  await desktop.waitForTimeout(500);
+  await desktop.screenshot({ path: `${out}/04-desktop-index-1440.png`, fullPage: true });
+
+  // 손님용 모바일 견적기를 PC 웹에서 열었을 때(480px 기둥) 모습
+  const wideMobile = await context.newPage();
+  await wideMobile.setViewportSize({ width: 1440, height: 1000 });
+  await wideMobile.goto(BASE, { waitUntil: 'networkidle' });
+  await wideMobile.waitForSelector('.sv-brand-card');
+  await wideMobile.screenshot({ path: `${out}/05-mobile-web-wide-1440.png`, fullPage: true });
+
   /* 외부 CDN이 headless Chromium의 CORP 정책으로 막히는 것은 앱 로직 오류가 아니다.
      대신 localhost의 앱 JS/CSS/API가 실패하면 반드시 실패시킨다. */
   const coreFailures = requestFailures.filter((x) => x.url.startsWith('http://127.0.0.1:5173/'));
