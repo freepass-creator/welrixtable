@@ -174,56 +174,56 @@ const 공유시각 = computed(() => {
 .sr-snapshot {
   display: flex; flex-direction: column; gap: 3px;
   margin: -4px 0 14px; padding: 11px 13px;
-  background: var(--brand-50); border-radius: 10px;
+  background: var(--brand-50); border-radius: var(--r-chip);
 }
-.sr-snapshot b { font-size: 13px; color: var(--brand); }
-.sr-snapshot span { font-size: 11.5px; color: var(--ink-3); line-height: 1.45; }
+.sr-snapshot b { font-size: var(--fs-md); color: var(--brand); }
+.sr-snapshot span { font-size: var(--fs-sm); color: var(--ink-3); line-height: 1.45; }
 
 .sr-car {
   padding: 16px; margin-bottom: 12px;
-  background: var(--bg-soft); border-radius: 12px;
+  background: var(--bg-soft); border-radius: var(--r-card);
 }
-.sr-car__name { font-size: 18px; font-weight: 700; color: var(--ink-1); letter-spacing: -0.4px; }
-.sr-car__trim { margin-top: 2px; font-size: 14px; color: var(--ink-2); }
+.sr-car__name { font-size: var(--fs-xl); font-weight: var(--fw-bold); color: var(--ink-1); letter-spacing: -0.4px; }
+.sr-car__trim { margin-top: 2px; font-size: var(--fs-base); color: var(--ink-2); }
 .sr-car__opts {
   margin: 10px 0 0; padding: 0; list-style: none;
   display: flex; flex-wrap: wrap; gap: 4px 6px;
 }
 .sr-car__opts li {
-  font-size: 12px; color: var(--ink-2);
+  font-size: var(--fs-sm); color: var(--ink-2);
   padding: 3px 8px; background: var(--bg); border-radius: 6px;
 }
-.sr-car__color { margin-top: 8px; font-size: 12.5px; color: var(--ink-3); }
+.sr-car__color { margin-top: 8px; font-size: var(--fs-sm); color: var(--ink-3); }
 .sr-car__total {
   display: flex; justify-content: space-between; align-items: baseline;
   margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line);
-  font-size: 13px; color: var(--ink-3);
+  font-size: var(--fs-md); color: var(--ink-3);
 }
-.sr-car__total b { font-size: 16px; color: var(--ink-1); font-variant-numeric: tabular-nums; }
+.sr-car__total b { font-size: var(--fs-lg); color: var(--ink-1); font-variant-numeric: tabular-nums; }
 
 .sr-terms { display: grid; gap: 8px; margin-bottom: 12px; }
 .sr-term {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  padding: 16px; background: var(--brand-50); border-radius: 12px;
+  padding: 16px; background: var(--brand-50); border-radius: var(--r-card);
 }
-.sr-term__label { font-size: 15px; font-weight: 700; color: var(--ink-1); }
-.sr-term__sub { margin-top: 2px; font-size: 11.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
-.sr-term__monthly { font-size: 13px; color: var(--ink-2); white-space: nowrap; }
+.sr-term__label { font-size: var(--fs-lg); font-weight: var(--fw-bold); color: var(--ink-1); }
+.sr-term__sub { margin-top: 2px; font-size: var(--fs-sm); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.sr-term__monthly { font-size: var(--fs-md); color: var(--ink-2); white-space: nowrap; }
 .sr-term__monthly b {
-  font-size: 22px; font-weight: 700; color: var(--brand);
+  font-size: var(--fs-2xl); font-weight: var(--fw-bold); color: var(--brand);
   letter-spacing: -0.5px; font-variant-numeric: tabular-nums;
 }
 .sr-muted { color: var(--ink-4); }
 .sr-error { margin: 4px 0 0; font-size: 13px; color: #c62828; }
 
-.sr-cond { padding: 4px 16px; background: var(--bg-soft); border-radius: 12px; }
+.sr-cond { padding: 4px 16px; background: var(--bg-soft); border-radius: var(--r-card); }
 .sr-cond__row {
   display: flex; justify-content: space-between; gap: 12px;
-  padding: 10px 0; font-size: 13.5px;
+  padding: 10px 0; font-size: var(--fs-md);
 }
 .sr-cond__row + .sr-cond__row { border-top: 1px solid var(--line); }
 .sr-cond__row span:first-child { color: var(--ink-3); }
 .sr-cond__row span:last-child { color: var(--ink-1); font-weight: 600; text-align: right; }
 
-.sr-note { margin: 12px 2px 0; font-size: 12px; color: var(--ink-4); line-height: 1.55; }
+.sr-note { margin: 12px 2px 0; font-size: var(--fs-sm); color: var(--ink-4); line-height: 1.55; }
 </style>
