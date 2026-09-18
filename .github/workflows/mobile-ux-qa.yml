@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - feat/mobile-ux-qa-unify
+  pull_request:
   workflow_dispatch:
 
 jobs:
