@@ -24,6 +24,7 @@ const STEPS = [
 
 const 담당자 = 담당자인가();
 const 공유됨 = ref(false);
+const 공유중 = ref(false);
 const 공유견적 = computed(() => !!quoteState.sharedSnapshot);
 const 견적준비됨 = computed(() => !!vehicleState.trim && (공유견적.value || 견적상태.상태 === 'ok'));
 
@@ -63,21 +64,38 @@ const 금액바보임 = computed(() => {
  * ★나가는 주소에서 `staff` 를 «반드시» 떼어 낸다(손님링크). 붙여 보내면
  *   받은 사람이 수수료 칸을 보게 된다. */
 async function 공유하기() {
-  if (!견적준비됨.value) return;
-  /* ★고른 차·트림·옵션·색상과 확정 계산값을 주소에 담고, staff 표시는 떼어 낸다 */
-  const 주소 = 손님링크(지금주소(vehicleState, quoteState, 견적상태));
-  const 표시차 = quoteState.sharedSnapshot?.vehicle || quoteState.vehicle || {};
-  const 글 = vehicleState.trim
-    ? [표시차.brand, 표시차.model, 표시차.trim_name, '견적'].filter(Boolean).join(' ')
-    : '신차 장기렌터카 견적';
+  if (!견적준비됨.value || 공유중.value) return;
+  공유중.value = true;
   try {
-    if (navigator.share) { await navigator.share({ title: '웰릭스모빌리티 견적', text: 글, url: 주소 }); return; }
-  } catch { /* 취소는 잘못이 아니다 */ return; }
-  try {
-    await navigator.clipboard.writeText(주소);
-    공유됨.value = true;
-    setTimeout(() => { 공유됨.value = false; }, 1600);
-  } catch { window.prompt('이 주소를 복사하세요', 주소); }
+    /* ★고른 차·트림·옵션·색상과 확정 계산값을 주소에 담고, staff 표시는 떼어 낸다 */
+    const 주소 = 손님링크(지금주소(vehicleState, quoteState, 견적상태));
+    const 표시차 = quoteState.sharedSnapshot?.vehicle || quoteState.vehicle || {};
+    const 글 = vehicleState.trim
+      ? [표시차.brand, 표시차.model, 표시차.trim_name, '견적'].filter(Boolean).join(' ')
+      : '신차 장기렌터카 견적';
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: '웰릭스모빌리티 견적', text: 글, url: 주소 });
+        공유됨.value = true;
+        setTimeout(() => { 공유됨.value = false; }, 1600);
+        return;
+      } catch (e) {
+        if (e?.name === 'AbortError') return;
+        /* 공유시트 자체 오류면 아래 클립보드 fallback 으로 이어진다. */
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(주소);
+      공유됨.value = true;
+      setTimeout(() => { 공유됨.value = false; }, 1600);
+    } catch {
+      window.prompt('이 주소를 복사하세요', 주소);
+    }
+  } finally {
+    공유중.value = false;
+  }
 }
 
 /* 공유 링크로 들어왔으면 견적 페이지에서 시작한다 (share-link.js 풀기가 표시해 둔다) */
@@ -274,7 +292,8 @@ async function shareSignLink() {
            :class="{ 'is-done': (i - 1) <= currentPageIdx }"></div>
     </div>
 
-    <main class="m-main">
+    <main class="m-main"
+          :class="{ 'm-main--quote': 금액바보임, 'm-main--result': currentStep.key === 'result' }">
       <component :is="currentStep.comp" :vehicles="vehicles" />
     </main>
 
@@ -286,8 +305,8 @@ async function shareSignLink() {
         <button class="m-btn m-btn--soft" @click="수정하기">
           <i class="ph ph-pencil-simple"></i>조건 변경
         </button>
-        <button class="m-btn m-btn--primary" @click="공유하기">
-          <i class="ph ph-share-network"></i>{{ 공유됨 ? '복사됨' : '이 견적 공유' }}
+        <button class="m-btn m-btn--primary" :disabled="공유중" @click="공유하기">
+          <i class="ph ph-share-network"></i>{{ 공유중 ? '준비 중…' : (공유됨 ? '공유됨' : '이 견적 공유') }}
         </button>
       </template>
       <template v-else>
@@ -305,15 +324,15 @@ async function shareSignLink() {
         <button
           v-else-if="담당자"
           class="m-btn m-btn--primary"
-          :disabled="!vehicleState.trim"
+          :disabled="!견적준비됨"
           @click="openSend"
         ><i class="ph ph-paper-plane-tilt"></i>견적 발송</button>
         <button
           v-else
           class="m-btn m-btn--primary"
-          :disabled="!vehicleState.trim"
+          :disabled="!견적준비됨 || 공유중"
           @click="공유하기"
-        ><i class="ph ph-share-network"></i>{{ 공유됨 ? '주소를 복사했습니다' : '이 견적 공유하기' }}</button>
+        ><i class="ph ph-share-network"></i>{{ 공유중 ? '준비 중…' : (공유됨 ? '공유됨' : '이 견적 공유하기') }}</button>
       </template>
     </footer>
 
@@ -405,7 +424,7 @@ async function shareSignLink() {
 
 .m-main {
   flex: 1;
-  padding: calc(var(--safe-top) + 80px) 20px calc(var(--safe-bottom) + 220px);
+  padding: calc(var(--safe-top) + 80px) var(--sp-5) calc(var(--safe-bottom) + 92px);
   /* ★여기서 overflow-y:auto 를 «쓰지 않는다» — 2026-09-18.
      #m-app 은 min-height 만 있고 max-height 가 없어 콘텐츠만큼 늘어난다.
      즉 .m-main 이 실제로 넘쳐서 «따로» 스크롤되는 일은 없고(항상 clientHeight===scrollHeight),
@@ -414,12 +433,23 @@ async function shareSignLink() {
      바깥 페이지로 못 넘기는 경우가 있다(안드로이드·데스크톱 크롬에서는 안 보이는 버그라 놓치기 쉽다).
      대표 「스크롤 되게 해주고」 — 트림이 많은 차(싼타페 36개 등)에서 이 증상이 났을 것이다. */
 }
+.m-main--quote {
+  /* 접힌 실시간 견적바 + footer가 함께 떠 있는 화면만 충분한 하단 여백을 둔다. */
+  padding-bottom: calc(var(--safe-bottom) + 210px);
+}
+.m-main--result {
+  /* 최종 견적은 footer만 피하면 된다. 과도한 빈 스크롤을 만들지 않는다. */
+  padding-bottom: calc(var(--safe-bottom) + 118px);
+}
 
 .m-footer {
   position: fixed; bottom: 0; left: 0; right: 0;
   display: flex; gap: 8px;
   padding: 12px 16px calc(var(--safe-bottom) + 12px);
-  background: var(--bg);
+  background: rgba(255,255,255,.96);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -6px 18px rgba(0,0,0,.035);
+  backdrop-filter: blur(10px);
   z-index: 30;
 }
 .m-btn {
