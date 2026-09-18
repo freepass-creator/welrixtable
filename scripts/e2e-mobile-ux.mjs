@@ -35,8 +35,10 @@ try {
 
   const page = await context.newPage();
   const consoleErrors = [];
+  const requestFailures = [];
   page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
   page.on('pageerror', (e) => consoleErrors.push(String(e)));
+  page.on('requestfailed', (r) => requestFailures.push({ url: r.url(), error: r.failure()?.errorText || '' }));
 
   await page.goto(BASE, { waitUntil: 'networkidle' });
   await page.waitForSelector('.sv-brand-card');
@@ -187,7 +189,12 @@ try {
   ok(headerFits, '320px에서 헤더 액션이 넘침');
   await narrow.screenshot({ path: `${out}/03-brand-320.png`, fullPage: true });
 
-  ok(consoleErrors.length === 0, '브라우저 콘솔 오류: ' + consoleErrors.join(' | '));
+  /* 외부 CDN이 headless Chromium의 CORP 정책으로 막히는 것은 앱 로직 오류가 아니다.
+     대신 localhost의 앱 JS/CSS/API가 실패하면 반드시 실패시킨다. */
+  const coreFailures = requestFailures.filter((x) => x.url.startsWith('http://127.0.0.1:5173/'));
+  const realConsoleErrors = consoleErrors.filter((x) => !x.includes('ERR_BLOCKED_BY_RESPONSE.NotSameOrigin'));
+  ok(coreFailures.length === 0, '앱 핵심 리소스 실패: ' + JSON.stringify(coreFailures));
+  ok(realConsoleErrors.length === 0, '브라우저 콘솔 오류: ' + realConsoleErrors.join(' | '));
   console.log(JSON.stringify({
     ok: true,
     monthly,
@@ -195,6 +202,7 @@ try {
     estimateCallsAfterEdit: estimateCalls,
     scrollY: scrollCheck.y,
     ui,
+    externalResourceWarnings: requestFailures.filter((x) => !x.url.startsWith('http://127.0.0.1:5173/')),
   }, null, 2));
 } finally {
   await browser.close();
