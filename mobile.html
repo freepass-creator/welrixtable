@@ -35,6 +35,7 @@
   </script>
   <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles/tokens.css" />
   <!-- 차량 DB — PC 와 동일 SSOT -->
   <!-- ★차량 DB = 웰릭스 것 (2026-09-18 대표: 「웰릭스 거 견적기를 그대로 갖다 쓰고」)
        trim_id 가 곧 /api/estimate 의 model 키다 — 이름 매핑이 없다.
@@ -46,40 +47,7 @@
   <link rel="stylesheet" href="/quote-doc.css" />
   <style>
     :root {
-      --brand: #e1141e;
-      --brand-700: #b30f18;
-      --brand-100: #f6c4c7;
-      --brand-50:  #fdecee;
-      --ink-1: #0a0a0a;
-      --ink-2: #404040;
-      --ink-3: #737373;
-      --ink-4: #a3a3a3;
-      --bg: #ffffff;
-      --bg-soft: #fafafa;
-      --line: #e5e5e5;
-      --line-2: #d4d4d4;
-      /* 라운드 토큰 — 모바일 통일 규격 */
-      --r-chip: 10px;       /* chip, input, 옵션 항목 */
-      --r-card: 12px;       /* 카드, 액션 버튼 (대부분 통일) */
-      --r-sheet: 16px;      /* bottom sheet, sticky 상단 모서리 */
-      --r-pill: 999px;      /* 알약 (필요 시) */
-      /* 높이 토큰 */
-      --h-chip: 36px;       /* 헤더 알약 */
-      --h-input: 46px;      /* input, select */
-      --h-cta: 54px;        /* 큰 CTA 버튼 (footer + sheet action) */
-      /* 폰트 사이즈 토큰 */
-      --fs-xs:  11px;       /* caption, hint */
-      --fs-sm:  12.5px;     /* meta, sub-label */
-      --fs-md:  13px;       /* label, badge */
-      --fs-base: 14px;      /* 본문, chip */
-      --fs-lg:  15px;       /* 버튼, input, 강조 본문 */
-      --fs-xl:  17px;       /* section 제목 */
-      --fs-2xl: 22px;       /* hero 제목 (step 타이틀) */
-      /* 굵기 */
-      --fw-regular: 400;
-      --fw-medium:  500;
-      --fw-semi:    600;
-      --fw-bold:    700;
+      /* 모바일에서만 필요한 safe-area. 색/폰트/라운드/높이는 tokens.css 한 곳이 정본이다. */
       --safe-top: env(safe-area-inset-top, 0);
       --safe-bottom: env(safe-area-inset-bottom, 0);
     }
@@ -88,8 +56,8 @@
       margin: 0; padding: 0;
       background: var(--bg);
       color: var(--ink-1);
-      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 14px;
+      font-family: var(--font);
+      font-size: var(--fs-base);
       line-height: 1.5;
       letter-spacing: -0.2px;
       -webkit-text-size-adjust: 100%;
