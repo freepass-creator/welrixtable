@@ -122,7 +122,8 @@ try {
   // 기간을 하나 빼도 이후 화면/재진입에서 되살아나면 안 된다.
   const term48 = page.locator('.sc-chip').filter({ hasText: '48개월' });
   if (await term48.count()) await term48.click();
-  ok(await page.locator('.sc-chip.is-selected').count() === 2, '기간 1개 해제 후 선택 수가 2가 아님');
+  ok(await page.locator('.sc-field').first().locator('.sc-chip.is-selected').count() === 2,
+    '기간 1개 해제 후 선택 수가 2가 아님');
 
   // 용품/서비스
   await page.locator('.m-footer .m-btn--primary').click();
