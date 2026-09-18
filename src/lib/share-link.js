@@ -56,11 +56,21 @@ function 안전한스냅샷(값) {
   if (!terms.some((x) => x.monthly != null)) return null;
 
   const c = 값.conditions || {};
+  const car = 값.vehicle || {};
   return {
     v: 1,
     at: typeof 값.at === 'string' ? 값.at : null,
     engine: typeof 값.engine === 'string' ? 값.engine : '웰릭스',
-    vehiclePrice: Number.isFinite(+값.vehiclePrice) ? +값.vehiclePrice : null,
+    vehiclePrice: 값.vehiclePrice != null && Number.isFinite(+값.vehiclePrice) ? +값.vehiclePrice : null,
+    vehicle: {
+      brand: typeof car.brand === 'string' ? car.brand : '',
+      model: typeof car.model === 'string' ? car.model : '',
+      variant: typeof car.variant === 'string' ? car.variant : '',
+      trim_name: typeof car.trim_name === 'string' ? car.trim_name : '',
+      options: Array.isArray(car.options) ? car.options.filter((v) => typeof v === 'string').slice(0, 30) : [],
+      colorExt: typeof car.colorExt === 'string' ? car.colorExt : null,
+      colorInt: typeof car.colorInt === 'string' ? car.colorInt : null,
+    },
     terms,
     conditions: {
       km: Number.isFinite(+c.km) ? +c.km : 2,
@@ -95,11 +105,21 @@ function 스냅샷만들기(quoteState, 견적상태) {
   if (!terms.length || !terms.some((x) => x.monthly != null)) return null;
 
   const c = quoteState?.cond || {};
+  const car = quoteState?.vehicle || {};
   return {
     v: 1,
     at: new Date().toISOString(),
     engine: 견적상태.계산기 || '웰릭스',
     vehiclePrice: 견적상태.차량가 ?? null,
+    vehicle: {
+      brand: car.brand || '',
+      model: car.model || '',
+      variant: car.variant || '',
+      trim_name: car.trim_name || '',
+      options: Array.isArray(car.options) ? [...car.options] : [],
+      colorExt: car.colorExt || null,
+      colorInt: car.colorInt || null,
+    },
     terms,
     conditions: {
       km: +c.km || 2,
@@ -226,6 +246,7 @@ export function 풀기(vehicleState, quoteState, 주소 = location.search) {
   /* Snapshot 이 있으면 그것이 «보낸 당시 견적»의 정본이다. */
   const snap = 안전한스냅샷(디코드(p.get('qs')));
   quoteState.sharedSnapshot = snap;
+  if (snap?.vehicle?.trim_name) quoteState.vehicle = { ...snap.vehicle };
   공개조건적용(quoteState, p, snap);
 
   vehicleState.subStep = vehicleState.trim ? 'options' : 'brand';
