@@ -119,6 +119,11 @@ try {
   const km3 = page.locator('.sc-chip').filter({ hasText: '3만km/년' });
   if (await km3.count()) await km3.click();
 
+  // 기간을 하나 빼도 이후 화면/재진입에서 되살아나면 안 된다.
+  const term48 = page.locator('.sc-chip').filter({ hasText: '48개월' });
+  if (await term48.count()) await term48.click();
+  ok(await page.locator('.sc-chip.is-selected').count() === 2, '기간 1개 해제 후 선택 수가 2가 아님');
+
   // 용품/서비스
   await page.locator('.m-footer .m-btn--primary').click();
   await page.waitForFunction(() => document.querySelector('.se-title')?.textContent?.includes('옵션·서비스'));
@@ -134,7 +139,21 @@ try {
   await page.waitForSelector('.sr-title');
   await page.waitForFunction(() => document.querySelectorAll('.sr-term__monthly b').length > 0, null, { timeout: 20000 });
   const monthly = await page.locator('.sr-term__monthly b').allTextContents();
-  ok(monthly.length >= 1 && monthly.every(Boolean), '월 대여료 결과 없음');
+  ok(monthly.length === 2 && monthly.every(Boolean), '선택한 2개 기간만 결과에 나와야 함: ' + JSON.stringify(monthly));
+
+  // 최종 결과를 끝까지 스크롤했을 때 조건/안내문이 고정 footer 뒤에 가리지 않아야 한다.
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  await page.waitForTimeout(150);
+  const resultBottom = await page.evaluate(() => {
+    const note = document.querySelector('.sr-note')?.getBoundingClientRect();
+    const footer = document.querySelector('.m-footer')?.getBoundingClientRect();
+    return { noteBottom: note?.bottom ?? 0, footerTop: footer?.top ?? innerHeight };
+  });
+  ok(resultBottom.noteBottom <= resultBottom.footerTop + 2,
+    `최종 견적 하단 안내가 footer에 가림: note=${resultBottom.noteBottom}, footer=${resultBottom.footerTop}`);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(100);
+
   const shareReady = !(await page.locator('.m-header .m-act').first().isDisabled());
   ok(shareReady, '계산 완료 후 공유 버튼이 활성화되지 않음');
   await noHorizontalOverflow(page, '견적결과');
@@ -160,7 +179,20 @@ try {
   ok(JSON.stringify(received) === JSON.stringify(monthly),
     '공유받은 견적 금액이 원본과 다름: ' + JSON.stringify({ monthly, received }));
   ok(estimateCalls === 0, '공유받은 Snapshot을 열자마자 재계산 API 호출함: ' + estimateCalls);
+  ok(await page2.locator('.sr-term').count() === 2, '공유 견적에서 선택하지 않은 기간이 되살아남');
   await noHorizontalOverflow(page2, '공유견적');
+
+  await page2.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  await page2.waitForTimeout(100);
+  const sharedBottom = await page2.evaluate(() => {
+    const note = document.querySelector('.sr-note')?.getBoundingClientRect();
+    const footer = document.querySelector('.m-footer')?.getBoundingClientRect();
+    return { noteBottom: note?.bottom ?? 0, footerTop: footer?.top ?? innerHeight };
+  });
+  ok(sharedBottom.noteBottom <= sharedBottom.footerTop + 2,
+    `공유 견적 하단 안내가 footer에 가림: note=${sharedBottom.noteBottom}, footer=${sharedBottom.footerTop}`);
+  await page2.evaluate(() => window.scrollTo(0, 0));
+  await page2.waitForTimeout(100);
   await page2.screenshot({ path: `${out}/02-shared-snapshot.png`, fullPage: true });
 
   // 공유받은 것을 다시 공유해도 Snapshot 유지
@@ -188,6 +220,23 @@ try {
   });
   ok(headerFits, '320px에서 헤더 액션이 넘침');
   await narrow.screenshot({ path: `${out}/03-brand-320.png`, fullPage: true });
+
+  // PC 담당자 견적기 초기 상태 — 빈 화면처럼 보이지 않고 선택 안내가 있어야 한다.
+  const desktop = await context.newPage();
+  await desktop.setViewportSize({ width: 1440, height: 1000 });
+  await desktop.goto('http://127.0.0.1:5173/index.html', { waitUntil: 'networkidle' });
+  await desktop.waitForSelector('.qp-empty-guide');
+  ok(await desktop.locator('.qp-empty-guide').isVisible(), 'PC 초기 상태 안내가 보이지 않음');
+  await desktop.screenshot({ path: `${out}/04-desktop-index-1440.png`, fullPage: true });
+
+  // 고객 링크를 PC에서 열었을 때도 단일 열 컨셉은 유지하되 540px 읽기 폭을 사용한다.
+  const wideMobile = await context.newPage();
+  await wideMobile.setViewportSize({ width: 1440, height: 1000 });
+  await wideMobile.goto(BASE, { waitUntil: 'networkidle' });
+  await wideMobile.waitForSelector('.sv-brand-card');
+  const wideWidth = await wideMobile.locator('#m-app').evaluate((el) => el.getBoundingClientRect().width);
+  ok(wideWidth >= 530 && wideWidth <= 542, 'PC 고객용 견적 폭이 540px 규격이 아님: ' + wideWidth);
+  await wideMobile.screenshot({ path: `${out}/05-mobile-web-wide-1440.png`, fullPage: true });
 
   /* 외부 CDN이 headless Chromium의 CORP 정책으로 막히는 것은 앱 로직 오류가 아니다.
      대신 localhost의 앱 JS/CSS/API가 실패하면 반드시 실패시킨다. */
