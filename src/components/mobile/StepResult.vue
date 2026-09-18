@@ -32,7 +32,7 @@ function 목록에서() {
     };
   } catch { return {}; }
 }
-const v = computed(() => (quoteState.vehicle?.trim_name ? quoteState.vehicle : 목록에서()));
+const v = computed(() => (snapshot.value?.vehicle?.trim_name ? snapshot.value.vehicle : (quoteState.vehicle?.trim_name ? quoteState.vehicle : 목록에서())));
 const c = computed(() => quoteState.cond || {});
 
 const 계산중 = computed(() => !공유견적.value && 견적상태.상태 === 'pending');
