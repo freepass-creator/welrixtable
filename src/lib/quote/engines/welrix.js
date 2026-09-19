@@ -1,26 +1,22 @@
 // ============================================================================
-//  계산기 ①  웰릭스   —   신차. 계산은 그쪽 서버가 한다.
+//  계산기 ① 웰릭스 — 신차. 계산은 웰릭스 서버가 한다.
 // ----------------------------------------------------------------------------
-//  ★대표 2026-09-18 「차량 선택하는 방법만 우리 방법으로 하고,
-//    그 차량 금액에 따른 대여료 산출은 웰릭스 API를 써야지」
+//  Engine(뼈대)은 업무 의미/단위를 소유하고, 이 Adapter는
+//  웰릭스 API의 몸통 변환·통신·응답 검증·오류 변환만 소유한다.
 //
-//  ★실패하면 «우리가 대신 계산»하지 않는다. 값이 달라지는 게 멈추는 것보다 나쁘다.
-//    대표 「그쪽이 죽거나 막히면 어차피 못하는 거지」
-//
-//  ⚠ 웰릭스는 비율을 «소수»로 받는다 (10% = 0.1). 규격은 퍼센트(10)이므로 여기서 나눈다.
-//     이 환산을 뼈대로 올리면 다른 계산기까지 웰릭스 규칙을 따라야 한다 — 여기 가둔다.
+//  ★ fail-closed:
+//    웰릭스가 실패/변경/부분응답이면 로컬 계산으로 대체하지 않는다.
 // ============================================================================
-
 export const 이름 = '웰릭스';
 export const 다루는차 = ['신차'];
+export const 어댑터계약버전 = 'welrix-estimate-v1';
 
-/** @param {object} 요청  spec.js 규격
- *  @returns {Promise<Array>}  안들과 같은 차례의 결과
- *  @throws  못 내면 던진다 — 뼈대가 받아 「계산할 수 없습니다」로 말한다 */
-export async function 계산(요청, { 신호 } = {}) {
+const 유한비음수 = (v) => typeof v === 'number' && Number.isFinite(v) && v >= 0;
+
+/** 공통 견적 규격(%) → 웰릭스 API 규격(0~1 비율) */
+export function 요청을웰릭스몸통으로(요청) {
   const { 차, 조건, 안들 } = 요청;
-
-  const 몸 = {
+  return {
     model: 차.키,
     old: false,
     manualPrice: 차.차량가 || 0,
@@ -41,19 +37,48 @@ export async function 계산(요청, { 신호 } = {}) {
       feeRate: (조건.수수료율 || 0) / 100,
     })),
   };
+}
+
+function 응답검사(j, 기대개수) {
+  if (!j || typeof j !== 'object' || j.ok !== true) return '웰릭스 응답 형식이 올바르지 않습니다';
+  if (!유한비음수(j.price)) return '웰릭스 차량가가 올바르지 않습니다';
+  if (!Array.isArray(j.results)) return '웰릭스 계산 결과가 없습니다';
+  if (j.results.length !== 기대개수) return `웰릭스가 ${기대개수}개 결과를 줘야 하는데 ${j.results.length}개를 줬습니다`;
+
+  for (let i = 0; i < j.results.length; i++) {
+    const g = j.results[i];
+    if (!g || typeof g !== 'object') return `웰릭스 ${i + 1}번째 결과가 비어 있습니다`;
+    for (const [이름, 값] of [
+      ['월 대여료', g.monthlyRent], ['보증금', g.deposit], ['선납금', g.prepay],
+      ['인수가', g.acquirePrice], ['총차량가', g.totalCarPrice], ['수수료', g.payFee],
+    ]) {
+      if (!유한비음수(값)) return `웰릭스 ${이름} 값이 올바르지 않습니다`;
+    }
+  }
+  return null;
+}
+
+/** @param {object} 요청 spec.js 규격
+ * @returns {Promise<{차량가:number, 결과:Array}>}
+ * @throws 웰릭스가 정확한 결과를 못 내면 던진다 */
+export async function 계산(요청, { 신호 } = {}) {
+  const 몸 = 요청을웰릭스몸통으로(요청);
 
   const r = await fetch('/api/estimate', {
-    method: 'POST', headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(몸), signal: 신호,
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(몸),
+    signal: 신호,
   });
   const j = await r.json().catch(() => null);
-  if (!r.ok || !j?.ok || !Array.isArray(j.results)) {
-    throw new Error(j?.error || `계산 서버 응답 ${r.status}`);
-  }
+  if (!r.ok) throw new Error(j?.error || `계산 서버 응답 ${r.status}`);
+
+  const 응답오류 = 응답검사(j, 요청.안들.length);
+  if (응답오류) throw new Error(응답오류);
 
   return {
     차량가: j.price,
-    결과: j.results.map((g) => (g == null ? null : {
+    결과: j.results.map((g) => ({
       월대여료: g.monthlyRent,
       보증금: g.deposit,
       선납금: g.prepay,
