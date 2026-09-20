@@ -801,7 +801,7 @@ function onFeeChange() {
 .sv-trim-card__name { font-size: var(--fs-lg); font-weight: var(--fw-semi); color: var(--ink-1); letter-spacing: -0.3px; }
 .sv-trim-card__check { font-size: 20px; color: var(--brand); font-weight: 700; }
 .sv-trim-card__price {
-  font-size: var(--fs-lg); font-weight: var(--fw-bold); color: var(--brand);
+  font-size: var(--fs-lg); font-weight: var(--fw-semi); color: var(--ink-2);
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
@@ -942,7 +942,7 @@ function onFeeChange() {
 .sv-opt__top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
 .sv-opt__name { font-size: var(--fs-base); font-weight: var(--fw-semi); color: var(--ink-1); }
 .sv-opt__price {
-  font-size: var(--fs-md); font-weight: var(--fw-bold); color: var(--brand);
+  font-size: var(--fs-md); font-weight: var(--fw-semi); color: var(--ink-2);
   font-variant-numeric: tabular-nums; flex-shrink: 0;
   text-align: right;
 }
