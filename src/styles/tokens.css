@@ -57,3 +57,28 @@
   --space-1: var(--sp-1);  --space-2: var(--sp-2);  --space-3: var(--sp-3);  --space-4: var(--sp-4);
   --space-5: var(--sp-5);  --space-6: var(--sp-6);  --space-8: var(--sp-8);
 }
+
+
+/* Mobile tactile feedback baseline */
+:where(button, [role="button"], summary) {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+:where(button, [role="button"], summary):not(:disabled) {
+  transition-property: transform, background-color, opacity;
+  transition-duration: 80ms, 120ms, 120ms;
+  transition-timing-function: cubic-bezier(.2,.8,.2,1);
+}
+:where(button, [role="button"], summary):not(:disabled):active {
+  transform: scale(.975);
+}
+@keyframes fp-step-in {
+  from { opacity: .72; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.sv-section,
+.sc,
+.se,
+.sr {
+  animation: fp-step-in 120ms cubic-bezier(.2,.8,.2,1) both;
+}
