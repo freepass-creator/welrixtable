@@ -6,6 +6,7 @@ import { setCompanyConfig } from './lib/calc.js';
 import { quoteState } from './store.js';
 import { 담당자인가, 담당자로, 담당자로들어왔나 } from './lib/role.js';
 import { 풀기 } from './lib/share-link.js';
+import { installMobileHaptics } from './lib/haptics.js';
 import { vehicleState } from './store.js';
 
 // 회사 config 로드 (welrix.json) — calc.js 에 주입
@@ -101,6 +102,7 @@ async function boot() {
   try { 풀기(vehicleState, quoteState); }
   catch (e) { console.warn('[mobile] 공유 링크 풀기 실패:', e); }
 
+  installMobileHaptics(document);
   const app = createApp(MobileApp);
   app.mount('#m-app');
 }
