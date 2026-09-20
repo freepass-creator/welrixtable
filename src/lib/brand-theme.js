@@ -19,6 +19,7 @@ export function applyProductTheme(cfg={}){
   root.style.setProperty('--brand-50',theme.soft_color||mixWhite(brand,0.94));
   root.style.setProperty('--accent',brand);
   root.style.setProperty('--accent-soft',theme.soft_color||mixWhite(brand,0.94));
+  root.style.setProperty('--partner-accent',theme.partner_accent||brand);
   const meta=document.querySelector('meta[name="theme-color"]');
   if(meta) meta.setAttribute('content',brand);
 }
