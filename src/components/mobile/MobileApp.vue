@@ -275,7 +275,7 @@ async function shareSignLink() {
 <template>
   <div class="m-shell">
     <!-- 헤더 — 좌측: CI + 페이지 타이틀, 우측: 발송 -->
-    <header class="m-header">
+    <header class="m-header ui-header">
       <!-- ★상단은 «웰컴저축은행 × 웰릭스모빌리티» 한 줄만 (대표 2026-09-17).
            welrix 로고·엑셀 버전 배지·조회동의 링크는 뺐다 — 손님이 볼 것이 아니다. -->
       <div class="m-header__brand">
@@ -298,7 +298,7 @@ async function shareSignLink() {
     </header>
 
     <!-- 페이지별 progress segment — 전체 페이지 수 만큼 -->
-    <div class="m-progress">
+    <div class="m-progress ui-stepper">
       <div v-for="i in TOTAL_PAGES" :key="i"
            class="m-progress__seg"
            :class="{ 'is-done': (i - 1) <= currentPageIdx }"></div>
@@ -311,18 +311,18 @@ async function shareSignLink() {
 
     <StickyQuote v-if="금액바보임" />
 
-    <footer class="m-footer">
+    <footer class="m-footer ui-bottom-action">
       <!-- 공유받은 확정견적은 먼저 «그대로» 보여 준다. 수정 버튼을 눌러야 새 계산이 시작된다. -->
       <template v-if="공유견적 && currentStep.key === 'result'">
-        <button class="m-btn m-btn--soft" @click="수정하기">
+        <button class="m-btn m-btn--soft ui-button secondary" @click="수정하기">
           <i class="ph ph-pencil-simple"></i>조건 변경
         </button>
-        <button class="m-btn m-btn--primary" :disabled="공유중" @click="공유하기">
+        <button class="m-btn m-btn--primary ui-button primary" :disabled="공유중" @click="공유하기">
           <i class="ph ph-share-network"></i>{{ 공유중 ? '준비 중…' : (공유됨 ? '공유됨' : '이 견적 공유') }}
         </button>
       </template>
       <template v-else>
-        <button v-if="canGoBack" class="m-btn m-btn--ghost" :class="{ 'm-btn--icon': 견적보기보임 }"
+        <button v-if="canGoBack" class="m-btn m-btn--ghost ui-button secondary" :class="{ 'm-btn--icon': 견적보기보임 }"
                 @click="prev" aria-label="이전">
           <i class="ph ph-arrow-left"></i><span v-if="!견적보기보임">이전</span>
         </button>
