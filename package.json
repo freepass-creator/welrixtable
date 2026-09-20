@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "check": "node scripts/check-sync.mjs",
     "check:quote-contract": "node scripts/check-quote-contract.mjs",
-    "check:welrix-live": "node scripts/check-welrix.mjs"
+    "check:welrix-live": "node scripts/check-welrix.mjs",
+    "check:options": "node scripts/check-option-relations.mjs"
   },
   "devDependencies": {
     "vite": "^8.0.4"
