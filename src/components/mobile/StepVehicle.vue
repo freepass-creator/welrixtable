@@ -9,6 +9,25 @@ const props = defineProps({
   vehicles: { type: Array, default: () => [] },
 });
 
+const committingKey = ref('');
+let committingTimer = null;
+function commitDelayMs() {
+  try {
+    return window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ? 0 : 90;
+  } catch {
+    return 90;
+  }
+}
+function commitSelection(key, nextStep) {
+  if (committingTimer) clearTimeout(committingTimer);
+  committingKey.value = key;
+  committingTimer = setTimeout(() => {
+    committingKey.value = '';
+    committingTimer = null;
+    subStep.value = nextStep;
+  }, commitDelayMs());
+}
+
 const BRAND_LOGOS = {
   hyundai:  '/hyundai.svg',
   kia:      '/kia.svg',
@@ -260,17 +279,15 @@ function selectBrand(b) {
   vehicleState.model = null; vehicleState.variant = null; vehicleState.trim = null;
   vehicleState.options.clear(); vehicleState.color = null;
   quoteState.vehicle = null;
-  subStep.value = 'model';
+  commitSelection('brand:' + b.manufacturer_id, 'model');
 }
 function selectModel(m) {
   vehicleState.model = m.model_id;
   vehicleState.variant = null; vehicleState.trim = null;
   vehicleState.options.clear(); vehicleState.color = null;
   quoteState.vehicle = null;
-  /* ★파워트레인이 하나뿐이어도 그 걸음을 건너뛰지 않는다 — 제조사 → 모델 → 파워트레인 → 세부트림 (대표 2026-09-18).
-     하나면 미리 골라 둔 채로 보여 주고, 손님은 「다음」만 누르면 된다. */
-  if ((m.variants || []).length === 1) vehicleState.variant = m.variants[0].variant_id;
-  subStep.value = 'variant';
+  // 파워트레인이 하나여도 사용자가 직접 선택한다. 선택 후 자동전진한다.
+  commitSelection('model:' + m.model_id, 'variant');
 }
 function selectVariant(v) {
   vehicleState.variant = v.variant_id;
@@ -280,14 +297,14 @@ function selectVariant(v) {
   quoteState.vehicle = null;
   /* ★인승·구동이 갈리면(그룹이 둘 이상) 그 화면을 먼저 보여 준다. 안 갈리면 곧장 트림으로. */
   const 갈래 = new Set((v.trims || []).map(t => t.group).filter(Boolean));
-  subStep.value = 갈래.size > 1 ? 'spec' : 'trim';
+  commitSelection('variant:' + v.variant_id, 갈래.size > 1 ? 'spec' : 'trim');
 }
 function selectSpec(g) {
   vehicleState.trimGroup = g.label;
   vehicleState.trim = null;
   vehicleState.options.clear(); vehicleState.color = null;
   quoteState.vehicle = null;
-  subStep.value = 'trim';
+  commitSelection('spec:' + g.label, 'trim');
 }
 function selectTrim(t) {
   vehicleState.trim = t.trim_id;
@@ -300,6 +317,8 @@ function selectTrim(t) {
   quoteState.cond.colorInt = '';
   quoteState.cond.colorIntPrice = 0;
   syncVehicle();
+  const 색상있음 = (exteriorColors.value?.length || 내장색들.value?.length);
+  commitSelection('trim:' + t.trim_id, 색상있음 ? 'colors' : 'options');
 }
 
 function goBack(target) { subStep.value = target; }
@@ -383,7 +402,8 @@ function onFeeChange() {
         <button
           v-for="b in brands" :key="b.manufacturer_id"
           class="sv-brand-card"
-          :class="{ 'is-selected': vehicleState.manufacturer === b.manufacturer_id }"
+          :class="{ 'is-selected': vehicleState.manufacturer === b.manufacturer_id, 'is-committing': committingKey === 'brand:' + b.manufacturer_id }"
+          :disabled="!!committingKey"
           @click="selectBrand(b)"
         >
           <img v-if="BRAND_LOGOS[b.manufacturer_id]" :src="BRAND_LOGOS[b.manufacturer_id]" :alt="b.manufacturer_name" />
@@ -399,7 +419,8 @@ function onFeeChange() {
         <button
           v-for="m in models" :key="m.model_id"
           class="sv-row"
-          :class="{ 'is-selected': vehicleState.model === m.model_id }"
+          :class="{ 'is-selected': vehicleState.model === m.model_id, 'is-committing': committingKey === 'model:' + m.model_id }"
+          :disabled="!!committingKey"
           @click="selectModel(m)"
         >
           <span class="sv-row__label">{{ m.model_name }}</span>
@@ -415,7 +436,8 @@ function onFeeChange() {
         <button
           v-for="v in variants" :key="v.variant_id"
           class="sv-row"
-          :class="{ 'is-selected': vehicleState.variant === v.variant_id }"
+          :class="{ 'is-selected': vehicleState.variant === v.variant_id, 'is-committing': committingKey === 'variant:' + v.variant_id }"
+          :disabled="!!committingKey"
           @click="selectVariant(v)"
         >
           <span class="sv-row__label">{{ v.variant_name }}</span>
@@ -431,7 +453,8 @@ function onFeeChange() {
         <button
           v-for="g in specGroups" :key="g.label"
           class="sv-row"
-          :class="{ 'is-selected': vehicleState.trimGroup === g.label }"
+          :class="{ 'is-selected': vehicleState.trimGroup === g.label, 'is-committing': committingKey === 'spec:' + g.label }"
+          :disabled="!!committingKey"
           @click="selectSpec(g)"
         >
           <span class="sv-row__label">{{ g.label }}
@@ -451,7 +474,8 @@ function onFeeChange() {
         <div v-if="t.group && t.group !== trims[i - 1]?.group" class="sv-group">{{ t.group }}</div>
         <button
           class="sv-trim-card"
-          :class="{ 'is-selected': vehicleState.trim === t.trim_id }"
+          :class="{ 'is-selected': vehicleState.trim === t.trim_id, 'is-committing': committingKey === 'trim:' + t.trim_id }"
+          :disabled="!!committingKey"
           @click="selectTrim(t)"
         >
           <div class="sv-trim-card__top">
@@ -929,4 +953,20 @@ function onFeeChange() {
   margin-top: 6px; padding-top: 8px;
   font-size: var(--fs-lg); color: var(--brand); font-weight: var(--fw-bold);
 }
+</style>
+
+<style scoped>
+.sv-brand-card.is-committing,
+.sv-row.is-committing,
+.sv-trim-card.is-committing {
+  background: var(--brand-50);
+  transform: scale(.985);
+  box-shadow: inset 0 0 0 1px var(--brand-100);
+}
+.sv-brand-card:disabled,
+.sv-row:disabled,
+.sv-trim-card:disabled { cursor: default; }
+.sv-brand-card:disabled:not(.is-committing),
+.sv-row:disabled:not(.is-committing),
+.sv-trim-card:disabled:not(.is-committing) { opacity: .72; }
 </style>
