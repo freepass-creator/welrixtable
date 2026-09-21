@@ -7,6 +7,8 @@ import { quoteState } from '../../store.js';
 import { 견적상태 } from '../../lib/quote/index.js';
 import { vehicleState } from '../../store.js';
 import { fmt } from '../../lib/format.js';
+import { selectionSummary } from '../../lib/selection-summary.js';
+const selected = computed(() => selectionSummary(window.VEHICLE_DB, vehicleState, quoteState));
 import * as Fees from '../../lib/compute-fees.js';
 
 const 담당자 = 담당자인가();   // 손님은 보증금·선납금을 만지지 않는다
@@ -235,6 +237,17 @@ const cards = computed(() => {
           <span class="sq-meta__val">{{ quoteState.vehicle?.brand }} {{ quoteState.vehicle?.model }} {{ quoteState.vehicle?.trim_name }}</span>
         </div>
         <div class="sq-meta__row">
+          <span class="sq-meta__key">옵션</span>
+          <span class="sq-meta__val">{{ selected?.options.length ? selected.options.join(' · ') : '미선택' }}</span>
+        </div>
+        <div class="sq-meta__row">
+          <span class="sq-meta__key">색상</span>
+          <span class="sq-meta__val">
+            <span class="sq-meta__color">외장 {{ selected?.exterior || '미선택' }}</span>
+            <span class="sq-meta__color">내장 {{ selected?.interior || '미선택' }}</span>
+          </span>
+        </div>
+        <div class="sq-meta__row">
           <span class="sq-meta__key">신용</span>
           <!-- 손님에게는 등급 이름 대신 「신용점수 무관」 (대표 2026-09-18) -->
           <span class="sq-meta__val">{{ 담당자 ? (quoteState.cond.credit || '중신용') : '신용점수 무관' }}</span>
@@ -436,11 +449,14 @@ const cards = computed(() => {
   padding: 5px 0;
   font-size: var(--fs-sm);
 }
-.sq-meta__key { color: var(--ink-3); }
+.sq-meta__key { color: var(--ink-3); flex-shrink: 0; }
+.sq-meta__color { display: block; }
 .sq-meta__val {
   color: var(--ink-1); font-weight: 500;
   font-variant-numeric: tabular-nums;
   text-align: right;
   max-width: 65%;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
 }
 </style>
