@@ -60,3 +60,8 @@ Original C:/dev/welrixtable dirty main worktree preserved. This isolated worktre
 - Live browser root -> Hyundai -> Grandeur -> Premium -> colors verified; unselected states and summary present. Burgundy swatch computed rgb(92,42,46).
 - Eleven regression tests pass. Physical device vibration unverified; browser/hardware API support required. Color approximations remain reference-only (118 exact legacy display-palette matches, 59 name-based fallback).
 - Earlier pending/block statements above describe history; these follow-ups are now deployed. Main-worktree integration remains necessary before another main deployment.
+
+## Expanded quote-panel placement correction
+- Screenshot-specified location: expanded price table metadata now reads 차량 -> 옵션 -> 색상 (외장/내장) -> 신용. Empty selection explicitly 미선택.
+- Production dpl_Mu6R5N5XjyZALQa3TSLxdbYYNNTV, source 9f46f94. Prior rollback dpl_2JWzvJ4qmz1bf1moTNGutH8SntJC.
+- Build and summary tests passed. Canonical browser verified selected panoramic sunroof and unselected exterior/interior between vehicle and credit. This check validates metadata display, not rental calculation.
