@@ -581,6 +581,12 @@ function onFeeChange() {
           </div>
           <div class="sv-opt__axis" v-if="o._main_axis">차량 구성 옵션</div>
           <div class="sv-opt__sub" v-if="o.sub">{{ o.sub }}</div>
+          <div class="sv-opt__sub" v-if="o.includes?.length && optionNames(o.includes).length">
+            포함 사양: {{ optionNames(o.includes).join(' · ') }}
+          </div>
+          <div class="sv-opt__sub" v-if="getRequires(o.id).length">
+            선택 조건: {{ optionNames(getRequires(o.id)).join(' · ') }} 먼저 선택
+          </div>
           <div class="sv-opt__group" v-if="getGroup(o.id)">
             <i class="ph ph-info"></i>
             {{ getGroup(o.id).label }} 중 1개만 선택
@@ -980,7 +986,7 @@ function onFeeChange() {
   font-weight: var(--fw-semi);
   line-height: 1.35;
 }
-.sv-opt__sub { font-size: var(--fs-sm); color: var(--ink-3); line-height: 1.4; }
+.sv-opt__sub { font-size: 13px; color: var(--ink-2); line-height: 1.55; white-space: normal; overflow-wrap: anywhere; }
 .sv-opt__group {
   display: inline-flex; align-items: center; gap: 4px;
   font-size: var(--fs-xs); color: var(--ink-4); margin-top: 2px;

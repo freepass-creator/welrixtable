@@ -46,3 +46,9 @@ Original C:/dev/welrixtable dirty main worktree preserved. This isolated worktre
 - Browser verified unselected colors + selected sunroof remain identical through options, conditions and result. Build and four summary tests PASS. Local API calculation unavailable, so result verification is display-only.
 - Cursor flagged density; footer names remain bounded with full disclosure. Selection/send gates kept unchanged because this request concerns display, not making optional selections mandatory.
 - Production still blocked by Vercel author permission; all follow-ups remain local.
+
+## Option supporting descriptions
+- Mobile option cards retain web source sub text and now also show declared included specs and prerequisite names without hiding them until disabled.
+- Supporting text is 13px, readable contrast, line-height 1.55, wrapping with no truncation. No descriptions invented for missing source data.
+- Build PASS; browser Grandeur option step confirms supporting copy below names.
+- Deploy author identity confirmation remains pending; no production release claimed.
