@@ -29,6 +29,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import vm from 'node:vm';
 import { MODEL_SLUG } from '../src/lib/slug.js';
+import { guessColor } from '../src/lib/format.js';
 
 const 여기 = dirname(fileURLToPath(import.meta.url));
 const 뿌리 = resolve(여기, '..');
@@ -54,11 +55,15 @@ const 관계 = (() => {
     .replace(/인치/g, '"').replace(/패키지|PACK|PKG/g, '')
     .replace(/[\s·,()\[\]+"'’”&]/g, '').toUpperCase();
   const 통 = {};
+  const 색상 = new Map();
   for (const m of DB?.manufacturers || []) for (const md of m.models || []) {
     const slug = MODEL_SLUG[md.model_name]
       || Object.entries(MODEL_SLUG).find(([k]) => k.includes(md.model_name))?.[1];
     if (!slug) continue;
     const t = 통[slug] ||= { 옵: new Map(), 묶: new Map(), 품: new Map() };
+    for (const c of md.exterior_colors || []) {
+      if (c.name && c.hex && !색상.has(c.name)) 색상.set(c.name, { code: c.code || '', hex: c.hex });
+    }
     for (const v of md.variants || []) {
       const om = v.options_master || {};
       for (const [, o] of Object.entries(om)) {
@@ -77,7 +82,7 @@ const 관계 = (() => {
       }
     }
   }
-  return { 통, 정 };
+  return { 통, 정, 색상 };
 })();
 
 /* ★구동을 바꾸는 «옵션»은 싣지 않는다.
@@ -236,10 +241,12 @@ for (const [브랜드, mid] of Object.entries(브랜드ID)) {
           if (!options_master[id]) {
             const k = 관계.정(o.name);
             const r = 통?.옵.get(k);
+            const 보조설명 = r?.sub || o.note || '세부 적용 품목은 선택한 트림의 제조사 가격표를 따릅니다.';
             options_master[id] = {
               name: o.name,
               price: Math.round(o.price / 10000),          // 화면은 만원 단위로 읽는다
-              ...(r?.sub ? { sub: r.sub } : {}),
+              sub: 보조설명,
+              _sub_source: r?.sub ? 'legacy-master' : (o.note ? 'welrix-catalog' : 'manufacturer-price-list'),
               ...(r?.requires?.length ? { _requiresNames: r.requires } : {}),
             };
           }
@@ -303,7 +310,16 @@ for (const [브랜드, mid] of Object.entries(브랜드ID)) {
     const 추가 = 카탈.colorExtra?.[차종] || {};
     models.push({
       model_id: slug, model_name: 차종, category: '', year: 2026, variants,
-      exterior_colors: (색.exterior || []).map((n) => ({ name: n, code: '', hex: '', price: 추가[n] ? Math.round(추가[n] / 10000) : 0 })),
+      exterior_colors: (색.exterior || []).map((n) => {
+        const 기존색 = 관계.색상.get(n);
+        return {
+          name: n,
+          code: 기존색?.code || '',
+          hex: 기존색?.hex || guessColor(n),
+          _swatch_source: 기존색?.hex ? 'legacy-master' : 'name-derived',
+          price: 추가[n] ? Math.round(추가[n] / 10000) : 0,
+        };
+      }),
       _interior: 색.interior || [],
     });
   }

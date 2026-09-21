@@ -572,7 +572,7 @@ function onFeeChange() {
             <span class="sv-opt__price">+{{ fmt(o.price) }}만</span>
           </div>
           <div class="sv-opt__axis" v-if="o._main_axis">차량 구성 옵션</div>
-          <div class="sv-opt__sub" v-if="o.sub">{{ o.sub }}</div>
+          <div class="sv-opt__sub">{{ o.sub }}</div>
           <div class="sv-opt__group" v-if="getGroup(o.id)">
             <i class="ph ph-info"></i>
             {{ getGroup(o.id).label }} 중 1개만 선택
@@ -628,6 +628,7 @@ function onFeeChange() {
             <i class="ph ph-check sv-color-check" v-if="vehicleState.color === i"></i>
           </button>
         </div>
+        <p class="sv-color-note">화면 색상은 참고용이며 실제 색상은 제조사 안내를 확인해 주세요.</p>
       </div>
 
       <!-- 내장 색상 -->
@@ -974,6 +975,7 @@ function onFeeChange() {
   line-height: 1.35;
 }
 .sv-opt__sub { font-size: var(--fs-sm); color: var(--ink-3); line-height: 1.4; }
+.sv-color-note { margin: 8px 2px 0; color: var(--ink-3); font-size: var(--fs-xs); line-height: 1.45; }
 .sv-opt__group {
   display: inline-flex; align-items: center; gap: 4px;
   font-size: var(--fs-xs); color: var(--ink-4); margin-top: 2px;

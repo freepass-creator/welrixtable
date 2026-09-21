@@ -78,6 +78,14 @@ let optionsMasterEntries = 0;
 
 for (const manufacturer of db.manufacturers || []) {
   for (const model of manufacturer.models || []) {
+    for (const color of model.exterior_colors || []) {
+      if (!String(color.hex || '').trim()) {
+        integrityErrors.push({ code: 'EXTERIOR_COLOR_SWATCH_MISSING', model: model.model_name, color: color.name });
+      }
+      if (!['legacy-master', 'name-derived'].includes(color._swatch_source)) {
+        integrityErrors.push({ code: 'EXTERIOR_COLOR_SOURCE_MISSING', model: model.model_name, color: color.name });
+      }
+    }
     for (const variant of model.variants || []) {
       variants++;
       const master = variant.options_master || {};
@@ -105,6 +113,12 @@ for (const manufacturer of db.manufacturers || []) {
       }
 
       for (const [id, option] of Object.entries(master)) {
+        if (!String(option.sub || '').trim()) {
+          integrityErrors.push({ code: 'OPTION_HELPER_MISSING', model: model.model_name, variant: variant.variant_name, id, option: option.name });
+        }
+        if (!['legacy-master', 'welrix-catalog', 'manufacturer-price-list'].includes(option._sub_source)) {
+          integrityErrors.push({ code: 'OPTION_HELPER_SOURCE_MISSING', model: model.model_name, variant: variant.variant_name, id, option: option.name });
+        }
         for (const req of option.requires || []) {
           requirementEdges++;
           if (!master[req]) integrityErrors.push({ code: 'REQUIRE_UNKNOWN_OPTION', model: model.model_name, variant: variant.variant_name, id, req });
