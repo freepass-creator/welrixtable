@@ -4,6 +4,7 @@ import { vehicleState, quoteState } from '../../store.js';
 import { 담당자인가 } from '../../lib/role.js';
 import { POPULAR_BRAND, POPULAR_MODELS, sortByRank } from '../../data/popular-rankings.js';
 import { fmt, guessColor } from '../../lib/format.js';
+import { exteriorColorSwatches } from '../../data/exterior-color-swatches.js';
 import {
   requiredOptionIds,
   exclusiveGroupFor,
@@ -607,6 +608,7 @@ function onFeeChange() {
     <!-- 6) 색상 (외장 + 내장) -->
     <div v-else-if="subStep === 'colors'" class="sv-section">
       <h2 class="sv-title">색상을<br>골라주세요</h2>
+      <p class="sv-color-notice">색상 표시는 참고용이며 실제 차량 색상과 다를 수 있습니다.</p>
 
       <!-- 외장 색상 -->
       <div v-if="exteriorColors.length" class="sv-block">
@@ -622,7 +624,7 @@ function onFeeChange() {
             :title="c.name"
             @click="pickExtColor(i)"
           >
-            <span class="sv-color-swatch" :style="{ background: c.hex }"></span>
+            <span class="sv-color-swatch" :style="{ background: c.hex || exteriorColorSwatches[selectedModel.model_id + '|' + c.name] || guessColor(c.name) }"></span>
             <span class="sv-color-name">{{ c.name }}</span>
             <span class="sv-color-price" v-if="c.price">+{{ fmt(c.price * 10000) }}원</span>
             <i class="ph ph-check sv-color-check" v-if="vehicleState.color === i"></i>
@@ -837,6 +839,8 @@ function onFeeChange() {
   font-size: var(--fs-md); color: var(--brand); font-weight: var(--fw-bold);
   font-variant-numeric: tabular-nums;
 }
+
+.sv-color-notice { color: var(--ink-3); font-size: var(--fs-sm); margin: -12px 0 20px; }
 
 /* 색상 grid — 외장/내장 공통 (swatch + 이름 + 가격) */
 .sv-color-grid {

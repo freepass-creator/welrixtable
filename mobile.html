@@ -161,15 +161,8 @@
     #gate-admin:active { background: var(--bg-soft); color: var(--ink-1); }
   </style>
   <script>
-    // PC viewport 로 들어오면 데스크탑 페이지로 redirect (단, ?force=mobile 이면 유지)
-    (function () {
-      const params = new URLSearchParams(location.search);
-      if (location.pathname === '/' || params.get('force') === 'mobile') { document.documentElement.classList.add('force-mobile'); return; }
-      if (window.innerWidth > 1024) {
-        const target = location.pathname.replace(/mobile\.html$/, 'desktop.html');
-        location.replace(target + location.search + location.hash);
-      }
-    })();
+    // 셀프견적은 주소와 화면 폭에 관계없이 동일한 모바일 UI를 사용한다.
+    document.documentElement.classList.add('force-mobile');
   </script>
 </head>
 <body>
