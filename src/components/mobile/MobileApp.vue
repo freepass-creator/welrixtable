@@ -260,7 +260,6 @@ async function shareSignLink() {
   <div class="m-shell">
     <!-- 헤더 — 좌측: CI + 페이지 타이틀, 우측: 발송 -->
     <header class="m-header ui-header">
-      <a class="m-promotion-link" href="https://welrix-rent.web.app/" aria-label="조건표로 이동">조건표</a>
       <!-- ★상단은 «웰컴저축은행 × 웰릭스모빌리티» 한 줄만 (대표 2026-09-17).
            welrix 로고·엑셀 버전 배지·조회동의 링크는 뺐다 — 손님이 볼 것이 아니다. -->
       <div class="m-header__brand">
@@ -312,6 +311,12 @@ async function shareSignLink() {
           <i class="ph ph-arrow-left"></i><span v-if="!견적보기보임">이전</span>
         </button>
         <button v-if="견적보기보임" class="m-btn m-btn--soft" @click="견적보기">견적 보기</button>
+        <a
+          v-if="stepIdx < STEPS.length - 1"
+          class="m-btn m-btn--condition"
+          href="https://welrix-rent.web.app/"
+          aria-label="조건표로 이동"
+        >조건표</a>
         <button
           v-if="stepIdx < STEPS.length - 1"
           class="m-btn m-btn--primary"
@@ -345,13 +350,6 @@ async function shareSignLink() {
   color: var(--partner-accent, var(--brand)); white-space: nowrap;
 }
 .m-brand__x { opacity: .55; margin: 0 1px; font-weight: 600; }
-.m-promotion-link {
-  display: inline-flex; align-items: center; justify-content: center;
-  flex: 0 0 auto; height: 40px; padding: 0 6px; color: var(--brand); text-decoration: none;
-  border-radius: var(--r); font-size: 12px; font-weight: 600; background: var(--bg-soft);
-}
-.m-promotion-link:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
-@media (max-width: 360px) { .m-brand { font-size: 10px; } }
 
 .m-shell {
   display: flex;
@@ -485,6 +483,12 @@ async function shareSignLink() {
   font-size: var(--fs-lg);
 }
 .m-btn--primary:not(:disabled):active { background: var(--brand-700); }
+.m-btn--condition {
+  flex: 0 0 72px;
+  background: var(--bg-soft); color: var(--ink-2); text-decoration: none;
+  font-size: var(--fs-base);
+}
+.m-btn--condition:active { background: var(--line-2); }
 /* 「견적 보기」 — 다음 옆에 나란히. 테두리 없이 옅은 바탕 */
 .m-btn--soft {
   flex: 1;
