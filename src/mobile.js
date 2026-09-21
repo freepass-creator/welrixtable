@@ -1,3 +1,4 @@
+import { normalizeExteriorPaint, restorePaintSelection } from './lib/exterior-paint.js';
 // 모바일 전용 entry — index.js 와 분리된 별도 번들
 // 기존 store/calc/firebase 는 재사용, UI 만 모바일 전용 컴포넌트로 새로 작성
 import { createApp } from 'vue';
@@ -101,6 +102,7 @@ async function boot() {
   // FreePass 메인 견적기의 기본축/옵션축 정책을 Preview에도 동일 적용.
   try { await loadAndApplySalesMainAxisBridge(window.VEHICLE_DB); }
   catch (e) { console.warn('[mobile] main axis bridge 적용 실패:', e); }
+  normalizeExteriorPaint(window.VEHICLE_DB);
   // 재고는 비동기 — mount 후에도 늦게 도착해도 OK
   loadStock();
   /* ★공유 링크로 들어왔으면 고른 것을 먼저 풀어 놓고 그린다.
@@ -108,6 +110,7 @@ async function boot() {
   try { 풀기(vehicleState, quoteState); }
   catch (e) { console.warn('[mobile] 공유 링크 풀기 실패:', e); }
 
+  restorePaintSelection(window.VEHICLE_DB, vehicleState);
   installMobileHaptics(document);
   const app = createApp(MobileApp);
   app.mount('#m-app');

@@ -262,7 +262,7 @@ const optionsPriceManwon = computed(() => {
 const totalManwon = computed(() => {
   if (!selectedTrim.value) return 0;
   const taxRate = vehicleState.tax_rate || '5';
-  return trimPrice(selectedTrim.value, taxRate) + optionsPriceManwon.value;
+  return trimPrice(selectedTrim.value, taxRate) + optionsPriceManwon.value + (vehicleState.color != null ? exteriorColors.value[vehicleState.color]?.price || 0 : 0);
 });
 
 
