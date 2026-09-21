@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, nextTick } from 'vue';
 import { quoteState, vehicleState } from '../../store.js';
 import { 담당자인가, 손님링크 } from '../../lib/role.js';
 import { 지금주소 } from '../../lib/share-link.js';
@@ -123,43 +123,40 @@ function 견적보기() {
   if (typeof window !== 'undefined') window.scrollTo({ top: 0 });
 }
 const currentStep = computed(() => STEPS[stepIdx.value]);
+function scrollMainTop(behavior = 'auto') {
+  nextTick(() => {
+    const main = document.querySelector('.m-main');
+    if (main?.scrollTo) main.scrollTo({ top: 0, behavior });
+    else if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior });
+  });
+}
+watch(
+  () => [stepIdx.value, vehicleState.subStep].join('|'),
+  () => scrollMainTop('auto'),
+);
 
-/* ★순서는 제조사 «내 차 만들기»와 같게 — 파워트레인 → (갈리면) 인승·구동 → 세부트림 → 색상 → 옵션.
-     현대 hyundai.com/kr/ko/e/vehicles/estimation: 01 모델(엔진·구동·트림) → 02 색상 → 옵션 → 완료.
-     ★'spec'(인승·구동) 은 그 파워트레인 안에서 실제로 갈릴 때만 있는 걸음이다 — 대표 2026-09-18
-       「그 인승 구동 방식 그거를 어떻게 나눌지」. 갈리지 않는 차(그랜저 2.5, K5 등)는 이 걸음이 아예 없다. */
-const VEHICLE_SUB_STEPS_ALL = ['brand', 'model', 'variant', 'spec', 'trim', 'colors', 'options'];
 
-/* 지금 고른 파워트레인이 인승·구동으로 갈리는가 — StepVehicle.vue 의 specGroups 와 같은 기준.
-   그 컴포넌트 안 값이라 여기서는 DB 를 직접 다시 본다(전역 window.VEHICLE_DB, 같은 데이터). */
-const 파워트레인갈래있나 = computed(() => {
-  try {
-    const b = window.VEHICLE_DB?.manufacturers?.find((x) => x.manufacturer_id === vehicleState.manufacturer);
-    const m = b?.models?.find((x) => x.model_id === vehicleState.model);
-    const v = m?.variants?.find((x) => x.variant_id === vehicleState.variant);
-    return new Set((v?.trims || []).map((t) => t.group).filter(Boolean)).size > 1;
-  } catch { return false; }
-});
-const VEHICLE_SUB_STEPS = computed(() => (
-  파워트레인갈래있나.value ? VEHICLE_SUB_STEPS_ALL : VEHICLE_SUB_STEPS_ALL.filter((s) => s !== 'spec')
-));
+/* 차량 선택은 과도하게 쪼개지 않는다.
+   제조사 → 모델 → 파워트레인(연료·배기량 + 필요 시 인승·구동·용도) → 트림 → 색상 → 옵션.
+   variant 단계가 내부 variant + trimGroup 을 한 번에 저장하므로 별도 spec 화면은 없다. */
+const VEHICLE_SUB_STEPS = ['brand', 'model', 'variant', 'trim', 'colors', 'options'];
 
-// 전체 페이지 (sub-step 포함) — progress bar 세그먼트 수. 'spec' 유무에 따라 차마다 다르다.
-const TOTAL_PAGES = computed(() => VEHICLE_SUB_STEPS.value.length + (STEPS.length - 1));
+// 전체 페이지 (sub-step 포함) — 고객에게 보이는 실제 선택 단계만 센다.
+const TOTAL_PAGES = computed(() => VEHICLE_SUB_STEPS.length + (STEPS.length - 1));
 // 현재 페이지 인덱스 (0-based)
 const currentPageIdx = computed(() => {
   if (currentStep.value.key === 'vehicle') {
     const sub = vehicleState.subStep || 'brand';
-    return VEHICLE_SUB_STEPS.value.indexOf(sub);
+    return VEHICLE_SUB_STEPS.indexOf(sub);
   }
-  return VEHICLE_SUB_STEPS.value.length + (stepIdx.value - 1);
+  return VEHICLE_SUB_STEPS.length + (stepIdx.value - 1);
 });
 
 const canGoBack = computed(() => {
   if (공유견적.value && currentStep.value.key === 'result') return false;
   if (currentStep.value.key === 'vehicle') {
     const sub = vehicleState.subStep || 'brand';
-    if (VEHICLE_SUB_STEPS.value.indexOf(sub) > 0) return true;
+    if (VEHICLE_SUB_STEPS.indexOf(sub) > 0) return true;
   }
   return stepIdx.value > 0;
 });
@@ -170,7 +167,7 @@ const 견적보기보임 = computed(() => {
   if (key === 'result') return false;
   if (STEPS[stepIdx.value + 1]?.key === 'result') return false;   // 그 걸음의 「다음」이 이미 「견적 보기」다
   if (key === 'vehicle') {
-    return VEHICLE_SUB_STEPS.value.indexOf(vehicleState.subStep || 'brand') >= VEHICLE_SUB_STEPS.value.indexOf('trim');
+    return VEHICLE_SUB_STEPS.indexOf(vehicleState.subStep || 'brand') >= VEHICLE_SUB_STEPS.indexOf('trim');
   }
   return true;
 });
@@ -181,7 +178,6 @@ const canProceed = computed(() => {
   if (sub === 'brand')   return !!vehicleState.manufacturer;
   if (sub === 'model')   return !!vehicleState.model;
   if (sub === 'variant') return !!vehicleState.variant;
-  if (sub === 'spec')    return !!vehicleState.trimGroup;
   if (sub === 'trim')    return !!vehicleState.trim;
   return true;
 });
@@ -190,7 +186,7 @@ function next() {
   if (!canProceed.value) return;
   if (currentStep.value.key === 'vehicle') {
     const sub = vehicleState.subStep || 'brand';
-    const list = VEHICLE_SUB_STEPS.value;
+    const list = VEHICLE_SUB_STEPS;
     const i = list.indexOf(sub);
     if (i >= 0 && i < list.length - 1) {
       vehicleState.subStep = list[i + 1];
@@ -209,7 +205,7 @@ function prev() {
   }
   if (currentStep.value.key === 'vehicle') {
     const sub = vehicleState.subStep || 'brand';
-    const list = VEHICLE_SUB_STEPS.value;
+    const list = VEHICLE_SUB_STEPS;
     const i = list.indexOf(sub);
     if (i > 0) {
       vehicleState.subStep = list[i - 1];
@@ -263,7 +259,7 @@ async function shareSignLink() {
 <template>
   <div class="m-shell">
     <!-- 헤더 — 좌측: CI + 페이지 타이틀, 우측: 발송 -->
-    <header class="m-header">
+    <header class="m-header ui-header">
       <!-- ★상단은 «웰컴저축은행 × 웰릭스모빌리티» 한 줄만 (대표 2026-09-17).
            welrix 로고·엑셀 버전 배지·조회동의 링크는 뺐다 — 손님이 볼 것이 아니다. -->
       <div class="m-header__brand">
@@ -286,7 +282,7 @@ async function shareSignLink() {
     </header>
 
     <!-- 페이지별 progress segment — 전체 페이지 수 만큼 -->
-    <div class="m-progress">
+    <div class="m-progress ui-stepper">
       <div v-for="i in TOTAL_PAGES" :key="i"
            class="m-progress__seg"
            :class="{ 'is-done': (i - 1) <= currentPageIdx }"></div>
@@ -299,18 +295,18 @@ async function shareSignLink() {
 
     <StickyQuote v-if="금액바보임" />
 
-    <footer class="m-footer">
+    <footer class="m-footer ui-bottom-action">
       <!-- 공유받은 확정견적은 먼저 «그대로» 보여 준다. 수정 버튼을 눌러야 새 계산이 시작된다. -->
       <template v-if="공유견적 && currentStep.key === 'result'">
-        <button class="m-btn m-btn--soft" @click="수정하기">
+        <button class="m-btn m-btn--soft ui-button secondary" @click="수정하기">
           <i class="ph ph-pencil-simple"></i>조건 변경
         </button>
-        <button class="m-btn m-btn--primary" :disabled="공유중" @click="공유하기">
+        <button class="m-btn m-btn--primary ui-button primary" :disabled="공유중" @click="공유하기">
           <i class="ph ph-share-network"></i>{{ 공유중 ? '준비 중…' : (공유됨 ? '공유됨' : '이 견적 공유') }}
         </button>
       </template>
       <template v-else>
-        <button v-if="canGoBack" class="m-btn m-btn--ghost" :class="{ 'm-btn--icon': 견적보기보임 }"
+        <button v-if="canGoBack" class="m-btn m-btn--ghost ui-button secondary" :class="{ 'm-btn--icon': 견적보기보임 }"
                 @click="prev" aria-label="이전">
           <i class="ph ph-arrow-left"></i><span v-if="!견적보기보임">이전</span>
         </button>
@@ -345,13 +341,17 @@ async function shareSignLink() {
 .m-brand {
   border: 0; background: none; padding: 0; cursor: pointer;
   font: inherit; font-size: var(--fs-md); font-weight: 700; letter-spacing: -0.3px;
-  color: var(--brand); white-space: nowrap;
+  color: var(--partner-accent, var(--brand)); white-space: nowrap;
 }
 .m-brand__x { opacity: .55; margin: 0 1px; font-weight: 600; }
 
 .m-shell {
-  display: flex; flex-direction: column;
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
   background: var(--bg);
 }
 
@@ -360,7 +360,7 @@ async function shareSignLink() {
   position: fixed; top: 0; left: 0; right: 0;
   z-index: 20;
   display: flex; align-items: center; justify-content: space-between;
-  padding: calc(var(--safe-top) + 10px) 14px 10px;
+  padding: calc(var(--safe-top) + 10px) 16px 10px;
   background: var(--bg);
   gap: 8px;
 }
@@ -408,7 +408,7 @@ async function shareSignLink() {
 .m-progress {
   display: flex; gap: 4px;
   position: fixed; top: calc(var(--safe-top) + 56px); left: 0; right: 0;
-  padding: 0 14px 6px;
+  padding: 0 16px 6px;
   background: var(--bg);
   z-index: 19;
 }
@@ -423,15 +423,17 @@ async function shareSignLink() {
 }
 
 .m-main {
-  flex: 1;
-  padding: calc(var(--safe-top) + 80px) var(--sp-5) calc(var(--safe-bottom) + 92px);
-  /* ★여기서 overflow-y:auto 를 «쓰지 않는다» — 2026-09-18.
-     #m-app 은 min-height 만 있고 max-height 가 없어 콘텐츠만큼 늘어난다.
-     즉 .m-main 이 실제로 넘쳐서 «따로» 스크롤되는 일은 없고(항상 clientHeight===scrollHeight),
-     페이지(html/body)가 스크롤한다. 그런데도 여기에 overflow-y:auto 를 켜 두면
-     아이폰 사파리에서 «넘치지 않는 스크롤 영역» 이 손가락 스크롤 제스처를 가로채
-     바깥 페이지로 못 넘기는 경우가 있다(안드로이드·데스크톱 크롬에서는 안 보이는 버그라 놓치기 쉽다).
-     대표 「스크롤 되게 해주고」 — 트림이 많은 차(싼타페 36개 등)에서 이 증상이 났을 것이다. */
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  padding: calc(var(--safe-top) + 80px) var(--sp-4) calc(var(--safe-bottom) + 92px);
 }
 .m-main--quote {
   /* 접힌 실시간 견적바 + footer가 함께 떠 있는 화면만 충분한 하단 여백을 둔다. */
@@ -453,14 +455,15 @@ async function shareSignLink() {
   z-index: 30;
 }
 .m-btn {
-  height: var(--h-cta);
+  height: 52px;
   border: 0; border-radius: var(--r-card);
   font-family: inherit; font-weight: 600;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 6px;
-  transition: background .12s, opacity .12s;
+  transition: transform .08s cubic-bezier(.2,.8,.2,1), background .12s, opacity .12s;
 }
 .m-btn i { font-size: 18px; }
+.m-btn:not(:disabled):active { transform: scale(.975); }
 .m-btn--ghost {
   flex: 0 0 96px;
   background: var(--bg-soft);

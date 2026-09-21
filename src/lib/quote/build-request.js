@@ -8,6 +8,7 @@ import { quoteState, vehicleState } from '../../store.js';
 import * as Fees from '../compute-fees.js';
 import { 탁송, 썬팅값, 블박값 } from '../welrix-rates.js';
 import { 담당자인가 } from '../role.js';
+import { resolveBridgeProviderSelection } from '../sales-main-axis-bridge.js';
 
 /** 고른 외장색의 추가금 (원) */
 function 색추가금() {
@@ -22,15 +23,34 @@ function 색추가금() {
 /** @returns {object|null} 규격(spec.js)에 맞는 요청. 차를 안 골랐으면 null */
 export function 요청만들기() {
   const c = quoteState.cond || {};
-  const 키 = vehicleState.trim;      // ★welrix-db 의 trim_id = 웰릭스 model 문자열
-  if (!키) return null;
+  const baseKey = vehicleState.trim;
+  if (!baseKey) return null;
+
+  const vehicle = quoteState.vehicle || {};
+  const selected = Array.isArray(vehicle._selected_options) ? vehicle._selected_options : [];
+  const optionsMaster = Object.fromEntries(selected.map((o) => [
+    o.id,
+    { name: o.name, price: Number(o.price_won || 0) / 10000 },
+  ]));
+  const selectedIds = selected.map((o) => o.id);
+  const bridge = resolveBridgeProviderSelection(
+    vehicle._trim_meta || { trim_id: baseKey, _base_axes: vehicle._base_axes || {} },
+    optionsMaster,
+    selectedIds,
+  );
+  if (bridge && !bridge.candidate) {
+    throw new Error('선택한 인승·구동 조합의 웰릭스 견적 행을 찾을 수 없습니다');
+  }
+  const 키 = bridge?.candidate?.api_model || baseKey;
+  const 흡수옵션가 = bridge?.absorbedWon || 0;
+  const 옵션가 = Math.max(0, Fees.optPrice(quoteState) - 흡수옵션가);
 
   return {
     차: {
       종류: '신차',                   // 중고차 뼈대가 붙으면 여기서 갈린다
       키,
       차량가: 0,                      // ★신차는 계산기(웰릭스)가 키로 값을 안다. 중고차는 여기에 실린다
-      옵션가: Fees.optPrice(quoteState),
+      옵션가,
       색추가금: 색추가금(),
       /* ★손님은 할인을 못 넣는다 — 칸이 없어도 예전 값이 남아 있을 수 있어 여기서 한 번 더 막는다 */
       할인: 담당자인가() ? (c.discount || 0) * 10000 : 0,

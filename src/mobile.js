@@ -6,6 +6,9 @@ import { setCompanyConfig } from './lib/calc.js';
 import { quoteState } from './store.js';
 import { 담당자인가, 담당자로, 담당자로들어왔나 } from './lib/role.js';
 import { 풀기 } from './lib/share-link.js';
+import { installMobileHaptics } from './lib/haptics.js';
+import { loadAndApplySalesMainAxisBridge } from './lib/sales-main-axis-bridge.js';
+import { applyProductTheme } from './lib/brand-theme.js';
 import { vehicleState } from './store.js';
 
 // 회사 config 로드 (welrix.json) — calc.js 에 주입
@@ -15,6 +18,7 @@ async function loadCompanyConfig() {
     const cfg = await res.json();
     setCompanyConfig(cfg);
     window.__welrix_companyConfig = cfg;
+    applyProductTheme(cfg);
   } catch (e) {
     console.warn('[mobile] company config 로드 실패:', e);
   }
@@ -94,6 +98,9 @@ async function boot() {
   if (담당자로들어왔나() && !담당자인가()) await 담당자문();
   await waitForVehicleDb();
   await Promise.all([loadCompanyConfig(), loadVehicles()]);
+  // FreePass 메인 견적기의 기본축/옵션축 정책을 Preview에도 동일 적용.
+  try { await loadAndApplySalesMainAxisBridge(window.VEHICLE_DB); }
+  catch (e) { console.warn('[mobile] main axis bridge 적용 실패:', e); }
   // 재고는 비동기 — mount 후에도 늦게 도착해도 OK
   loadStock();
   /* ★공유 링크로 들어왔으면 고른 것을 먼저 풀어 놓고 그린다.
@@ -101,6 +108,7 @@ async function boot() {
   try { 풀기(vehicleState, quoteState); }
   catch (e) { console.warn('[mobile] 공유 링크 풀기 실패:', e); }
 
+  installMobileHaptics(document);
   const app = createApp(MobileApp);
   app.mount('#m-app');
 }
