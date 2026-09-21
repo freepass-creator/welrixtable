@@ -65,3 +65,11 @@ Original C:/dev/welrixtable dirty main worktree preserved. This isolated worktre
 - Screenshot-specified location: expanded price table metadata now reads 차량 -> 옵션 -> 색상 (외장/내장) -> 신용. Empty selection explicitly 미선택.
 - Production dpl_Mu6R5N5XjyZALQa3TSLxdbYYNNTV, source 9f46f94. Prior rollback dpl_2JWzvJ4qmz1bf1moTNGutH8SntJC.
 - Build and summary tests passed. Canonical browser verified selected panoramic sunroof and unselected exterior/interior between vehicle and credit. This check validates metadata display, not rental calculation.
+
+## Snow White Pearl option classification
+- Source 509400c: mobile runtime removes exact Snow White Pearl paint from equipment for nine K8/K9/Seltos/Niro variants and preserves its original 8-manwon surcharge under exterior color. Supplier catalog remains unchanged.
+- Legacy draft links remove paint option IDs; absent exterior is restored from paint, explicit exterior wins. Confirmed historical quote snapshots remain immutable. Other paint names are outside this narrow correction.
+- Sixteen regression tests pass, including explicit-color legacy conflict and source-price conflict. Production build passes.
+- Cursor found no concrete blocker after checking removal before totals and explicit-color precedence; both covered. Claude independent review unavailable due weekly quota; Gemini remains unavailable from prior authentication failure, neither counted as passed.
+- Production dpl_CA2hWC5WrcSKFRzdMgLqCiAtfZEr; rollback dpl_Mu6R5N5XjyZALQa3TSLxdbYYNNTV. Canonical root browser verified K8 2.5 Noblesse Light: no Snow White Pearl equipment checkbox, exterior selection present, total 37,310,000 -> 37,390,000 KRW, options unselected.
+- Browser evidence covers selection and vehicle-price display; full rental-price parity and physical-device vibration are not newly certified by this fix. Integrate isolated branch before any later main deployment.
