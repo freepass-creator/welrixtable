@@ -121,9 +121,8 @@ const 공유시각 = computed(() => {
       <ul v-if="(v.options || []).length" class="sr-car__opts">
         <li v-for="o in v.options" :key="o">{{ o }}</li>
       </ul>
-      <div v-if="v.colorExt || v.colorInt" class="sr-car__color">
-        {{ [v.colorExt && `외장 ${v.colorExt}`, v.colorInt && `내장 ${v.colorInt}`].filter(Boolean).join(' · ') }}
-      </div>
+      <div v-else class="sr-car__color">옵션 미선택</div>
+      <div class="sr-car__color">외장 {{ v.colorExt || '미선택' }} · 내장 {{ v.colorInt || '미선택' }}</div>
       <div class="sr-car__total">
         <span>총 차량가격</span><b>{{ fmt(총차량가) }}원</b>
       </div>

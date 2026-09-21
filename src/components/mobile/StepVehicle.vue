@@ -4,6 +4,7 @@ import { vehicleState, quoteState } from '../../store.js';
 import { 담당자인가 } from '../../lib/role.js';
 import { POPULAR_BRAND, POPULAR_MODELS, sortByRank } from '../../data/popular-rankings.js';
 import { fmt, guessColor } from '../../lib/format.js';
+import { selectionSummary } from '../../lib/selection-summary.js';
 import { exteriorColorSwatches } from '../../data/exterior-color-swatches.js';
 import {
   requiredOptionIds,
@@ -18,6 +19,7 @@ const props = defineProps({
   vehicles: { type: Array, default: () => [] },
 });
 
+const selectedSummary = computed(() => selectionSummary(window.VEHICLE_DB, vehicleState, quoteState));
 const committingKey = ref('');
 let committingTimer = null;
 function commitDelayMs() {
@@ -402,6 +404,11 @@ function onFeeChange() {
       <button v-if="selectedModel" class="sv-crumb" @click="goBack('model')">{{ selectedModel.model_name }}</button>
       <button v-if="selectedVariant" class="sv-crumb" @click="goBack('variant')">{{ [selectedVariant.variant_name, vehicleState.trimGroup].filter(Boolean).join(' · ') }}</button>
       <button v-if="selectedTrim" class="sv-crumb" @click="goBack('trim')">{{ [selectedTrim._ui_powertrain_group, selectedTrim.name].filter(Boolean).join(' ') }}</button>
+    </div>
+
+    <div v-if="selectedTrim && selectedSummary" class="sv-selected-summary">
+      <p>외장 {{ selectedSummary.exterior }} · 내장 {{ selectedSummary.interior }}</p>
+      <p>옵션 {{ selectedSummary.options.length ? selectedSummary.options.join(' · ') : '미선택' }}</p>
     </div>
 
     <!-- 1) 제조사 -->
@@ -840,6 +847,8 @@ function onFeeChange() {
   font-variant-numeric: tabular-nums;
 }
 
+.sv-selected-summary { font-size: var(--fs-sm); color: var(--ink-2); margin-bottom: 16px; overflow-wrap: anywhere; }
+.sv-selected-summary p { margin: 4px 0; }
 .sv-color-notice { color: var(--ink-3); font-size: var(--fs-sm); margin: -12px 0 20px; }
 
 /* 색상 grid — 외장/내장 공통 (swatch + 이름 + 가격) */

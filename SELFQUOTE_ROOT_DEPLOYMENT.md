@@ -39,3 +39,10 @@ Original C:/dev/welrixtable dirty main worktree preserved. This isolated worktre
 - Eleven unit tests including four summary tests passed; Vite build passed. Browser flow verified Grandeur/Premium, exterior black, interior black, sunroof -> conditions, expanded list. 390x844 screenshot verified readable summary and non-overlapping action buttons.
 - Cursor advisory recommended separate collapsed lines, capped expansion, proper list structure and offset checks; implemented/verified those. Physical phone and production verification pending.
 - Still local only: existing Vercel TEAM_ACCESS_REQUIRED has not been resolved.
+
+## Explicit unselected state and visible option names
+- Collapsed footer shows option names (two lines, full details available) rather than count alone. Vehicle breadcrumb area also shows full current colors/options.
+- Result card always shows exterior/interior with 미선택 fallback; empty options say 옵션 미선택. No implicit default selection or source-data mutation.
+- Browser verified unselected colors + selected sunroof remain identical through options, conditions and result. Build and four summary tests PASS. Local API calculation unavailable, so result verification is display-only.
+- Cursor flagged density; footer names remain bounded with full disclosure. Selection/send gates kept unchanged because this request concerns display, not making optional selections mandatory.
+- Production still blocked by Vercel author permission; all follow-ups remain local.
