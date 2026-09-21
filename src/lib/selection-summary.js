@@ -1,4 +1,5 @@
 // Resolve the current selection from the same vehicle DB as the picker.
+import { exteriorColorsFor } from './exterior-paint.js';
 export function selectionSummary(db, state, quote) {
   const snapshot = quote.sharedSnapshot?.vehicle;
   if (snapshot) return {
@@ -14,7 +15,7 @@ export function selectionSummary(db, state, quote) {
   return {
     vehicle: [brand.manufacturer_name, model?.model_name, variant?.variant_name,
       trim && [trim._ui_powertrain_group || trim.group, trim.name].filter(Boolean).join(' ')].filter(Boolean).join(' · '),
-    exterior: trim && state.color != null ? model.exterior_colors?.[state.color]?.name || '미선택' : '미선택',
+    exterior: trim && state.color != null ? exteriorColorsFor(model,trim)[state.color]?.name || '미선택' : '미선택',
     interior: trim ? quote.cond?.colorInt || '미선택' : '미선택',
     options: trim ? [...state.options].map(id => variant.options_master?.[id]?.name).filter(Boolean) : [],
   };

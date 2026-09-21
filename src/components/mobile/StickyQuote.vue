@@ -271,7 +271,7 @@ const cards = computed(() => {
   overflow: hidden;
 }
 .sq--expanded {
-  max-height: 75vh;
+  max-height: min(75dvh, calc(100dvh - var(--footer-height, 78px) - var(--safe-top, 0px) - 80px));
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
