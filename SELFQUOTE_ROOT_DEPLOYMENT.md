@@ -86,3 +86,4 @@ Original C:/dev/welrixtable dirty main worktree preserved. This isolated worktre
 - Shared SelectionSummary remains byte-identical to FreePass canonical. Local scroll-container sticky offset is 0 (effective viewport top 80px); tested scrolled 319px without header overlap. Quote metadata and footer ResizeObserver preserved.
 - Build, diff check, canonical sync PASS. Local browser K8 paid paint + sunroof and unselected interior verified. Cursor review checks applied; physical-device rotation not verified.
 - Production receipt: source 145c3f5; deployment dpl_9CJpHvgvy5ahGLPJBuXJPJitcyYc READY. https://welrixtable.vercel.app/ browser verified K8 paid snow-white selection, compact top exterior/interior/options and footer actions only; live monthly rates present.
+- Latest instruction supersedes sticky summary: remove position/top/z-index so selection scrolls normally. Compact placement unchanged. Both builds passed.
