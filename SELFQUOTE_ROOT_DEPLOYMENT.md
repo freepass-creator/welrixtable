@@ -31,3 +31,11 @@ Original C:/dev/welrixtable dirty main worktree preserved. This isolated worktre
 - Seven regression tests and Vite build PASS. Browser manufacturer-to-model flow PASS. Physical device haptic strength/support unverified.
 - Cursor identified cancel-then-click haptic risk; fixed and included regression. No unresolved reviewer disagreement.
 - All follow-up changes remain local; Vercel commit-author TEAM_ACCESS_REQUIRED blocks deployment.
+
+## Persistent selected-vehicle summary
+- Footer above actions now shows cumulative manufacturer/model/trim, exterior/interior and option count on every wizard step; native details lists all option names.
+- Summary derives from current selection, clears dependent fields on model changes, and honors confirmed shared snapshot.
+- Footer measured with ResizeObserver; price bar and main padding follow actual height.
+- Eleven unit tests including four summary tests passed; Vite build passed. Browser flow verified Grandeur/Premium, exterior black, interior black, sunroof -> conditions, expanded list. 390x844 screenshot verified readable summary and non-overlapping action buttons.
+- Cursor advisory recommended separate collapsed lines, capped expansion, proper list structure and offset checks; implemented/verified those. Physical phone and production verification pending.
+- Still local only: existing Vercel TEAM_ACCESS_REQUIRED has not been resolved.

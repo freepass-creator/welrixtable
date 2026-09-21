@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, nextTick } from 'vue';
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { quoteState, vehicleState } from '../../store.js';
 import { 담당자인가, 손님링크 } from '../../lib/role.js';
 import { 지금주소 } from '../../lib/share-link.js';
@@ -10,6 +10,18 @@ import StepResult from './StepResult.vue';
 import { 다시계산, 견적상태 } from '../../lib/quote/index.js';
 import StickyQuote from './StickyQuote.vue';
 import SendSheet from './SendSheet.vue';
+import SelectionSummary from './SelectionSummary.vue';
+
+const footer = ref(null);
+const footerHeight = ref(78);
+let footerObserver;
+onMounted(() => {
+  footerObserver = new ResizeObserver(() => {
+    footerHeight.value = footer.value?.getBoundingClientRect().height || 78;
+  });
+  if (footer.value) footerObserver.observe(footer.value);
+});
+onBeforeUnmount(() => footerObserver?.disconnect());
 
 const cfg = computed(() => window.__welrix_companyConfig || {});
 
@@ -257,7 +269,7 @@ async function shareSignLink() {
 </script>
 
 <template>
-  <div class="m-shell">
+  <div class="m-shell" :style="{ '--footer-height': footerHeight + 'px' }">
     <!-- 헤더 — 좌측: CI + 페이지 타이틀, 우측: 발송 -->
     <header class="m-header ui-header">
       <!-- ★상단은 «웰컴저축은행 × 웰릭스모빌리티» 한 줄만 (대표 2026-09-17).
@@ -295,7 +307,9 @@ async function shareSignLink() {
 
     <StickyQuote v-if="금액바보임" />
 
-    <footer class="m-footer ui-bottom-action">
+    <footer ref="footer" class="m-footer ui-bottom-action">
+      <SelectionSummary />
+      <div class="m-footer__actions">
       <!-- 공유받은 확정견적은 먼저 «그대로» 보여 준다. 수정 버튼을 눌러야 새 계산이 시작된다. -->
       <template v-if="공유견적 && currentStep.key === 'result'">
         <button class="m-btn m-btn--soft ui-button secondary" @click="수정하기">
@@ -330,6 +344,7 @@ async function shareSignLink() {
           @click="공유하기"
         ><i class="ph ph-share-network"></i>{{ 공유중 ? '준비 중…' : (공유됨 ? '공유됨' : '이 견적 공유하기') }}</button>
       </template>
+      </div>
     </footer>
 
     <SendSheet :open="sendOpen" @close="sendOpen = false" />
@@ -433,20 +448,20 @@ async function shareSignLink() {
   touch-action: pan-y;
   scroll-behavior: smooth;
   scrollbar-gutter: stable;
-  padding: calc(var(--safe-top) + 80px) var(--sp-4) calc(var(--safe-bottom) + 92px);
+  padding: calc(var(--safe-top) + 80px) var(--sp-4) calc(var(--footer-height, 78px) + 16px);
 }
 .m-main--quote {
   /* 접힌 실시간 견적바 + footer가 함께 떠 있는 화면만 충분한 하단 여백을 둔다. */
-  padding-bottom: calc(var(--safe-bottom) + 210px);
+  padding-bottom: calc(var(--footer-height, 78px) + 140px);
 }
 .m-main--result {
   /* 최종 견적은 footer만 피하면 된다. 과도한 빈 스크롤을 만들지 않는다. */
-  padding-bottom: calc(var(--safe-bottom) + 118px);
+  padding-bottom: calc(var(--footer-height, 78px) + 24px);
 }
 
 .m-footer {
   position: fixed; bottom: 0; left: 0; right: 0;
-  display: flex; gap: 8px;
+  display: block;
   padding: 12px 16px calc(var(--safe-bottom) + 12px);
   background: rgba(255,255,255,.96);
   border-top: 1px solid var(--line);
@@ -454,6 +469,7 @@ async function shareSignLink() {
   backdrop-filter: blur(10px);
   z-index: 30;
 }
+.m-footer__actions { display: flex; gap: 8px; }
 .m-btn {
   height: 52px;
   border: 0; border-radius: var(--r-card);

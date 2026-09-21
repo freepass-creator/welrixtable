@@ -246,7 +246,7 @@ const cards = computed(() => {
 
 <style scoped>
 .sq {
-  position: fixed; bottom: 78px; left: 0; right: 0;
+  position: fixed; bottom: var(--footer-height, 78px); left: 0; right: 0;
   background: var(--bg);
   border-top: 1px solid var(--line);
   border-radius: var(--r-sheet) var(--r-sheet) 0 0;
