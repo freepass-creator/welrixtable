@@ -43,6 +43,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         index: resolve(__dirname, 'index.html'),
+        desktop: resolve(__dirname, 'desktop.html'),
         mobile: resolve(__dirname, 'mobile.html'),
         home: resolve(__dirname, 'home.html'),
         vehicles: resolve(__dirname, 'vehicles.html'),
