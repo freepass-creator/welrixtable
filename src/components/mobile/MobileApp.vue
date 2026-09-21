@@ -3,6 +3,7 @@ import { ref, computed, watch, nextTick } from 'vue';
 import { quoteState, vehicleState } from '../../store.js';
 import { 담당자인가, 손님링크 } from '../../lib/role.js';
 import { 지금주소 } from '../../lib/share-link.js';
+import { promotionReturnUrl } from '../../lib/promotion-return.js';
 import StepVehicle from './StepVehicle.vue';
 import StepConditions from './StepConditions.vue';
 import StepExtras from './StepExtras.vue';
@@ -12,6 +13,7 @@ import StickyQuote from './StickyQuote.vue';
 import SendSheet from './SendSheet.vue';
 
 const cfg = computed(() => window.__welrix_companyConfig || {});
+const promotionUrl = promotionReturnUrl(location.search, document.referrer);
 
 // 발송은 헤더 상단 아이콘으로 — step 으로 안 둠 (사용자 의도)
 const STEPS = [
@@ -260,6 +262,7 @@ async function shareSignLink() {
   <div class="m-shell">
     <!-- 헤더 — 좌측: CI + 페이지 타이틀, 우측: 발송 -->
     <header class="m-header ui-header">
+      <a class="m-promotion-back" :href="promotionUrl" aria-label="프로모션으로 돌아가기" title="프로모션으로 돌아가기">←</a>
       <!-- ★상단은 «웰컴저축은행 × 웰릭스모빌리티» 한 줄만 (대표 2026-09-17).
            welrix 로고·엑셀 버전 배지·조회동의 링크는 뺐다 — 손님이 볼 것이 아니다. -->
       <div class="m-header__brand">
@@ -344,6 +347,13 @@ async function shareSignLink() {
   color: var(--partner-accent, var(--brand)); white-space: nowrap;
 }
 .m-brand__x { opacity: .55; margin: 0 1px; font-weight: 600; }
+.m-promotion-back {
+  display: inline-flex; align-items: center; justify-content: center;
+  flex: 0 0 32px; height: 40px; color: var(--brand); text-decoration: none;
+  border-radius: var(--r); font-size: 22px;
+}
+.m-promotion-back:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+@media (max-width: 360px) { .m-brand { font-size: 11px; } }
 
 .m-shell {
   display: flex;
