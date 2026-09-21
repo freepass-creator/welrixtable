@@ -312,11 +312,11 @@ async function shareSignLink() {
         </button>
         <button v-if="견적보기보임" class="m-btn m-btn--soft" @click="견적보기">견적 보기</button>
         <a
-          v-if="stepIdx < STEPS.length - 1"
+          v-if="stepIdx === 0 && (vehicleState.subStep || 'brand') === 'brand'"
           class="m-btn m-btn--condition"
           href="https://welrix-rent.web.app/"
-          aria-label="조건표로 이동"
-        >조건표</a>
+          aria-label="차종별 조건표로 이동"
+        >차종별 조건표</a>
         <button
           v-if="stepIdx < STEPS.length - 1"
           class="m-btn m-btn--primary"
@@ -484,7 +484,7 @@ async function shareSignLink() {
 }
 .m-btn--primary:not(:disabled):active { background: var(--brand-700); }
 .m-btn--condition {
-  flex: 0 0 72px;
+  flex: 0 0 112px;
   background: var(--bg-soft); color: var(--ink-2); text-decoration: none;
   font-size: var(--fs-base);
 }
