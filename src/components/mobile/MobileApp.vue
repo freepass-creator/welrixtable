@@ -471,7 +471,7 @@ async function shareSignLink() {
 .m-btn i { font-size: 18px; }
 .m-btn:not(:disabled):active { transform: scale(.975); }
 .m-btn--ghost {
-  flex: 0 0 96px;
+  flex: 0 0 112px;
   background: var(--bg-soft);
   color: var(--ink-2);
   font-size: var(--fs-base);
@@ -484,7 +484,6 @@ async function shareSignLink() {
 }
 .m-btn--primary:not(:disabled):active { background: var(--brand-700); }
 .m-btn--condition {
-  flex: 0 0 112px;
   text-decoration: none;
 }
 /* 「견적 보기」 — 다음 옆에 나란히. 테두리 없이 옅은 바탕 */
