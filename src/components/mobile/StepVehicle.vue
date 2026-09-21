@@ -392,7 +392,7 @@ function onFeeChange() {
 
 <template>
   <div class="sv">
-    <!-- breadcrumb — 텍스트만 결합 -->
+    <!-- breadcrumb — 각 선택 단계를 > 로 명확하게 구분 -->
     <div class="sv-crumbs" v-if="selectedBrand">
       <button class="sv-crumb" @click="goBack('brand')">
         <img v-if="BRAND_LOGOS[selectedBrand.manufacturer_id]" :src="BRAND_LOGOS[selectedBrand.manufacturer_id]" />
@@ -714,6 +714,12 @@ function onFeeChange() {
   font-family: inherit; font-size: var(--fs-sm);
   cursor: pointer;
   letter-spacing: -0.2px;
+}
+.sv-crumb + .sv-crumb::before {
+  content: '>';
+  margin-right: 4px;
+  color: var(--ink-3);
+  font-weight: var(--fw-regular);
 }
 .sv-crumb img { width: 14px; height: 14px; }
 .sv-crumb:active { color: var(--brand); }
