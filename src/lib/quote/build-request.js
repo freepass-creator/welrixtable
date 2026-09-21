@@ -9,6 +9,7 @@ import * as Fees from '../compute-fees.js';
 import { 탁송, 썬팅값, 블박값 } from '../welrix-rates.js';
 import { 담당자인가 } from '../role.js';
 import { resolveBridgeProviderSelection } from '../sales-main-axis-bridge.js';
+import { exteriorColorsFor } from '../exterior-paint.js';
 
 /** 고른 외장색의 추가금 (원) */
 function 색추가금() {
@@ -16,7 +17,10 @@ function 색추가금() {
     const DB = window.VEHICLE_DB;
     const b = DB?.manufacturers?.find((m) => m.manufacturer_id === vehicleState.manufacturer);
     const md = b?.models?.find((m) => m.model_id === vehicleState.model);
-    return (md?.exterior_colors?.[vehicleState.color]?.price || 0) * 10000;
+    const variant = md?.variants?.find(v => v.variant_id === vehicleState.variant);
+    const trim = variant?.trims?.find(t => t.trim_id === vehicleState.trim);
+    const color = exteriorColorsFor(md, trim)[vehicleState.color];
+    return color?._paintUnavailable ? 0 : (color?.price || 0) * 10000;
   } catch { return 0; }
 }
 
