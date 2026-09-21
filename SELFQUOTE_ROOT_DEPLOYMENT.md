@@ -52,3 +52,11 @@ Original C:/dev/welrixtable dirty main worktree preserved. This isolated worktre
 - Supporting text is 13px, readable contrast, line-height 1.55, wrapping with no truncation. No descriptions invented for missing source data.
 - Build PASS; browser Grandeur option step confirms supporting copy below names.
 - Deploy author identity confirmation remains pending; no production release claimed.
+
+## Follow-ups released
+- User renewed deploy instruction; release commit 602eac5 records verified Vercel account dudguq@gmail.com with per-command Git identity (global config/history unchanged).
+- Preview dpl_AGbY9yFXkev5pw6RjRHzGeoyuBrb -> production dpl_2JWzvJ4qmz1bf1moTNGutH8SntJC. Prior rollback dpl_EbCqZGJ1L5XdzHRUGYG8xcSe1zWE.
+- Canonical root/mobile HTML and production bundle readback confirm forced mobile, haptics, cumulative summary, option supporting text.
+- Live browser root -> Hyundai -> Grandeur -> Premium -> colors verified; unselected states and summary present. Burgundy swatch computed rgb(92,42,46).
+- Eleven regression tests pass. Physical device vibration unverified; browser/hardware API support required. Color approximations remain reference-only (118 exact legacy display-palette matches, 59 name-based fallback).
+- Earlier pending/block statements above describe history; these follow-ups are now deployed. Main-worktree integration remains necessary before another main deployment.
