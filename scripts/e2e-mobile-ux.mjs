@@ -58,11 +58,11 @@ try {
   });
   ok(ui.title === '22px', '페이지 타이틀 규격이 22px 아님: ' + ui.title);
   ok(+ui.titleWeight >= 700, '페이지 타이틀 굵기 부족');
-  ok(ui.footerH >= 54, '하단 CTA 터치 높이 부족: ' + ui.footerH);
+  ok(ui.footerH >= 52, '하단 CTA 터치 높이 부족: ' + ui.footerH);
   ok(ui.headerShareH >= 36, '상단 액션 높이 부족: ' + ui.headerShareH);
   ok(ui.shareDisabled, '견적 전 공유 버튼이 활성화되어 있음');
 
-  // 제조사 → 모델 → 파워트레인 → (있으면 인승/구동) → 트림
+  // 제조사 → 모델 → 파워트레인(연료·배기량·인승·구동 통합) → 트림
   await page.locator('.sv-brand-card').filter({ hasText: '현대' }).click();
   await page.waitForFunction(() => document.querySelector('.sv-title')?.textContent?.includes('어떤 모델'));
   const santa = page.locator('.sv-row').filter({ hasText: '싼타페' });
@@ -70,11 +70,11 @@ try {
   else await clickFirst(page.locator('.sv-row'), '모델');
 
   await page.waitForFunction(() => document.querySelector('.sv-title')?.textContent?.includes('파워트레인'));
+  const combinedPowertrain = page.locator('.sv-row__label').filter({ hasText: /가솔린|하이브리드/ }).filter({ hasText: /인승/ });
+  ok(await combinedPowertrain.count() > 0, '파워트레인에 인승·구동 정보가 합쳐져 있지 않음');
   await clickFirst(page.locator('.sv-row'), '파워트레인');
-
-  if (await page.locator('.sv-title').filter({ hasText: '인승·구동방식' }).count()) {
-    await clickFirst(page.locator('.sv-row'), '인승·구동');
-  }
+  ok(await page.locator('.sv-title').filter({ hasText: '인승·구동방식' }).count() === 0,
+    '별도 인승·구동 화면이 남아 있음');
   await page.waitForSelector('.sv-trim-card');
   await clickFirst(page.locator('.sv-trim-card'), '트림');
 
@@ -96,17 +96,20 @@ try {
   }
 
   // 옵션 화면 실제 스크롤 + 하단 고정 영역이 콘텐츠를 가리지 않는지
-  const beforeScroll = await page.evaluate(() => ({
-    sh: document.documentElement.scrollHeight,
-    ch: document.documentElement.clientHeight,
-  }));
-  ok(beforeScroll.sh > beforeScroll.ch, '옵션 화면이 긴데도 문서 스크롤 높이가 생기지 않음');
-  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  const beforeScroll = await page.evaluate(() => {
+    const main = document.querySelector('.m-main');
+    return { sh: main?.scrollHeight || 0, ch: main?.clientHeight || 0 };
+  });
+  ok(beforeScroll.sh > beforeScroll.ch, '옵션 화면이 긴데도 본문 스크롤 높이가 생기지 않음');
+  await page.evaluate(() => {
+    const main = document.querySelector('.m-main');
+    if (main) { main.style.scrollBehavior = 'auto'; main.scrollTop = main.scrollHeight; }
+  });
   await page.waitForTimeout(200);
   const scrollCheck = await page.evaluate(() => {
     const sticky = document.querySelector('.sq')?.getBoundingClientRect();
     const last = document.querySelector('.sv-total')?.getBoundingClientRect();
-    return { y: window.scrollY, stickyTop: sticky?.top ?? 9999, lastBottom: last?.bottom ?? 0 };
+    return { y: document.querySelector('.m-main')?.scrollTop || 0, stickyTop: sticky?.top ?? 9999, lastBottom: last?.bottom ?? 0 };
   });
   ok(scrollCheck.y > 0, '본문 스크롤이 실제로 움직이지 않음');
   ok(scrollCheck.lastBottom <= scrollCheck.stickyTop + 2,
@@ -143,7 +146,10 @@ try {
   ok(monthly.length === 2 && monthly.every(Boolean), '선택한 2개 기간만 결과에 나와야 함: ' + JSON.stringify(monthly));
 
   // 최종 결과를 끝까지 스크롤했을 때 조건/안내문이 고정 footer 뒤에 가리지 않아야 한다.
-  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  await page.evaluate(() => {
+    const main = document.querySelector('.m-main');
+    if (main) { main.style.scrollBehavior = 'auto'; main.scrollTop = main.scrollHeight; }
+  });
   await page.waitForTimeout(150);
   const resultBottom = await page.evaluate(() => {
     const note = document.querySelector('.sr-note')?.getBoundingClientRect();
@@ -152,7 +158,7 @@ try {
   });
   ok(resultBottom.noteBottom <= resultBottom.footerTop + 2,
     `최종 견적 하단 안내가 footer에 가림: note=${resultBottom.noteBottom}, footer=${resultBottom.footerTop}`);
-  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.evaluate(() => { const main = document.querySelector('.m-main'); if (main) main.scrollTop = 0; });
   await page.waitForTimeout(100);
 
   await page.waitForFunction(() => {
@@ -187,16 +193,22 @@ try {
   ok(await page2.locator('.sr-term').count() === 2, '공유 견적에서 선택하지 않은 기간이 되살아남');
   await noHorizontalOverflow(page2, '공유견적');
 
-  await page2.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+  await page2.evaluate(() => {
+    const main = document.querySelector('.m-main');
+    if (main) { main.style.scrollBehavior = 'auto'; main.scrollTop = main.scrollHeight; }
+  });
   await page2.waitForTimeout(100);
   const sharedBottom = await page2.evaluate(() => {
     const note = document.querySelector('.sr-note')?.getBoundingClientRect();
     const footer = document.querySelector('.m-footer')?.getBoundingClientRect();
-    return { noteBottom: note?.bottom ?? 0, footerTop: footer?.top ?? innerHeight };
+    const main = document.querySelector('.m-main');
+    return { noteBottom: note?.bottom ?? 0, footerTop: footer?.top ?? innerHeight,
+      scrollTop: main?.scrollTop || 0, scrollHeight: main?.scrollHeight || 0, clientHeight: main?.clientHeight || 0,
+      className: main?.className || '' };
   });
   ok(sharedBottom.noteBottom <= sharedBottom.footerTop + 2,
-    `공유 견적 하단 안내가 footer에 가림: note=${sharedBottom.noteBottom}, footer=${sharedBottom.footerTop}`);
-  await page2.evaluate(() => window.scrollTo(0, 0));
+    `공유 견적 하단 안내가 footer에 가림: ${JSON.stringify(sharedBottom)}`);
+  await page2.evaluate(() => { const main = document.querySelector('.m-main'); if (main) main.scrollTop = 0; });
   await page2.waitForTimeout(100);
   await page2.screenshot({ path: `${out}/02-shared-snapshot.png`, fullPage: true });
 

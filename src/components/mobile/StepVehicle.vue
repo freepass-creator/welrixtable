@@ -126,7 +126,7 @@ const powertrainChoices = computed(() => {
     const groups = new Map();
 
     for (const trim of available) {
-      const group = trim._ui_powertrain_group || '';
+      const group = trim._ui_powertrain_group || trim.group || '';
       if (!groups.has(group)) groups.set(group, { group, count: 0, minPrice: Infinity, order: trim._groupOrder ?? 0 });
       const item = groups.get(group);
       item.count += 1;
@@ -161,7 +161,7 @@ const trims = computed(() => {
   if (!selectedVariant.value) return [];
   const taxRate = vehicleState.tax_rate || '5';
   let list = [...(selectedVariant.value.trims || [])].filter(t => t.operating !== false);
-  if (vehicleState.trimGroup) list = list.filter(t => (t._ui_powertrain_group || '') === vehicleState.trimGroup);
+  if (vehicleState.trimGroup) list = list.filter(t => (t._ui_powertrain_group || t.group || '') === vehicleState.trimGroup);
   return list.sort((a, b) => (a._groupOrder ?? 0) - (b._groupOrder ?? 0) || trimPrice(a, taxRate) - trimPrice(b, taxRate));
 });
 
@@ -306,7 +306,7 @@ function syncVehicle() {
     model: modelName,
     variant: selectedVariant.value?.variant_name || '',
     /* ★소제목(인승·구동·용도)을 트림 이름 앞에 붙인다 — 「익스클루시브」만으론 5인승인지 7인승인지 모른다 */
-    trim_name: [t._ui_powertrain_group, t.name].filter(Boolean).join(' '),
+    trim_name: [t._ui_powertrain_group || t.group, t.name].filter(Boolean).join(' '),
     total_manwon: totalManwon.value,
     trim_price_manwon: trimPriceManwon,
     options_price_manwon: optionsPriceManwon.value,
@@ -400,7 +400,7 @@ function onFeeChange() {
       </button>
       <button v-if="selectedModel" class="sv-crumb" @click="goBack('model')">{{ selectedModel.model_name }}</button>
       <button v-if="selectedVariant" class="sv-crumb" @click="goBack('variant')">{{ [selectedVariant.variant_name, vehicleState.trimGroup].filter(Boolean).join(' · ') }}</button>
-      <button v-if="selectedTrim" class="sv-crumb" @click="goBack('trim')">{{ [selectedTrim._ui_powertrain_group, selectedTrim.name].filter(Boolean).join(' ') }}</button>
+      <button v-if="selectedTrim" class="sv-crumb" @click="goBack('trim')">{{ [selectedTrim._ui_powertrain_group || selectedTrim.group, selectedTrim.name].filter(Boolean).join(' ') }}</button>
     </div>
 
     <!-- 1) 제조사 -->
