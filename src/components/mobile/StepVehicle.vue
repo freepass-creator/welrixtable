@@ -5,7 +5,7 @@ import { 담당자인가 } from '../../lib/role.js';
 import { POPULAR_BRAND, POPULAR_MODELS, sortByRank } from '../../data/popular-rankings.js';
 import { fmt, guessColor } from '../../lib/format.js';
 import { colorPriceLabel, exteriorColorsFor } from '../../lib/exterior-paint.js';
-import { selectionSummary } from '../../lib/selection-summary.js';
+import SelectionSummary from './SelectionSummary.vue';
 import { exteriorColorSwatches } from '../../data/exterior-color-swatches.js';
 import {
   requiredOptionIds,
@@ -20,7 +20,6 @@ const props = defineProps({
   vehicles: { type: Array, default: () => [] },
 });
 
-const selectedSummary = computed(() => selectionSummary(window.VEHICLE_DB, vehicleState, quoteState));
 const committingKey = ref('');
 let committingTimer = null;
 function commitDelayMs() {
@@ -400,6 +399,7 @@ function onFeeChange() {
   <div class="sv">
     <p v-if="vehicleState.colorNotice" role="status">{{ vehicleState.colorNotice }}</p>
     <!-- breadcrumb — 텍스트만 결합 -->
+    <div class="selection-anchor">
     <div class="sv-crumbs" v-if="selectedBrand">
       <button class="sv-crumb" @click="goBack('brand')">
         <img v-if="BRAND_LOGOS[selectedBrand.manufacturer_id]" :src="BRAND_LOGOS[selectedBrand.manufacturer_id]" />
@@ -409,11 +409,9 @@ function onFeeChange() {
       <button v-if="selectedVariant" class="sv-crumb" @click="goBack('variant')">{{ [selectedVariant.variant_name, vehicleState.trimGroup].filter(Boolean).join(' · ') }}</button>
       <button v-if="selectedTrim" class="sv-crumb" @click="goBack('trim')">{{ [selectedTrim._ui_powertrain_group, selectedTrim.name].filter(Boolean).join(' ') }}</button>
     </div>
-
-    <div v-if="selectedTrim && selectedSummary" class="sv-selected-summary">
-      <p>외장 {{ selectedSummary.exterior }} · 내장 {{ selectedSummary.interior }}</p>
-      <p>옵션 {{ selectedSummary.options.length ? selectedSummary.options.join(' · ') : '미선택' }}</p>
+      <SelectionSummary :show-vehicle="false" />
     </div>
+
 
     <!-- 1) 제조사 -->
     <div v-if="subStep === 'brand'" class="sv-section">
@@ -715,6 +713,7 @@ function onFeeChange() {
 </template>
 
 <style scoped>
+.selection-anchor .sv-crumbs { margin-bottom: 2px; }
 .sv { padding-top: 4px; }
 .sv-title {
   font-size: var(--fs-2xl); font-weight: var(--fw-bold);

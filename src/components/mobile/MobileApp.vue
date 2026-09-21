@@ -302,13 +302,13 @@ async function shareSignLink() {
 
     <main class="m-main"
           :class="{ 'm-main--quote': 금액바보임, 'm-main--result': currentStep.key === 'result' }">
+      <div v-if="currentStep.key !== 'vehicle'" class="selection-anchor"><SelectionSummary /></div>
       <component :is="currentStep.comp" :vehicles="vehicles" />
     </main>
 
     <StickyQuote v-if="금액바보임" />
 
     <footer ref="footer" class="m-footer ui-bottom-action">
-      <SelectionSummary />
       <div class="m-footer__actions">
       <!-- 공유받은 확정견적은 먼저 «그대로» 보여 준다. 수정 버튼을 눌러야 새 계산이 시작된다. -->
       <template v-if="공유견적 && currentStep.key === 'result'">

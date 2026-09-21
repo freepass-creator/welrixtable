@@ -80,3 +80,8 @@ Original C:/dev/welrixtable dirty main worktree preserved. This isolated worktre
 - Source ec9c559 -> production dpl_8zfKFJ5chz8BXiU5wNsxXAyoiFwC, rollback dpl_CHEUkmm8LbjEqt88uSYH6ciMBFSE. Upstream deployment dpl_51QH8i3Uc5z27m8mQqzXV7QxGQbs.
 - Nineteen regressions and build passed; real request/adaptor test confirms +80k/+400k/free charged exactly once. Canonical root browser verified K8 matte-only total 37,710,000 KRW and equipment paint removal.
 - Cursor review corrections applied: per-trim availability, name-based legacy restore, won-field consistency, visible notice and viewport cap. Claude/Gemini unavailable, not passed. Original dirty Welrix main remains preserved; main integration still required before future main deploy.
+
+## Compact top selection refinement (2026-09-21)
+- Removed footer selection details per latest user instruction. Exterior/interior/options stay directly below clickable model breadcrumbs, with compact spacing and sticky visibility; later steps retain top summary.
+- Shared SelectionSummary remains byte-identical to FreePass canonical. Local scroll-container sticky offset is 0 (effective viewport top 80px); tested scrolled 319px without header overlap. Quote metadata and footer ResizeObserver preserved.
+- Build, diff check, canonical sync PASS. Local browser K8 paid paint + sunroof and unselected interior verified. Cursor review checks applied; physical-device rotation not verified.
