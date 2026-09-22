@@ -306,7 +306,7 @@ async function shareSignLink() {
 
     <StickyQuote v-if="금액바보임" />
 
-    <footer ref="footer" class="m-footer ui-bottom-action">
+    <footer ref="footer" class="m-footer ui-bottom-action" :class="{ 'm-footer--three': 견적보기보임 }">
       <div class="m-footer__actions">
       <!-- 공유받은 확정견적은 먼저 «그대로» 보여 준다. 수정 버튼을 눌러야 새 계산이 시작된다. -->
       <template v-if="공유견적 && currentStep.key === 'result'">
@@ -499,5 +499,12 @@ async function shareSignLink() {
 }
 .m-btn--soft:active { background: var(--line-2); }
 .m-btn--icon { flex: 0 0 52px; }
+.m-footer--three > .m-footer__actions > .m-btn {
+  flex: 3 1 0;
+  min-width: 0;
+}
+.m-footer--three > .m-footer__actions > .m-btn--primary {
+  flex-grow: 4;
+}
 .m-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 </style>
