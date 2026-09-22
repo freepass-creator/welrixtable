@@ -1,7 +1,7 @@
 # AI Work Result
 
-- 목적: AI Core 스타터 키트를 welrixtable에 배포
-- 대상 revision: 3c333136c4c566dcfa4e99f4613e654c259cfa5c
+- 목적: 최신 AI Core 규격과 GitHub 동기화 부트스트랩 적용
+- 대상 revision: 47e89d936bf1264387ee5e62888f40f0470d583f
 - 변경:
 - 검증:
 - 남음:
