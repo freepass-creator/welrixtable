@@ -7,6 +7,7 @@ import StepConditions from './StepConditions.vue';
 import StepExtras from './StepExtras.vue';
 import StepResult from './StepResult.vue';
 import { 다시계산, 견적상태 } from '../../lib/quote/index.js';
+import { 공유기본주소 } from '../../lib/share-link.js';
 import StickyQuote from './StickyQuote.vue';
 import SendSheet from './SendSheet.vue';
 import SelectionSummary from './SelectionSummary.vue';
@@ -78,7 +79,7 @@ async function 공유하기() {
   if (!견적준비됨.value || 공유중.value) return;
   공유중.value = true;
   try {
-    const 주소 = 'https://welrixtable.vercel.app';
+    const 주소 = 공유기본주소;
     const 표시차 = quoteState.sharedSnapshot?.vehicle || quoteState.vehicle || {};
     const 글 = vehicleState.trim
       ? [표시차.brand, 표시차.model, 표시차.trim_name, '견적'].filter(Boolean).join(' ')
