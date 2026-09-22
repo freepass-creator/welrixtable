@@ -1,16 +1,16 @@
 {
   "schema": "ai-core-starter-kit/v1",
-  "core_revision": "a73b9616592f71d0aea81d297ac48ffa273586dd",
-  "generated_at": "2026-09-22T00:09:21.514Z",
-  "task": "AI Core 스타터 키트를 welrixtable에 배포",
+  "core_revision": "87b0f4f6c75dbb313ec4684081b83b1ef0c53da2",
+  "generated_at": "2026-09-22T02:24:48.666Z",
+  "task": "최신 AI Core 규격과 GitHub 동기화 부트스트랩 적용",
   "track": "development",
   "target": {
     "project_id": "welrixtable",
     "repository": "freepass-creator/welrixtable",
-    "branch": "codex/ai-core-starter-kit-20260922",
-    "revision": "3c333136c4c566dcfa4e99f4613e654c259cfa5c",
-    "registry_revision": "56affca1fc4e419000afe3e42f8821e5458d2071",
-    "root": "C:\\dev\\_ai-core-rollout\\welrixtable",
+    "branch": "codex/refresh-ai-core-kit-v2-20260922",
+    "revision": "47e89d936bf1264387ee5e62888f40f0470d583f",
+    "registry_revision": "47e89d936bf1264387ee5e62888f40f0470d583f",
+    "root": "C:\\dev\\ai-core-kit-rollout-20260922-v2\\welrixtable",
     "display_name": "welrixtable"
   },
   "files": [
@@ -33,6 +33,11 @@
       "path": "standards/shared-services/SHARED_RELEASE_GATE.md",
       "sha256": "098ba568b40d6fcd7c5830e7a024048a52ad156ed7a6f0374af2a9ac545eb03b",
       "source": "docs/shared-services/SHARED_RELEASE_GATE.md"
+    },
+    {
+      "path": "session-bootstrap.mjs",
+      "sha256": "60b0ccc3a8217aa2b7415f3830fec94fd894fab294155e294d7ede71edd8c900",
+      "source": "generated:session-bootstrap/v2"
     }
   ],
   "verification": {
