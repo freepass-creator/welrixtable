@@ -105,7 +105,7 @@ async function boot() {
   loadStock();
   /* ★공유 링크로 들어왔으면 고른 것을 먼저 풀어 놓고 그린다.
      VEHICLE_DB·vehicles.json 이 다 온 뒤라야 트림·옵션이 살아난다. */
-  try { 풀기(vehicleState, quoteState); }
+  try { await 풀기(vehicleState, quoteState); }
   catch (e) { console.warn('[mobile] 공유 링크 풀기 실패:', e); }
 
   installMobileHaptics(document);

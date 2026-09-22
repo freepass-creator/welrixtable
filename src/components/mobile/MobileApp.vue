@@ -68,7 +68,7 @@ async function 공유하기() {
   공유중.value = true;
   try {
     /* ★고른 차·트림·옵션·색상과 확정 계산값을 주소에 담고, staff 표시는 떼어 낸다 */
-    const 주소 = 손님링크(지금주소(vehicleState, quoteState, 견적상태));
+    const 주소 = 손님링크(await 지금주소(vehicleState, quoteState, 견적상태));
     const 표시차 = quoteState.sharedSnapshot?.vehicle || quoteState.vehicle || {};
     const 글 = vehicleState.trim
       ? [표시차.brand, 표시차.model, 표시차.trim_name, '견적'].filter(Boolean).join(' ')
