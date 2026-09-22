@@ -78,6 +78,13 @@ try {
   await page.waitForSelector('.sv-trim-card');
   await clickFirst(page.locator('.sv-trim-card'), '트림');
 
+  const footerWidths = await page.locator('.m-footer .m-btn').evaluateAll((buttons) =>
+    buttons.map((button) => button.getBoundingClientRect().width));
+  ok(footerWidths.length === 3, '트림 선택 후 하단 버튼이 3개가 아님: ' + footerWidths.length);
+  ok(Math.abs(footerWidths[0] / footerWidths[2] - 0.75) < 0.03
+    && Math.abs(footerWidths[1] / footerWidths[2] - 0.75) < 0.03,
+  '하단 3버튼 폭이 3:3:4가 아님: ' + JSON.stringify(footerWidths));
+
   // 트림 선택 뒤 공유는 계산 완료 전에는 아직 막혀 있어야 함
   const shareDuringCalc = await page.locator('.m-header .m-act').first().isDisabled();
   ok(shareDuringCalc, '계산 완료 전 공유가 열림');
