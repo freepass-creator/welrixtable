@@ -168,10 +168,11 @@ try {
   await page.locator('.m-header .m-act').first().click();
   await page.waitForTimeout(200);
   const sharedUrl = await page.evaluate(() => navigator.clipboard.readText());
-  ok(sharedUrl.includes('qs='), '공유 URL에 Snapshot(qs) 없음');
-  ok(sharedUrl.includes('force=mobile'), '공유 URL에 force=mobile 없음');
+  ok(sharedUrl.includes('?q='), '공유 URL이 단일 압축 파라미터(q)가 아님');
+  ok(!sharedUrl.includes('qs='), '공유 URL에 긴 Snapshot(qs)이 남음');
+  ok(!sharedUrl.includes('force=mobile'), '공유 URL에 불필요한 force 파라미터가 남음');
   ok(!sharedUrl.includes('staff='), '공유 URL에 staff 권한 누출');
-  ok(sharedUrl.length < 4000, '공유 URL이 지나치게 김: ' + sharedUrl.length);
+  ok(sharedUrl.length < 700, '압축 공유 URL이 여전히 김: ' + sharedUrl.length);
 
   // 받은 사람이 열었을 때 API 재계산 없이 같은 금액
   const page2 = await context.newPage();
@@ -204,7 +205,7 @@ try {
   await page2.locator('.m-header .m-act').first().click();
   await page2.waitForTimeout(150);
   const reShared = await page2.evaluate(() => navigator.clipboard.readText());
-  ok(reShared.includes('qs='), '재공유 시 Snapshot 유실');
+  ok(reShared.includes('?q='), '재공유 시 압축 Snapshot 유실');
 
   // 조건 변경을 누른 뒤에만 새 계산
   await page2.locator('.m-footer .m-btn--soft').filter({ hasText: '조건 변경' }).click();
