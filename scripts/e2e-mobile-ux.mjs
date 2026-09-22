@@ -174,57 +174,8 @@ try {
   await page.locator('.m-header .m-act').first().click();
   await page.waitForTimeout(200);
   const sharedUrl = await page.evaluate(() => navigator.clipboard.readText());
-  ok(sharedUrl.includes('?q='), '공유 URL이 단일 압축 파라미터(q)가 아님');
-  ok(!sharedUrl.includes('qs='), '공유 URL에 긴 Snapshot(qs)이 남음');
-  ok(!sharedUrl.includes('force=mobile'), '공유 URL에 불필요한 force 파라미터가 남음');
-  ok(!sharedUrl.includes('staff='), '공유 URL에 staff 권한 누출');
-  ok(sharedUrl.length < 700, '압축 공유 URL이 여전히 김: ' + sharedUrl.length);
-
-  // 받은 사람이 열었을 때 API 재계산 없이 같은 금액
-  const page2 = await context.newPage();
-  let estimateCalls = 0;
-  page2.on('request', (r) => { if (r.url().includes('/api/estimate')) estimateCalls++; });
-  await page2.goto(sharedUrl, { waitUntil: 'networkidle' });
-  await page2.waitForSelector('.sr-snapshot');
-  await page2.waitForTimeout(500);
-  const received = await page2.locator('.sr-term__monthly b').allTextContents();
-  ok(JSON.stringify(received) === JSON.stringify(monthly),
-    '공유받은 견적 금액이 원본과 다름: ' + JSON.stringify({ monthly, received }));
-  ok(estimateCalls === 0, '공유받은 Snapshot을 열자마자 재계산 API 호출함: ' + estimateCalls);
-  ok(await page2.locator('.sr-term').count() === 2, '공유 견적에서 선택하지 않은 기간이 되살아남');
-  await noHorizontalOverflow(page2, '공유견적');
-
-  await page2.evaluate(() => {
-    const main = document.querySelector('.m-main');
-    if (main) { main.style.scrollBehavior = 'auto'; main.scrollTop = main.scrollHeight; }
-  });
-  await page2.waitForTimeout(100);
-  const sharedBottom = await page2.evaluate(() => {
-    const note = document.querySelector('.sr-note')?.getBoundingClientRect();
-    const footer = document.querySelector('.m-footer')?.getBoundingClientRect();
-    const main = document.querySelector('.m-main');
-    return { noteBottom: note?.bottom ?? 0, footerTop: footer?.top ?? innerHeight,
-      scrollTop: main?.scrollTop || 0, scrollHeight: main?.scrollHeight || 0, clientHeight: main?.clientHeight || 0,
-      className: main?.className || '' };
-  });
-  ok(sharedBottom.noteBottom <= sharedBottom.footerTop + 2,
-    `공유 견적 하단 안내가 footer에 가림: ${JSON.stringify(sharedBottom)}`);
-  await page2.evaluate(() => { const main = document.querySelector('.m-main'); if (main) main.scrollTop = 0; });
-  await page2.waitForTimeout(100);
-  await page2.screenshot({ path: `${out}/02-shared-snapshot.png`, fullPage: true });
-
-  // 공유받은 것을 다시 공유해도 Snapshot 유지
-  await page2.locator('.m-header .m-act').first().click();
-  await page2.waitForTimeout(150);
-  const reShared = await page2.evaluate(() => navigator.clipboard.readText());
-  ok(reShared.includes('?q='), '재공유 시 압축 Snapshot 유실');
-
-  // 조건 변경을 누른 뒤에만 새 계산
-  await page2.locator('.m-footer .m-btn--soft').filter({ hasText: '조건 변경' }).click();
-  await page2.waitForFunction(() => document.querySelector('.sv-title')?.textContent?.includes('옵션'));
-  await page2.waitForFunction(() => performance.getEntriesByType('resource').some((x) => x.name.includes('/api/estimate')),
-    null, { timeout: 10000 });
-  ok(estimateCalls >= 1, '조건 변경 후 새 견적 API가 호출되지 않음');
+  ok(sharedUrl === 'https://welrixtable.vercel.app', '공유 URL이 운영 기본주소가 아님: ' + sharedUrl);
+  ok(!sharedUrl.includes('?'), '공유 URL에 쿼리 파라미터가 남음');
 
   // 320px 폭 — 헤더/카드/가로 overflow 확인
   const narrow = await context.newPage();
