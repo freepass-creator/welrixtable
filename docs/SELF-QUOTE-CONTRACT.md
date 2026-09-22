@@ -23,13 +23,13 @@ UI
 
 공통 Quote Engine 안에서는 비율을 퍼센트로 보관한다.
 
-- 보증금 10% = `10`
+- 보증금 0% = `0`
 - 선납금 0% = `0`
 - 수수료율 7% = `7`
 
 Welrix Adapter 안에서만 API 비율로 변환한다.
 
-- `deposit_pct: 0.1`
+- `deposit_pct: 0`
 - `prepay_pct: 0`
 - `feeRate: 0.07`
 

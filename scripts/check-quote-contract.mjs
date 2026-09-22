@@ -27,9 +27,9 @@ const 기본요청 = () => ({
     수수료율: 7,
   },
   안들: [
-    { 기간: 60, 보증금: 10, 선납: 0 },
-    { 기간: 48, 보증금: 10, 선납: 0 },
-    { 기간: 36, 보증금: 10, 선납: 0 },
+    { 기간: 60, 보증금: 0, 선납: 0 },
+    { 기간: 48, 보증금: 0, 선납: 0 },
+    { 기간: 36, 보증금: 0, 선납: 0 },
   ],
 });
 
@@ -72,7 +72,7 @@ assert.equal(요청검사(기본요청()), null);
   const 몸 = 요청을웰릭스몸통으로(기본요청());
   assert.equal(몸.model, '테스트 차량');
   assert.equal(몸.inputs.length, 3);
-  assert.equal(몸.inputs[0].deposit_pct, 0.1);
+  assert.equal(몸.inputs[0].deposit_pct, 0);
   assert.equal(몸.inputs[0].prepay_pct, 0);
   assert.equal(몸.inputs[0].feeRate, 0.07);
   assert.equal(몸.inputs[0].optionPrice, 120000);
@@ -104,7 +104,7 @@ try {
     assert.equal(url, '/api/estimate');
     assert.equal(init.method, 'POST');
     const body = JSON.parse(init.body);
-    assert.equal(body.inputs[0].deposit_pct, 0.1);
+    assert.equal(body.inputs[0].deposit_pct, 0);
     assert.equal(body.inputs[0].feeRate, 0.07);
     return {
       ok: true,
