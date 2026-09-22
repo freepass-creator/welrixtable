@@ -1,8 +1,7 @@
 <script setup>
 import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue';
 import { quoteState, vehicleState } from '../../store.js';
-import { 담당자인가, 손님링크 } from '../../lib/role.js';
-import { 지금주소 } from '../../lib/share-link.js';
+import { 담당자인가 } from '../../lib/role.js';
 import StepVehicle from './StepVehicle.vue';
 import StepConditions from './StepConditions.vue';
 import StepExtras from './StepExtras.vue';
@@ -73,14 +72,13 @@ const 금액바보임 = computed(() => {
 /* ── 공유 ──────────────────────────────────────────────────────────────
  * ★대표 2026-09-17 「공유는 좀 있었으면 좋겠어 — 내가 친구한테 할 수도 있고
  *   손님한테 할 수도 있으니까」
- * ★나가는 주소에서 `staff` 를 «반드시» 떼어 낸다(손님링크). 붙여 보내면
- *   받은 사람이 수수료 칸을 보게 된다. */
+ * ★대표 2026-09-22: 공유 주소는 쿼리 없이 운영 셀프견적 첫 화면만 보낸다.
+ *   고른 차량과 계산 결과는 주소에 싣지 않는다. */
 async function 공유하기() {
   if (!견적준비됨.value || 공유중.value) return;
   공유중.value = true;
   try {
-    /* ★고른 차·트림·옵션·색상과 확정 계산값을 주소에 담고, staff 표시는 떼어 낸다 */
-    const 주소 = 손님링크(await 지금주소(vehicleState, quoteState, 견적상태));
+    const 주소 = 'https://welrixtable.vercel.app';
     const 표시차 = quoteState.sharedSnapshot?.vehicle || quoteState.vehicle || {};
     const 글 = vehicleState.trim
       ? [표시차.brand, 표시차.model, 표시차.trim_name, '견적'].filter(Boolean).join(' ')
