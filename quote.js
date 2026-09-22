@@ -11,6 +11,7 @@ import {
 
 // ============ 유틸 ============
 import { fmt, krw, fmtTel, guessColor } from './src/lib/format.js';
+import { 공유기본주소 } from './src/lib/share-link.js';
 const $ = (id) => document.getElementById(id);
 function setSwatch(el, hex) {
   if (!el) return;
@@ -842,8 +843,8 @@ ${custName}님, 안녕하세요. 요청하신 견적을 보내드립니다.
 
 ${vNames}
 
-상세 견적 확인하기 ↓
-${url}
+셀프견적 바로가기 ↓
+${공유기본주소}
 
 — ${state.staff.name || '웰릭스 모빌리티'} (${state.staff.tel || ''})`;
       await navigator.clipboard.writeText(text);
