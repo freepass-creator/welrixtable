@@ -1,13 +1,36 @@
-// 견적 발송 — Realtime DB 의 welrix_quotes/<id> 경로에 저장
-// 손님 페이지는 ?q=<id> 로 접근해 read-only 로 표시
-import { ref, set, get, update, push } from 'firebase/database';
+// 견적 공유 저장.
+//
+//  ① 영업 견적서 `/?q=<id>` — 기존 그대로 freepasserp3 RTDB `welrix_quotes/<id>`.
+//     이미 나간 링크가 살아 있어야 해서 옮기지 않는다.
+//  ② 셀프견적 `/s/<id>`   — welrixtable 프로젝트 Firestore. 주소에는 ID만 담는다.
+//     (예전에는 견적 전체를 주소에 실어 2,000자가 넘었다)
+import { ref, set, get, push } from 'firebase/database';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db, waitAuth, auth } from './config.js';
+import { shareDb } from './share-db.js';
+
+const 공유컬렉션 = 'welrix_quote_shares';
+const 살릴기간 = 30 * 86400000; // 30일 — 대표 지정(2026-09-23)
 
 // short id (6자) — Base36 timestamp + random
 function makeShortId() {
   const t = Date.now().toString(36).slice(-4);
   const r = Math.random().toString(36).slice(2, 4);
   return t + r;
+}
+
+/** 추측이 어려운 8자리 ID. 36으로 나눈 나머지 편향까지 버린다. */
+function 짧은아이디(길이 = 8) {
+  const 글자 = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  const 뽑힘 = [];
+  while (뽑힘.length < 길이) {
+    for (const v of crypto.getRandomValues(new Uint8Array(길이))) {
+      if (v >= 252) continue; // 252 = 36*7 — 남는 꼬리는 버려야 고르게 나온다
+      뽑힘.push(글자[v % 36]);
+      if (뽑힘.length === 길이) break;
+    }
+  }
+  return 뽑힘.join('');
 }
 
 /**
@@ -64,4 +87,40 @@ export function buildQuoteUrl(id) {
   const origin = location.origin;
   // 같은 SPA 안에서 ?q=<id> 모드로 분기
   return `${origin}${location.pathname}?q=${id}`;
+}
+
+/**
+ * 셀프견적 공유 저장 — 주소에는 ID만 남긴다.
+ * @param {Array} payload — [선택 쿼리문자열, 줄인 스냅샷]
+ * @returns {Promise<{id, url}>}
+ */
+export async function saveSelfQuote(payload) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const id = 짧은아이디();
+    const 자리 = doc(shareDb, 공유컬렉션, id);
+    if ((await getDoc(자리)).exists()) continue;
+    await setDoc(자리, {
+      quote_id: id,
+      kind: 'self',
+      created_at: Date.now(),
+      expires_at: Date.now() + 살릴기간,
+      payload,
+    });
+    return { id, url: buildSelfQuoteUrl(id) };
+  }
+  throw new Error('견적 ID 생성 실패 — 다시 시도하세요');
+}
+
+/** 없거나 기간이 지났으면 null. 부른 쪽이 «긴 주소»로 되돌아갈 수 있게 한다. */
+export async function loadSelfQuote(id) {
+  const snap = await getDoc(doc(shareDb, 공유컬렉션, id));
+  if (!snap.exists()) return null;
+  const 값 = snap.data();
+  if (값.kind !== 'self') return null;
+  if (Number(값.expires_at || 0) <= Date.now()) return null;
+  return Array.isArray(값.payload) ? 값.payload : null;
+}
+
+export function buildSelfQuoteUrl(id) {
+  return `${location.origin}/s/${id}`;
 }

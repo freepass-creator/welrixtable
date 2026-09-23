@@ -1,4 +1,5 @@
 import { redirectProviderTrimSelection } from './sales-main-axis-bridge.js';
+import { loadSelfQuote, saveSelfQuote } from '../firebase/quotes.js';
 
 /** 손님에게 전달하는 셀프견적 진입 주소. 고객 발송 경로는 이 주소만 사용한다. */
 export const 공유기본주소 = 'https://welrixtable.vercel.app';
@@ -298,6 +299,14 @@ function 공개조건적용(quoteState, p, snap) {
 export async function 풀기(vehicleState, quoteState, 주소 = location.search) {
   let p;
   try { p = new URLSearchParams(주소); } catch { return false; }
+  const shortMatch = location.pathname.match(/^\/s\/([a-z0-9]{8})\/?$/i);
+  if (shortMatch) {
+    const savedBundle = await loadSelfQuote(shortMatch[1].toLowerCase());
+    if (!Array.isArray(savedBundle) || typeof savedBundle[0] !== 'string') return false;
+    p = new URLSearchParams(savedBundle[0]);
+    const snap = 스냅샷늘리기(savedBundle[1]);
+    if (snap) p.set('qs', 인코드(snap));
+  }
   const 묶음 = await 압축디코드(p.get('q'));
   if (Array.isArray(묶음) && typeof 묶음[0] === 'string') {
     p = new URLSearchParams(묶음[0]);
@@ -356,18 +365,27 @@ export async function 풀기(vehicleState, quoteState, 주소 = location.search)
  *  - 이미 공유받은 Snapshot 을 재공유하면 원본 Snapshot 을 그대로 이어 보낸다.
  */
 export async function 지금주소(vehicleState, quoteState, 견적상태 = null) {
-  const u = new URL(location.href);
-  const 고른것 = 담기(vehicleState, quoteState);
   const snap = quoteState?.sharedSnapshot || 스냅샷만들기(quoteState, 견적상태);
-  const 짧은값 = snap ? await 압축인코드([선택만담기(vehicleState), 스냅샷줄이기(snap)]) : '';
-  u.search = '';
-  u.hash = '';
-  if (짧은값) {
-    u.searchParams.set('q', 짧은값);
-  } else {
-    u.search = 고른것;
-    if (snap) u.searchParams.set('qs', 인코드(snap));
-    u.searchParams.set('force', 'mobile');
+  if (!snap) return 공유기본주소;
+  const 묶음 = [선택만담기(vehicleState), 스냅샷줄이기(snap)];
+  try {
+    return (await saveSelfQuote(묶음)).url;
+  } catch {
+    // 저장이 막히거나 끊겨도 «공유 자체»는 되게 한다. 대신 주소가 길어진다.
+    return await 긴주소(묶음);
   }
+}
+
+/** 서버에 못 맡겼을 때 쓰는 자급자족 주소 — 견적을 주소 안에 싣는다 */
+async function 긴주소(묶음) {
+  const u = new URL(공유기본주소);
+  const 압축 = await 압축인코드(묶음);
+  if (압축) u.searchParams.set('q', 압축);
+  else {
+    u.search = 묶음[0];
+    const snap = 스냅샷늘리기(묶음[1]);
+    if (snap) u.searchParams.set('qs', 인코드(snap));
+  }
+  u.searchParams.set('force', 'mobile');
   return u.toString();
 }

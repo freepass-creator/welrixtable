@@ -181,7 +181,7 @@ try {
   await page.locator('.m-header .m-act').first().click();
   await page.waitForTimeout(200);
   const sharedUrl = await page.evaluate(() => navigator.clipboard.readText());
-  ok(sharedUrl === 'https://welrixtable.vercel.app', '공유 URL이 운영 기본주소가 아님: ' + sharedUrl);
+  ok(/^https:\/\/welrixtable\.vercel\.app\/s\/[a-z0-9]{8}$/.test(sharedUrl), '공유 URL이 짧은 견적 경로가 아님: ' + sharedUrl);
   ok(!sharedUrl.includes('?'), '공유 URL에 쿼리 파라미터가 남음');
 
   // 320px 폭 — 헤더/카드/가로 overflow 확인
