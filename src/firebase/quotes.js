@@ -95,6 +95,7 @@ export function buildQuoteUrl(id) {
  * @returns {Promise<{id, url}>}
  */
 export async function saveSelfQuote(payload) {
+  const 저장값 = JSON.stringify(payload);
   for (let attempt = 0; attempt < 3; attempt++) {
     const id = 짧은아이디();
     const 자리 = doc(shareDb, 공유컬렉션, id);
@@ -104,21 +105,27 @@ export async function saveSelfQuote(payload) {
       kind: 'self',
       created_at: Date.now(),
       expires_at: Date.now() + 살릴기간,
-      payload,
+      payload: 저장값,
     });
     return { id, url: buildSelfQuoteUrl(id) };
   }
   throw new Error('견적 ID 생성 실패 — 다시 시도하세요');
 }
 
-/** 없거나 기간이 지났으면 null. 부른 쪽이 «긴 주소»로 되돌아갈 수 있게 한다. */
+/** 없거나 기간이 지났으면 null. */
 export async function loadSelfQuote(id) {
   const snap = await getDoc(doc(shareDb, 공유컬렉션, id));
   if (!snap.exists()) return null;
   const 값 = snap.data();
   if (값.kind !== 'self') return null;
   if (Number(값.expires_at || 0) <= Date.now()) return null;
-  return Array.isArray(값.payload) ? 값.payload : null;
+  if (typeof 값.payload !== 'string') return null;
+  try {
+    const payload = JSON.parse(값.payload);
+    return Array.isArray(payload) ? payload : null;
+  } catch {
+    return null;
+  }
 }
 
 export function buildSelfQuoteUrl(id) {

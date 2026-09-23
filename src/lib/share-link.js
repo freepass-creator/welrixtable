@@ -3,6 +3,12 @@ import { loadSelfQuote, saveSelfQuote } from '../firebase/quotes.js';
 
 /** 손님에게 전달하는 셀프견적 진입 주소. 고객 발송 경로는 이 주소만 사용한다. */
 export const 공유기본주소 = 'https://welrixtable.vercel.app';
+
+/** 카톡·문자에 그대로 붙일 표기 — `https://` 는 떼고 보낸다(대표 2026-09-23: 33자).
+ *  카톡·문자·메일 모두 도메인만 있어도 링크로 만들어 준다. */
+export function 짧게보일주소(주소) {
+  return String(주소 || '').replace(/^https?:\/\//, '');
+}
 // ============================================================================
 //  공유 링크 — «고른 것 + 확정 견적 Snapshot» 을 주소에 담는다
 // ----------------------------------------------------------------------------
@@ -44,23 +50,10 @@ function 디코드(글) {
   } catch { return null; }
 }
 
-function 바이트를주소로(bytes) {
-  let binary = '';
-  for (const b of bytes) binary += String.fromCharCode(b);
-  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
-}
-
 function 주소를바이트로(글) {
   const base64 = 글.replace(/-/g, '+').replace(/_/g, '/');
   const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
   return Uint8Array.from(atob(padded), (ch) => ch.charCodeAt(0));
-}
-
-/** 긴 공개 견적을 브라우저 표준 gzip으로 줄인다. 서버 저장소나 외부 단축 서비스가 필요 없다. */
-async function 압축인코드(값) {
-  if (typeof CompressionStream !== 'function') return '';
-  const stream = new Blob([JSON.stringify(값)]).stream().pipeThrough(new CompressionStream('gzip'));
-  return 바이트를주소로(new Uint8Array(await new Response(stream).arrayBuffer()));
 }
 
 async function 압축디코드(글) {
@@ -368,24 +361,5 @@ export async function 지금주소(vehicleState, quoteState, 견적상태 = null
   const snap = quoteState?.sharedSnapshot || 스냅샷만들기(quoteState, 견적상태);
   if (!snap) return 공유기본주소;
   const 묶음 = [선택만담기(vehicleState), 스냅샷줄이기(snap)];
-  try {
-    return (await saveSelfQuote(묶음)).url;
-  } catch {
-    // 저장이 막히거나 끊겨도 «공유 자체»는 되게 한다. 대신 주소가 길어진다.
-    return await 긴주소(묶음);
-  }
-}
-
-/** 서버에 못 맡겼을 때 쓰는 자급자족 주소 — 견적을 주소 안에 싣는다 */
-async function 긴주소(묶음) {
-  const u = new URL(공유기본주소);
-  const 압축 = await 압축인코드(묶음);
-  if (압축) u.searchParams.set('q', 압축);
-  else {
-    u.search = 묶음[0];
-    const snap = 스냅샷늘리기(묶음[1]);
-    if (snap) u.searchParams.set('qs', 인코드(snap));
-  }
-  u.searchParams.set('force', 'mobile');
-  return u.toString();
+  return (await saveSelfQuote(묶음)).url;
 }

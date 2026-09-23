@@ -7,7 +7,7 @@ import StepConditions from './StepConditions.vue';
 import StepExtras from './StepExtras.vue';
 import StepResult from './StepResult.vue';
 import { 다시계산, 견적상태 } from '../../lib/quote/index.js';
-import { 지금주소 } from '../../lib/share-link.js';
+import { 지금주소, 짧게보일주소 } from '../../lib/share-link.js';
 import StickyQuote from './StickyQuote.vue';
 import SendSheet from './SendSheet.vue';
 
@@ -61,13 +61,12 @@ const 금액바보임 = computed(() => {
 /* ── 공유 ──────────────────────────────────────────────────────────────
  * ★대표 2026-09-17 「공유는 좀 있었으면 좋겠어 — 내가 친구한테 할 수도 있고
  *   손님한테 할 수도 있으니까」
- * ★대표 2026-09-22: 공유 주소는 쿼리 없이 운영 셀프견적 첫 화면만 보낸다.
- *   고른 차량과 계산 결과는 주소에 싣지 않는다. */
+ * ★공유 주소는 짧게 유지하되, 고른 차량과 확정 견적은 서버에 저장해 같은 화면을 연다. */
 async function 공유하기() {
   if (!견적준비됨.value || 공유중.value) return;
   공유중.value = true;
   try {
-    const 주소 = await 지금주소(vehicleState, quoteState, 견적상태.value);
+    const 주소 = 짧게보일주소(await 지금주소(vehicleState, quoteState, 견적상태.value));
     const 표시차 = quoteState.sharedSnapshot?.vehicle || quoteState.vehicle || {};
     const 글 = vehicleState.trim
       ? [표시차.brand, 표시차.model, 표시차.trim_name, '견적'].filter(Boolean).join(' ')
@@ -75,7 +74,8 @@ async function 공유하기() {
 
     if (navigator.share) {
       try {
-        await navigator.share({ title: '웰릭스모빌리티 견적', text: 글, url: 주소 });
+        // url 로 넘기면 브라우저가 https:// 를 다시 붙인다. 받는 사람이 «보는 글자»를 짧게 두려고 글에 싣는다.
+        await navigator.share({ title: '웰릭스모빌리티 견적', text: `${글}\n${주소}` });
         공유됨.value = true;
         setTimeout(() => { 공유됨.value = false; }, 1600);
         return;
@@ -92,6 +92,9 @@ async function 공유하기() {
     } catch {
       window.prompt('이 주소를 복사하세요', 주소);
     }
+  } catch (e) {
+    console.error('견적 공유 링크 생성 실패', e);
+    window.alert('공유 링크를 만들지 못했습니다. 잠시 후 다시 시도해 주세요.');
   } finally {
     공유중.value = false;
   }
