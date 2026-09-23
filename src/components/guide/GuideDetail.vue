@@ -21,7 +21,7 @@ onMounted(async () => {
   } catch {}
   loading.value = false;
   // 타이틀 업데이트
-  if (meta.value) document.title = `${meta.value.model} 가이드 · 웰릭스 모빌리티`;
+  if (meta.value) document.title = `${meta.value.model} 가이드 · 신차 장기렌터카 견적기`;
 });
 
 const meta = computed(() => {

@@ -76,7 +76,7 @@ async function 공유하기() {
 
     if (navigator.share) {
       try {
-        await navigator.share({ title: '웰릭스모빌리티 견적', text: 글, url: 주소 });
+        await navigator.share({ title: '신차 장기렌터카 견적', text: 글, url: 주소 });
         공유됨.value = true;
         setTimeout(() => { 공유됨.value = false; }, 1600);
         return;
@@ -260,11 +260,18 @@ async function shareSignLink() {
   <div class="m-shell">
     <!-- 헤더 — 좌측: CI + 페이지 타이틀, 우측: 발송 -->
     <header class="m-header ui-header">
-      <!-- ★상단은 «웰컴저축은행 × 웰릭스모빌리티» 한 줄만 (대표 2026-09-17).
-           welrix 로고·엑셀 버전 배지·조회동의 링크는 뺐다 — 손님이 볼 것이 아니다. -->
+      <!-- ★상단은 «도구 이름» 한 줄만.
+           2026-09-17 에는 «웰컴저축은행 × 웰릭스모빌리티» 였다. 2026-09-23 대표가 정리하셨다 —
+           「그냥 신차 장기 렌터카 견적기로 해도 되지 · 프로모션은 웰릭스 이름을 쓰고
+             견적기는 굳이 웰릭스 걸 안 써도 될것 같은 느낌이야」.
+           ★손님 길이 문자[웰릭스 신차 장기렌터카] → 광고(웰릭스) → 견적기 인데,
+             견적기에서 또 다른 회사 이름이 나오면 «누구랑 거래하는 거지»가 된다.
+             그래서 회사 이름을 빼고 도구 이름만 둔다.
+           ★계약금 입금계좌에는 웰릭스모빌리티㈜가 그대로 있다 — 실제로 차를 빌려주는 법인이다.
+             이름을 감추는 게 아니라, 이름이 «꼭 필요한 자리»에만 두는 것이다. -->
       <div class="m-header__brand">
         <button type="button" class="m-brand" @click="goHome" title="처음으로">
-          웰컴저축은행 <span class="m-brand__x">×</span> 웰릭스모빌리티
+          신차 장기렌터카 견적기
         </button>
       </div>
       <div class="m-header__actions">
