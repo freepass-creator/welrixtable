@@ -15,10 +15,24 @@ function injectGatePins() {
   };
 }
 
+/* ★/s/<id> 는 배포에서 vercel.json 이 mobile.html 로 넘긴다.
+   개발 서버에도 같은 길을 내 둬야 공유 링크를 로컬에서 열어 볼 수 있다. */
+function 짧은견적경로() {
+  return {
+    name: 'short-self-quote-path',
+    configureServer(server) {
+      server.middlewares.use((req, _res, next) => {
+        if (/^\/s\/[a-z0-9]{8}\/?(\?|$)/i.test(req.url || '')) req.url = '/mobile.html';
+        next();
+      });
+    },
+  };
+}
+
 export default defineConfig({
   root: '.',
   publicDir: 'public',
-  plugins: [vue(), injectGatePins()],
+  plugins: [vue(), injectGatePins(), 짧은견적경로()],
   server: {
     port: 5173,
     open: '/index.html',

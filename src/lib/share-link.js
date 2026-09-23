@@ -1,8 +1,8 @@
 import { redirectProviderTrimSelection } from './sales-main-axis-bridge.js';
-import { loadSelfQuote, saveSelfQuote } from '../firebase/quotes.js';
+import { loadSelfQuote, saveSelfQuote, 공유도메인 } from '../firebase/quotes.js';
 
 /** 손님에게 전달하는 셀프견적 진입 주소. 고객 발송 경로는 이 주소만 사용한다. */
-export const 공유기본주소 = 'https://welrixtable.vercel.app';
+export const 공유기본주소 = 공유도메인;
 
 /** 카톡·문자에 그대로 붙일 표기 — `https://` 는 떼고 보낸다(대표 2026-09-23: 33자).
  *  카톡·문자·메일 모두 도메인만 있어도 링크로 만들어 준다. */

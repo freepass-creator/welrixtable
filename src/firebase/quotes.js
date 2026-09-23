@@ -10,6 +10,8 @@ import { db, waitAuth, auth } from './config.js';
 import { shareDb } from './share-db.js';
 
 const 공유컬렉션 = 'welrix_quote_shares';
+/** 손님에게 나가는 정본 도메인. 미리보기·개발 주소에서 만들어도 손님에게는 이 주소로 보낸다. */
+export const 공유도메인 = 'https://welrixtable.vercel.app';
 const 살릴기간 = 30 * 86400000; // 30일 — 대표 지정(2026-09-23)
 
 // short id (6자) — Base36 timestamp + random
@@ -96,25 +98,37 @@ export function buildQuoteUrl(id) {
  */
 export async function saveSelfQuote(payload) {
   const 저장값 = JSON.stringify(payload);
+  let 마지막탈 = null;
+  // ★있는지 먼저 «읽지» 않는다 — 없는 문서 읽기는 규칙이 막는다(링크 훑기 방지).
+  //   이미 쓴 자리에 또 쓰는 것은 규칙이 update 로 보고 막으므로, 부딪히면 새 ID로 다시 한다.
   for (let attempt = 0; attempt < 3; attempt++) {
     const id = 짧은아이디();
     const 자리 = doc(shareDb, 공유컬렉션, id);
-    if ((await getDoc(자리)).exists()) continue;
-    await setDoc(자리, {
-      quote_id: id,
-      kind: 'self',
-      created_at: Date.now(),
-      expires_at: Date.now() + 살릴기간,
-      payload: 저장값,
-    });
-    return { id, url: buildSelfQuoteUrl(id) };
+    try {
+      await setDoc(자리, {
+        quote_id: id,
+        kind: 'self',
+        created_at: Date.now(),
+        expires_at: Date.now() + 살릴기간,
+        payload: 저장값,
+      });
+      return { id, url: buildSelfQuoteUrl(id) };
+    } catch (e) {
+      마지막탈 = e;
+    }
   }
-  throw new Error('견적 ID 생성 실패 — 다시 시도하세요');
+  throw 마지막탈 || new Error('견적 ID 생성 실패 — 다시 시도하세요');
 }
 
-/** 없거나 기간이 지났으면 null. */
+/** 없거나 기간이 지났으면 null.
+ *  ★규칙은 «없는 문서»도 거부로 답한다(링크를 훑지 못하게). 거부와 없음을 같게 본다. */
 export async function loadSelfQuote(id) {
-  const snap = await getDoc(doc(shareDb, 공유컬렉션, id));
+  let snap;
+  try {
+    snap = await getDoc(doc(shareDb, 공유컬렉션, id));
+  } catch {
+    return null;
+  }
   if (!snap.exists()) return null;
   const 값 = snap.data();
   if (값.kind !== 'self') return null;
@@ -129,5 +143,5 @@ export async function loadSelfQuote(id) {
 }
 
 export function buildSelfQuoteUrl(id) {
-  return `${location.origin}/s/${id}`;
+  return `${공유도메인}/s/${id}`;
 }

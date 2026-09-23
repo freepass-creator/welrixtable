@@ -66,7 +66,8 @@ async function 공유하기() {
   if (!견적준비됨.value || 공유중.value) return;
   공유중.value = true;
   try {
-    const 주소 = 짧게보일주소(await 지금주소(vehicleState, quoteState, 견적상태.value));
+    // ★견적상태 는 reactive 객체다. .value 로 읽으면 undefined 라 견적이 통째로 빠진다.
+    const 주소 = 짧게보일주소(await 지금주소(vehicleState, quoteState, 견적상태));
     const 표시차 = quoteState.sharedSnapshot?.vehicle || quoteState.vehicle || {};
     const 글 = vehicleState.trim
       ? [표시차.brand, 표시차.model, 표시차.trim_name, '견적'].filter(Boolean).join(' ')

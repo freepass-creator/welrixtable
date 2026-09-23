@@ -7,7 +7,7 @@
 // ⚠ 아래 값들은 «비밀이 아니다». 공개돼도 된다 — 실제 방어는 firestore.rules 가 한다.
 //   규칙 정본은 freepass-sales 저장소의 firestore.rules 다.
 import { initializeApp, getApps } from 'firebase/app';
-import { initializeFirestore } from 'firebase/firestore';
+import { initializeFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 
 const 설정 = {
   apiKey: 'AIzaSyDqPhVTIKLpoFmPySlPk9iAX_tJIcFIyZg',
@@ -23,3 +23,10 @@ const 앱이름 = 'welrix-share';
 const app = getApps().find((x) => x.name === 앱이름) || initializeApp(설정, 앱이름);
 
 export const shareDb = initializeFirestore(app, { ignoreUndefinedProperties: true });
+
+/* ★검증용 — 시험 하네스가 켤 때«만» 에뮬레이터로 붙는다.
+   운영 브라우저에는 이 전역이 없으므로 아무 일도 일어나지 않는다. */
+const 에뮬 = typeof window !== 'undefined' ? window.__WELRIX_SHARE_EMULATOR__ : null;
+if (에뮬 && /^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+  connectFirestoreEmulator(shareDb, 에뮬.host || '127.0.0.1', 에뮬.port || 8080);
+}

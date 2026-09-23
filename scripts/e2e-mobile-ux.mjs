@@ -31,6 +31,8 @@ try {
   await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: 'http://127.0.0.1:5173' });
   await context.addInitScript(() => {
     try { Object.defineProperty(navigator, 'share', { value: undefined, configurable: true }); } catch {}
+    /* 공유 저장은 운영 Firestore 대신 에뮬레이터로 보낸다 — 시험이 운영에 글을 남기지 않는다 */
+    window.__WELRIX_SHARE_EMULATOR__ = { host: '127.0.0.1', port: 8080 };
   });
 
   const page = await context.newPage();
@@ -179,10 +181,29 @@ try {
 
   // 공유 URL 생성
   await page.locator('.m-header .m-act').first().click();
-  await page.waitForTimeout(200);
-  const sharedUrl = await page.evaluate(() => navigator.clipboard.readText());
-  ok(/^https:\/\/welrixtable\.vercel\.app\/s\/[a-z0-9]{8}$/.test(sharedUrl), '공유 URL이 짧은 견적 경로가 아님: ' + sharedUrl);
+  // 공유는 이제 서버에 견적을 맡기고 온다 — 붙여넣을 글자가 생길 때까지 기다린다.
+  let sharedUrl = '';
+  for (let i = 0; i < 60 && !sharedUrl; i++) {
+    sharedUrl = await page.evaluate(() => navigator.clipboard.readText().catch(() => ''));
+    if (!sharedUrl) await page.waitForTimeout(250);
+  }
+  // 대표 2026-09-23 — 손님이 받는 글자는 https:// 없이 33자다.
+  ok(/^welrixtable\.vercel\.app\/s\/[a-z0-9]{8}$/.test(sharedUrl), '공유 URL이 짧은 견적 경로가 아님: ' + sharedUrl);
   ok(!sharedUrl.includes('?'), '공유 URL에 쿼리 파라미터가 남음');
+  ok(sharedUrl.length === 33, `공유 URL 길이가 33자가 아님: ${sharedUrl.length}자`);
+
+  // ★받은 사람이 그 링크를 열면 «고른 차와 금액»이 그대로 살아나야 한다.
+  const 짧은경로 = sharedUrl.slice(sharedUrl.indexOf('/'));
+  const 받은쪽 = await context.newPage();
+  // Firestore 연결이 계속 열려 있어 networkidle 이 오지 않는다 — 문서만 뜨면 본다.
+  await 받은쪽.goto(new URL(짧은경로, BASE).toString(), { waitUntil: 'domcontentloaded' });
+  await 받은쪽.waitForSelector('text=공유받은 견적', { timeout: 20000 });
+  const 살아난글 = await 받은쪽.evaluate(() => document.body.innerText);
+  ok(/공유받은 견적/.test(살아난글), '공유 링크를 열었는데 공유받은 견적 화면이 아님');
+  ok(/총 차량가격[\s\S]{0,40}[0-9][0-9,]{5,}원/.test(살아난글), '공유 링크에 차량가격이 살아나지 않음');
+  ok(/월\s*[0-9][0-9,]{4,}원/.test(살아난글), '공유 링크에 월 대여료가 살아나지 않음');
+  await 받은쪽.screenshot({ path: `${out}/02-shared-open-390.png`, fullPage: true });
+  await 받은쪽.close();
 
   // 320px 폭 — 헤더/카드/가로 overflow 확인
   const narrow = await context.newPage();
@@ -223,8 +244,8 @@ try {
   console.log(JSON.stringify({
     ok: true,
     monthly,
+    sharedUrl,
     sharedUrlLength: sharedUrl.length,
-    estimateCallsAfterEdit: estimateCalls,
     scrollY: scrollCheck.y,
     ui,
     externalResourceWarnings: requestFailures.filter((x) => !x.url.startsWith('http://127.0.0.1:5173/')),
