@@ -1,0 +1,231 @@
+{
+  "schema": "ai-core-canonical-development-lines/v1",
+  "updated_at": "2026-09-26",
+  "policy": {
+    "one_canonical_line_per_concern": true,
+    "historical_assets_must_not_claim_authority": true,
+    "superseded_branches_are_not_runtime_authority": true
+  },
+  "lines": [
+    {
+      "id": "design-tokens",
+      "canonical_entrypoint": "src/styles/tokens.css",
+      "canonical_roots": [
+        "src/styles/tokens.css"
+      ],
+      "notes": [
+        "브랜드 색·토큰 값은 src/styles/tokens.css 한 곳에서만 정한다. 2026-09-25 점검에서 main 에 --brand 가 세 벌(#e1141e HTML 4장 인라인 · #1b2a4a tokens.css · #0D4E8B StandardPriceTable.vue)이었다.",
+        "색 «값»을 무엇으로 할지는 대표 결정이다 — 이 등록부는 값이 아니라 «정하는 자리»를 하나로 묶는다. 기존 위반은 baseline(기한 2026-10-31) 으로 두고 늘어나지 못하게 max_count 로 묶는다."
+      ],
+      "guards": [
+        {
+          "id": "brand-hex-literal",
+          "why": "세 브랜드 색(#e1141e · #1b2a4a · #0d4e8b)을 tokens.css 밖에서 hex 로 새로 박지 않는다 — var(--brand) 를 쓴다.",
+          "pattern": "#(?:[eE]1141[eE]|1[bB]2[aA]4[aA]|0[dD]4[eE]8[bB])(?![0-9a-fA-F])",
+          "include": [
+            "**/*.html",
+            "**/*.css",
+            "**/*.vue",
+            "**/*.js",
+            "**/*.mjs"
+          ],
+          "exclude": [
+            ".ai-core/**",
+            "_audit/**"
+          ]
+        },
+        {
+          "id": "brand-token-definition",
+          "why": "--brand 계열 토큰 정의는 tokens.css 에만 둔다.",
+          "pattern": "^\\s*--brand(?:-[a-z0-9]+)?\\s*:",
+          "include": [
+            "**/*.html",
+            "**/*.css",
+            "**/*.vue",
+            "**/*.js",
+            "**/*.mjs"
+          ],
+          "exclude": [
+            ".ai-core/**",
+            "_audit/**"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "quote-contract",
+      "canonical_entrypoint": "docs/SELF-QUOTE-CONTRACT.md",
+      "canonical_roots": [
+        "docs/SELF-QUOTE-CONTRACT.md"
+      ],
+      "historical_or_noncanonical": [
+        "_진행상황_인계.md"
+      ],
+      "notes": [
+        "대여료 계산은 웰릭스 /api/estimate 가 정본이고 로컬 엔진 fallback 은 금지(SELF-QUOTE-CONTRACT 2026-09-19). 2026-07-23 인계 문서의 「계산엔진 SSOT = src/lib/calc.js」는 이력이다."
+      ]
+    },
+    {
+      "id": "root-entry",
+      "canonical_entrypoint": "index.html",
+      "canonical_roots": [
+        "index.html",
+        "mobile.html",
+        "vercel.json"
+      ],
+      "notes": [
+        "main 의 루트는 «기기별»(PC=index.html, 폰=mobile.html 로 넘김)이다.",
+        "미해결 갈림: codex/selfquote-root-20260921(PR 없음)의 SELFQUOTE_ROOT_DEPLOYMENT.md 는 «루트=모바일 견적기, 옛 PC 화면=desktop.html» 을 운영에 배포했다고 적는다. 운영과 main 이 다를 수 있다 — 이 등록부는 루트 구조를 바꾸지 않는다. codex/short-share-link 는 같은 6커밋의 재적용본이다."
+      ]
+    }
+  ],
+  "repository_guards": {
+    "entry_files": {
+      "canonical": "AGENTS.md",
+      "mirrors": [
+        "CLAUDE.md",
+        "GEMINI.md"
+      ],
+      "why": "AI 가 처음 읽는 지시문은 한 벌이다."
+    },
+    "workflow_refs": {
+      "allow": [
+        "main"
+      ],
+      "why": "예약·운영 작업은 main 에서만 돈다."
+    },
+    "pull_request": {
+      "max_behind_main": 30,
+      "single_open_pr_per_canonical_path": true,
+      "why": "묵은 가지·같은 정본을 동시에 고치는 가지가 갈림의 원인이다(2026-09-25 점검: selfquote-root 와 short-share-link 가 같은 6커밋을 두 벌로 가짐).",
+      "allowed_head_patterns": [
+        "^work/[a-z0-9._-]+/[a-z0-9._-]+$",
+        "^dependabot/",
+        "^renovate/"
+      ],
+      "forbidden_actor_prefixes": [
+        "gpt/",
+        "claude/",
+        "codex/",
+        "cursor/",
+        "gemini/",
+        "work/gpt/",
+        "work/claude/",
+        "work/codex/",
+        "work/cursor/",
+        "work/gemini/"
+      ],
+      "legacy_head_exceptions": [
+        {
+          "branch": "cursor/freepass-sales-ad-links-cd11",
+          "expires": "2026-10-07"
+        },
+        {
+          "branch": "claude/ai-core-integration-standardization-ntmoli",
+          "expires": "2026-10-07",
+          "reason": "이 Claude 세션에 배정된 가지 이름이라 세션이 바꿀 수 없다."
+        }
+      ]
+    }
+  },
+  "baseline": [
+    {
+      "guard": "brand-hex-literal",
+      "path": "guide.html",
+      "max_count": 1,
+      "expires": "2026-10-31",
+      "reason": "2026-09-26 이전부터 있던 브랜드 hex 하드코딩 — var(--brand) 로 바꾸고 이 줄을 지운다(색 값은 대표 결정)."
+    },
+    {
+      "guard": "brand-hex-literal",
+      "path": "home.html",
+      "max_count": 3,
+      "expires": "2026-10-31",
+      "reason": "2026-09-26 이전부터 있던 브랜드 hex 하드코딩 — var(--brand) 로 바꾸고 이 줄을 지운다(색 값은 대표 결정)."
+    },
+    {
+      "guard": "brand-hex-literal",
+      "path": "index.html",
+      "max_count": 17,
+      "expires": "2026-10-31",
+      "reason": "2026-09-26 이전부터 있던 브랜드 hex 하드코딩 — var(--brand) 로 바꾸고 이 줄을 지운다(색 값은 대표 결정)."
+    },
+    {
+      "guard": "brand-hex-literal",
+      "path": "mobile.html",
+      "max_count": 1,
+      "expires": "2026-10-31",
+      "reason": "2026-09-26 이전부터 있던 브랜드 hex 하드코딩 — var(--brand) 로 바꾸고 이 줄을 지운다(색 값은 대표 결정)."
+    },
+    {
+      "guard": "brand-hex-literal",
+      "path": "src/components/StandardPriceTable.vue",
+      "max_count": 1,
+      "expires": "2026-10-31",
+      "reason": "2026-09-26 이전부터 있던 브랜드 hex 하드코딩 — var(--brand) 로 바꾸고 이 줄을 지운다(색 값은 대표 결정)."
+    },
+    {
+      "guard": "brand-hex-literal",
+      "path": "src/lib/brand-theme.js",
+      "max_count": 1,
+      "expires": "2026-10-31",
+      "reason": "2026-09-26 이전부터 있던 브랜드 hex 하드코딩 — var(--brand) 로 바꾸고 이 줄을 지운다(색 값은 대표 결정)."
+    },
+    {
+      "guard": "brand-hex-literal",
+      "path": "src/lib/build-quote-html.js",
+      "max_count": 1,
+      "expires": "2026-10-31",
+      "reason": "2026-09-26 이전부터 있던 브랜드 hex 하드코딩 — var(--brand) 로 바꾸고 이 줄을 지운다(색 값은 대표 결정)."
+    },
+    {
+      "guard": "brand-hex-literal",
+      "path": "src/lib/build-standard-price-html.js",
+      "max_count": 4,
+      "expires": "2026-10-31",
+      "reason": "2026-09-26 이전부터 있던 브랜드 hex 하드코딩 — var(--brand) 로 바꾸고 이 줄을 지운다(색 값은 대표 결정)."
+    },
+    {
+      "guard": "brand-hex-literal",
+      "path": "vehicles.html",
+      "max_count": 1,
+      "expires": "2026-10-31",
+      "reason": "2026-09-26 이전부터 있던 브랜드 hex 하드코딩 — var(--brand) 로 바꾸고 이 줄을 지운다(색 값은 대표 결정)."
+    },
+    {
+      "guard": "brand-token-definition",
+      "path": "guide.html",
+      "max_count": 4,
+      "expires": "2026-10-31",
+      "reason": "2026-09-26 이전부터 있던 파일별 --brand 정의 — tokens.css import 로 옮기고 이 줄을 지운다."
+    },
+    {
+      "guard": "brand-token-definition",
+      "path": "home.html",
+      "max_count": 4,
+      "expires": "2026-10-31",
+      "reason": "2026-09-26 이전부터 있던 파일별 --brand 정의 — tokens.css import 로 옮기고 이 줄을 지운다."
+    },
+    {
+      "guard": "brand-token-definition",
+      "path": "index.html",
+      "max_count": 4,
+      "expires": "2026-10-31",
+      "reason": "2026-09-26 이전부터 있던 파일별 --brand 정의 — tokens.css import 로 옮기고 이 줄을 지운다."
+    },
+    {
+      "guard": "brand-token-definition",
+      "path": "src/components/StandardPriceTable.vue",
+      "max_count": 1,
+      "expires": "2026-10-31",
+      "reason": "2026-09-26 이전부터 있던 파일별 --brand 정의 — tokens.css import 로 옮기고 이 줄을 지운다."
+    },
+    {
+      "guard": "brand-token-definition",
+      "path": "vehicles.html",
+      "max_count": 3,
+      "expires": "2026-10-31",
+      "reason": "2026-09-26 이전부터 있던 파일별 --brand 정의 — tokens.css import 로 옮기고 이 줄을 지운다."
+    }
+  ]
+}
