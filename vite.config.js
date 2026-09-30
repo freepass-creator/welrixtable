@@ -18,7 +18,7 @@ function injectGatePins() {
 export default defineConfig({
   root: '.',
   publicDir: 'public',
-  plugins: [vue(), injectGatePins()],
+  plugins: [vue(), injectGatePins(), { name: 'self-quote-short-route', configureServer(server) { server.middlewares.use((req, _res, next) => { if (/^\/s\/[^/?]+\/?(?:\?.*)?$/.test(req.url || '')) req.url = '/mobile.html'; next(); }); } }],
   server: {
     port: 5173,
     open: '/index.html',

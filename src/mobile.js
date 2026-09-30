@@ -5,7 +5,7 @@ import MobileApp from './components/mobile/MobileApp.vue';
 import { setCompanyConfig } from './lib/calc.js';
 import { quoteState } from './store.js';
 import { 담당자인가, 담당자로, 담당자로들어왔나 } from './lib/role.js';
-import { 풀기 } from './lib/share-link.js';
+import { 공유풀기 } from './lib/share-link.js';
 import { installMobileHaptics } from './lib/haptics.js';
 import { loadAndApplySalesMainAxisBridge } from './lib/sales-main-axis-bridge.js';
 import { applyProductTheme } from './lib/brand-theme.js';
@@ -105,8 +105,14 @@ async function boot() {
   loadStock();
   /* ★공유 링크로 들어왔으면 고른 것을 먼저 풀어 놓고 그린다.
      VEHICLE_DB·vehicles.json 이 다 온 뒤라야 트림·옵션이 살아난다. */
-  try { 풀기(vehicleState, quoteState); }
-  catch (e) { console.warn('[mobile] 공유 링크 풀기 실패:', e); }
+  try { await 공유풀기(vehicleState, quoteState); }
+  catch (e) {
+    const message = document.createElement('p');
+    message.setAttribute('role', 'alert');
+    message.textContent = e.message || '견적을 불러오지 못했습니다. 다시 열어주세요.';
+    document.getElementById('m-app').replaceChildren(message);
+    return;
+  }
 
   installMobileHaptics(document);
   const app = createApp(MobileApp);
