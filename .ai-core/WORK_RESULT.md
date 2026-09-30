@@ -24,3 +24,11 @@
 - 정리: obsolete promotion PR #1 closed with branch/history retained; its /s route contested this current user-approved self-quote route. Canon gate now PASS. Canonical owner PR #56 merged at 00d8bac7845e08ef8d13eaa227e77a69c5f06594.
 - 남음: operational PR #12 main publication, production deploy and live short-link write/readback.
 - next_start_here: release work/feature/short-self-quote; previous HOLD entry is historical and superseded by the direct approval.
+
+## 2026-09-30 — Desktop short-link follow-up
+- 목적: correct bare /s links at desktop width.
+- 대상 revision: main efd46631cb445949fc06261f1a0a7bbfc577a8df; initial production dpl_HfVhRsngKP2RFC3XeF4wbcCjBciD.
+- 변경: bypass legacy desktop redirect on validated /s/8id paths; preserve ordinary desktop entry.
+- 검증: operational UI created https://welrixtable.vercel.app/s/v3o3jog7; Firestore REST readback 200 with original 870000/1064000 amounts and 30-day expiry. Live desktop exposed self-redirect loop missed by the prior force=mobile desktop test. New 1280px bare-link browser regression PASS, full existing mobile UX regression PASS, contract/build PASS.
+- 남음: independent review, follow-up CI/merge/deploy and fresh mobile/desktop live readback.
+- next_start_here: mobile.html entry guard and scripts/e2e-mobile-ux.mjs desktopShare regression.

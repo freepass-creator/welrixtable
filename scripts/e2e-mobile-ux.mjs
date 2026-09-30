@@ -168,6 +168,8 @@ try {
   await page.locator('.m-footer .m-btn--primary').click();
   await page.waitForSelector('.sr-title');
   await page.waitForFunction(() => document.querySelectorAll('.sr-term__monthly b').length > 0, null, { timeout: 20000 });
+  // Wait for the pending option/condition recalculation before freezing the comparison.
+  await page.waitForLoadState('networkidle');
   const monthly = await page.locator('.sr-term__monthly b').allTextContents();
   ok(monthly.length === 2 && monthly.every(Boolean), '선택한 2개 기간만 결과에 나와야 함: ' + JSON.stringify(monthly));
 
@@ -247,6 +249,18 @@ try {
   const originalBundle = shares.get(new URL(sharedUrl).pathname.split('/').pop());
   const resharedBundle = shares.get(new URL(reShared).pathname.split('/').pop());
   ok(JSON.stringify(resharedBundle) === JSON.stringify(originalBundle), '재공유 시 Snapshot 유실');
+
+  // Bare short links must stay on the frozen viewer at desktop widths too.
+  const desktopShare = await context.newPage();
+  await desktopShare.setViewportSize({ width: 1280, height: 900 });
+  await desktopShare.goto(new URL(new URL(sharedUrl).pathname, BASE).href, { waitUntil: 'domcontentloaded' });
+  await desktopShare.waitForSelector('.sr-snapshot');
+  ok(JSON.stringify(await desktopShare.locator('.sr-term__monthly b').allTextContents()) === JSON.stringify(monthly), 'PC 단축 링크 금액 불일치');
+  ok(await desktopShare.locator('html.force-mobile').count() === 1, 'PC 이동 안내막이 단축 견적을 가림');
+  await desktopShare.goto(new URL('/s/zzz', BASE).href, { waitUntil: 'domcontentloaded' });
+  await desktopShare.waitForSelector('[role="alert"]');
+  ok(await desktopShare.locator('html.force-mobile').count() === 1, 'PC 잘못된 링크 안내가 이동막에 가림');
+  await desktopShare.close();
 
   // 조건 변경을 누른 뒤에만 새 계산
   await page2.locator('.m-footer .m-btn--soft').filter({ hasText: '조건 변경' }).click();
