@@ -256,6 +256,10 @@ try {
   await desktopShare.goto(new URL(new URL(sharedUrl).pathname, BASE).href, { waitUntil: 'domcontentloaded' });
   await desktopShare.waitForSelector('.sr-snapshot');
   ok(JSON.stringify(await desktopShare.locator('.sr-term__monthly b').allTextContents()) === JSON.stringify(monthly), 'PC 단축 링크 금액 불일치');
+  ok(await desktopShare.locator('html.force-mobile').count() === 1, 'PC 이동 안내막이 단축 견적을 가림');
+  await desktopShare.goto(new URL('/s/zzz', BASE).href, { waitUntil: 'domcontentloaded' });
+  await desktopShare.waitForSelector('[role="alert"]');
+  ok(await desktopShare.locator('html.force-mobile').count() === 1, 'PC 잘못된 링크 안내가 이동막에 가림');
   await desktopShare.close();
 
   // 조건 변경을 누른 뒤에만 새 계산
