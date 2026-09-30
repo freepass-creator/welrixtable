@@ -2,7 +2,7 @@
 import { ref, computed, watch, nextTick } from 'vue';
 import { quoteState, vehicleState } from '../../store.js';
 import { 담당자인가, 손님링크 } from '../../lib/role.js';
-import { 지금주소 } from '../../lib/share-link.js';
+import { 공유주소 } from '../../lib/share-link.js';
 import StepVehicle from './StepVehicle.vue';
 import StepConditions from './StepConditions.vue';
 import StepExtras from './StepExtras.vue';
@@ -68,7 +68,7 @@ async function 공유하기() {
   공유중.value = true;
   try {
     /* ★고른 차·트림·옵션·색상과 확정 계산값을 주소에 담고, staff 표시는 떼어 낸다 */
-    const 주소 = 손님링크(지금주소(vehicleState, quoteState, 견적상태));
+    const 주소 = 손님링크(await 공유주소(vehicleState, quoteState, 견적상태));
     const 표시차 = quoteState.sharedSnapshot?.vehicle || quoteState.vehicle || {};
     const 글 = vehicleState.trim
       ? [표시차.brand, 표시차.model, 표시차.trim_name, '견적'].filter(Boolean).join(' ')
@@ -93,6 +93,8 @@ async function 공유하기() {
     } catch {
       window.prompt('이 주소를 복사하세요', 주소);
     }
+  } catch {
+    window.alert('짧은 공유 링크를 만들지 못했습니다. 연결을 확인하고 다시 시도해주세요.');
   } finally {
     공유중.value = false;
   }

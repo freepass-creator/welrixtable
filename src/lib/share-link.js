@@ -41,7 +41,9 @@ function 디코드(글) {
 }
 
 function 안전한스냅샷(값) {
-  if (!값 || 값.v !== 1 || !Array.isArray(값.terms) || !값.terms.length) return null;
+  const legacy = 값?.v === 1 && !값?.contract;
+  const current = 값?.v === 2 && 값?.contract === 'freepass-quote-snapshot/v2';
+  if (!값 || (!legacy && !current) || !Array.isArray(값.terms) || !값.terms.length) return null;
   const terms = 값.terms
     .filter((x) => x && Number.isFinite(+x.term))
     .map((x) => ({
@@ -59,7 +61,13 @@ function 안전한스냅샷(값) {
   const c = 값.conditions || {};
   const car = 값.vehicle || {};
   return {
-    v: 1,
+    v: current ? 2 : 1,
+    contract: current ? 'freepass-quote-snapshot/v2' : null,
+    quoteContract: current && typeof 값.quoteContract === 'string' ? 값.quoteContract : null,
+    resultContract: current && typeof 값.resultContract === 'string' ? 값.resultContract : null,
+    executionContract: current && typeof 값.executionContract === 'string' ? 값.executionContract : null,
+    sourceRevision: current && /^[0-9a-f]{40}$/i.test(값.sourceRevision || '') ? 값.sourceRevision : null,
+    providerMode: current && ['standard','external','forced'].includes(값.providerMode) ? 값.providerMode : null,
     at: typeof 값.at === 'string' ? 값.at : null,
     engine: typeof 값.engine === 'string' ? 값.engine : '웰릭스',
     vehiclePrice: 값.vehiclePrice != null && Number.isFinite(+값.vehiclePrice) ? +값.vehiclePrice : null,
@@ -90,6 +98,7 @@ function 스냅샷만들기(quoteState, 견적상태) {
   if (!견적상태 || 견적상태.상태 !== 'ok' || !Array.isArray(견적상태.결과)) return null;
   const scenarios = quoteState?.scenarios || [];
   const terms = scenarios.map((sc, i) => {
+    if (quoteState?.send?.[i] === false) return null;
     const r = 견적상태.결과[i];
     if (!r) return null;
     return {
@@ -221,7 +230,8 @@ export function 풀기(vehicleState, quoteState, 주소 = location.search) {
 
   // 과거 Promotion/공유 링크가 provider 완성차 row를 직접 가리켜도
   // 메인 견적기의 기본 트림 + 축 옵션 선택으로 되돌린다.
-  const 축리다이렉트 = redirectProviderTrimSelection(p.get('t'));
+  const snap = 안전한스냅샷(디코드(p.get('qs')));
+  const 축리다이렉트 = snap ? null : redirectProviderTrimSelection(p.get('t'));
   if (축리다이렉트?.base_provider_trim_id) {
     p.set('t', 축리다이렉트.base_provider_trim_id);
   }
@@ -254,7 +264,6 @@ export function 풀기(vehicleState, quoteState, 주소 = location.search) {
   if (color != null && color !== '') vehicleState.color = isNaN(+color) ? color : +color;
 
   /* Snapshot 이 있으면 그것이 «보낸 당시 견적»의 정본이다. */
-  const snap = 안전한스냅샷(디코드(p.get('qs')));
   quoteState.sharedSnapshot = snap;
   if (snap?.vehicle?.trim_name) quoteState.vehicle = { ...snap.vehicle };
   공개조건적용(quoteState, p, snap);
@@ -275,4 +284,39 @@ export function 지금주소(vehicleState, quoteState, 견적상태 = null) {
   if (snap) u.searchParams.set('qs', 인코드(snap));
   u.searchParams.set('force', 'mobile');
   return u.toString();
+}
+
+export async function 공유주소(vehicleState, quoteState, 견적상태, save = null) {
+  const snap = 안전한스냅샷(quoteState?.sharedSnapshot || 스냅샷만들기(quoteState, 견적상태));
+  if (!snap) throw new Error('견적 계산이 끝난 뒤 다시 공유해주세요.');
+  const store = save || (await import('../firebase/self-quote-share.js')).saveSelfQuote;
+  return store([담기(vehicleState, quoteState), snap]);
+}
+
+export async function 공유풀기(vehicleState, quoteState, load = null) {
+  const path = location.pathname || '';
+  if (!path.startsWith('/s/')) return 풀기(vehicleState, quoteState);
+  const match = path.match(/^\/s\/([a-z0-9]{8})\/?$/i);
+  if (!match) throw new Error('올바르지 않은 견적 링크입니다.');
+  const reader = load || (await import('../firebase/self-quote-share.js')).loadSelfQuote;
+  const bundle = await reader(match[1].toLowerCase());
+  if (!Array.isArray(bundle) || typeof bundle[0] !== 'string') throw new Error('저장된 견적을 읽을 수 없습니다.');
+  let snapshot = bundle[1];
+  // Historical /s/ links used a compact v1 array.
+  if (Array.isArray(snapshot) && snapshot[0] === 1 && Array.isArray(snapshot[5])) {
+    const a = snapshot, car = a[4] || [], c = a[6] || [];
+    snapshot = {
+      v: 1, at: a[1] ? new Date(a[1] * 60000).toISOString() : null,
+      engine: a[2] || '웰릭스', vehiclePrice: a[3],
+      vehicle: { brand: car[0], model: car[1], variant: car[2], trim_name: car[3], options: car[4], colorExt: car[5], colorInt: car[6] },
+      terms: a[5].map(t => ({ term: t[0], monthly: t[1], acquire: t[2], totalCarPrice: t[3], deposit: t[4], prepay: t[5], depPct: t[6], prePct: t[7] })),
+      conditions: { km: c[0], svc: c[1], insProperty: c[2], extraDriver: c[3], deliveryCity: c[4], tint: c[5], blackbox: c[6] },
+    };
+  }
+  const snap = 안전한스냅샷(snapshot);
+  if (!snap) throw new Error('저장된 견적을 읽을 수 없습니다.');
+  const params = new URLSearchParams(bundle[0]);
+  params.set('qs', 인코드(snap));
+  if (!풀기(vehicleState, quoteState, params.toString())) throw new Error('저장된 차량 선택을 읽을 수 없습니다.');
+  return true;
 }
