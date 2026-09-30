@@ -33,6 +33,32 @@ try {
     try { Object.defineProperty(navigator, 'share', { value: undefined, configurable: true }); } catch {}
   });
 
+  // Deterministic transport fixture: exercise the real UI/snapshot routing without
+  // creating operational documents in CI. Real SDK/rules are checked by emulator/live readback.
+  const shares = new Map();
+  let nextShare = 0;
+  await context.route('**/src/firebase/self-quote-share.js*', route => route.fulfill({
+    contentType: 'application/javascript',
+    body: `export async function saveSelfQuote(bundle) {
+      const response = await fetch('/__test-self-quote', { method: 'POST', headers: {'content-type':'application/json'}, body: JSON.stringify(bundle) });
+      const {id} = await response.json(); return 'https://welrixtable.vercel.app/s/' + id;
+    }
+    export async function loadSelfQuote(id) {
+      const response = await fetch('/__test-self-quote?id=' + id); return response.json();
+    }`,
+  }));
+  await context.route('**/__test-self-quote*', async route => {
+    const request = route.request();
+    if (request.method() === 'POST') {
+      const id = (++nextShare).toString(36).padStart(8, '0');
+      shares.set(id, request.postDataJSON());
+      await route.fulfill({ json: { id } });
+    } else {
+      const id = new URL(request.url()).searchParams.get('id');
+      await route.fulfill({ json: shares.get(id) || null });
+    }
+  });
+
   const page = await context.newPage();
   const consoleErrors = [];
   const requestFailures = [];
@@ -172,18 +198,18 @@ try {
 
   // 공유 URL 생성
   await page.locator('.m-header .m-act').first().click();
-  await page.waitForTimeout(200);
+  await page.waitForFunction(async () => /\/s\/[a-z0-9]{8}$/.test(await navigator.clipboard.readText()));
   const sharedUrl = await page.evaluate(() => navigator.clipboard.readText());
-  ok(sharedUrl.includes('qs='), '공유 URL에 Snapshot(qs) 없음');
-  ok(sharedUrl.includes('force=mobile'), '공유 URL에 force=mobile 없음');
+  ok(/^https:\/\/welrixtable\.vercel\.app\/s\/[a-z0-9]{8}$/.test(sharedUrl), '공유 URL이 짧은 정본 링크가 아님');
+  ok(new URL(sharedUrl).search === '', '견적 전체가 공유 URL 쿼리에 노출됨');
   ok(!sharedUrl.includes('staff='), '공유 URL에 staff 권한 누출');
-  ok(sharedUrl.length < 4000, '공유 URL이 지나치게 김: ' + sharedUrl.length);
+  ok(sharedUrl.length === 41, '공유 URL이 41자가 아님: ' + sharedUrl.length);
 
   // 받은 사람이 열었을 때 API 재계산 없이 같은 금액
   const page2 = await context.newPage();
   let estimateCalls = 0;
   page2.on('request', (r) => { if (r.url().includes('/api/estimate')) estimateCalls++; });
-  await page2.goto(sharedUrl, { waitUntil: 'networkidle' });
+  await page2.goto(new URL(new URL(sharedUrl).pathname, BASE).href, { waitUntil: 'networkidle' });
   await page2.waitForSelector('.sr-snapshot');
   await page2.waitForTimeout(500);
   const received = await page2.locator('.sr-term__monthly b').allTextContents();
