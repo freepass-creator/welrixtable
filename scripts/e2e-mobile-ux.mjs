@@ -248,6 +248,14 @@ try {
   const resharedBundle = shares.get(new URL(reShared).pathname.split('/').pop());
   ok(JSON.stringify(resharedBundle) === JSON.stringify(originalBundle), '재공유 시 Snapshot 유실');
 
+  // Bare short links must stay on the frozen viewer at desktop widths too.
+  const desktopShare = await context.newPage();
+  await desktopShare.setViewportSize({ width: 1280, height: 900 });
+  await desktopShare.goto(new URL(new URL(sharedUrl).pathname, BASE).href, { waitUntil: 'domcontentloaded' });
+  await desktopShare.waitForSelector('.sr-snapshot');
+  ok(JSON.stringify(await desktopShare.locator('.sr-term__monthly b').allTextContents()) === JSON.stringify(monthly), 'PC 단축 링크 금액 불일치');
+  await desktopShare.close();
+
   // 조건 변경을 누른 뒤에만 새 계산
   await page2.locator('.m-footer .m-btn--soft').filter({ hasText: '조건 변경' }).click();
   await page2.waitForFunction(() => document.querySelector('.sv-title')?.textContent?.includes('옵션'));
