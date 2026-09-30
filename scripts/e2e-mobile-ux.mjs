@@ -168,6 +168,8 @@ try {
   await page.locator('.m-footer .m-btn--primary').click();
   await page.waitForSelector('.sr-title');
   await page.waitForFunction(() => document.querySelectorAll('.sr-term__monthly b').length > 0, null, { timeout: 20000 });
+  // Wait for the pending option/condition recalculation before freezing the comparison.
+  await page.waitForLoadState('networkidle');
   const monthly = await page.locator('.sr-term__monthly b').allTextContents();
   ok(monthly.length === 2 && monthly.every(Boolean), '선택한 2개 기간만 결과에 나와야 함: ' + JSON.stringify(monthly));
 
