@@ -197,10 +197,11 @@ try {
   await page.screenshot({ path: `${out}/01-result-390.png`, fullPage: true });
 
   // 공유 URL 생성
+  await page.evaluate(() => navigator.clipboard.writeText(''));
   await page.locator('.m-header .m-act').first().click();
-  await page.waitForFunction(async () => /\/s\/[a-z0-9]{8}$/.test(await navigator.clipboard.readText()));
+  await page.waitForSelector('.m-header .ph-check-circle');
   const sharedUrl = await page.evaluate(() => navigator.clipboard.readText());
-  ok(/^https:\/\/welrixtable\.vercel\.app\/s\/[a-z0-9]{8}$/.test(sharedUrl), '공유 URL이 짧은 정본 링크가 아님');
+  ok(/^https:\/\/welrixtable\.vercel\.app\/s\/[a-z0-9]{8}$/.test(sharedUrl), '공유 URL이 짧은 정본 링크가 아님: ' + JSON.stringify(sharedUrl));
   ok(new URL(sharedUrl).search === '', '견적 전체가 공유 URL 쿼리에 노출됨');
   ok(!sharedUrl.includes('staff='), '공유 URL에 staff 권한 누출');
   ok(sharedUrl.length === 41, '공유 URL이 41자가 아님: ' + sharedUrl.length);
@@ -242,7 +243,10 @@ try {
   await page2.locator('.m-header .m-act').first().click();
   await page2.waitForTimeout(150);
   const reShared = await page2.evaluate(() => navigator.clipboard.readText());
-  ok(reShared.includes('qs='), '재공유 시 Snapshot 유실');
+  ok(/^https:\/\/welrixtable\.vercel\.app\/s\/[a-zA-Z0-9]{8}$/.test(reShared), '재공유 단축 링크 누락');
+  const originalBundle = shares.get(new URL(sharedUrl).pathname.split('/').pop());
+  const resharedBundle = shares.get(new URL(reShared).pathname.split('/').pop());
+  ok(JSON.stringify(resharedBundle) === JSON.stringify(originalBundle), '재공유 시 Snapshot 유실');
 
   // 조건 변경을 누른 뒤에만 새 계산
   await page2.locator('.m-footer .m-btn--soft').filter({ hasText: '조건 변경' }).click();
