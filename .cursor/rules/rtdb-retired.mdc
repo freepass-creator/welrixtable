@@ -1,0 +1,7 @@
+---
+description: RTDB is retired in this repository
+alwaysApply: true
+---
+
+RTDB is prohibited. Remove legacy references and use Firestore. Never restore freepasserp3 RTDB configuration, listeners, database URLs, adapters, or fallback paths.
+
