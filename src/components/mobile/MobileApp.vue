@@ -277,11 +277,6 @@ async function shareSignLink() {
         </button>
       </div>
       <div class="m-header__actions">
-        <button class="m-act" :disabled="!견적준비됨" @click="공유하기"
-                :title="견적준비됨 ? '이 견적 링크 공유' : '견적 계산이 끝나면 공유할 수 있습니다'">
-          <i class="ph" :class="공유됨 ? 'ph-check-circle' : 'ph-share-network'"></i>
-          <span>{{ 공유됨 ? '복사됨' : '공유' }}</span>
-        </button>
         <!-- 견적 발송은 담당자만 — 손님에게는 공유가 그 자리다 -->
         <button v-if="담당자" class="m-act m-act--primary" :disabled="!견적준비됨" @click="openSend">
           <i class="ph ph-paper-plane-tilt"></i>

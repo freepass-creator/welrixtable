@@ -36,6 +36,8 @@ const 기본요청 = () => ({
 assert.equal(견적계약버전, 'quote-v1');
 assert.equal(어댑터계약버전, 'welrix-estimate-v1');
 assert.equal(요청검사(기본요청()), null);
+assert.ok(요청을웰릭스몸통으로(기본요청()).inputs.every(input => input.etcFee === 0),
+  'provider requires explicit zero miscellaneous fee');
 
 {
   const r = 기본요청();
@@ -177,3 +179,21 @@ try {
 }
 
 console.log('PASS self-quote contract: request/unit/response/fail-closed');
+
+const { default: proxy } = await import('../api/estimate.js');
+try {
+  let forwarded;
+  globalThis.fetch = async (_url, init) => {
+    forwarded = JSON.parse(init.body);
+    return { status: 200, async text() { return '{"ok":true}'; } };
+  };
+  const response = { setHeader() {}, status(code) { assert.equal(code, 200); return this; }, send() {} };
+  const body = { model: 'fixture', inputs: [{ optionPrice: 1200000 }, { etcFee: 75000 }, { etcFee: null }] };
+  for (const input of [body, JSON.stringify(body)]) {
+    await proxy({ method: 'POST', body: input }, response);
+    assert.deepEqual(forwarded.inputs.map(item => item.etcFee), [0, 75000, null]);
+    assert.equal(forwarded.inputs[0].optionPrice, 1200000);
+    assert.equal(forwarded.model, 'fixture');
+  }
+} finally { globalThis.fetch = 원래fetch; }
+console.log('PASS legacy proxy: missing fee defaults, explicit fee/null and options preserved');

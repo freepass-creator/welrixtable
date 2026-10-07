@@ -29,6 +29,7 @@ export function 요청을웰릭스몸통으로(요청) {
       deliveryFee: 조건.탁송비,
       tintFee: 조건.썬팅비,
       dashcamFee: 조건.블박비,
+      etcFee: 0,
       deposit_pct: (a.보증금 || 0) / 100,
       prepay_pct: (a.선납 || 0) / 100,
       liability: 조건.대물,
