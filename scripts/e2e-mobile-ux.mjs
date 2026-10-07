@@ -202,8 +202,8 @@ try {
   await page.waitForFunction(() => document.querySelectorAll('.sr-term__monthly b').length > 0, null, { timeout: 20000 });
   // Wait for the pending option/condition recalculation before freezing the comparison.
   await page.waitForLoadState('networkidle');
-  const monthly = await page.locator('.sr-term__monthly b').allTextContents();
-  ok(monthly.length === 2 && monthly.every(Boolean), '선택한 2개 기간만 결과에 나와야 함: ' + JSON.stringify(monthly));
+  const initialMonthly = await page.locator('.sr-term__monthly b').allTextContents();
+  ok(initialMonthly.length === 2 && initialMonthly.every(Boolean), '선택한 2개 기간만 결과에 나와야 함: ' + JSON.stringify(initialMonthly));
 
   // 최종 결과를 끝까지 스크롤했을 때 조건/안내문이 고정 footer 뒤에 가리지 않아야 한다.
   await page.evaluate(() => {
@@ -234,6 +234,9 @@ try {
   await page.evaluate(() => navigator.clipboard.writeText(''));
   await page.locator('.m-footer .m-btn--primary').first().click();
   await page.waitForFunction(() => document.querySelector('.m-footer .m-btn--primary')?.textContent?.includes('공유됨'));
+  // Freeze the sender comparison at the confirmed share, after any debounced
+  // condition recalculation, rather than an earlier transient result.
+  const monthly = await page.locator('.sr-term__monthly b').allTextContents();
   const sharedUrl = await page.evaluate(() => navigator.clipboard.readText());
   ok(/^https:\/\/welrixtable\.vercel\.app\/s\/[a-z0-9]{8}$/.test(sharedUrl), '공유 URL이 짧은 정본 링크가 아님: ' + JSON.stringify(sharedUrl));
   ok(new URL(sharedUrl).search === '', '견적 전체가 공유 URL 쿼리에 노출됨');
