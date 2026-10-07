@@ -22,6 +22,35 @@ async function clickFirst(locator, label) {
   await locator.first().click();
 }
 
+async function verifyRayGroups(context) {
+  // Ray's explicit one-seat van remains a separate choice even when the other
+  // van has no seat metadata. Each chosen group must contain three unique trims.
+  for (const width of [360, 390]) {
+    for (const group of ['밴', '밴 1인승']) {
+      const ray = await context.newPage();
+      await ray.setViewportSize({ width, height: 844 });
+      await ray.goto(BASE, { waitUntil: 'networkidle' });
+      await ray.locator('.sv-brand-card').filter({ hasText: '기아' }).click();
+      await ray.locator('.sv-row__label').getByText('레이', { exact: true }).click();
+      await ray.waitForFunction(() => document.querySelector('.sv-title')?.textContent?.includes('파워트레인'));
+      // The complete label includes the engine and a subordinate count/price.
+      const groups = await ray.locator('.sv-row').allTextContents();
+      const index = groups.findIndex(text => group === '밴'
+        ? text.includes('밴') && !text.includes('1인승') : text.includes('밴 1인승'));
+      ok(index >= 0, `Ray ${group} choice missing`);
+      await ray.locator('.sv-row').nth(index).click();
+      await ray.waitForSelector('.sv-trim-card');
+      const names = await ray.locator('.sv-trim-card__name').allTextContents();
+      ok(await ray.locator('.sv-trim-card').count() === 3, `Ray ${group}: duplicate trim cards`);
+      ok(names.length === 3 && new Set(names).size === 3, `Ray ${group}: duplicate names`);
+      await noHorizontalOverflow(ray, `Ray ${group} ${width}`);
+      await ray.screenshot({ path: `${out}/ray-${width}-${group === '밴' ? 'van' : 'one-seat'}.png`, fullPage: true });
+      await ray.close();
+    }
+  }
+
+}
+
 const browser = await chromium.launch({ headless: true });
 try {
   const context = await browser.newContext({
@@ -58,6 +87,13 @@ try {
       await route.fulfill({ json: shares.get(id) || null });
     }
   });
+
+  if (process.env.RAY_GROUPS_ONLY === '1') {
+    await verifyRayGroups(context);
+    await browser.close();
+    console.log('PASS Ray van groups at 360/390px');
+    process.exit(0);
+  }
 
   const page = await context.newPage();
   const consoleErrors = [];
@@ -285,7 +321,7 @@ try {
   // PC 담당자 견적기 초기 상태 — 빈 화면처럼 보이지 않고 선택 안내가 있어야 한다.
   const desktop = await context.newPage();
   await desktop.setViewportSize({ width: 1440, height: 1000 });
-  await desktop.goto('http://127.0.0.1:5173/index.html', { waitUntil: 'networkidle' });
+  await desktop.goto(new URL('/index.html', BASE).href, { waitUntil: 'networkidle' });
   await desktop.waitForSelector('.qp-empty-guide');
   ok(await desktop.locator('.qp-empty-guide').isVisible(), 'PC 초기 상태 안내가 보이지 않음');
   await desktop.screenshot({ path: `${out}/04-desktop-index-1440.png`, fullPage: true });
@@ -302,6 +338,8 @@ try {
   /* 외부 CDN이 headless Chromium의 CORP 정책으로 막히는 것은 앱 로직 오류가 아니다.
      대신 localhost의 앱 JS/CSS/API가 실패하면 반드시 실패시킨다. */
   const coreFailures = requestFailures.filter((x) => x.url.startsWith('http://127.0.0.1:5173/'));
+  await verifyRayGroups(context);
+
   const realConsoleErrors = consoleErrors.filter((x) => !x.includes('ERR_BLOCKED_BY_RESPONSE.NotSameOrigin'));
   ok(coreFailures.length === 0, '앱 핵심 리소스 실패: ' + JSON.stringify(coreFailures));
   ok(realConsoleErrors.length === 0, '브라우저 콘솔 오류: ' + realConsoleErrors.join(' | '));
