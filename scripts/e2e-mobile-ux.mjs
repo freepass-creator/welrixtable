@@ -57,7 +57,7 @@ try {
     viewport: { width: 390, height: 844 },
     locale: 'ko-KR',
   });
-  await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: 'http://127.0.0.1:5173' });
+  await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: new URL(BASE).origin });
   await context.addInitScript(() => {
     try { Object.defineProperty(navigator, 'share', { value: undefined, configurable: true }); } catch {}
   });
@@ -114,15 +114,13 @@ try {
       title: css('.sv-title').fontSize,
       titleWeight: css('.sv-title').fontWeight,
       footerH: rect('.m-footer .m-btn--primary').height,
-      headerShareH: rect('.m-header .m-act').height,
-      shareDisabled: document.querySelector('.m-header .m-act').disabled,
+      headerActions: document.querySelectorAll('.m-header .m-act').length,
     };
   });
   ok(ui.title === '22px', '페이지 타이틀 규격이 22px 아님: ' + ui.title);
   ok(+ui.titleWeight >= 700, '페이지 타이틀 굵기 부족');
   ok(ui.footerH >= 52, '하단 CTA 터치 높이 부족: ' + ui.footerH);
-  ok(ui.headerShareH >= 36, '상단 액션 높이 부족: ' + ui.headerShareH);
-  ok(ui.shareDisabled, '견적 전 공유 버튼이 활성화되어 있음');
+  ok(ui.headerActions === 0, '제거된 상단 공유 버튼이 복원됨');
 
   // 제조사 → 모델 → 파워트레인(연료·배기량·인승·구동 통합) → 트림
   await page.locator('.sv-brand-card').filter({ hasText: '현대' }).click();
@@ -141,11 +139,9 @@ try {
   await clickFirst(page.locator('.sv-trim-card'), '트림');
 
   // 트림 선택 뒤 공유는 계산 완료 전에는 아직 막혀 있어야 함
-  const shareDuringCalc = await page.locator('.m-header .m-act').first().isDisabled();
-  ok(shareDuringCalc, '계산 완료 전 공유가 열림');
+  ok(await page.locator('.m-footer .ph-share-network').count() === 0, '계산 완료 전 공유가 열림');
 
   // 다음 → 색상
-  await page.locator('.m-footer .m-btn--primary').click();
   await page.waitForFunction(() => document.querySelector('.sv-title')?.textContent?.includes('색상'));
   if (await page.locator('.sv-color-card').count()) await page.locator('.sv-color-card').first().click();
   await noHorizontalOverflow(page, '색상');
@@ -226,18 +222,18 @@ try {
   await page.waitForTimeout(100);
 
   await page.waitForFunction(() => {
-    const b = document.querySelector('.m-header .m-act');
+    const b = document.querySelector('.m-footer .m-btn--primary');
     return b && !b.disabled;
   }, null, { timeout: 5000 });
-  const shareReady = !(await page.locator('.m-header .m-act').first().isDisabled());
+  const shareReady = !(await page.locator('.m-footer .m-btn--primary').first().isDisabled());
   ok(shareReady, '계산 완료 후 공유 버튼이 활성화되지 않음');
   await noHorizontalOverflow(page, '견적결과');
   await page.screenshot({ path: `${out}/01-result-390.png`, fullPage: true });
 
   // 공유 URL 생성
   await page.evaluate(() => navigator.clipboard.writeText(''));
-  await page.locator('.m-header .m-act').first().click();
-  await page.waitForSelector('.m-header .ph-check-circle');
+  await page.locator('.m-footer .m-btn--primary').first().click();
+  await page.waitForFunction(() => document.querySelector('.m-footer .m-btn--primary')?.textContent?.includes('공유됨'));
   const sharedUrl = await page.evaluate(() => navigator.clipboard.readText());
   ok(/^https:\/\/welrixtable\.vercel\.app\/s\/[a-z0-9]{8}$/.test(sharedUrl), '공유 URL이 짧은 정본 링크가 아님: ' + JSON.stringify(sharedUrl));
   ok(new URL(sharedUrl).search === '', '견적 전체가 공유 URL 쿼리에 노출됨');
@@ -278,7 +274,7 @@ try {
   await page2.screenshot({ path: `${out}/02-shared-snapshot.png`, fullPage: true });
 
   // 공유받은 것을 다시 공유해도 Snapshot 유지
-  await page2.locator('.m-header .m-act').first().click();
+  await page2.locator('.m-footer .m-btn--primary').first().click();
   await page2.waitForTimeout(150);
   const reShared = await page2.evaluate(() => navigator.clipboard.readText());
   ok(/^https:\/\/welrixtable\.vercel\.app\/s\/[a-zA-Z0-9]{8}$/.test(reShared), '재공유 단축 링크 누락');
