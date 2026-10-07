@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import vm from 'node:vm';
 import assert from 'node:assert/strict';
+import { applySalesMainAxisBridge, computeUiPowertrainGroups } from '../src/lib/sales-main-axis-bridge.js';
 import {
   requiredOptionIds,
   toggleOptionSelection,
@@ -16,6 +17,34 @@ function loadDb(path) {
 
 function selectedNames(master, selected) {
   return [...selected].map((id) => master[id]?.name || id);
+}
+
+// Partial identity metadata must retain its explicit label. Price and provider
+// keys are immutable through display grouping, including an unlabelled branch.
+{
+  const variant = { trims: [
+    { trim_id: 'van', name: '트렌디', group: '밴', base_price_5: 1490 },
+    { trim_id: 'van-one', name: '트렌디', group: '밴 1인승', base_price_5: 1480 },
+  ] };
+  const original = JSON.stringify(variant.trims);
+  computeUiPowertrainGroups(variant);
+  assert.notEqual(variant.trims[0]._ui_powertrain_group, variant.trims[1]._ui_powertrain_group);
+  assert.equal(JSON.stringify(variant.trims.map(({ _ui_powertrain_group, ...trim }) => trim)), original);
+
+  const db = loadDb('public/welrix-db.js');
+  const bridge = JSON.parse(fs.readFileSync('public/data/freepass-newcar/sales-main-axis-bridge.json', 'utf8'));
+  applySalesMainAxisBridge(db, bridge);
+  let variants = 0;
+  for (const model of db.manufacturers.flatMap(m => m.models)) for (const variant of model.variants) {
+    variants++;
+    const keys = new Set();
+    for (const trim of variant.trims.filter(t => t.operating !== false)) {
+      const key = `${trim._ui_powertrain_group || trim.group || ''}|${trim.name}`;
+      assert.ok(!keys.has(key), `duplicate displayed trim: ${model.model_name} ${key}`);
+      keys.add(key);
+    }
+  }
+  console.log(`PASS display groups: ${variants} variants, no duplicate trim names within a group`);
 }
 
 // Pure-rule regression cases.

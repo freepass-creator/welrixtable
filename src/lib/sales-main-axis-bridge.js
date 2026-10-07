@@ -4,6 +4,7 @@ import {
   resolveProviderCandidate,
   absorbedAxisOptionIds,
   driveClass,
+  configurationGroupLabel,
 } from './newcar/configuration-resolver.js';
 
 const BRIDGE_URL = '/data/freepass-newcar/sales-main-axis-bridge.json';
@@ -22,14 +23,6 @@ function driveToken(v){
   if (/FWD|전륜/i.test(s)) return 'FWD';
   if (/RWD|후륜/i.test(s)) return 'RWD';
   return '';
-}
-function structuralGroup(v){
-  return S(v)
-    .replace(/\d{1,2}\s*인(?:승)?/gi,' ')
-    .replace(/(?:2WD|4WD|AWD|FWD|RWD|HTRAC)/gi,' ')
-    .replace(/(?:일반|선구매|렌터카)/gi,' ')
-    .replace(/\s+/g,' ')
-    .trim();
 }
 function uniquePush(arr, value){ if(value && !arr.includes(value)) arr.push(value); }
 
@@ -94,7 +87,10 @@ export function computeUiPowertrainGroups(variant){
 
   for(const trim of trims){
     const parts=[];
-    const structural=structuralGroup(trim.group);
+    const structural=configurationGroupLabel(trim.group, {
+      seatsModeled: optionAxes.has('seats') || showSeats,
+      drivetrainModeled: optionAxes.has('drivetrain') || showDrive,
+    });
     uniquePush(parts, structural);
     if(showSeats){
       const seats=trimSeat(trim);

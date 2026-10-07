@@ -22,13 +22,42 @@ async function clickFirst(locator, label) {
   await locator.first().click();
 }
 
+async function verifyRayGroups(context) {
+  // Ray's explicit one-seat van remains a separate choice even when the other
+  // van has no seat metadata. Each chosen group must contain three unique trims.
+  for (const width of [360, 390]) {
+    for (const group of ['밴', '밴 1인승']) {
+      const ray = await context.newPage();
+      await ray.setViewportSize({ width, height: 844 });
+      await ray.goto(BASE, { waitUntil: 'networkidle' });
+      await ray.locator('.sv-brand-card').filter({ hasText: '기아' }).click();
+      await ray.locator('.sv-row__label').getByText('레이', { exact: true }).click();
+      await ray.waitForFunction(() => document.querySelector('.sv-title')?.textContent?.includes('파워트레인'));
+      // The complete label includes the engine and a subordinate count/price.
+      const groups = await ray.locator('.sv-row').allTextContents();
+      const index = groups.findIndex(text => group === '밴'
+        ? text.includes('밴') && !text.includes('1인승') : text.includes('밴 1인승'));
+      ok(index >= 0, `Ray ${group} choice missing`);
+      await ray.locator('.sv-row').nth(index).click();
+      await ray.waitForSelector('.sv-trim-card');
+      const names = await ray.locator('.sv-trim-card__name').allTextContents();
+      ok(await ray.locator('.sv-trim-card').count() === 3, `Ray ${group}: duplicate trim cards`);
+      ok(names.length === 3 && new Set(names).size === 3, `Ray ${group}: duplicate names`);
+      await noHorizontalOverflow(ray, `Ray ${group} ${width}`);
+      await ray.screenshot({ path: `${out}/ray-${width}-${group === '밴' ? 'van' : 'one-seat'}.png`, fullPage: true });
+      await ray.close();
+    }
+  }
+
+}
+
 const browser = await chromium.launch({ headless: true });
 try {
   const context = await browser.newContext({
     viewport: { width: 390, height: 844 },
     locale: 'ko-KR',
   });
-  await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: 'http://127.0.0.1:5173' });
+  await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: new URL(BASE).origin });
   await context.addInitScript(() => {
     try { Object.defineProperty(navigator, 'share', { value: undefined, configurable: true }); } catch {}
   });
@@ -59,6 +88,13 @@ try {
     }
   });
 
+  if (process.env.RAY_GROUPS_ONLY === '1') {
+    await verifyRayGroups(context);
+    await browser.close();
+    console.log('PASS Ray van groups at 360/390px');
+    process.exit(0);
+  }
+
   const page = await context.newPage();
   const consoleErrors = [];
   const requestFailures = [];
@@ -78,15 +114,13 @@ try {
       title: css('.sv-title').fontSize,
       titleWeight: css('.sv-title').fontWeight,
       footerH: rect('.m-footer .m-btn--primary').height,
-      headerShareH: rect('.m-header .m-act').height,
-      shareDisabled: document.querySelector('.m-header .m-act').disabled,
+      headerActions: document.querySelectorAll('.m-header .m-act').length,
     };
   });
   ok(ui.title === '22px', '페이지 타이틀 규격이 22px 아님: ' + ui.title);
   ok(+ui.titleWeight >= 700, '페이지 타이틀 굵기 부족');
   ok(ui.footerH >= 52, '하단 CTA 터치 높이 부족: ' + ui.footerH);
-  ok(ui.headerShareH >= 36, '상단 액션 높이 부족: ' + ui.headerShareH);
-  ok(ui.shareDisabled, '견적 전 공유 버튼이 활성화되어 있음');
+  ok(ui.headerActions === 0, '제거된 상단 공유 버튼이 복원됨');
 
   // 제조사 → 모델 → 파워트레인(연료·배기량·인승·구동 통합) → 트림
   await page.locator('.sv-brand-card').filter({ hasText: '현대' }).click();
@@ -105,11 +139,9 @@ try {
   await clickFirst(page.locator('.sv-trim-card'), '트림');
 
   // 트림 선택 뒤 공유는 계산 완료 전에는 아직 막혀 있어야 함
-  const shareDuringCalc = await page.locator('.m-header .m-act').first().isDisabled();
-  ok(shareDuringCalc, '계산 완료 전 공유가 열림');
+  ok(await page.locator('.m-footer .ph-share-network').count() === 0, '계산 완료 전 공유가 열림');
 
   // 다음 → 색상
-  await page.locator('.m-footer .m-btn--primary').click();
   await page.waitForFunction(() => document.querySelector('.sv-title')?.textContent?.includes('색상'));
   if (await page.locator('.sv-color-card').count()) await page.locator('.sv-color-card').first().click();
   await noHorizontalOverflow(page, '색상');
@@ -170,8 +202,8 @@ try {
   await page.waitForFunction(() => document.querySelectorAll('.sr-term__monthly b').length > 0, null, { timeout: 20000 });
   // Wait for the pending option/condition recalculation before freezing the comparison.
   await page.waitForLoadState('networkidle');
-  const monthly = await page.locator('.sr-term__monthly b').allTextContents();
-  ok(monthly.length === 2 && monthly.every(Boolean), '선택한 2개 기간만 결과에 나와야 함: ' + JSON.stringify(monthly));
+  const initialMonthly = await page.locator('.sr-term__monthly b').allTextContents();
+  ok(initialMonthly.length === 2 && initialMonthly.every(Boolean), '선택한 2개 기간만 결과에 나와야 함: ' + JSON.stringify(initialMonthly));
 
   // 최종 결과를 끝까지 스크롤했을 때 조건/안내문이 고정 footer 뒤에 가리지 않아야 한다.
   await page.evaluate(() => {
@@ -190,18 +222,21 @@ try {
   await page.waitForTimeout(100);
 
   await page.waitForFunction(() => {
-    const b = document.querySelector('.m-header .m-act');
+    const b = document.querySelector('.m-footer .m-btn--primary');
     return b && !b.disabled;
   }, null, { timeout: 5000 });
-  const shareReady = !(await page.locator('.m-header .m-act').first().isDisabled());
+  const shareReady = !(await page.locator('.m-footer .m-btn--primary').first().isDisabled());
   ok(shareReady, '계산 완료 후 공유 버튼이 활성화되지 않음');
   await noHorizontalOverflow(page, '견적결과');
   await page.screenshot({ path: `${out}/01-result-390.png`, fullPage: true });
 
   // 공유 URL 생성
   await page.evaluate(() => navigator.clipboard.writeText(''));
-  await page.locator('.m-header .m-act').first().click();
-  await page.waitForSelector('.m-header .ph-check-circle');
+  await page.locator('.m-footer .m-btn--primary').first().click();
+  await page.waitForFunction(() => document.querySelector('.m-footer .m-btn--primary')?.textContent?.includes('공유됨'));
+  // Freeze the sender comparison at the confirmed share, after any debounced
+  // condition recalculation, rather than an earlier transient result.
+  const monthly = await page.locator('.sr-term__monthly b').allTextContents();
   const sharedUrl = await page.evaluate(() => navigator.clipboard.readText());
   ok(/^https:\/\/welrixtable\.vercel\.app\/s\/[a-z0-9]{8}$/.test(sharedUrl), '공유 URL이 짧은 정본 링크가 아님: ' + JSON.stringify(sharedUrl));
   ok(new URL(sharedUrl).search === '', '견적 전체가 공유 URL 쿼리에 노출됨');
@@ -242,7 +277,7 @@ try {
   await page2.screenshot({ path: `${out}/02-shared-snapshot.png`, fullPage: true });
 
   // 공유받은 것을 다시 공유해도 Snapshot 유지
-  await page2.locator('.m-header .m-act').first().click();
+  await page2.locator('.m-footer .m-btn--primary').first().click();
   await page2.waitForTimeout(150);
   const reShared = await page2.evaluate(() => navigator.clipboard.readText());
   ok(/^https:\/\/welrixtable\.vercel\.app\/s\/[a-zA-Z0-9]{8}$/.test(reShared), '재공유 단축 링크 누락');
@@ -285,7 +320,7 @@ try {
   // PC 담당자 견적기 초기 상태 — 빈 화면처럼 보이지 않고 선택 안내가 있어야 한다.
   const desktop = await context.newPage();
   await desktop.setViewportSize({ width: 1440, height: 1000 });
-  await desktop.goto('http://127.0.0.1:5173/index.html', { waitUntil: 'networkidle' });
+  await desktop.goto(new URL('/index.html', BASE).href, { waitUntil: 'networkidle' });
   await desktop.waitForSelector('.qp-empty-guide');
   ok(await desktop.locator('.qp-empty-guide').isVisible(), 'PC 초기 상태 안내가 보이지 않음');
   await desktop.screenshot({ path: `${out}/04-desktop-index-1440.png`, fullPage: true });
@@ -302,6 +337,8 @@ try {
   /* 외부 CDN이 headless Chromium의 CORP 정책으로 막히는 것은 앱 로직 오류가 아니다.
      대신 localhost의 앱 JS/CSS/API가 실패하면 반드시 실패시킨다. */
   const coreFailures = requestFailures.filter((x) => x.url.startsWith('http://127.0.0.1:5173/'));
+  await verifyRayGroups(context);
+
   const realConsoleErrors = consoleErrors.filter((x) => !x.includes('ERR_BLOCKED_BY_RESPONSE.NotSameOrigin'));
   ok(coreFailures.length === 0, '앱 핵심 리소스 실패: ' + JSON.stringify(coreFailures));
   ok(realConsoleErrors.length === 0, '브라우저 콘솔 오류: ' + realConsoleErrors.join(' | '));
